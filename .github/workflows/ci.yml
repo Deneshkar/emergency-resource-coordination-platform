@@ -20,10 +20,10 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore ./backend
+        run: dotnet restore ./backend-tests/ERCP.Api.Tests.csproj
 
       - name: Build
-        run: dotnet build ./backend --no-restore
+        run: dotnet build ./backend-tests/ERCP.Api.Tests.csproj --no-restore
 
       - name: Run tests
-        run: dotnet test ./backend --no-build --verbosity normal
+        run: dotnet test ./backend-tests/ERCP.Api.Tests.csproj --no-build --verbosity normal
