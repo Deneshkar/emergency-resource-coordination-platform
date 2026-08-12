@@ -1,0 +1,26 @@
+namespace ERCP.Api.DTOs;
+
+public class CreateVolunteerDto
+{
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
+    public string Skills { get; set; } = string.Empty;
+}
+
+public class UpdateAvailabilityDto
+{
+    public bool IsAvailable { get; set; }
+}
+
+public class VolunteerResponseDto
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
+    public string Skills { get; set; } = string.Empty;
+    public bool IsAvailable { get; set; }
+    public double Rating { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
