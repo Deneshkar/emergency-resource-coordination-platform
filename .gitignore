@@ -17,3 +17,5 @@ mobile-flutter/.flutter-plugin-dependencies
 .vscode/
 .DS_Store
 *.log
+backend-tests/bin/
+backend-tests/obj/
