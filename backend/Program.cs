@@ -14,12 +14,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add CORS configuration
+// Add CORS configuration - allows any localhost port (React on 5173, Flutter web on a changing port, etc.)
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp", policy =>
+    options.AddPolicy("AllowLocalDev", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -37,7 +37,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Enable CORS policy (Must be placed before UseAuthorization and MapControllers)
-app.UseCors("AllowReactApp");
+app.UseCors("AllowLocalDev");
 
 app.UseAuthorization();
 
