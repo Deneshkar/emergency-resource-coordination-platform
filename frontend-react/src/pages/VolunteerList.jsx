@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getVolunteers, updateAvailability } from "../services/volunteerService";
+import { Link } from "react-router-dom";
 
 function VolunteerList() {
   const [volunteers, setVolunteers] = useState([]);
@@ -67,7 +68,7 @@ function VolunteerList() {
           <tbody>
             {volunteers.map((v) => (
               <tr key={v.id}>
-                <td>{v.name}</td>
+                <td><Link to={`/volunteers/${v.id}`}>{v.name}</Link></td>
                 <td>{v.email}</td>
                 <td>{v.skills}</td>
                 <td>{v.isAvailable ? "Yes" : "No"}</td>
