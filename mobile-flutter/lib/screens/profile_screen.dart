@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/volunteer.dart';
 import '../services/volunteer_service.dart';
+import '../services/notification_service.dart';
+import 'shifts_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Volunteer volunteer;
@@ -33,6 +35,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _isAvailable = value;
       });
+      await NotificationService.showNotification(
+        "Availability Updated",
+        value ? "You are now marked as available." : "You are now marked as unavailable.",
+      );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Availability updated")),
@@ -89,6 +95,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onChanged: _toggleAvailability,
                       ),
               ],
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ShiftsScreen(volunteerId: v.id),
+                  ),
+                );
+              },
+              child: const Text("View My Shifts"),
             ),
           ],
         ),

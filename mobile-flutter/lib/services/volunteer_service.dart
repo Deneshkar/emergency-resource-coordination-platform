@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/volunteer.dart';
+import '../models/shift.dart';
 
 class VolunteerService {
   // Use 10.0.2.2 instead of localhost when testing on an Android emulator
-  static const String baseUrl = "http://localhost:5009/api";
+  static const String baseUrl = "http://10.0.2.2:5009/api";
 
   static Future<Volunteer> registerVolunteer({
     required String name,
@@ -49,6 +50,16 @@ class VolunteerService {
       return data.map((json) => Volunteer.fromJson(json)).toList();
     } else {
       throw Exception("Failed to load volunteers");
+    }
+  }
+  static Future<List<Shift>> getShifts(String volunteerId) async {
+    final response = await http.get(Uri.parse("$baseUrl/Volunteers/$volunteerId/shifts"));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => Shift.fromJson(json)).toList();
+    } else {
+      throw Exception("Failed to load shifts");
     }
   }
 }

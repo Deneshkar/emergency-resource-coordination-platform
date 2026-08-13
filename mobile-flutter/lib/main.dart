@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'screens/register_screen.dart';
 import 'screens/select_profile_screen.dart';
+import 'services/notification_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.init();
   runApp(const ERCPApp());
 }
 
