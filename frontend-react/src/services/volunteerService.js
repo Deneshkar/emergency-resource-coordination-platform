@@ -18,3 +18,8 @@ export const getVolunteerShifts = async (id) => {
   const response = await axios.get(`${API_BASE_URL}/Volunteers/${id}/shifts`);
   return response.data;
 };
+
+export const createVolunteer = async (volunteerData) => {
+  const response = await axios.post(`${API_BASE_URL}/Volunteers`, volunteerData);
+  return response.data;
+};
