@@ -22,6 +22,85 @@ namespace ERCP.Api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ERCP.Api.Models.Dispatch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ApprovedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("IncidentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Dispatches");
+                });
+
+            modelBuilder.Entity("ERCP.Api.Models.DispatchTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("AcceptedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("AssignedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("DispatchId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("ResourceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TaskType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("VolunteerId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DispatchId");
+
+                    b.HasIndex("VolunteerId");
+
+                    b.ToTable("DispatchTasks");
+                });
+
             modelBuilder.Entity("ERCP.Api.Models.Shift", b =>
                 {
                     b.Property<Guid>("Id")
@@ -92,6 +171,25 @@ namespace ERCP.Api.Migrations
                     b.ToTable("Volunteers");
                 });
 
+            modelBuilder.Entity("ERCP.Api.Models.DispatchTask", b =>
+                {
+                    b.HasOne("ERCP.Api.Models.Dispatch", "Dispatch")
+                        .WithMany("Tasks")
+                        .HasForeignKey("DispatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ERCP.Api.Models.Volunteer", "Volunteer")
+                        .WithMany()
+                        .HasForeignKey("VolunteerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Dispatch");
+
+                    b.Navigation("Volunteer");
+                });
+
             modelBuilder.Entity("ERCP.Api.Models.Shift", b =>
                 {
                     b.HasOne("ERCP.Api.Models.Volunteer", "Volunteer")
@@ -101,6 +199,11 @@ namespace ERCP.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Volunteer");
+                });
+
+            modelBuilder.Entity("ERCP.Api.Models.Dispatch", b =>
+                {
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("ERCP.Api.Models.Volunteer", b =>
