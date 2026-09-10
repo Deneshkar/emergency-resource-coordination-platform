@@ -14,6 +14,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Register Student 2 Situation Analysis AI Agent Service
+builder.Services.AddScoped<ERCP.Api.Services.SituationAnalysisService>();
+
 // Add CORS configuration - allows any localhost port (React on 5173, Flutter web on a changing port, etc.)
 builder.Services.AddCors(options =>
 {
