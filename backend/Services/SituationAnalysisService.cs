@@ -114,7 +114,7 @@ public class SituationAnalysisService
         var summaryParts = new List<string>();
 
         int medicalCount = inventoryItems.Where(i => i.Category.Equals("Medical", StringComparison.OrdinalIgnoreCase)).Sum(i => i.Quantity);
-        int foodCount = inventoryItems.Where(i => i.Category.Equals("Food", StringComparison.OrdinalIgnoreCase)).Sum(i => i.Quantity);
+        int foodCount = inventoryItems.Where(i => i.Category.Equals("Food", StringComparison.OrdinalIgnoreCase) || i.Category.Equals("Water", StringComparison.OrdinalIgnoreCase)).Sum(i => i.Quantity);
         int vehicleCount = resources.Count(r => r.ResourceType.Equals("Vehicle", StringComparison.OrdinalIgnoreCase));
 
         deficiencies.Add(new ResourceDeficiencyDto
