@@ -114,7 +114,6 @@ export default function ResourceInventoryHub() {
 
   // Stats calculation
   const totalAvailableVehicles = resources.filter((r) => r.status === "Available").length;
-  const activeShelterCount = shelters.filter((s) => s.status === "Active").length;
   const lowStockCount = inventory.filter((i) => i.status === "LowStock" || i.status === "OutOfStock").length;
   const totalCapacitySum = shelters.reduce((sum, s) => sum + s.totalCapacity, 0);
   const totalOccupancySum = shelters.reduce((sum, s) => sum + s.currentOccupancy, 0);
