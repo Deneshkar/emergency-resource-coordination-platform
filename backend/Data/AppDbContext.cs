@@ -20,6 +20,12 @@ public class AppDbContext : DbContext
     // Component - Incident Intelligence & Management
     public DbSet<Incident> Incidents => Set<Incident>();
     public DbSet<IncidentPlan> IncidentPlans => Set<IncidentPlan>();
+    public DbSet<SituationAssessment> SituationAssessments => Set<SituationAssessment>();
+
+    // Component - Resource, Shelter & Inventory Management
+    public DbSet<Resource> Resources => Set<Resource>();
+    public DbSet<Shelter> Shelters => Set<Shelter>();
+    public DbSet<InventoryItem> InventoryItems => Set<InventoryItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
