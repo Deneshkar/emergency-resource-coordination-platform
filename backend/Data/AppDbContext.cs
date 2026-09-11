@@ -5,8 +5,11 @@ namespace ERCP.Api.Data;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+    }
 
+    // Volunteer Management
     public DbSet<Volunteer> Volunteers => Set<Volunteer>();
     public DbSet<Shift> Shifts => Set<Shift>();
 
@@ -14,15 +17,9 @@ public class AppDbContext : DbContext
     public DbSet<Dispatch> Dispatches => Set<Dispatch>();
     public DbSet<DispatchTask> DispatchTasks => Set<DispatchTask>();
 
-    // Component 1 - Incident Intelligence & Management
+    // Component - Incident Intelligence & Management
     public DbSet<Incident> Incidents => Set<Incident>();
     public DbSet<IncidentPlan> IncidentPlans => Set<IncidentPlan>();
-
-    // Component 2 - Resource, Shelter & Inventory Management
-    public DbSet<Resource> Resources => Set<Resource>();
-    public DbSet<Shelter> Shelters => Set<Shelter>();
-    public DbSet<InventoryItem> InventoryItems => Set<InventoryItem>();
-    public DbSet<SituationAssessment> SituationAssessments => Set<SituationAssessment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -55,19 +52,5 @@ public class AppDbContext : DbContext
             .WithMany(i => i.Plans)
             .HasForeignKey(p => p.IncidentId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        // Shelter 1 → Many Resources
-        modelBuilder.Entity<Resource>()
-            .HasOne(r => r.Shelter)
-            .WithMany(s => s.Resources)
-            .HasForeignKey(r => r.ShelterId)
-            .OnDelete(DeleteBehavior.SetNull);
-
-        // Shelter 1 → Many InventoryItems
-        modelBuilder.Entity<InventoryItem>()
-            .HasOne(i => i.Shelter)
-            .WithMany(s => s.InventoryItems)
-            .HasForeignKey(i => i.ShelterId)
-            .OnDelete(DeleteBehavior.SetNull);
     }
 }

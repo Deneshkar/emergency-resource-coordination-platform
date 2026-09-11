@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ERCP.Api.Data;
@@ -101,6 +102,7 @@ public class VolunteersController : ControllerBase
 
     // GET /api/volunteers/available?skill=medical
     [HttpGet("available")]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<VolunteerResponseDto>>> GetAvailableBySkill([FromQuery] string skill)
     {
         var volunteers = await _context.Volunteers
