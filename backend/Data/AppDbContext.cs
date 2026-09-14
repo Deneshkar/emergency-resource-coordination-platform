@@ -20,6 +20,7 @@ public class AppDbContext : DbContext
     // Component - Incident Intelligence & Management
     public DbSet<Incident> Incidents => Set<Incident>();
     public DbSet<IncidentPlan> IncidentPlans => Set<IncidentPlan>();
+    public DbSet<IncidentTimelineEvent> IncidentTimelineEvents => Set<IncidentTimelineEvent>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -51,6 +52,13 @@ public class AppDbContext : DbContext
             .HasOne(p => p.Incident)
             .WithMany(i => i.Plans)
             .HasForeignKey(p => p.IncidentId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Incident 1 → Many TimelineEvents
+        modelBuilder.Entity<IncidentTimelineEvent>()
+            .HasOne(e => e.Incident)
+            .WithMany(i => i.TimelineEvents)
+            .HasForeignKey(e => e.IncidentId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
