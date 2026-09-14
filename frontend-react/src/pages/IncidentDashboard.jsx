@@ -9,6 +9,7 @@ function IncidentDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Filter states
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [priority, setPriority] = useState("");
@@ -63,18 +64,11 @@ function IncidentDashboard() {
 
   const getStatusBadgeClass = (s) => {
     switch (s?.toLowerCase()) {
-      case "dispatched":
-      case "in execution":
-        return "badge badge-success";
-      case "active planning":
-        return "badge badge-info";
-      case "reported":
-        return "badge badge-warning";
-      case "resolved":
-      case "closed":
-        return "badge badge-neutral";
-      default:
-        return "badge badge-secondary";
+      case "dispatched": case "in execution": return "badge badge-success";
+      case "active planning": return "badge badge-info";
+      case "reported": return "badge badge-warning";
+      case "resolved": case "closed": return "badge badge-neutral";
+      default: return "badge badge-secondary";
     }
   };
 
@@ -96,26 +90,26 @@ function IncidentDashboard() {
 
       {/* Summary Analytics Cards */}
       {stats && (
-        <div className="stats-grid anim-stagger">
-          <div className="stat-card anim-slide-up">
+        <div className="stats-grid">
+          <div className="stat-card">
             <div className="stat-label">Total Incidents</div>
             <div className="stat-value">{stats.totalIncidents}</div>
             <div className="stat-foot">Registered emergency events</div>
           </div>
 
-          <div className="stat-card active-border anim-slide-up">
+          <div className="stat-card active-border">
             <div className="stat-label">Active Emergencies</div>
             <div className="stat-value text-warning">{stats.activeIncidents}</div>
             <div className="stat-foot">Currently requiring active coordination</div>
           </div>
 
-          <div className="stat-card critical-border anim-slide-up">
+          <div className="stat-card critical-border">
             <div className="stat-label">Critical Priority</div>
             <div className="stat-value text-danger">{stats.criticalIncidents}</div>
             <div className="stat-foot">Immediate life-safety threats</div>
           </div>
 
-          <div className="stat-card ai-border anim-slide-up">
+          <div className="stat-card ai-border">
             <div className="stat-label">AI Action Plans</div>
             <div className="stat-value text-accent">{stats.generatedPlansCount}</div>
             <div className="stat-foot">Coordinator Agent response strategies</div>
@@ -134,9 +128,7 @@ function IncidentDashboard() {
               onChange={(e) => setSearch(e.target.value)}
               className="form-control"
             />
-            <button type="submit" className="btn btn-secondary">
-              Search
-            </button>
+            <button type="submit" className="btn btn-secondary">Search</button>
           </div>
 
           <div className="filter-selectors">
@@ -214,7 +206,7 @@ function IncidentDashboard() {
           </Link>
         </div>
       ) : (
-        <div className="incidents-grid anim-stagger">
+        <div className="incidents-grid">
           {incidents.map((inc) => (
             <div
               key={inc.id}

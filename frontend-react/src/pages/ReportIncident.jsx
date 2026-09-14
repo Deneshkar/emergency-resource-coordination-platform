@@ -49,14 +49,14 @@ function ReportIncident() {
   };
 
   return (
-    <div className="incident-hub-container">
+    <div className="incident-hub-container" style={{ maxWidth: "800px" }}>
       <div className="detail-top-bar">
         <Link to="/incidents" className="btn btn-ghost">
           ← Back to Incident Hub
         </Link>
       </div>
 
-      <div className="command-header anim-slide-up">
+      <div className="command-header">
         <div>
           <div className="subtitle-tag">🚨 EMERGENCY REPORTING PORTAL</div>
           <h1 className="header-title">Report Emergency Incident</h1>
@@ -66,9 +66,9 @@ function ReportIncident() {
         </div>
       </div>
 
-      <div className="glass-card anim-slide-up">
+      <div className="glass-card">
         {message && (
-          <div className={`alert ${isError ? "alert-error" : "alert-success"} anim-fade-in`}>
+          <div className={`alert ${isError ? "alert-error" : "alert-success"}`}>
             {message}
           </div>
         )}
@@ -171,12 +171,11 @@ function ReportIncident() {
           </div>
 
           <div className="ai-checkbox-card">
-            <label className="form-label" style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
               <input
                 type="checkbox"
                 checked={autoGeneratePlan}
                 onChange={(e) => setAutoGeneratePlan(e.target.checked)}
-                className="form-control"
                 style={{ width: "18px", height: "18px" }}
               />
               <div>
@@ -188,7 +187,7 @@ function ReportIncident() {
             </label>
           </div>
 
-          <div className="form-group">
+          <div style={{ marginTop: "20px" }}>
             <button
               type="submit"
               className="btn btn-primary btn-block shadow-glow"
