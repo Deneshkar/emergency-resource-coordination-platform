@@ -204,6 +204,47 @@ namespace ERCP.Api.Migrations
                     b.ToTable("Shifts");
                 });
 
+            modelBuilder.Entity("ERCP.Api.Models.SituationAssessment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AnalysisSummary")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("IncidentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("NearestShelterId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RecommendedResourceTypes")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResourceDeficiencyJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UrgencyLevel")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UrgencyScore")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SituationAssessments");
+                });
+
             modelBuilder.Entity("ERCP.Api.Models.Volunteer", b =>
                 {
                     b.Property<Guid>("Id")

@@ -9,19 +9,28 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+<<<<<<< HEAD
 builder.Services.AddScoped<IncidentPlannerService>();
+=======
+
+>>>>>>> origin/main
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // JWT Authentication
+<<<<<<< HEAD
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+=======
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+>>>>>>> origin/main
     .AddJwtBearer(options =>
     {
         options.RequireHttpsMetadata = false;
         options.SaveToken = true;
     });
 
+<<<<<<< HEAD
 // Check if PostgreSQL is accessible, otherwise fallback to InMemory Db for zero-config execution
 bool usePostgres = false;
 var connString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -52,20 +61,39 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 // Add CORS configuration
+=======
+// Register DbContext with PostgreSQL
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
+
+// CORS configuration
+>>>>>>> origin/main
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalDev", policy =>
     {
         policy.SetIsOriginAllowed(origin =>
+<<<<<<< HEAD
                 new Uri(origin).Host == "localhost"
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
+=======
+        {
+            return new Uri(origin).Host == "localhost";
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+>>>>>>> origin/main
     });
 });
 
 var app = builder.Build();
 
+<<<<<<< HEAD
 // Seed initial data if DB is empty
 using (var scope = app.Services.CreateScope())
 {
@@ -149,6 +177,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure HTTP request pipeline
+=======
+// Configure the HTTP request pipeline.
+>>>>>>> origin/main
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -161,4 +192,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
+<<<<<<< HEAD
+=======
+app.MapControllers();
+
+// IMPORTANT: Start the ASP.NET Core application
+>>>>>>> origin/main
 app.Run();

@@ -31,6 +31,10 @@ public class Incident
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public ICollection<IncidentPlan> Plans { get; set; } = new List<IncidentPlan>();
+<<<<<<< HEAD
 
     public ICollection<IncidentTimelineEvent> TimelineEvents { get; set; } = new List<IncidentTimelineEvent>();
 }
+=======
+}
+>>>>>>> origin/main
