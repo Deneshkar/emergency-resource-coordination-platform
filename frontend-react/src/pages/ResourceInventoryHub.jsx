@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  getResources, createResource, updateResourceStatus,
+  getResources, createResource, updateResourceStatus, deleteResource,
   getShelters, createShelter, updateShelterOccupancy,
   getInventory, createInventoryItem, adjustStock,
   assessSituation,
@@ -77,6 +77,12 @@ export default function ResourceInventoryHub() {
     fetchAllData();
   };
 
+  const handleDeleteResource = async (id, name) => {
+    if (!window.confirm(`Delete "${name}"?`)) return;
+    await deleteResource(id);
+    fetchAllData();
+  };
+
   const handleOccupancyUpdate = async (id, occupancy) => {
     await updateShelterOccupancy(id, parseInt(occupancy) || 0);
     fetchAllData();
@@ -125,7 +131,6 @@ export default function ResourceInventoryHub() {
         <button className="btn btn-ghost" onClick={fetchAllData}>↻ Refresh</button>
       </div>
 
-      {/* Tabs */}
       <div className="tab-bar">
         {tabs.map((tab) => (
           <button
@@ -145,16 +150,16 @@ export default function ResourceInventoryHub() {
           {/* OVERVIEW TAB */}
           {activeTab === "overview" && (
             <>
-              <div className="grid-stats">
+              <div className="grid-stats anim-stagger">
                 <StatCard icon="📦" label="Available Resources" value={totalAvailableVehicles} sub={`of ${resources.length} total`} color="blue" />
                 <StatCard icon="🏠" label="Shelter Occupancy" value={`${totalCapacitySum > 0 ? Math.round((totalOccupancySum / totalCapacitySum) * 100) : 0}%`} sub={`${totalOccupancySum} / ${totalCapacitySum}`} color="green" />
                 <StatCard icon="⚠️" label="Low Stock Alerts" value={lowStockCount} sub="items need restock" color={lowStockCount > 0 ? "amber" : "green"} />
                 <StatCard icon="🧠" label="AI Agent" value="Ready" sub="Situation Analysis" color="purple" />
               </div>
 
-              <div className="grid-3">
+              <div className="grid-3 anim-stagger">
                 {/* Inventory Quick View */}
-                <div className="card">
+                <div className="card anim-slide-up">
                   <div className="card-header">
                     <span className="card-title">📋 Inventory Summary</span>
                     <button className="btn btn-ghost btn-sm" onClick={() => setActiveTab("inventory")}>Manage →</button>
@@ -164,10 +169,10 @@ export default function ResourceInventoryHub() {
                       <div key={i.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 10px", background: "var(--bg-base)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border-subtle)" }}>
                         <div>
                           <div style={{ fontWeight: "600", fontSize: "13px" }}>{i.itemName}</div>
-                          <div style={{ fontSize: "11px", color: "var(--text-dim)" }}>{i.category}</div>
+                          <div className="text-dim" style={{ fontSize: "11px" }}>{i.category}</div>
                         </div>
                         <div style={{ textAlign: "right" }}>
-                          <div style={{ fontWeight: "700", fontSize: "13px", fontFamily: "var(--font-mono)" }}>{i.quantity} {i.unitOfMeasure}</div>
+                          <div className="font-mono" style={{ fontWeight: "700", fontSize: "13px" }}>{i.quantity} {i.unitOfMeasure}</div>
                           <StatusBadge status={i.status} size="sm" />
                         </div>
                       </div>
@@ -176,7 +181,7 @@ export default function ResourceInventoryHub() {
                 </div>
 
                 {/* Resource Fleet */}
-                <div className="card">
+                <div className="card anim-slide-up">
                   <div className="card-header">
                     <span className="card-title">🚛 Resource Fleet</span>
                     <button className="btn btn-ghost btn-sm" onClick={() => setActiveTab("resources")}>Manage →</button>
@@ -186,7 +191,7 @@ export default function ResourceInventoryHub() {
                       <div key={r.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 10px", background: "var(--bg-base)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border-subtle)" }}>
                         <div>
                           <div style={{ fontWeight: "600", fontSize: "13px" }}>{r.name}</div>
-                          <div style={{ fontSize: "11px", color: "var(--text-dim)" }}>{r.resourceType}</div>
+                          <div className="text-dim" style={{ fontSize: "11px" }}>{r.resourceType}</div>
                         </div>
                         <StatusBadge status={r.status} size="sm" />
                       </div>
@@ -195,7 +200,7 @@ export default function ResourceInventoryHub() {
                 </div>
 
                 {/* Shelter Overview */}
-                <div className="card">
+                <div className="card anim-slide-up">
                   <div className="card-header">
                     <span className="card-title">🏠 Shelter Capacity</span>
                     <button className="btn btn-ghost btn-sm" onClick={() => setActiveTab("shelters")}>Manage →</button>
@@ -207,7 +212,7 @@ export default function ResourceInventoryHub() {
                         <div key={s.id}>
                           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
                             <span style={{ fontSize: "13px", fontWeight: "600" }}>{s.name}</span>
-                            <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{pct}%</span>
+                            <span className="font-mono text-muted" style={{ fontSize: "12px" }}>{pct}%</span>
                           </div>
                           <div className="progress-bar">
                             <div className={`progress-fill ${pct >= 90 ? "red" : pct >= 70 ? "amber" : "green"}`} style={{ width: `${Math.min(pct, 100)}%` }} />
@@ -223,11 +228,11 @@ export default function ResourceInventoryHub() {
 
           {/* RESOURCES TAB */}
           {activeTab === "resources" && (
-            <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+            <div className="card anim-slide-up" style={{ padding: 0, overflow: "hidden" }}>
               <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border-subtle)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
                   <div style={{ fontWeight: "700", fontSize: "15px" }}>Resource & Vehicle Fleet</div>
-                  <div style={{ fontSize: "12px", color: "var(--text-dim)" }}>Manage transport units, equipment & operational readiness</div>
+                  <div className="text-dim" style={{ fontSize: "12px" }}>Manage transport units, equipment & operational readiness</div>
                 </div>
                 <button className="btn btn-primary btn-sm" onClick={() => setShowResourceModal(true)}>+ Add Resource</button>
               </div>
@@ -251,19 +256,25 @@ export default function ResourceInventoryHub() {
                         <td style={{ fontWeight: "600", color: "var(--text-primary)" }}>{r.name}</td>
                         <td>{r.resourceType}</td>
                         <td><StatusBadge status={r.status} /></td>
-                        <td style={{ fontFamily: "var(--font-mono)" }}>{r.capacity}</td>
+                        <td className="font-mono">{r.capacity}</td>
                         <td>{r.location || "—"}</td>
                         <td>
-                          <select
-                            value={r.status}
-                            onChange={(e) => handleStatusChange(r.id, e.target.value)}
-                            style={{ padding: "5px 8px", fontSize: "12px", width: "auto" }}
-                          >
-                            <option value="Available">Available</option>
-                            <option value="Dispatched">Dispatched</option>
-                            <option value="Maintenance">Maintenance</option>
-                            <option value="Reserved">Reserved</option>
-                          </select>
+                          <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+                            <select
+                              value={r.status}
+                              onChange={(e) => handleStatusChange(r.id, e.target.value)}
+                              className="form-select"
+                              style={{ padding: "5px 8px", fontSize: "12px", width: "auto" }}
+                            >
+                              <option value="Available">Available</option>
+                              <option value="Dispatched">Dispatched</option>
+                              <option value="Maintenance">Maintenance</option>
+                              <option value="Reserved">Reserved</option>
+                            </select>
+                            <button className="btn btn-danger btn-sm" onClick={() => handleDeleteResource(r.id, r.name)}>
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -279,32 +290,33 @@ export default function ResourceInventoryHub() {
               <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "16px" }}>
                 <button className="btn btn-primary" onClick={() => setShowShelterModal(true)}>+ Add Shelter</button>
               </div>
-              <div className="grid-3">
+              <div className="grid-3 anim-stagger">
                 {shelters.map((s) => {
                   const occupancyPct = Math.round((s.currentOccupancy / s.totalCapacity) * 100) || 0;
                   return (
-                    <div key={s.id} className="card" style={{ borderLeft: `3px solid ${s.status === "Full" ? "var(--red)" : s.status === "Active" ? "var(--green)" : "var(--text-dim)"}` }}>
+                    <div key={s.id} className="card anim-slide-up" style={{ borderLeft: `3px solid ${s.status === "Full" ? "var(--red)" : s.status === "Active" ? "var(--green)" : "var(--text-dim)"}` }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                         <div style={{ fontWeight: "700", fontSize: "15px" }}>{s.name}</div>
                         <StatusBadge status={s.status} size="sm" />
                       </div>
-                      <div style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "4px" }}>📍 {s.location || "—"}</div>
-                      <div style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "14px" }}>📞 {s.contactNumber || "—"}</div>
+                      <div className="text-muted" style={{ fontSize: "12px", marginBottom: "4px" }}>📍 {s.location || "—"}</div>
+                      <div className="text-muted" style={{ fontSize: "12px", marginBottom: "14px" }}>📞 {s.contactNumber || "—"}</div>
                       <div style={{ marginBottom: "12px" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", marginBottom: "4px" }}>
-                          <span style={{ color: "var(--text-secondary)" }}>Occupancy</span>
-                          <span style={{ fontFamily: "var(--font-mono)", fontWeight: "700" }}>{s.currentOccupancy} / {s.totalCapacity} ({occupancyPct}%)</span>
+                          <span className="text-muted">Occupancy</span>
+                          <span className="font-mono" style={{ fontWeight: "700" }}>{s.currentOccupancy} / {s.totalCapacity} ({occupancyPct}%)</span>
                         </div>
                         <div className="progress-bar" style={{ height: "8px" }}>
                           <div className={`progress-fill ${occupancyPct >= 90 ? "red" : occupancyPct >= 70 ? "amber" : "green"}`} style={{ width: `${Math.min(occupancyPct, 100)}%` }} />
                         </div>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "8px", paddingTop: "10px", borderTop: "1px solid var(--border-subtle)" }}>
-                        <span style={{ fontSize: "11px", color: "var(--text-dim)" }}>Headcount:</span>
+                        <span className="text-dim" style={{ fontSize: "11px" }}>Headcount:</span>
                         <input
                           type="number"
                           defaultValue={s.currentOccupancy}
                           onBlur={(e) => handleOccupancyUpdate(s.id, e.target.value)}
+                          className="form-control"
                           style={{ width: "70px", padding: "5px 8px", fontSize: "12px" }}
                         />
                       </div>
@@ -317,11 +329,11 @@ export default function ResourceInventoryHub() {
 
           {/* INVENTORY TAB */}
           {activeTab === "inventory" && (
-            <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+            <div className="card anim-slide-up" style={{ padding: 0, overflow: "hidden" }}>
               <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border-subtle)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
                   <div style={{ fontWeight: "700", fontSize: "15px" }}>Inventory & Medical Supplies</div>
-                  <div style={{ fontSize: "12px", color: "var(--text-dim)" }}>Track stock levels, thresholds & low-stock alerts</div>
+                  <div className="text-dim" style={{ fontSize: "12px" }}>Track stock levels, thresholds & low-stock alerts</div>
                 </div>
                 <button className="btn btn-primary btn-sm" onClick={() => setShowInventoryModal(true)}>+ Add Item</button>
               </div>
@@ -344,8 +356,8 @@ export default function ResourceInventoryHub() {
                         <td>#{item.id}</td>
                         <td style={{ fontWeight: "600", color: "var(--text-primary)" }}>{item.itemName}</td>
                         <td>{item.category}</td>
-                        <td style={{ fontFamily: "var(--font-mono)", fontWeight: "700" }}>{item.quantity} {item.unitOfMeasure}</td>
-                        <td style={{ fontFamily: "var(--font-mono)", color: "var(--text-dim)" }}>{item.minimumThreshold} {item.unitOfMeasure}</td>
+                        <td className="font-mono" style={{ fontWeight: "700" }}>{item.quantity} {item.unitOfMeasure}</td>
+                        <td className="font-mono text-dim">{item.minimumThreshold} {item.unitOfMeasure}</td>
                         <td><StatusBadge status={item.status} /></td>
                         <td>
                           <div style={{ display: "flex", gap: "4px" }}>
@@ -363,12 +375,12 @@ export default function ResourceInventoryHub() {
 
           {/* SITUATION ANALYSIS TAB */}
           {activeTab === "situation_ai" && (
-            <div className="card">
+            <div className="card anim-slide-up">
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
                 <div style={{ width: "44px", height: "44px", borderRadius: "var(--radius-md)", background: "var(--purple-glow)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>🧠</div>
                 <div>
                   <div style={{ fontWeight: "700", fontSize: "17px" }}>Situation Analysis Agent</div>
-                  <div style={{ fontSize: "12px", color: "var(--text-dim)" }}>AI-powered urgency scoring & resource gap analysis</div>
+                  <div className="text-dim" style={{ fontSize: "12px" }}>AI-powered urgency scoring & resource gap analysis</div>
                 </div>
               </div>
 
@@ -378,6 +390,7 @@ export default function ResourceInventoryHub() {
                   placeholder="Incident ID"
                   value={incidentId}
                   onChange={(e) => setIncidentId(e.target.value)}
+                  className="form-control"
                   style={{ width: "140px" }}
                   required
                 />
@@ -387,13 +400,13 @@ export default function ResourceInventoryHub() {
               </form>
 
               {aiError && (
-                <div style={{ padding: "12px", background: "var(--red-glow)", border: "1px solid var(--red-dim)", borderRadius: "var(--radius-sm)", color: "var(--red)", fontSize: "13px", marginBottom: "20px" }}>
+                <div className="alert alert-error" style={{ marginBottom: "20px" }}>
                   {aiError}
                 </div>
               )}
 
               {assessment && (
-                <div style={{ border: "1px solid var(--purple-dim)", borderRadius: "var(--radius-lg)", padding: "24px", background: "var(--bg-base)" }}>
+                <div className="anim-slide-up" style={{ border: "1px solid var(--purple-dim)", borderRadius: "var(--radius-lg)", padding: "24px", background: "var(--bg-base)" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
                     <div style={{ fontWeight: "700", fontSize: "16px" }}>
                       Assessment #{assessment.id} — Incident #{assessment.incidentId}
@@ -402,24 +415,24 @@ export default function ResourceInventoryHub() {
                   </div>
 
                   <div style={{ padding: "14px", background: "var(--bg-surface)", borderRadius: "var(--radius-sm)", borderLeft: "3px solid var(--purple)", marginBottom: "20px", fontSize: "13px", lineHeight: "1.6" }}>
-                    <strong style={{ color: "var(--purple)" }}>Analysis Summary: </strong>
-                    <span style={{ color: "var(--text-secondary)" }}>{assessment.analysisSummary}</span>
+                    <strong className="text-accent">Analysis Summary: </strong>
+                    <span className="text-muted">{assessment.analysisSummary}</span>
                   </div>
 
-                  <div className="grid-2" style={{ marginBottom: "20px" }}>
-                    <div style={{ padding: "14px", background: "var(--bg-surface)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border-subtle)" }}>
-                      <div style={{ fontSize: "10px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.8px", color: "var(--text-dim)", marginBottom: "4px" }}>Recommended Assets</div>
+                  <div className="grid-2 anim-stagger" style={{ marginBottom: "20px" }}>
+                    <div className="card" style={{ padding: "14px" }}>
+                      <div className="text-dim" style={{ fontSize: "10px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: "4px" }}>Recommended Assets</div>
                       <div style={{ fontWeight: "700", color: "var(--cyan)", fontSize: "15px" }}>{assessment.recommendedResourceTypes}</div>
                     </div>
-                    <div style={{ padding: "14px", background: "var(--bg-surface)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border-subtle)" }}>
-                      <div style={{ fontSize: "10px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.8px", color: "var(--text-dim)", marginBottom: "4px" }}>Nearest Shelter Match</div>
+                    <div className="card" style={{ padding: "14px" }}>
+                      <div className="text-dim" style={{ fontSize: "10px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: "4px" }}>Nearest Shelter Match</div>
                       <div style={{ fontWeight: "700", color: "var(--green)", fontSize: "15px" }}>
                         {assessment.nearestShelterName || "None"} (Cap: {assessment.availableShelterCapacity})
                       </div>
                     </div>
                   </div>
 
-                  <div style={{ fontWeight: "700", fontSize: "14px", marginBottom: "10px", color: "var(--purple)" }}>Resource Deficiency Breakdown</div>
+                  <div className="text-accent" style={{ fontWeight: "700", fontSize: "14px", marginBottom: "10px" }}>Resource Deficiency Breakdown</div>
                   <div style={{ overflowX: "auto" }}>
                     <table className="data-table">
                       <thead>
@@ -434,8 +447,8 @@ export default function ResourceInventoryHub() {
                         {assessment.resourceDeficiencies?.map((d, idx) => (
                           <tr key={idx}>
                             <td style={{ fontWeight: "600", color: "var(--text-primary)" }}>{d.category}</td>
-                            <td style={{ fontFamily: "var(--font-mono)" }}>{d.available}</td>
-                            <td style={{ fontFamily: "var(--font-mono)" }}>{d.recommended}</td>
+                            <td className="font-mono">{d.available}</td>
+                            <td className="font-mono">{d.recommended}</td>
                             <td>
                               <span style={{ fontWeight: "700", color: d.isDeficit ? "var(--red)" : "var(--green)", fontSize: "12px" }}>
                                 {d.isDeficit ? "DEFICIT" : "ADEQUATE"}
@@ -457,11 +470,11 @@ export default function ResourceInventoryHub() {
       <Modal isOpen={showResourceModal} onClose={() => setShowResourceModal(false)} title="Add Resource" subtitle="Register a new resource or vehicle">
         <form onSubmit={handleCreateResource}>
           <FormField label="Resource Name" required>
-            <input placeholder="e.g. Ambulance Unit 2" value={newResource.name} onChange={(e) => setNewResource({ ...newResource, name: e.target.value })} required />
+            <input className="form-control" placeholder="e.g. Ambulance Unit 2" value={newResource.name} onChange={(e) => setNewResource({ ...newResource, name: e.target.value })} required />
           </FormField>
           <FormRow>
             <FormField label="Type">
-              <select value={newResource.resourceType} onChange={(e) => setNewResource({ ...newResource, resourceType: e.target.value })}>
+              <select className="form-select" value={newResource.resourceType} onChange={(e) => setNewResource({ ...newResource, resourceType: e.target.value })}>
                 <option value="Vehicle">Vehicle</option>
                 <option value="MedicalEquipment">Medical Equipment</option>
                 <option value="Generator">Generator</option>
@@ -470,11 +483,11 @@ export default function ResourceInventoryHub() {
               </select>
             </FormField>
             <FormField label="Capacity">
-              <input type="number" value={newResource.capacity} onChange={(e) => setNewResource({ ...newResource, capacity: parseInt(e.target.value) || 1 })} />
+              <input className="form-control" type="number" value={newResource.capacity} onChange={(e) => setNewResource({ ...newResource, capacity: parseInt(e.target.value) || 1 })} />
             </FormField>
           </FormRow>
           <FormField label="Location">
-            <input placeholder="e.g. Central Depot" value={newResource.location} onChange={(e) => setNewResource({ ...newResource, location: e.target.value })} />
+            <input className="form-control" placeholder="e.g. Central Depot" value={newResource.location} onChange={(e) => setNewResource({ ...newResource, location: e.target.value })} />
           </FormField>
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "8px" }}>
             <button type="button" className="btn btn-ghost" onClick={() => setShowResourceModal(false)}>Cancel</button>
@@ -486,18 +499,18 @@ export default function ResourceInventoryHub() {
       <Modal isOpen={showShelterModal} onClose={() => setShowShelterModal(false)} title="Add Shelter" subtitle="Register a new evacuation shelter">
         <form onSubmit={handleCreateShelter}>
           <FormField label="Shelter Name" required>
-            <input placeholder="e.g. Central School Shelter" value={newShelter.name} onChange={(e) => setNewShelter({ ...newShelter, name: e.target.value })} required />
+            <input className="form-control" placeholder="e.g. Central School Shelter" value={newShelter.name} onChange={(e) => setNewShelter({ ...newShelter, name: e.target.value })} required />
           </FormField>
           <FormRow>
             <FormField label="Location">
-              <input placeholder="District" value={newShelter.location} onChange={(e) => setNewShelter({ ...newShelter, location: e.target.value })} />
+              <input className="form-control" placeholder="District" value={newShelter.location} onChange={(e) => setNewShelter({ ...newShelter, location: e.target.value })} />
             </FormField>
             <FormField label="Max Capacity">
-              <input type="number" value={newShelter.totalCapacity} onChange={(e) => setNewShelter({ ...newShelter, totalCapacity: parseInt(e.target.value) || 0 })} />
+              <input className="form-control" type="number" value={newShelter.totalCapacity} onChange={(e) => setNewShelter({ ...newShelter, totalCapacity: parseInt(e.target.value) || 0 })} />
             </FormField>
           </FormRow>
           <FormField label="Contact Number">
-            <input placeholder="Hotline" value={newShelter.contactNumber} onChange={(e) => setNewShelter({ ...newShelter, contactNumber: e.target.value })} />
+            <input className="form-control" placeholder="Hotline" value={newShelter.contactNumber} onChange={(e) => setNewShelter({ ...newShelter, contactNumber: e.target.value })} />
           </FormField>
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "8px" }}>
             <button type="button" className="btn btn-ghost" onClick={() => setShowShelterModal(false)}>Cancel</button>
@@ -509,11 +522,11 @@ export default function ResourceInventoryHub() {
       <Modal isOpen={showInventoryModal} onClose={() => setShowInventoryModal(false)} title="Add Inventory Item" subtitle="Register a new supply item">
         <form onSubmit={handleCreateItem}>
           <FormField label="Item Name" required>
-            <input placeholder="e.g. Trauma Dressing" value={newItem.itemName} onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })} required />
+            <input className="form-control" placeholder="e.g. Trauma Dressing" value={newItem.itemName} onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })} required />
           </FormField>
           <FormRow>
             <FormField label="Category">
-              <select value={newItem.category} onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}>
+              <select className="form-select" value={newItem.category} onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}>
                 <option value="Medical">Medical</option>
                 <option value="Food">Food</option>
                 <option value="Water">Water</option>
@@ -522,15 +535,15 @@ export default function ResourceInventoryHub() {
               </select>
             </FormField>
             <FormField label="Quantity">
-              <input type="number" value={newItem.quantity} onChange={(e) => setNewItem({ ...newItem, quantity: parseInt(e.target.value) || 0 })} />
+              <input className="form-control" type="number" value={newItem.quantity} onChange={(e) => setNewItem({ ...newItem, quantity: parseInt(e.target.value) || 0 })} />
             </FormField>
           </FormRow>
           <FormRow>
             <FormField label="Unit">
-              <input placeholder="e.g. Kits" value={newItem.unitOfMeasure} onChange={(e) => setNewItem({ ...newItem, unitOfMeasure: e.target.value })} />
+              <input className="form-control" placeholder="e.g. Kits" value={newItem.unitOfMeasure} onChange={(e) => setNewItem({ ...newItem, unitOfMeasure: e.target.value })} />
             </FormField>
             <FormField label="Min Threshold">
-              <input type="number" value={newItem.minimumThreshold} onChange={(e) => setNewItem({ ...newItem, minimumThreshold: parseInt(e.target.value) || 0 })} />
+              <input className="form-control" type="number" value={newItem.minimumThreshold} onChange={(e) => setNewItem({ ...newItem, minimumThreshold: parseInt(e.target.value) || 0 })} />
             </FormField>
           </FormRow>
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "8px" }}>

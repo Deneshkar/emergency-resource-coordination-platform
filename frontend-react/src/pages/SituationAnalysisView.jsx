@@ -28,12 +28,12 @@ export default function SituationAnalysisView() {
       <div className="page-header">
         <div className="page-header-left">
           <h1>Situation Analysis</h1>
-          <p>AI-powered urgency scoring, resource gap analysis & shelter matching</p>
+          <p>AI-powered urgency scoring, resource gap analysis &amp; shelter matching</p>
         </div>
       </div>
 
       {/* Agent Card */}
-      <div className="card" style={{ marginBottom: "24px" }}>
+      <div className="card anim-slide-up" style={{ marginBottom: "24px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "20px" }}>
           <div style={{
             width: "50px", height: "50px", borderRadius: "var(--radius-lg)",
@@ -44,7 +44,7 @@ export default function SituationAnalysisView() {
           <div>
             <div style={{ fontWeight: "800", fontSize: "18px" }}>Situation Analysis Agent</div>
             <div style={{ fontSize: "12px", color: "var(--text-dim)" }}>
-              Evaluates incident urgency, checks inventory deficiencies & matches nearest shelter
+              Evaluates incident urgency, checks inventory deficiencies &amp; matches nearest shelter
             </div>
           </div>
         </div>
@@ -55,10 +55,9 @@ export default function SituationAnalysisView() {
           border: "1px solid var(--purple-dim)", flexWrap: "wrap",
         }}>
           <div style={{ flex: "0 0 160px" }}>
-            <label style={{ display: "block", fontSize: "11px", fontWeight: "600", color: "var(--text-dim)", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-              Incident ID
-            </label>
+            <label className="form-label">Incident ID</label>
             <input
+              className="form-control"
               type="number"
               placeholder="e.g. 1"
               value={incidentId}
@@ -79,19 +78,15 @@ export default function SituationAnalysisView() {
       </div>
 
       {error && (
-        <div style={{
-          padding: "12px 16px", background: "var(--red-glow)",
-          border: "1px solid var(--red-dim)", borderRadius: "var(--radius-sm)",
-          color: "var(--red)", fontSize: "13px", fontWeight: "600", marginBottom: "24px",
-        }}>
+        <div className="alert alert-error" style={{ marginBottom: "24px" }}>
           {error}
         </div>
       )}
 
       {assessment && (
-        <div className="fade-in">
+        <div className="anim-fade-in">
           {/* Urgency Score Header */}
-          <div className="card" style={{
+          <div className="card anim-slide-up" style={{
             marginBottom: "20px",
             borderLeft: `4px solid ${
               assessment.urgencyLevel === "Critical" ? "var(--red)" :
@@ -119,7 +114,7 @@ export default function SituationAnalysisView() {
           </div>
 
           {/* Analysis Summary */}
-          <div className="card" style={{ marginBottom: "20px", borderLeft: "4px solid var(--purple)" }}>
+          <div className="card anim-slide-up" style={{ marginBottom: "20px", borderLeft: "4px solid var(--purple)" }}>
             <div style={{ fontSize: "10px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.8px", color: "var(--purple)", marginBottom: "8px" }}>
               Agent Analysis Summary
             </div>
@@ -129,7 +124,7 @@ export default function SituationAnalysisView() {
           </div>
 
           {/* Recommendations Grid */}
-          <div className="grid-2" style={{ marginBottom: "20px" }}>
+          <div className="grid-2 anim-stagger" style={{ marginBottom: "20px" }}>
             <div className="card">
               <div style={{ fontSize: "10px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.8px", color: "var(--text-dim)", marginBottom: "8px" }}>
                 Recommended Resources
@@ -152,7 +147,7 @@ export default function SituationAnalysisView() {
           </div>
 
           {/* Resource Deficiency Table */}
-          <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+          <div className="card anim-slide-up" style={{ padding: 0, overflow: "hidden" }}>
             <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border-subtle)" }}>
               <div style={{ fontWeight: "700", fontSize: "15px", color: "var(--purple)" }}>Resource Deficiency Breakdown</div>
             </div>

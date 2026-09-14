@@ -58,6 +58,14 @@ export const adjustStock = async (id, quantityAdjustment) => {
   return response.data;
 };
 
+export const deleteInventoryItem = async (id) => {
+  await axios.delete(`${API_BASE_URL}/Inventory/${id}`);
+};
+
+export const deleteResource = async (id) => {
+  await axios.delete(`${API_BASE_URL}/Resources/${id}`);
+};
+
 // Situation Analysis AI Agent API
 export const assessSituation = async (incidentId) => {
   const response = await axios.post(`${API_BASE_URL}/SituationAnalysis/assess`, { incidentId });

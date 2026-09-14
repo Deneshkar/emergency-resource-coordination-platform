@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getResources, createResource, updateResourceStatus } from "../services/resourceService";
+import { getResources, createResource, updateResourceStatus, deleteResource } from "../services/resourceService";
 import StatusBadge from "../components/StatusBadge";
 import Modal, { FormField, FormRow } from "../components/Modal";
 
@@ -33,6 +33,12 @@ export default function ResourceList() {
 
   const handleStatusChange = async (id, status) => {
     await updateResourceStatus(id, status);
+    fetchResources();
+  };
+
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete "${name}"?`)) return;
+    await deleteResource(id);
     fetchResources();
   };
 
@@ -102,16 +108,21 @@ export default function ResourceList() {
                     <td style={{ fontFamily: "var(--font-mono)" }}>{r.capacity}</td>
                     <td>{r.location || "—"}</td>
                     <td>
-                      <select
-                        value={r.status}
-                        onChange={(e) => handleStatusChange(r.id, e.target.value)}
-                        style={{ padding: "5px 8px", fontSize: "12px", width: "auto" }}
-                      >
-                        <option value="Available">Available</option>
-                        <option value="Dispatched">Dispatched</option>
-                        <option value="Maintenance">Maintenance</option>
-                        <option value="Reserved">Reserved</option>
-                      </select>
+                      <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+                        <select
+                          value={r.status}
+                          onChange={(e) => handleStatusChange(r.id, e.target.value)}
+                          style={{ padding: "5px 8px", fontSize: "12px", width: "auto" }}
+                        >
+                          <option value="Available">Available</option>
+                          <option value="Dispatched">Dispatched</option>
+                          <option value="Maintenance">Maintenance</option>
+                          <option value="Reserved">Reserved</option>
+                        </select>
+                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(r.id, r.name)}>
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

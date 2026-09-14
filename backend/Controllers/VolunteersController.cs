@@ -35,6 +35,44 @@ public class VolunteersController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = volunteer.Id }, ToResponseDto(volunteer));
     }
 
+    // DELETE /api/volunteers
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAll()
+    {
+        var volunteerIds = await _context.Volunteers.Select(v => v.Id).ToListAsync();
+
+        var dispatchTasks = await _context.DispatchTasks.Where(dt => volunteerIds.Contains(dt.VolunteerId)).ToListAsync();
+        _context.DispatchTasks.RemoveRange(dispatchTasks);
+
+        var shifts = await _context.Shifts.Where(s => volunteerIds.Contains(s.VolunteerId)).ToListAsync();
+        _context.Shifts.RemoveRange(shifts);
+
+        var volunteers = await _context.Volunteers.ToListAsync();
+        _context.Volunteers.RemoveRange(volunteers);
+
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+
+    // DELETE /api/volunteers/{id}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var volunteer = await _context.Volunteers.FindAsync(id);
+        if (volunteer == null) return NotFound();
+
+        var dispatchTasks = await _context.DispatchTasks.Where(dt => dt.VolunteerId == id).ToListAsync();
+        _context.DispatchTasks.RemoveRange(dispatchTasks);
+
+        var shifts = await _context.Shifts.Where(s => s.VolunteerId == id).ToListAsync();
+        _context.Shifts.RemoveRange(shifts);
+
+        _context.Volunteers.Remove(volunteer);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
     // GET /api/volunteers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<VolunteerResponseDto>>> GetAll(

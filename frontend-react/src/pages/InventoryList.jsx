@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getInventory, createInventoryItem, adjustStock } from "../services/resourceService";
+import { getInventory, createInventoryItem, adjustStock, deleteInventoryItem } from "../services/resourceService";
 import StatusBadge from "../components/StatusBadge";
 import Modal, { FormField, FormRow } from "../components/Modal";
 
@@ -33,6 +33,12 @@ export default function InventoryList() {
 
   const handleAdjust = async (id, delta) => {
     await adjustStock(id, delta);
+    fetchInventory();
+  };
+
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete "${name}"?`)) return;
+    await deleteInventoryItem(id);
     fetchInventory();
   };
 
@@ -77,13 +83,13 @@ export default function InventoryList() {
                 <th>Stock</th>
                 <th>Threshold</th>
                 <th>Status</th>
-                <th>Adjust</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {items.length === 0 ? (
                 <tr>
-                  <td colSpan="7">
+                  <td colSpan="8">
                     <div className="empty-state">
                       <div className="empty-state-icon">📋</div>
                       <div className="empty-state-text">No inventory items</div>
@@ -104,6 +110,7 @@ export default function InventoryList() {
                       <div style={{ display: "flex", gap: "4px" }}>
                         <button className="btn btn-success btn-sm" onClick={() => handleAdjust(i.id, 10)}>+10</button>
                         <button className="btn btn-danger btn-sm" onClick={() => handleAdjust(i.id, -10)}>-10</button>
+                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(i.id, i.itemName)}>Delete</button>
                       </div>
                     </td>
                   </tr>
