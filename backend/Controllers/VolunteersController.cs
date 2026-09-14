@@ -41,9 +41,6 @@ public class VolunteersController : ControllerBase
     {
         var volunteerIds = await _context.Volunteers.Select(v => v.Id).ToListAsync();
 
-        var dispatchTasks = await _context.DispatchTasks.Where(dt => volunteerIds.Contains(dt.VolunteerId)).ToListAsync();
-        _context.DispatchTasks.RemoveRange(dispatchTasks);
-
         var shifts = await _context.Shifts.Where(s => volunteerIds.Contains(s.VolunteerId)).ToListAsync();
         _context.Shifts.RemoveRange(shifts);
 
@@ -60,9 +57,6 @@ public class VolunteersController : ControllerBase
     {
         var volunteer = await _context.Volunteers.FindAsync(id);
         if (volunteer == null) return NotFound();
-
-        var dispatchTasks = await _context.DispatchTasks.Where(dt => dt.VolunteerId == id).ToListAsync();
-        _context.DispatchTasks.RemoveRange(dispatchTasks);
 
         var shifts = await _context.Shifts.Where(s => s.VolunteerId == id).ToListAsync();
         _context.Shifts.RemoveRange(shifts);
