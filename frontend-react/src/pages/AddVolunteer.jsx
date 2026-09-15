@@ -18,7 +18,7 @@ function AddVolunteer() {
     setError(null);
     try {
       await createVolunteer(form);
-      navigate("/", { state: { successMessage: "Volunteer registered successfully!" } });
+      navigate("/volunteers", { state: { successMessage: "Volunteer registered successfully!" } });
     } catch (err) {
       setError("Failed to register volunteer. Please check the details and try again.");
     } finally {
@@ -29,7 +29,7 @@ function AddVolunteer() {
   return (
     <div className="page-wrapper">
       <div style={{ marginBottom: "20px" }}>
-        <Link to="/" style={{ fontSize: "13px", color: "var(--text-muted)", display: "inline-flex", alignItems: "center", gap: "6px" }}>
+        <Link to="/volunteers" style={{ fontSize: "13px", color: "var(--text-muted)", display: "inline-flex", alignItems: "center", gap: "6px" }}>
           ← Back to Volunteers
         </Link>
       </div>
@@ -62,21 +62,21 @@ function AddVolunteer() {
             <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "var(--text-secondary)", marginBottom: "6px" }}>
               Full Name <span style={{ color: "var(--red)" }}>*</span>
             </label>
-            <input name="name" placeholder="e.g. Amara Perera" value={form.name} onChange={handleChange} required />
+            <input name="name" className="form-control" placeholder="e.g. Amara Perera" value={form.name} onChange={handleChange} required />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "16px" }}>
+          <div className="form-row-responsive" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "16px" }}>
             <div>
               <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "var(--text-secondary)", marginBottom: "6px" }}>
                 Email <span style={{ color: "var(--red)" }}>*</span>
               </label>
-              <input name="email" type="email" placeholder="amara@email.com" value={form.email} onChange={handleChange} required />
+              <input name="email" className="form-control" type="email" placeholder="amara@email.com" value={form.email} onChange={handleChange} required />
             </div>
             <div>
               <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "var(--text-secondary)", marginBottom: "6px" }}>
                 Phone <span style={{ color: "var(--red)" }}>*</span>
               </label>
-              <input name="phone" placeholder="+94 77 123 4567" value={form.phone} onChange={handleChange} required />
+              <input name="phone" className="form-control" placeholder="+94 77 123 4567" value={form.phone} onChange={handleChange} required />
             </div>
           </div>
 
@@ -84,12 +84,12 @@ function AddVolunteer() {
             <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "var(--text-secondary)", marginBottom: "6px" }}>
               Skills <span style={{ color: "var(--red)" }}>*</span>
             </label>
-            <input name="skills" placeholder="e.g. medical, driving, rescue" value={form.skills} onChange={handleChange} required />
+            <input name="skills" className="form-control" placeholder="e.g. medical, driving, rescue" value={form.skills} onChange={handleChange} required />
             <div style={{ fontSize: "11px", color: "var(--text-dim)", marginTop: "4px" }}>Comma-separated list of skills</div>
           </div>
 
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
-            <Link to="/" className="btn btn-ghost">Cancel</Link>
+            <Link to="/volunteers" className="btn btn-ghost">Cancel</Link>
             <button type="submit" className="btn btn-primary" disabled={submitting}>
               {submitting ? "Registering..." : "Register Volunteer"}
             </button>

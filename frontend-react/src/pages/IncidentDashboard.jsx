@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { incidentService } from "../services/incidentService";
+import StatCard from "../components/StatCard";
 
 function IncidentDashboard() {
   const navigate = useNavigate();
+  const searchRef = useRef(null);
   const [incidents, setIncidents] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,11 +17,9 @@ function IncidentDashboard() {
   const [priority, setPriority] = useState("");
   const [status, setStatus] = useState("");
 
-  useEffect(() => {
-    loadData();
-  }, [category, priority, status]);
+  const hasFilters = Boolean(search || category || priority || status);
 
-  const loadData = async () => {
+  async function loadData() {
     try {
       setLoading(true);
       setError(null);
@@ -31,15 +31,40 @@ function IncidentDashboard() {
       setStats(summaryStats);
     } catch (err) {
       console.error(err);
-      setError("Unable to connect to the Incident Intelligence Backend.");
+      setError("Unable to connect to the Incident Intelligence Backend. Check that the API is running, then retry.");
     } finally {
       setLoading(false);
     }
-  };
+  }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, priority, status]);
+
+  // Press "/" anywhere to jump to search (matches topbar hint)
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "/" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "SELECT" && document.activeElement?.tagName !== "TEXTAREA") {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     loadData();
+  };
+
+  const resetFilters = () => {
+    setSearch("");
+    setCategory("");
+    setPriority("");
+    setStatus("");
   };
 
   const handleDelete = async (id, e) => {
@@ -52,6 +77,8 @@ function IncidentDashboard() {
       alert("Failed to delete incident: " + err.message);
     }
   };
+
+  const openIncident = (id) => navigate(`/incidents/${id}`);
 
   const getPriorityBadgeClass = (p) => {
     switch (p?.toLowerCase()) {
@@ -68,13 +95,13 @@ function IncidentDashboard() {
       case "active planning": return "badge badge-info";
       case "reported": return "badge badge-warning";
       case "resolved": case "closed": return "badge badge-neutral";
-      default: return "badge badge-secondary";
+      default: return "badge badge-neutral";
     }
   };
 
   return (
-    <div className="incident-hub-container">
-      {/* Header Banner */}
+    <div className="incident-hub-container page-wrapper">
+      {/* Header */}
       <div className="command-header">
         <div>
           <div className="subtitle-tag">🤖 AGENTIC AI SUBSYSTEM</div>
@@ -83,60 +110,49 @@ function IncidentDashboard() {
             Real-time emergency monitoring, threat assessment, and AI Coordinator response planning.
           </p>
         </div>
-        <Link to="/incidents/new" className="btn btn-primary shadow-glow">
-          + Report Emergency Incident
-        </Link>
+        <div className="hub-toolbar">
+          <button type="button" className="btn btn-secondary" onClick={loadData} title="Refresh incident feed">
+            ⟳ Refresh
+          </button>
+          <Link to="/incidents/new" className="btn btn-primary shadow-glow">
+            + Report Emergency Incident
+          </Link>
+        </div>
       </div>
 
-      {/* Summary Analytics Cards */}
+      {/* Summary analytics */}
       {stats && (
-        <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-label">Total Incidents</div>
-            <div className="stat-value">{stats.totalIncidents}</div>
-            <div className="stat-foot">Registered emergency events</div>
-          </div>
-
-          <div className="stat-card active-border">
-            <div className="stat-label">Active Emergencies</div>
-            <div className="stat-value text-warning">{stats.activeIncidents}</div>
-            <div className="stat-foot">Currently requiring active coordination</div>
-          </div>
-
-          <div className="stat-card critical-border">
-            <div className="stat-label">Critical Priority</div>
-            <div className="stat-value text-danger">{stats.criticalIncidents}</div>
-            <div className="stat-foot">Immediate life-safety threats</div>
-          </div>
-
-          <div className="stat-card ai-border">
-            <div className="stat-label">AI Action Plans</div>
-            <div className="stat-value text-accent">{stats.generatedPlansCount}</div>
-            <div className="stat-foot">Coordinator Agent response strategies</div>
-          </div>
+        <div className="stats-grid anim-stagger">
+          <StatCard icon="📋" label="Total Incidents" value={stats.totalIncidents} sub="Registered emergency events" color="blue" />
+          <StatCard icon="⚠️" label="Active Emergencies" value={stats.activeIncidents} sub="Requiring active coordination" color="amber" glow={stats.activeIncidents > 0} />
+          <StatCard icon="🚨" label="Critical Priority" value={stats.criticalIncidents} sub="Immediate life-safety threats" color="red" glow={stats.criticalIncidents > 0} />
+          <StatCard icon="🤖" label="AI Action Plans" value={stats.generatedPlansCount} sub="Coordinator response strategies" color="purple" />
         </div>
       )}
 
-      {/* Filters and Search Bar */}
+      {/* Filters */}
       <div className="filter-card">
         <form onSubmit={handleSearchSubmit} className="filter-row">
           <div className="search-input-group">
             <input
+              ref={searchRef}
               type="text"
-              placeholder="Search by title, location, description..."
+              placeholder='Search by title, location, description…  ( press / )'
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="form-control"
+              aria-label="Search incidents"
             />
+            {search && (
+              <button type="button" className="btn btn-ghost" onClick={() => setSearch("")} aria-label="Clear search">
+                ✕
+              </button>
+            )}
             <button type="submit" className="btn btn-secondary">Search</button>
           </div>
 
           <div className="filter-selectors">
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="form-select"
-            >
+            <select value={category} onChange={(e) => setCategory(e.target.value)} className="form-select" aria-label="Filter by category">
               <option value="">All Categories</option>
               <option value="Fire">Fire</option>
               <option value="Flood">Flood</option>
@@ -146,11 +162,7 @@ function IncidentDashboard() {
               <option value="Chemical">Chemical / HazMat</option>
             </select>
 
-            <select
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
-              className="form-select"
-            >
+            <select value={priority} onChange={(e) => setPriority(e.target.value)} className="form-select" aria-label="Filter by priority">
               <option value="">All Priorities</option>
               <option value="Critical">Critical</option>
               <option value="High">High</option>
@@ -158,11 +170,7 @@ function IncidentDashboard() {
               <option value="Low">Low</option>
             </select>
 
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="form-select"
-            >
+            <select value={status} onChange={(e) => setStatus(e.target.value)} className="form-select" aria-label="Filter by status">
               <option value="">All Statuses</option>
               <option value="Reported">Reported</option>
               <option value="Active Planning">Active Planning</option>
@@ -171,47 +179,64 @@ function IncidentDashboard() {
               <option value="Closed">Closed</option>
             </select>
 
-            {(search || category || priority || status) && (
-              <button
-                type="button"
-                className="btn btn-ghost"
-                onClick={() => {
-                  setSearch("");
-                  setCategory("");
-                  setPriority("");
-                  setStatus("");
-                }}
-              >
+            {hasFilters && (
+              <button type="button" className="btn btn-ghost" onClick={resetFilters}>
                 Reset Filters
               </button>
             )}
+            <span className="hub-result-count" role="status">
+              {!loading && `${incidents.length} result${incidents.length === 1 ? "" : "s"}`}
+            </span>
           </div>
         </form>
       </div>
 
-      {/* Main Content Area */}
-      {error && <div className="alert alert-error">{error}</div>}
+      {/* Content */}
+      {error && (
+        <div className="alert alert-error" role="alert">
+          {error}
+          <div style={{ marginTop: "10px" }}>
+            <button className="btn btn-sm btn-secondary" onClick={loadData}>Try Again</button>
+          </div>
+        </div>
+      )}
 
       {loading ? (
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Loading Incident Intelligence Feeds...</p>
+        <div className="incidents-grid" aria-label="Loading incidents">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="skeleton-card" />
+          ))}
         </div>
       ) : incidents.length === 0 ? (
         <div className="empty-state">
-          <h3>No Incidents Found</h3>
-          <p>No emergency incidents match your search or filter parameters.</p>
-          <Link to="/incidents/new" className="btn btn-primary" style={{ marginTop: "12px" }}>
-            Report New Incident
-          </Link>
+          <div style={{ fontSize: "2rem", marginBottom: "8px" }}>🔍</div>
+          <h3>{hasFilters ? "No Incidents Match Your Filters" : "No Incidents Found"}</h3>
+          <p>{hasFilters ? "Try widening your search or resetting the filters." : "No emergency incidents have been reported yet."}</p>
+          <div className="hub-toolbar" style={{ justifyContent: "center", marginTop: "14px" }}>
+            {hasFilters && (
+              <button className="btn btn-secondary" onClick={resetFilters}>Reset Filters</button>
+            )}
+            <Link to="/incidents/new" className="btn btn-primary">
+              Report New Incident
+            </Link>
+          </div>
         </div>
       ) : (
         <div className="incidents-grid">
           {incidents.map((inc) => (
-            <div
+            <article
               key={inc.id}
               className="incident-card"
-              onClick={() => navigate(`/incidents/${inc.id}`)}
+              onClick={() => openIncident(inc.id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  openIncident(inc.id);
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-label={`Open incident ${inc.id}: ${inc.title}`}
             >
               <div className="incident-card-header">
                 <div className="badges-group">
@@ -229,21 +254,21 @@ function IncidentDashboard() {
 
               <div className="incident-meta-grid">
                 <div>
-                  <span className="meta-label">Location:</span>
-                  <span className="meta-value">📍 {inc.location}</span>
+                  <span className="meta-label">Location</span>
+                  <span className="meta-value">📍 {inc.location || "Unknown"}</span>
                 </div>
                 <div>
-                  <span className="meta-label">Impact:</span>
-                  <span className="meta-value">👥 ~{inc.affectedCount} affected</span>
+                  <span className="meta-label">Impact</span>
+                  <span className="meta-value">👥 ~{inc.affectedCount ?? 0} affected</span>
                 </div>
                 <div>
-                  <span className="meta-label">AI Plans:</span>
-                  <span className="meta-value">📋 {inc.planCount} generated</span>
+                  <span className="meta-label">AI Plans</span>
+                  <span className="meta-value">📋 {inc.planCount ?? 0} generated</span>
                 </div>
                 <div>
-                  <span className="meta-label">Reported:</span>
+                  <span className="meta-label">Reported</span>
                   <span className="meta-value">
-                    ⏱️ {new Date(inc.createdAt).toLocaleString()}
+                    ⏱️ {inc.createdAt ? new Date(inc.createdAt).toLocaleString() : "—"}
                   </span>
                 </div>
               </div>
@@ -253,19 +278,20 @@ function IncidentDashboard() {
                   className="btn btn-sm btn-accent"
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/incidents/${inc.id}`);
+                    openIncident(inc.id);
                   }}
                 >
-                  ⚡ Open AI Planner Workbench
+                  ⚡ Open AI Planner
                 </button>
                 <button
                   className="btn btn-sm btn-ghost-danger"
                   onClick={(e) => handleDelete(inc.id, e)}
+                  aria-label={`Delete incident ${inc.id}`}
                 >
                   Delete
                 </button>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       )}

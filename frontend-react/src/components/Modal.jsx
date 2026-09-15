@@ -135,10 +135,10 @@ export function FormField({ label, children, required }) {
   );
 }
 
-/* Form row for side-by-side fields */
+/* Form row for side-by-side fields (stacks on mobile) */
 export function FormRow({ children }) {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+    <div className="form-row-responsive" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
       {children}
     </div>
   );

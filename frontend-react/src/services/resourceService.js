@@ -16,6 +16,10 @@ export const createResource = async (data) => {
   return response.data;
 };
 
+export const updateResource = async (id, data) => {
+  await axios.put(`${API_BASE_URL}/Resources/${id}`, data);
+};
+
 export const updateResourceStatus = async (id, status) => {
   const response = await axios.put(`${API_BASE_URL}/Resources/${id}/status`, { status });
   return response.data;
@@ -32,6 +36,14 @@ export const getShelters = async (status = "") => {
 export const createShelter = async (data) => {
   const response = await axios.post(`${API_BASE_URL}/Shelters`, data);
   return response.data;
+};
+
+export const updateShelter = async (id, data) => {
+  await axios.put(`${API_BASE_URL}/Shelters/${id}`, data);
+};
+
+export const deleteShelter = async (id) => {
+  await axios.delete(`${API_BASE_URL}/Shelters/${id}`);
 };
 
 export const updateShelterOccupancy = async (id, currentOccupancy) => {
@@ -56,6 +68,10 @@ export const createInventoryItem = async (data) => {
 export const adjustStock = async (id, quantityAdjustment) => {
   const response = await axios.put(`${API_BASE_URL}/Inventory/${id}/adjust-stock`, { quantityAdjustment });
   return response.data;
+};
+
+export const updateInventoryItem = async (id, data) => {
+  await axios.put(`${API_BASE_URL}/Inventory/${id}`, data);
 };
 
 export const deleteInventoryItem = async (id) => {

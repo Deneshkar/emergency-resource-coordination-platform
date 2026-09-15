@@ -2,10 +2,20 @@
 
 :root {
   --bg-dark: #0b0f19;
+  --bg-base: #0b0f19;
+  --bg-surface: rgba(23, 31, 48, 0.85);
+  --bg-elevated: #1a2338;
+  --bg-hover: rgba(255, 255, 255, 0.06);
+  --bg-active: rgba(255, 255, 255, 0.1);
   --card-bg: rgba(23, 31, 48, 0.75);
   --card-border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.14);
   --text-main: #f1f5f9;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
   --text-muted: #94a3b8;
+  --text-dim: #64748b;
 
   --accent-primary: #38bdf8;
   --accent-glow: rgba(56, 189, 248, 0.25);
@@ -15,6 +25,29 @@
   --warning: #f59e0b;
   --success: #10b981;
   --info: #3b82f6;
+
+  --blue: #3b82f6;
+  --blue-glow: rgba(59, 130, 246, 0.25);
+  --red: #ef4444;
+  --red-glow: rgba(239, 68, 68, 0.25);
+  --amber: #f59e0b;
+  --amber-glow: rgba(245, 158, 11, 0.25);
+  --green: #10b981;
+  --green-glow: rgba(16, 185, 129, 0.25);
+  --cyan: #06b6d4;
+  --cyan-glow: rgba(6, 182, 212, 0.25);
+  --purple: #8b5cf6;
+  --purple-glow: rgba(139, 92, 246, 0.25);
+
+  --sidebar-width: 264px;
+  --sidebar-collapsed: 78px;
+  --topbar-height: 64px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --font-mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
 
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color-scheme: dark;
@@ -40,13 +73,15 @@ body {
   min-height: 100vh;
 }
 
-/* App Layout & Navigation */
+/* App Layout shell is owned by App.css (sidebar + main column).
+   Base definition kept here for load-order safety. */
 .app-layout {
   display: flex;
-  flex-direction: column;
+  width: 100%;
   min-height: 100vh;
 }
 
+/* Legacy top nav (kept for backwards-compat, no longer used by App shell) */
 .app-nav {
   display: flex;
   justify-content: space-between;
@@ -257,14 +292,73 @@ body {
 }
 
 .form-control, .form-select {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: block;
   background: rgba(15, 23, 42, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #fff;
-  padding: 0.6rem 1rem;
+  padding: 0.65rem 0.9rem;
   border-radius: 10px;
   font-size: 0.9rem;
+  font-family: inherit;
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+textarea.form-control {
+  min-height: 130px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+/* Safety net: bare controls inside modals (FormField pattern used across
+   list pages) get the same dark-theme styling even without a class. */
+.modal-body input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+.modal-body textarea,
+.modal-body select {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: block;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 0.65rem 0.9rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-body input:focus,
+.modal-body textarea:focus,
+.modal-body select:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.modal-body textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.form-control::placeholder,
+.form-select::placeholder,
+.modal-body input::placeholder,
+.modal-body textarea::placeholder {
+  color: var(--text-dim);
+  opacity: 1;
+  font-family: inherit;
+}
+
+@media (max-width: 560px) {
+  .modal-body .form-row-responsive {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 .form-control:focus, .form-select:focus {

@@ -138,20 +138,20 @@ export default function IncidentList() {
       </div>
 
       {/* Create Modal */}
-      <Modal isOpen={showCreate} onClose={() => setShowCreate(false)} title="Report New Incident" subtitle="Log a new emergency incident into the system">
+      <Modal isOpen={showCreate} onClose={() => setShowCreate(false)} title="Report New Incident" subtitle="Log a new emergency incident into the system" width="560px">
         <form onSubmit={handleCreate}>
           <FormField label="Title" required>
-            <input placeholder="e.g. Flash Flood in District 7" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+            <input className="form-control" placeholder="e.g. Flash Flood in District 7" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
           </FormField>
           <FormField label="Description">
-            <textarea rows={3} placeholder="Details about the incident..." value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} style={{ resize: "vertical" }} />
+            <textarea className="form-control" rows={4} placeholder="Details about the incident, visible hazards, people affected…" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           </FormField>
           <FormRow>
             <FormField label="Location">
-              <input placeholder="e.g. Colombo, Sri Lanka" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+              <input className="form-control" placeholder="e.g. Colombo, Sri Lanka" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
             </FormField>
             <FormField label="Priority">
-              <select value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })}>
+              <select className="form-select" value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })}>
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>
@@ -171,7 +171,7 @@ export default function IncidentList() {
         <form onSubmit={handleUpdate}>
           <FormRow>
             <FormField label="Status">
-              <select value={updateForm.status} onChange={(e) => setUpdateForm({ ...updateForm, status: e.target.value })}>
+              <select className="form-select" value={updateForm.status} onChange={(e) => setUpdateForm({ ...updateForm, status: e.target.value })}>
                 <option value="Reported">Reported</option>
                 <option value="Investigating">Investigating</option>
                 <option value="InProgress">In Progress</option>
@@ -180,7 +180,7 @@ export default function IncidentList() {
               </select>
             </FormField>
             <FormField label="Priority">
-              <select value={updateForm.priority} onChange={(e) => setUpdateForm({ ...updateForm, priority: e.target.value })}>
+              <select className="form-select" value={updateForm.priority} onChange={(e) => setUpdateForm({ ...updateForm, priority: e.target.value })}>
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>

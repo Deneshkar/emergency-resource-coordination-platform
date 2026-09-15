@@ -32,7 +32,7 @@ function VolunteerList() {
     }
   };
 
-  useEffect(() => { fetchVolunteers(); }, [page, availabilityFilter]);
+  useEffect(() => { fetchVolunteers(); }, [page, availabilityFilter, search]);
 
   useEffect(() => {
     if (successMessage) {

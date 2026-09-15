@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getShelters, createShelter, updateShelterOccupancy } from "../services/resourceService";
+import { getShelters, createShelter, updateShelter, deleteShelter, updateShelterOccupancy } from "../services/resourceService";
 import StatusBadge from "../components/StatusBadge";
 import Modal, { FormField, FormRow } from "../components/Modal";
 
@@ -8,6 +8,8 @@ export default function ShelterList() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ name: "", location: "", address: "", totalCapacity: 100, contactNumber: "" });
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState({ id: null, name: "", location: "", address: "", totalCapacity: 100, currentOccupancy: 0, status: "Active", contactNumber: "" });
 
   const fetchShelters = async () => {
     try {
@@ -28,6 +30,33 @@ export default function ShelterList() {
     await createShelter(form);
     setForm({ name: "", location: "", address: "", totalCapacity: 100, contactNumber: "" });
     setShowModal(false);
+    fetchShelters();
+  };
+
+  const openEditModal = (shelter) => {
+    setEditForm({
+      id: shelter.id,
+      name: shelter.name,
+      location: shelter.location || "",
+      address: shelter.address || "",
+      totalCapacity: shelter.totalCapacity,
+      currentOccupancy: shelter.currentOccupancy,
+      status: shelter.status,
+      contactNumber: shelter.contactNumber || "",
+    });
+    setShowEditModal(true);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    await updateShelter(editForm.id, editForm);
+    setShowEditModal(false);
+    fetchShelters();
+  };
+
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete "${name}"?`)) return;
+    await deleteShelter(id);
     fetchShelters();
   };
 
@@ -117,6 +146,10 @@ export default function ShelterList() {
                     onBlur={(e) => handleOccupancyUpdate(s.id, e.target.value)}
                     style={{ width: "70px", padding: "5px 8px", fontSize: "12px" }}
                   />
+                  <div style={{ marginLeft: "auto", display: "flex", gap: "4px" }}>
+                    <button className="btn btn-secondary btn-sm" onClick={() => openEditModal(s)}>Edit</button>
+                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(s.id, s.name)}>Delete</button>
+                  </div>
                 </div>
               </div>
             );
@@ -140,9 +173,50 @@ export default function ShelterList() {
           <FormField label="Contact Number">
             <input className="form-control" placeholder="Hotline" value={form.contactNumber} onChange={(e) => setForm({ ...form, contactNumber: e.target.value })} />
           </FormField>
+          <FormField label="Address">
+            <input className="form-control" placeholder="e.g. 123 Main Street, Colombo" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
+          </FormField>
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "8px" }}>
             <button type="button" className="btn btn-ghost" onClick={() => setShowModal(false)}>Cancel</button>
             <button type="submit" className="btn btn-success">Add Shelter</button>
+          </div>
+        </form>
+      </Modal>
+
+      <Modal isOpen={showEditModal} onClose={() => setShowEditModal(false)} title="Edit Shelter" subtitle={`Updating shelter #${editForm.id}`}>
+        <form onSubmit={handleUpdate}>
+          <FormField label="Shelter Name" required>
+            <input className="form-control" placeholder="e.g. Central School Shelter" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} required />
+          </FormField>
+          <FormRow>
+            <FormField label="Location">
+              <input className="form-control" placeholder="District" value={editForm.location} onChange={(e) => setEditForm({ ...editForm, location: e.target.value })} />
+            </FormField>
+            <FormField label="Max Capacity">
+              <input className="form-control" type="number" value={editForm.totalCapacity} onChange={(e) => setEditForm({ ...editForm, totalCapacity: parseInt(e.target.value) || 0 })} />
+            </FormField>
+          </FormRow>
+          <FormRow>
+            <FormField label="Current Occupancy">
+              <input className="form-control" type="number" value={editForm.currentOccupancy} onChange={(e) => setEditForm({ ...editForm, currentOccupancy: parseInt(e.target.value) || 0 })} />
+            </FormField>
+            <FormField label="Status">
+              <select className="form-select" value={editForm.status} onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}>
+                <option value="Active">Active</option>
+                <option value="Full">Full</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </FormField>
+          </FormRow>
+          <FormField label="Contact Number">
+            <input className="form-control" placeholder="Hotline" value={editForm.contactNumber} onChange={(e) => setEditForm({ ...editForm, contactNumber: e.target.value })} />
+          </FormField>
+          <FormField label="Address">
+            <input className="form-control" placeholder="e.g. 123 Main Street, Colombo" value={editForm.address} onChange={(e) => setEditForm({ ...editForm, address: e.target.value })} />
+          </FormField>
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "8px" }}>
+            <button type="button" className="btn btn-ghost" onClick={() => setShowEditModal(false)}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Save Changes</button>
           </div>
         </form>
       </Modal>
