@@ -19,6 +19,7 @@ function IncidentDetail() {
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [newStatus, setNewStatus] = useState("");
   const [newPriority, setNewPriority] = useState("");
+  const [newAssignedCoordinator, setNewAssignedCoordinator] = useState("");
   const [newNote, setNewNote] = useState("");
 
   // Timeline note state
@@ -38,6 +39,7 @@ function IncidentDetail() {
       setIncident(data);
       setNewStatus(data.status);
       setNewPriority(data.priority);
+      setNewAssignedCoordinator(data.assignedCoordinator || "");
     } catch (err) {
       console.error(err);
       setError(`Failed to load incident #${id}`);
@@ -68,6 +70,7 @@ function IncidentDetail() {
       await incidentService.updateIncident(id, {
         status: newStatus,
         priority: newPriority,
+        assignedCoordinator: newAssignedCoordinator,
         note: newNote,
       });
       setNewNote("");
@@ -85,6 +88,16 @@ function IncidentDetail() {
       await loadIncident();
     } catch (err) {
       alert("Failed to update plan status: " + err.message);
+    }
+  };
+
+  const handleDeleteIncident = async () => {
+    if (!window.confirm("Are you sure you want to delete this incident?")) return;
+    try {
+      await incidentService.deleteIncident(id);
+      navigate("/incidents");
+    } catch (err) {
+      alert("Failed to delete incident: " + err.message);
     }
   };
 
@@ -131,7 +144,15 @@ function IncidentDetail() {
         <Link to="/incidents" className="btn btn-ghost">
           ← Back to Incident Hub
         </Link>
-        <span className="detail-incident-id">Incident #{incident.id}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <span className="detail-incident-id">Incident #{incident.id}</span>
+          <button
+            className="btn btn-ghost-danger"
+            onClick={handleDeleteIncident}
+          >
+            Delete
+          </button>
+        </div>
       </div>
 
       {/* Main Banner */}
@@ -280,6 +301,17 @@ function IncidentDetail() {
                   <option value="High">High</option>
                   <option value="Critical">Critical</option>
                 </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Assigned Coordinator:</label>
+                <input
+                  type="text"
+                  placeholder="e.g. John Doe"
+                  value={newAssignedCoordinator}
+                  onChange={(e) => setNewAssignedCoordinator(e.target.value)}
+                  className="form-control"
+                />
               </div>
 
               <div className="form-group">

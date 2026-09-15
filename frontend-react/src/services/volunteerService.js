@@ -23,3 +23,11 @@ export const createVolunteer = async (volunteerData) => {
   const response = await axios.post(`${API_BASE_URL}/Volunteers`, volunteerData);
   return response.data;
 };
+
+export const deleteAllVolunteers = async () => {
+  await axios.delete(`${API_BASE_URL}/Volunteers`);
+};
+
+export const deleteVolunteer = async (id) => {
+  await axios.delete(`${API_BASE_URL}/Volunteers/${id}`);
+};

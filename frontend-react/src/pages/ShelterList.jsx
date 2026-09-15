@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getShelters, createShelter, updateShelterOccupancy } from "../services/resourceService";
+import { getShelters, createShelter, updateShelter, deleteShelter, updateShelterOccupancy } from "../services/resourceService";
 import StatusBadge from "../components/StatusBadge";
 import Modal, { FormField, FormRow } from "../components/Modal";
 
@@ -8,6 +8,8 @@ export default function ShelterList() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ name: "", location: "", address: "", totalCapacity: 100, contactNumber: "" });
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState({ id: null, name: "", location: "", address: "", totalCapacity: 100, currentOccupancy: 0, status: "Active", contactNumber: "" });
 
   const fetchShelters = async () => {
     try {
@@ -31,6 +33,33 @@ export default function ShelterList() {
     fetchShelters();
   };
 
+  const openEditModal = (shelter) => {
+    setEditForm({
+      id: shelter.id,
+      name: shelter.name,
+      location: shelter.location || "",
+      address: shelter.address || "",
+      totalCapacity: shelter.totalCapacity,
+      currentOccupancy: shelter.currentOccupancy,
+      status: shelter.status,
+      contactNumber: shelter.contactNumber || "",
+    });
+    setShowEditModal(true);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    await updateShelter(editForm.id, editForm);
+    setShowEditModal(false);
+    fetchShelters();
+  };
+
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete "${name}"?`)) return;
+    await deleteShelter(id);
+    fetchShelters();
+  };
+
   const handleOccupancyUpdate = async (id, occupancy) => {
     await updateShelterOccupancy(id, parseInt(occupancy) || 0);
     fetchShelters();
@@ -39,11 +68,16 @@ export default function ShelterList() {
   const totalCap = shelters.reduce((s, sh) => s + sh.totalCapacity, 0);
   const totalOcc = shelters.reduce((s, sh) => s + sh.currentOccupancy, 0);
 
-  if (loading) return <div className="loading-spinner">Loading shelters...</div>;
+  if (loading) return (
+    <div className="loading-spinner">
+      <div className="spinner"></div>
+      Loading shelters...
+    </div>
+  );
 
   return (
     <div className="page-wrapper">
-      <div className="page-header">
+      <div className="page-header anim-slide-up">
         <div className="page-header-left">
           <h1>Shelters</h1>
           <p>Evacuation shelter monitoring &amp; capacity control &mdash; {shelters.length} registered</p>
@@ -51,28 +85,28 @@ export default function ShelterList() {
         <button className="btn btn-primary" onClick={() => setShowModal(true)}>+ Add Shelter</button>
       </div>
 
-      <div className="grid-stats" style={{ marginBottom: "24px" }}>
-        <div className="card" style={{ padding: "14px 18px" }}>
-          <div style={{ fontSize: "11px", color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>Total Capacity</div>
-          <div style={{ fontSize: "22px", fontWeight: "800", color: "var(--blue)", marginTop: "2px", fontFamily: "var(--font-mono)" }}>{totalCap}</div>
+      <div className="grid-stats anim-stagger">
+        <div className="card stat-card ai-border anim-slide-up">
+          <div className="stat-label">Total Capacity</div>
+          <div className="stat-value font-mono" style={{ color: "var(--blue)" }}>{totalCap}</div>
         </div>
-        <div className="card" style={{ padding: "14px 18px" }}>
-          <div style={{ fontSize: "11px", color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>Currently Occupied</div>
-          <div style={{ fontSize: "22px", fontWeight: "800", color: "var(--amber)", marginTop: "2px", fontFamily: "var(--font-mono)" }}>{totalOcc}</div>
+        <div className="card stat-card active-border anim-slide-up">
+          <div className="stat-label">Currently Occupied</div>
+          <div className="stat-value font-mono" style={{ color: "var(--amber)" }}>{totalOcc}</div>
         </div>
-        <div className="card" style={{ padding: "14px 18px" }}>
-          <div style={{ fontSize: "11px", color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>Available Slots</div>
-          <div style={{ fontSize: "22px", fontWeight: "800", color: "var(--green)", marginTop: "2px", fontFamily: "var(--font-mono)" }}>{totalCap - totalOcc}</div>
+        <div className="card stat-card anim-slide-up">
+          <div className="stat-label">Available Slots</div>
+          <div className="stat-value font-mono" style={{ color: "var(--green)" }}>{totalCap - totalOcc}</div>
         </div>
-        <div className="card" style={{ padding: "14px 18px" }}>
-          <div style={{ fontSize: "11px", color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>Full Shelters</div>
-          <div style={{ fontSize: "22px", fontWeight: "800", color: "var(--red)", marginTop: "2px", fontFamily: "var(--font-mono)" }}>{shelters.filter(s => s.status === "Full").length}</div>
+        <div className="card stat-card critical-border anim-slide-up">
+          <div className="stat-label">Full Shelters</div>
+          <div className="stat-value font-mono" style={{ color: "var(--red)" }}>{shelters.filter(s => s.status === "Full").length}</div>
         </div>
       </div>
 
-      <div className="grid-3">
+      <div className="grid-3 anim-stagger">
         {shelters.length === 0 ? (
-          <div className="card" style={{ gridColumn: "1 / -1" }}>
+          <div className="card anim-fade-in" style={{ gridColumn: "1 / -1" }}>
             <div className="empty-state">
               <div className="empty-state-icon">🏠</div>
               <div className="empty-state-text">No shelters registered</div>
@@ -83,30 +117,39 @@ export default function ShelterList() {
           shelters.map((s) => {
             const pct = Math.round((s.currentOccupancy / s.totalCapacity) * 100) || 0;
             return (
-              <div key={s.id} className="card" style={{ borderLeft: `3px solid ${s.status === "Full" ? "var(--red)" : s.status === "Active" ? "var(--green)" : "var(--text-dim)"}` }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-                  <div style={{ fontWeight: "700", fontSize: "15px" }}>{s.name}</div>
+              <div
+                key={s.id}
+                className="card anim-slide-up"
+                style={{ borderLeft: `3px solid ${s.status === "Full" ? "var(--red)" : s.status === "Active" ? "var(--green)" : "var(--text-dim)"}` }}
+              >
+                <div className="card-header">
+                  <div className="card-title">{s.name}</div>
                   <StatusBadge status={s.status} size="sm" />
                 </div>
-                <div style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "3px" }}>📍 {s.location || "—"}</div>
-                <div style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "14px" }}>📞 {s.contactNumber || "—"}</div>
+                <div className="text-muted" style={{ fontSize: "12px", marginBottom: "3px" }}>📍 {s.location || "—"}</div>
+                <div className="text-muted" style={{ fontSize: "12px", marginBottom: "14px" }}>📞 {s.contactNumber || "—"}</div>
                 <div style={{ marginBottom: "12px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", marginBottom: "4px" }}>
-                    <span style={{ color: "var(--text-secondary)" }}>Occupancy</span>
-                    <span style={{ fontFamily: "var(--font-mono)", fontWeight: "700" }}>{s.currentOccupancy} / {s.totalCapacity} ({pct}%)</span>
+                    <span className="text-muted">Occupancy</span>
+                    <span className="font-mono" style={{ fontWeight: "700" }}>{s.currentOccupancy} / {s.totalCapacity} ({pct}%)</span>
                   </div>
                   <div className="progress-bar" style={{ height: "8px" }}>
                     <div className={`progress-fill ${pct >= 90 ? "red" : pct >= 70 ? "amber" : "green"}`} style={{ width: `${Math.min(pct, 100)}%` }} />
                   </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", paddingTop: "10px", borderTop: "1px solid var(--border-subtle)" }}>
-                  <span style={{ fontSize: "11px", color: "var(--text-dim)" }}>Headcount:</span>
+                  <span className="text-dim" style={{ fontSize: "11px" }}>Headcount:</span>
                   <input
                     type="number"
+                    className="form-control"
                     defaultValue={s.currentOccupancy}
                     onBlur={(e) => handleOccupancyUpdate(s.id, e.target.value)}
                     style={{ width: "70px", padding: "5px 8px", fontSize: "12px" }}
                   />
+                  <div style={{ marginLeft: "auto", display: "flex", gap: "4px" }}>
+                    <button className="btn btn-secondary btn-sm" onClick={() => openEditModal(s)}>Edit</button>
+                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(s.id, s.name)}>Delete</button>
+                  </div>
                 </div>
               </div>
             );
@@ -117,22 +160,63 @@ export default function ShelterList() {
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Add Shelter" subtitle="Register a new evacuation shelter">
         <form onSubmit={handleCreate}>
           <FormField label="Shelter Name" required>
-            <input placeholder="e.g. Central School Shelter" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+            <input className="form-control" placeholder="e.g. Central School Shelter" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
           </FormField>
           <FormRow>
             <FormField label="Location">
-              <input placeholder="District" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+              <input className="form-control" placeholder="District" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
             </FormField>
             <FormField label="Max Capacity">
-              <input type="number" value={form.totalCapacity} onChange={(e) => setForm({ ...form, totalCapacity: parseInt(e.target.value) || 0 })} />
+              <input className="form-control" type="number" value={form.totalCapacity} onChange={(e) => setForm({ ...form, totalCapacity: parseInt(e.target.value) || 0 })} />
             </FormField>
           </FormRow>
           <FormField label="Contact Number">
-            <input placeholder="Hotline" value={form.contactNumber} onChange={(e) => setForm({ ...form, contactNumber: e.target.value })} />
+            <input className="form-control" placeholder="Hotline" value={form.contactNumber} onChange={(e) => setForm({ ...form, contactNumber: e.target.value })} />
+          </FormField>
+          <FormField label="Address">
+            <input className="form-control" placeholder="e.g. 123 Main Street, Colombo" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
           </FormField>
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "8px" }}>
             <button type="button" className="btn btn-ghost" onClick={() => setShowModal(false)}>Cancel</button>
             <button type="submit" className="btn btn-success">Add Shelter</button>
+          </div>
+        </form>
+      </Modal>
+
+      <Modal isOpen={showEditModal} onClose={() => setShowEditModal(false)} title="Edit Shelter" subtitle={`Updating shelter #${editForm.id}`}>
+        <form onSubmit={handleUpdate}>
+          <FormField label="Shelter Name" required>
+            <input className="form-control" placeholder="e.g. Central School Shelter" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} required />
+          </FormField>
+          <FormRow>
+            <FormField label="Location">
+              <input className="form-control" placeholder="District" value={editForm.location} onChange={(e) => setEditForm({ ...editForm, location: e.target.value })} />
+            </FormField>
+            <FormField label="Max Capacity">
+              <input className="form-control" type="number" value={editForm.totalCapacity} onChange={(e) => setEditForm({ ...editForm, totalCapacity: parseInt(e.target.value) || 0 })} />
+            </FormField>
+          </FormRow>
+          <FormRow>
+            <FormField label="Current Occupancy">
+              <input className="form-control" type="number" value={editForm.currentOccupancy} onChange={(e) => setEditForm({ ...editForm, currentOccupancy: parseInt(e.target.value) || 0 })} />
+            </FormField>
+            <FormField label="Status">
+              <select className="form-select" value={editForm.status} onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}>
+                <option value="Active">Active</option>
+                <option value="Full">Full</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </FormField>
+          </FormRow>
+          <FormField label="Contact Number">
+            <input className="form-control" placeholder="Hotline" value={editForm.contactNumber} onChange={(e) => setEditForm({ ...editForm, contactNumber: e.target.value })} />
+          </FormField>
+          <FormField label="Address">
+            <input className="form-control" placeholder="e.g. 123 Main Street, Colombo" value={editForm.address} onChange={(e) => setEditForm({ ...editForm, address: e.target.value })} />
+          </FormField>
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "8px" }}>
+            <button type="button" className="btn btn-ghost" onClick={() => setShowEditModal(false)}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Save Changes</button>
           </div>
         </form>
       </Modal>

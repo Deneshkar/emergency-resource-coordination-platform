@@ -60,13 +60,12 @@ export default function Dashboard() {
           <h1>Dashboard</h1>
           <p>Emergency operations overview &mdash; real-time status across all modules</p>
         </div>
-        <div style={{ fontSize: "12px", color: "var(--text-dim)", fontFamily: "var(--font-mono)" }}>
+        <div className="text-dim font-mono" style={{ fontSize: "12px" }}>
           {new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
         </div>
       </div>
 
-      {/* Stats Row */}
-      <div className="grid-stats">
+      <div className="grid-stats anim-stagger">
         <StatCard icon="⚠️" label="Active Incidents" value={activeIncidents.length} sub={`${criticalIncidents.length} critical`} color={criticalIncidents.length > 0 ? "red" : "amber"} glow={criticalIncidents.length > 0} />
         <StatCard icon="🚛" label="Dispatches" value={dispatches.length} sub={`${dispatches.filter(d => d.status === "InProgress").length} in progress`} color="blue" />
         <StatCard icon="👤" label="Volunteers" value={volunteers.length} sub={`${availableVolunteers.length} available`} color="green" />
@@ -75,10 +74,9 @@ export default function Dashboard() {
         <StatCard icon="📋" label="Low Stock Alerts" value={lowStockItems.length} sub="items need restock" color={lowStockItems.length > 0 ? "amber" : "green"} />
       </div>
 
-      {/* Two Column Layout */}
       <div className="grid-2">
         {/* Recent Incidents */}
-        <div className="card">
+        <div className="card anim-slide-up">
           <div className="card-header">
             <span className="card-title">⚠️ Recent Incidents</span>
             <Link to="/incidents" className="btn btn-ghost btn-sm">View All</Link>
@@ -106,7 +104,7 @@ export default function Dashboard() {
                     <div style={{ fontWeight: "600", fontSize: "13px", color: "var(--text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "200px" }}>
                       {inc.title}
                     </div>
-                    <div style={{ fontSize: "11px", color: "var(--text-dim)", fontFamily: "var(--font-mono)" }}>
+                    <div className="text-dim font-mono" style={{ fontSize: "11px" }}>
                       #{inc.id} &middot; {inc.location || "No location"}
                     </div>
                   </div>
@@ -121,7 +119,7 @@ export default function Dashboard() {
         </div>
 
         {/* Active Dispatches */}
-        <div className="card">
+        <div className="card anim-slide-up">
           <div className="card-header">
             <span className="card-title">🚛 Active Dispatches</span>
             <Link to="/dispatches" className="btn btn-ghost btn-sm">View All</Link>
@@ -149,7 +147,7 @@ export default function Dashboard() {
                     <div style={{ fontWeight: "600", fontSize: "13px", color: "var(--text-primary)" }}>
                       Dispatch #{d.id}
                     </div>
-                    <div style={{ fontSize: "11px", color: "var(--text-dim)" }}>
+                    <div className="text-dim" style={{ fontSize: "11px" }}>
                       Incident #{d.incidentId} &middot; {d.tasks?.length || 0} tasks
                     </div>
                   </div>
@@ -161,7 +159,7 @@ export default function Dashboard() {
         </div>
 
         {/* Shelter Status */}
-        <div className="card">
+        <div className="card anim-slide-up">
           <div className="card-header">
             <span className="card-title">🏠 Shelter Status</span>
             <Link to="/shelters" className="btn btn-ghost btn-sm">Manage</Link>
@@ -178,7 +176,7 @@ export default function Dashboard() {
                   <div key={s.id}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
                       <span style={{ fontSize: "13px", fontWeight: "600" }}>{s.name}</span>
-                      <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                      <span className="text-muted" style={{ fontSize: "12px" }}>
                         {s.currentOccupancy}/{s.totalCapacity}
                       </span>
                     </div>
@@ -196,7 +194,7 @@ export default function Dashboard() {
         </div>
 
         {/* Low Stock Alerts */}
-        <div className="card">
+        <div className="card anim-slide-up">
           <div className="card-header">
             <span className="card-title">📋 Inventory Alerts</span>
             <Link to="/inventory" className="btn btn-ghost btn-sm">Manage</Link>
@@ -223,10 +221,10 @@ export default function Dashboard() {
                 >
                   <div>
                     <div style={{ fontWeight: "600", fontSize: "13px" }}>{item.itemName}</div>
-                    <div style={{ fontSize: "11px", color: "var(--text-dim)" }}>{item.category}</div>
+                    <div className="text-dim" style={{ fontSize: "11px" }}>{item.category}</div>
                   </div>
                   <div style={{ textAlign: "right" }}>
-                    <div style={{ fontWeight: "700", fontSize: "13px", fontFamily: "var(--font-mono)" }}>
+                    <div className="font-mono" style={{ fontWeight: "700", fontSize: "13px" }}>
                       {item.quantity} {item.unitOfMeasure}
                     </div>
                     <StatusBadge status={item.status} size="sm" />

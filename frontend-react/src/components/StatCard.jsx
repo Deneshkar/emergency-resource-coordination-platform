@@ -12,7 +12,7 @@ export default function StatCard({ icon, label, value, sub, color = "blue", glow
 
   return (
     <div
-      className="card"
+      className="card anim-slide-up"
       style={{
         position: "relative",
         overflow: "hidden",
@@ -27,8 +27,8 @@ export default function StatCard({ icon, label, value, sub, color = "blue", glow
           left: 0,
           right: 0,
           height: "2px",
-          background: c.text,
-          opacity: 0.6,
+          background: `linear-gradient(90deg, ${c.text}, transparent)`,
+          opacity: 0.7,
         }}
       />
 
@@ -36,7 +36,7 @@ export default function StatCard({ icon, label, value, sub, color = "blue", glow
         <div>
           <div
             style={{
-              fontSize: "11px",
+              fontSize: "0.7rem",
               fontWeight: "600",
               textTransform: "uppercase",
               letterSpacing: "0.8px",
@@ -48,7 +48,7 @@ export default function StatCard({ icon, label, value, sub, color = "blue", glow
           </div>
           <div
             style={{
-              fontSize: "28px",
+              fontSize: "1.75rem",
               fontWeight: "800",
               color: c.text,
               lineHeight: 1,
@@ -60,9 +60,9 @@ export default function StatCard({ icon, label, value, sub, color = "blue", glow
           {sub && (
             <div
               style={{
-                fontSize: "12px",
+                fontSize: "0.75rem",
                 color: "var(--text-muted)",
-                marginTop: "4px",
+                marginTop: "6px",
               }}
             >
               {sub}

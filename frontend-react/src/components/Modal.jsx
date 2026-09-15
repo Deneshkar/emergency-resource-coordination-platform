@@ -22,75 +22,95 @@ export default function Modal({ isOpen, onClose, title, subtitle, children, widt
 
   return (
     <div
+      className="modal-backdrop anim-fade-in"
       onClick={onClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0, 0, 0, 0.7)",
-        backdropFilter: "blur(4px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 1000,
-        padding: "20px",
-        animation: "fade-in 0.15s ease-out",
-      }}
     >
       <div
+        className="modal-content anim-scale-in"
         onClick={(e) => e.stopPropagation()}
-        style={{
-          background: "var(--bg-surface)",
-          border: "1px solid var(--border-default)",
-          borderRadius: "var(--radius-lg)",
-          width: "100%",
-          maxWidth: width,
-          maxHeight: "85vh",
-          overflow: "auto",
-          boxShadow: "var(--shadow-lg)",
-        }}
+        style={{ maxWidth: width }}
       >
         {/* Header */}
-        <div
-          style={{
-            padding: "20px 24px",
-            borderBottom: "1px solid var(--border-subtle)",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-          }}
-        >
+        <div className="modal-header">
           <div>
-            <h2 style={{ fontSize: "17px", fontWeight: "700", marginBottom: "2px" }}>{title}</h2>
+            <h2 className="modal-title">{title}</h2>
             {subtitle && (
-              <p style={{ fontSize: "12px", color: "var(--text-muted)" }}>{subtitle}</p>
+              <p className="modal-subtitle">{subtitle}</p>
             )}
           </div>
-          <button
-            onClick={onClose}
-            style={{
-              background: "var(--bg-hover)",
-              border: "none",
-              borderRadius: "var(--radius-sm)",
-              width: "30px",
-              height: "30px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "var(--text-muted)",
-              fontSize: "16px",
-              cursor: "pointer",
-              flexShrink: 0,
-            }}
-          >
-            ✕
+          <button className="modal-close" onClick={onClose}>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
           </button>
         </div>
 
         {/* Body */}
-        <div style={{ padding: "20px 24px" }}>
+        <div className="modal-body">
           {children}
         </div>
       </div>
+
+      <style>{`
+        .modal-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.7);
+          backdrop-filter: blur(6px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          padding: 20px;
+        }
+        .modal-content {
+          background: var(--bg-surface);
+          border: 1px solid var(--border-default);
+          border-radius: var(--radius-lg);
+          width: 100%;
+          max-width: ${width};
+          max-height: 85vh;
+          overflow: auto;
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+        }
+        .modal-header {
+          padding: 20px 24px;
+          border-bottom: 1px solid var(--border-subtle);
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+        }
+        .modal-title {
+          font-size: 1.05rem;
+          font-weight: 700;
+          margin-bottom: 2px;
+        }
+        .modal-subtitle {
+          font-size: 0.78rem;
+          color: var(--text-muted);
+        }
+        .modal-close {
+          background: var(--bg-hover);
+          border: 1px solid var(--border-subtle);
+          border-radius: 6px;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-muted);
+          cursor: pointer;
+          transition: all 0.15s ease;
+          flex-shrink: 0;
+        }
+        .modal-close:hover {
+          background: var(--bg-active);
+          color: var(--text-primary);
+        }
+        .modal-body {
+          padding: 20px 24px;
+        }
+      `}</style>
     </div>
   );
 }
@@ -102,9 +122,9 @@ export function FormField({ label, children, required }) {
       <label
         style={{
           display: "block",
-          fontSize: "12px",
+          fontSize: "0.78rem",
           fontWeight: "600",
-          color: "var(--text-secondary)",
+          color: "var(--text-muted)",
           marginBottom: "6px",
         }}
       >
@@ -115,10 +135,10 @@ export function FormField({ label, children, required }) {
   );
 }
 
-/* Form row for side-by-side fields */
+/* Form row for side-by-side fields (stacks on mobile) */
 export function FormRow({ children }) {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+    <div className="form-row-responsive" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
       {children}
     </div>
   );

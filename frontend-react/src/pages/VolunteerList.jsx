@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { getVolunteers, updateAvailability } from "../services/volunteerService";
+import { getVolunteers, updateAvailability, deleteAllVolunteers, deleteVolunteer } from "../services/volunteerService";
 import StatusBadge from "../components/StatusBadge";
 
 function VolunteerList() {
@@ -32,7 +32,7 @@ function VolunteerList() {
     }
   };
 
-  useEffect(() => { fetchVolunteers(); }, [page, availabilityFilter]);
+  useEffect(() => { fetchVolunteers(); }, [page, availabilityFilter, search]);
 
   useEffect(() => {
     if (successMessage) {
@@ -53,38 +53,56 @@ function VolunteerList() {
     fetchVolunteers();
   };
 
+  const handleDeleteAll = async () => {
+    if (!window.confirm("Are you sure you want to delete ALL volunteers?")) return;
+    try {
+      await deleteAllVolunteers();
+      setSuccessMessage("All volunteers deleted.");
+      fetchVolunteers();
+    } catch (err) {
+      setError("Failed to delete volunteers.");
+    }
+  };
+
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete volunteer "${name}"?`)) return;
+    try {
+      await deleteVolunteer(id);
+      setSuccessMessage(`"${name}" deleted.`);
+      fetchVolunteers();
+    } catch (err) {
+      setError("Failed to delete volunteer.");
+    }
+  };
+
   const hasPrevPage = page > 1;
 
   return (
     <div className="page-wrapper">
-      <div className="page-header">
+      <div className="page-header anim-slide-up">
         <div className="page-header-left">
           <h1>Volunteers</h1>
           <p>Manage responder profiles, skills &amp; availability</p>
         </div>
-        <Link to="/volunteers/new" className="btn btn-primary">+ Register Volunteer</Link>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <button onClick={handleDeleteAll} className="btn btn-danger btn-sm">
+            Clear All
+          </button>
+          <Link to="/volunteers/new" className="btn btn-primary">+ Register Volunteer</Link>
+        </div>
       </div>
 
       {successMessage && (
-        <div style={{
-          padding: "10px 16px",
-          background: "var(--green-glow)",
-          border: "1px solid var(--green)",
-          borderRadius: "var(--radius-sm)",
-          color: "var(--green)",
-          fontSize: "13px",
-          fontWeight: "600",
-          marginBottom: "20px",
-        }}>
+        <div className="alert alert-success anim-slide-up">
           {successMessage}
         </div>
       )}
 
-      {/* Filters */}
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px", flexWrap: "wrap" }}>
-        <form onSubmit={handleSearch} style={{ display: "flex", gap: "8px", flex: 1, minWidth: "280px" }}>
+      <div className="filter-row anim-slide-up" style={{ animationDelay: "100ms" }}>
+        <form onSubmit={handleSearch} className="search-input-group" style={{ flex: 1, minWidth: "280px" }}>
           <input
             type="text"
+            className="form-control"
             placeholder="Search by name or skill..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -106,9 +124,12 @@ function VolunteerList() {
       </div>
 
       {loading ? (
-        <div className="loading-spinner">Loading volunteers...</div>
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          Loading volunteers...
+        </div>
       ) : error ? (
-        <div className="card" style={{ color: "var(--red)", textAlign: "center", padding: "40px" }}>{error}</div>
+        <div className="card alert-error" style={{ textAlign: "center", padding: "40px" }}>{error}</div>
       ) : volunteers.length === 0 ? (
         <div className="card">
           <div className="empty-state">
@@ -119,7 +140,7 @@ function VolunteerList() {
         </div>
       ) : (
         <>
-          <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+          <div className="card anim-slide-up" style={{ padding: 0, overflow: "hidden", animationDelay: "150ms" }}>
             <div style={{ overflowX: "auto" }}>
               <table className="data-table">
                 <thead>
@@ -146,33 +167,33 @@ function VolunteerList() {
                       <td>
                         <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
                           {(v.skills || "").split(",").filter(Boolean).map((skill, i) => (
-                            <span key={i} style={{
-                              padding: "2px 8px",
-                              background: "var(--bg-base)",
-                              border: "1px solid var(--border-subtle)",
-                              borderRadius: "12px",
-                              fontSize: "11px",
-                              color: "var(--text-secondary)",
-                              whiteSpace: "nowrap",
-                            }}>
+                            <span key={i} className="badge badge-category">
                               {skill.trim()}
                             </span>
                           ))}
                         </div>
                       </td>
-                      <td style={{ fontFamily: "var(--font-mono)", fontSize: "12px" }}>
+                      <td className="font-mono" style={{ fontSize: "12px" }}>
                         {v.rating > 0 ? `★ ${v.rating.toFixed(1)}` : "—"}
                       </td>
                       <td>
                         <StatusBadge status={v.isAvailable ? "Available" : "Maintenance"} />
                       </td>
                       <td>
-                        <button
-                          className={`btn btn-sm ${v.isAvailable ? "btn-ghost" : "btn-success"}`}
-                          onClick={() => handleToggleAvailability(v.id, v.isAvailable)}
-                        >
-                          {v.isAvailable ? "Mark Unavailable" : "Mark Available"}
-                        </button>
+                        <div style={{ display: "flex", gap: "6px" }}>
+                          <button
+                            className={`btn btn-sm ${v.isAvailable ? "btn-ghost" : "btn-success"}`}
+                            onClick={() => handleToggleAvailability(v.id, v.isAvailable)}
+                          >
+                            {v.isAvailable ? "Mark Unavailable" : "Mark Available"}
+                          </button>
+                          <button
+                            className="btn btn-sm btn-ghost-danger"
+                            onClick={() => handleDelete(v.id, v.name)}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -182,7 +203,7 @@ function VolunteerList() {
           </div>
 
           <div style={{ marginTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+            <span className="text-dim" style={{ fontSize: "13px" }}>
               Showing {volunteers.length > 0 ? (page - 1) * pageSize + 1 : 0}–{(page - 1) * pageSize + volunteers.length} volunteers
             </span>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -193,7 +214,7 @@ function VolunteerList() {
               >
                 ← Previous
               </button>
-              <span style={{ fontSize: "13px", color: "var(--text-secondary)", fontFamily: "var(--font-mono)", padding: "0 8px" }}>
+              <span className="text-muted font-mono" style={{ fontSize: "13px", padding: "0 8px" }}>
                 Page {page}
               </span>
               <button
