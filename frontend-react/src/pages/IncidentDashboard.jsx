@@ -1,11 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { incidentService } from "../services/incidentService";
+import { useAuth } from "../context/AuthContext";
 import StatCard from "../components/StatCard";
 
 function IncidentDashboard() {
   const navigate = useNavigate();
   const searchRef = useRef(null);
+  const { user, hasRole } = useAuth();
+
+  const isCitizen = user?.role === "Citizen";
+  const isVolunteer = user?.role === "Volunteer";
+  const isCoordinatorOrAdmin = hasRole(["Coordinator", "Admin"]);
+
+  // Scope filter: Citizen defaults to their own reported incidents ("my")
+  const [scopeFilter, setScopeFilter] = useState(() => (isCitizen ? "my" : "all"));
+
   const [incidents, setIncidents] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,25 +33,27 @@ function IncidentDashboard() {
     try {
       setLoading(true);
       setError(null);
+
+      const isMyOnly = isCitizen ? scopeFilter === "my" : scopeFilter === "my";
+
       const [incidentList, summaryStats] = await Promise.all([
-        incidentService.getIncidents({ search, category, priority, status }),
-        incidentService.getSummaryStats(),
+        incidentService.getIncidents({ search, category, priority, status, myOnly: isMyOnly }),
+        incidentService.getSummaryStats({ myOnly: isMyOnly }),
       ]);
       setIncidents(incidentList);
       setStats(summaryStats);
     } catch (err) {
       console.error(err);
-      setError("Unable to connect to the Incident Intelligence Backend. Check that the API is running, then retry.");
+      setError(err.message || "Failed to load incidents. Please verify connection and credentials.");
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, priority, status]);
+  }, [category, priority, status, scopeFilter]);
 
   // Press "/" anywhere to jump to search (matches topbar hint)
   useEffect(() => {
@@ -101,16 +113,68 @@ function IncidentDashboard() {
 
   return (
     <div className="incident-hub-container page-wrapper">
-      {/* Header */}
+      {/* Header with Role-Specific Title and Scope Switcher */}
       <div className="command-header">
         <div>
-          <div className="subtitle-tag">🤖 AGENTIC AI SUBSYSTEM</div>
-          <h1 className="header-title">Incident Intelligence & Command Center</h1>
+          <div className="subtitle-tag">
+            {isCitizen
+              ? "🚨 CITIZEN EMERGENCY PORTAL"
+              : isVolunteer
+              ? "🚑 FIELD RESPONDER HUB"
+              : "🤖 AGENTIC AI SUBSYSTEM"}
+          </div>
+          <h1 className="header-title">
+            {isCitizen
+              ? scopeFilter === "my"
+                ? "My Reported Incidents & Response Status"
+                : "Community Emergency Incidents"
+              : isVolunteer
+              ? "Active Emergencies & Responder Feeds"
+              : "Incident Intelligence & Command Center"}
+          </h1>
           <p className="header-desc">
-            Real-time emergency monitoring, threat assessment, and AI Coordinator response planning.
+            {isCitizen
+              ? scopeFilter === "my"
+                ? "Track response plans, dispatch status, and updates on your reported emergencies."
+                : "View community emergency alerts and situation updates in your sector."
+              : isVolunteer
+              ? "Monitor regional emergency incidents and triage resource responses."
+              : "Real-time emergency monitoring, threat assessment, and AI Coordinator response planning."}
           </p>
         </div>
+
         <div className="hub-toolbar">
+          {/* Toggle for Citizen: My Reports vs All Community Alerts */}
+          {isCitizen && (
+            <div
+              className="scope-toggle-tabs"
+              style={{
+                display: "inline-flex",
+                background: "rgba(255, 255, 255, 0.06)",
+                borderRadius: "8px",
+                padding: "3px",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+              }}
+            >
+              <button
+                type="button"
+                className={`btn btn-sm ${scopeFilter === "my" ? "btn-primary" : "btn-ghost"}`}
+                onClick={() => setScopeFilter("my")}
+                style={{ padding: "5px 12px", fontSize: "12px", borderRadius: "6px" }}
+              >
+                📋 My Reports
+              </button>
+              <button
+                type="button"
+                className={`btn btn-sm ${scopeFilter === "all" ? "btn-primary" : "btn-ghost"}`}
+                onClick={() => setScopeFilter("all")}
+                style={{ padding: "5px 12px", fontSize: "12px", borderRadius: "6px" }}
+              >
+                🌍 Community Alerts
+              </button>
+            </div>
+          )}
+
           <button type="button" className="btn btn-secondary" onClick={loadData} title="Refresh incident feed">
             ⟳ Refresh
           </button>
@@ -123,10 +187,36 @@ function IncidentDashboard() {
       {/* Summary analytics */}
       {stats && (
         <div className="stats-grid anim-stagger">
-          <StatCard icon="📋" label="Total Incidents" value={stats.totalIncidents} sub="Registered emergency events" color="blue" />
-          <StatCard icon="⚠️" label="Active Emergencies" value={stats.activeIncidents} sub="Requiring active coordination" color="amber" glow={stats.activeIncidents > 0} />
-          <StatCard icon="🚨" label="Critical Priority" value={stats.criticalIncidents} sub="Immediate life-safety threats" color="red" glow={stats.criticalIncidents > 0} />
-          <StatCard icon="🤖" label="AI Action Plans" value={stats.generatedPlansCount} sub="Coordinator response strategies" color="purple" />
+          <StatCard
+            icon="📋"
+            label={isCitizen && scopeFilter === "my" ? "My Reports" : "Total Incidents"}
+            value={stats.totalIncidents ?? 0}
+            sub={isCitizen && scopeFilter === "my" ? "Submitted by your account" : "Registered emergency events"}
+            color="blue"
+          />
+          <StatCard
+            icon="⚠️"
+            label="Active Emergencies"
+            value={stats.activeIncidents ?? 0}
+            sub="Requiring active coordination"
+            color="amber"
+            glow={stats.activeIncidents > 0}
+          />
+          <StatCard
+            icon="🚨"
+            label="Critical Priority"
+            value={stats.criticalIncidents ?? 0}
+            sub="Immediate life-safety threats"
+            color="red"
+            glow={stats.criticalIncidents > 0}
+          />
+          <StatCard
+            icon="🤖"
+            label={isCitizen ? "Actioned / Planned" : "AI Action Plans"}
+            value={stats.generatedPlansCount ?? 0}
+            sub={isCitizen ? "Response strategies generated" : "Coordinator response strategies"}
+            color="purple"
+          />
         </div>
       )}
 
@@ -137,14 +227,14 @@ function IncidentDashboard() {
             <input
               ref={searchRef}
               type="text"
-              placeholder='Search by title, location, description…  ( press / )'
+              placeholder="Search by title, location, description…  ( press / )"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="form-control"
               aria-label="Search incidents"
             />
             {search && (
-              <button type="button" className="btn btn-ghost" onClick={() => setSearch("")} aria-label="Clear search">
+              <button type="button" className="search-clear" onClick={() => setSearch("")} aria-label="Clear search">
                 ✕
               </button>
             )}
@@ -210,14 +300,26 @@ function IncidentDashboard() {
       ) : incidents.length === 0 ? (
         <div className="empty-state">
           <div style={{ fontSize: "2rem", marginBottom: "8px" }}>🔍</div>
-          <h3>{hasFilters ? "No Incidents Match Your Filters" : "No Incidents Found"}</h3>
-          <p>{hasFilters ? "Try widening your search or resetting the filters." : "No emergency incidents have been reported yet."}</p>
+          <h3>
+            {isCitizen && scopeFilter === "my"
+              ? "You Haven't Reported Any Incidents Yet"
+              : hasFilters
+              ? "No Incidents Match Your Filters"
+              : "No Incidents Found"}
+          </h3>
+          <p>
+            {isCitizen && scopeFilter === "my"
+              ? "If you are experiencing an emergency situation, submit a report to trigger response coordination."
+              : hasFilters
+              ? "Try widening your search or resetting the filters."
+              : "No emergency incidents have been reported yet."}
+          </p>
           <div className="hub-toolbar" style={{ justifyContent: "center", marginTop: "14px" }}>
             {hasFilters && (
               <button className="btn btn-secondary" onClick={resetFilters}>Reset Filters</button>
             )}
             <Link to="/incidents/new" className="btn btn-primary">
-              Report New Incident
+              Report Emergency Incident
             </Link>
           </div>
         </div>
@@ -239,23 +341,23 @@ function IncidentDashboard() {
               aria-label={`Open incident ${inc.id}: ${inc.title}`}
             >
               <div className="incident-card-header">
-                <div className="badges-group">
+                <div className="badge-group">
                   <span className={getPriorityBadgeClass(inc.priority)}>
                     {inc.priority} Priority
                   </span>
-                  <span className="badge badge-category">{inc.category || "General"}</span>
+                  <span className="badge badge-category">{inc.category}</span>
                   <span className={getStatusBadgeClass(inc.status)}>{inc.status}</span>
                 </div>
                 <span className="incident-id">#{inc.id}</span>
               </div>
 
-              <h3 className="incident-title">{inc.title}</h3>
-              <p className="incident-description">{inc.description}</p>
+              <h2 className="incident-title">{inc.title}</h2>
+              <p className="incident-desc">{inc.description}</p>
 
               <div className="incident-meta-grid">
                 <div>
                   <span className="meta-label">Location</span>
-                  <span className="meta-value">📍 {inc.location || "Unknown"}</span>
+                  <span className="meta-value">📍 {inc.location}</span>
                 </div>
                 <div>
                   <span className="meta-label">Impact</span>
@@ -274,22 +376,46 @@ function IncidentDashboard() {
               </div>
 
               <div className="incident-card-footer">
-                <button
-                  className="btn btn-sm btn-accent"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openIncident(inc.id);
-                  }}
-                >
-                  ⚡ Open AI Planner
-                </button>
-                <button
-                  className="btn btn-sm btn-ghost-danger"
-                  onClick={(e) => handleDelete(inc.id, e)}
-                  aria-label={`Delete incident ${inc.id}`}
-                >
-                  Delete
-                </button>
+                {isCoordinatorOrAdmin ? (
+                  <>
+                    <button
+                      className="btn btn-sm btn-accent"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openIncident(inc.id);
+                      }}
+                    >
+                      ⚡ Open AI Planner
+                    </button>
+                    <button
+                      className="btn btn-sm btn-ghost-danger"
+                      onClick={(e) => handleDelete(inc.id, e)}
+                      aria-label={`Delete incident ${inc.id}`}
+                    >
+                      Delete
+                    </button>
+                  </>
+                ) : isVolunteer ? (
+                  <button
+                    className="btn btn-sm btn-primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openIncident(inc.id);
+                    }}
+                  >
+                    📍 View Field Details
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-sm btn-primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openIncident(inc.id);
+                    }}
+                  >
+                    🔍 Track Response Status
+                  </button>
+                )}
               </div>
             </article>
           ))}

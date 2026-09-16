@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Icon = ({ d }) => (
   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -17,8 +18,8 @@ const ICONS = {
   shelter: <Icon d={<><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1V10Z" /></>} />,
   inventory: <Icon d={<><path d="M9 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z" /><path d="M14 2v6h6M9 13h6M9 17h6" /></>} />,
   ai: <Icon d={<><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z" /><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z" /></>} />,
-  report: <Icon d={<><circle cx="12" cy="12" r="9" /><path d="M12 8v4m0 4h.01" /></>} />,
   citizen: <Icon d={<><circle cx="12" cy="8" r="4" /><path d="M4 21v-1a8 8 0 0 1 16 0v1" /></>} />,
+  login: <Icon d={<><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" y1="12" x2="3" y2="12" /></>} />,
 };
 
 const NAV = [
@@ -26,21 +27,23 @@ const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: ICONS.dashboard },
   { to: "/incidents", label: "Incident Hub", icon: ICONS.incident, badgeKey: "active" },
   { section: "Operations" },
-  { to: "/incident-list", label: "All Incidents", icon: ICONS.list },
-  { to: "/dispatches", label: "Dispatches", icon: ICONS.dispatch },
+  { to: "/incident-list", label: "All Incidents", icon: ICONS.list, roles: ["Coordinator", "Admin"] },
+  { to: "/dispatches", label: "Dispatches", icon: ICONS.dispatch, roles: ["Coordinator", "Admin", "Volunteer"] },
   { section: "Resources" },
-  { to: "/volunteers", label: "Volunteers", icon: ICONS.volunteers },
-  { to: "/inventory-hub", label: "Resources & Inventory", icon: ICONS.resources },
+  { to: "/volunteers", label: "Volunteers", icon: ICONS.volunteers, roles: ["Coordinator", "Admin", "Volunteer"] },
+  { to: "/inventory-hub", label: "Resources & Inventory", icon: ICONS.resources, roles: ["Coordinator", "Admin"] },
   { to: "/shelters", label: "Shelters", icon: ICONS.shelter },
-  { to: "/inventory", label: "Inventory", icon: ICONS.inventory },
+  { to: "/inventory", label: "Inventory", icon: ICONS.inventory, roles: ["Coordinator", "Admin"] },
   { section: "Intelligence" },
-  { to: "/situation-analysis", label: "AI Analysis", icon: ICONS.ai },
+  { to: "/situation-analysis", label: "AI Analysis", icon: ICONS.ai, roles: ["Coordinator", "Admin"] },
   { to: "/citizen", label: "Citizen View", icon: ICONS.citizen },
 ];
 
 export default function Sidebar({ collapsed, onToggle, mobileOpen, onClose, activeCount }) {
   const location = useLocation();
+  const { user, isAuthenticated } = useAuth();
   const showText = !collapsed || mobileOpen;
+  const userRole = user?.role;
 
   useEffect(() => {
     if (mobileOpen) onClose();
@@ -54,6 +57,14 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onClose, acti
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen, onClose]);
+
+  // Filter navigation items by active user role
+  const visibleNav = NAV.filter((item) => {
+    if (item.section) return true;
+    if (!item.roles) return true;
+    if (!isAuthenticated) return false;
+    return item.roles.includes(userRole);
+  });
 
   return (
     <>
@@ -94,7 +105,7 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onClose, acti
         </div>
 
         <nav className="sidebar-nav">
-          {NAV.map((item, i) => {
+          {visibleNav.map((item, i) => {
             if (item.section) {
               return showText ? (
                 <div key={`s-${i}`} className="sidebar-section-label">{item.section}</div>
@@ -120,13 +131,36 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onClose, acti
               </NavLink>
             );
           })}
+
+          {isAuthenticated && (
+            <NavLink
+              to="/profile"
+              className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}
+              style={{ marginTop: "0.5rem" }}
+              title="My Account Profile"
+            >
+              <span className="sidebar-link-icon">👤</span>
+              {showText && <span className="sidebar-link-text">My Profile</span>}
+            </NavLink>
+          )}
+
+          {!isAuthenticated && (
+            <NavLink
+              to="/login"
+              className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}
+              style={{ marginTop: "1rem", color: "var(--accent)" }}
+            >
+              <span className="sidebar-link-icon">{ICONS.login}</span>
+              {showText && <span className="sidebar-link-text">Operator Login</span>}
+            </NavLink>
+          )}
         </nav>
 
         {showText ? (
           <div className="sidebar-footer">
             <div className="sidebar-status">
               <span className="status-dot" />
-              <span>System Operational</span>
+              <span>{isAuthenticated ? `${userRole} Session` : "Public Access"}</span>
             </div>
             <div className="sidebar-version">ERCP v1.0.0</div>
           </div>

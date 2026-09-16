@@ -1,4 +1,7 @@
-import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import UserProfileModal from "./UserProfileModal";
 
 const TITLES = [
   { match: "/incidents/new", crumb: "Operations", title: "Report Incident" },
@@ -16,6 +19,8 @@ const TITLES = [
   { match: "/inventory", crumb: "Resources", title: "Inventory" },
   { match: "/situation-analysis", crumb: "Intelligence", title: "Situation Analysis" },
   { match: "/citizen", crumb: "Intelligence", title: "Citizen View" },
+  { match: "/login", crumb: "Security", title: "Operator Authentication" },
+  { match: "/register", crumb: "Security", title: "Registration" },
 ];
 
 function resolveTitle(pathname) {
@@ -25,9 +30,38 @@ function resolveTitle(pathname) {
   return hit ?? { crumb: "Overview", title: "Command Center" };
 }
 
-export default function Topbar({ role, onRoleChange, onMenu, onToggle, collapsed }) {
+const ROLE_COLORS = {
+  Coordinator: { bg: "rgba(245, 158, 11, 0.15)", text: "#f59e0b", border: "rgba(245, 158, 11, 0.3)" },
+  Admin: { bg: "rgba(168, 85, 247, 0.15)", text: "#a855f7", border: "rgba(168, 85, 247, 0.3)" },
+  Volunteer: { bg: "rgba(16, 185, 129, 0.15)", text: "#10b981", border: "rgba(16, 185, 129, 0.3)" },
+  Citizen: { bg: "rgba(14, 165, 233, 0.15)", text: "#0ea5e9", border: "rgba(14, 165, 233, 0.3)" },
+};
+
+export default function Topbar({ onMenu, onToggle, collapsed }) {
   const { pathname } = useLocation();
+  const { user, isAuthenticated, demoLogin, logout } = useAuth();
+  const navigate = useNavigate();
   const { crumb, title } = resolveTitle(pathname);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  const activeRole = user?.role || "Guest";
+  const colors = ROLE_COLORS[activeRole] || { bg: "rgba(255,255,255,0.08)", text: "#94a3b8", border: "rgba(255,255,255,0.15)" };
+
+  const handleRoleChange = async (e) => {
+    const newRole = e.target.value;
+    if (newRole) {
+      try {
+        await demoLogin(newRole);
+      } catch (err) {
+        console.error("Failed to switch demo role:", err);
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <header className="topbar">
@@ -59,24 +93,100 @@ export default function Topbar({ role, onRoleChange, onMenu, onToggle, collapsed
 
       <div className="topbar-spacer" />
 
-      <div className="role-badge-picker">
-        <span className="role-label">Role</span>
-        <select
-          value={role}
-          onChange={(e) => onRoleChange(e.target.value)}
-          className="role-select"
-          aria-label="Select user role"
-        >
-          <option value="Admin">Admin / Dispatcher</option>
-          <option value="Citizen">Citizen</option>
-          <option value="Volunteer">Volunteer</option>
-        </select>
-      </div>
+      {isAuthenticated ? (
+        <div className="topbar-auth-section" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          {/* Quick Demo Role Switcher for Viva Examiners */}
+          <div className="role-badge-picker" title="Switch demo role instantly">
+            <span className="role-label">Active Role</span>
+            <select
+              value={activeRole}
+              onChange={handleRoleChange}
+              className="role-select"
+              aria-label="Switch active demo role"
+            >
+              <option value="Coordinator">Coordinator (AI Planner)</option>
+              <option value="Volunteer">Volunteer (Field Tasks)</option>
+              <option value="Citizen">Citizen (Public Report)</option>
+              <option value="Admin">Admin (System Full)</option>
+            </select>
+          </div>
 
-      <div className="topbar-status" title="All systems operational">
+          {/* User Profile Pill & Profile Modal Trigger */}
+          <button
+            type="button"
+            className="user-profile-pill"
+            onClick={() => setShowProfileModal(true)}
+            title="Click to view full account profile & permissions"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "5px 12px",
+              background: colors.bg,
+              border: `1px solid ${colors.border}`,
+              borderRadius: "20px",
+              fontSize: "12px",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <span
+              style={{
+                width: "22px",
+                height: "22px",
+                borderRadius: "50%",
+                background: colors.text,
+                color: "#000",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 700,
+                fontSize: "11px",
+              }}
+            >
+              {user?.fullName?.charAt(0) || "U"}
+            </span>
+            <span style={{ fontWeight: 600, color: colors.text }}>
+              {user?.fullName ? user.fullName.split(" ")[0] : activeRole}
+            </span>
+            <span style={{ fontSize: "11px", color: "var(--text-muted)", marginLeft: "2px" }}>👤 Profile</span>
+          </button>
+
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="topbar-icon-btn"
+            title="Sign out of platform"
+            style={{ color: "#ef4444" }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          </button>
+        </div>
+      ) : (
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <Link to="/login" className="btn btn-primary" style={{ padding: "6px 14px", fontSize: "13px" }}>
+            Sign In
+          </Link>
+          <Link to="/register" className="btn btn-secondary" style={{ padding: "6px 14px", fontSize: "13px" }}>
+            Register
+          </Link>
+        </div>
+      )}
+
+      <div className="topbar-status" title="Platform online & connected to ASP.NET Core API">
         <span className="status-dot" />
         <span className="status-text">Operational</span>
       </div>
+
+      {/* Account Profile Modal */}
+      <UserProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+      />
     </header>
   );
 }
