@@ -18,6 +18,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.SaveToken = true;
     });
 
+// HttpClient & Scoped Services
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<ERCP.Api.Services.SituationAnalysisService>();
+builder.Services.AddScoped<ERCP.Api.Services.GeolocationService>();
+
 // Register DbContext with PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(
