@@ -17,5 +17,19 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
+    rules: {
+      // Team-standard data-fetch pattern (fetchX() in useEffect on mount/filter
+      // change) trips the new v7 set-state-in-effect rule across all pages.
+      // Keep it visible as a warning; refactor incrementally. Do NOT add new
+      // synchronous setState-in-effect occurrences — see Student 4 CI notes.
+      'react-hooks/set-state-in-effect': 'warn',
+    },
+  },
+  {
+    // Vitest globals for test files.
+    files: ['**/*.test.{js,jsx}', 'src/test/**/*.js'],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.vitest },
+    },
   },
 ])
