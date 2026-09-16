@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getVolunteers, updateAvailability, deleteAllVolunteers, deleteVolunteer } from "../services/volunteerService";
 import StatusBadge from "../components/StatusBadge";
+import { useAuth } from "../context/AuthContext";
 
 function VolunteerList() {
   const location = useLocation();
+  const { user, hasRole } = useAuth();
+  const canManage = hasRole(["Coordinator", "Admin"]);
+
   const [volunteers, setVolunteers] = useState([]);
   const [search, setSearch] = useState("");
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
@@ -48,9 +52,13 @@ function VolunteerList() {
   };
 
   const handleToggleAvailability = async (id, currentStatus) => {
-    await updateAvailability(id, !currentStatus);
-    setSuccessMessage("Availability updated.");
-    fetchVolunteers();
+    try {
+      await updateAvailability(id, !currentStatus);
+      setSuccessMessage("Availability updated successfully.");
+      fetchVolunteers();
+    } catch (err) {
+      setError(err?.response?.data?.message || "Failed to update availability. You may only update your own status.");
+    }
   };
 
   const handleDeleteAll = async () => {
@@ -82,13 +90,21 @@ function VolunteerList() {
       <div className="page-header anim-slide-up">
         <div className="page-header-left">
           <h1>Volunteers</h1>
-          <p>Manage responder profiles, skills &amp; availability</p>
+          <p>
+            {canManage
+              ? "Manage responder profiles, skills & availability"
+              : "View responder pool and update your duty status"}
+          </p>
         </div>
         <div style={{ display: "flex", gap: "8px" }}>
-          <button onClick={handleDeleteAll} className="btn btn-danger btn-sm">
-            Clear All
-          </button>
-          <Link to="/volunteers/new" className="btn btn-primary">+ Register Volunteer</Link>
+          {canManage && (
+            <>
+              <button onClick={handleDeleteAll} className="btn btn-danger btn-sm">
+                Clear All
+              </button>
+              <Link to="/volunteers/new" className="btn btn-primary">+ Register Volunteer</Link>
+            </>
+          )}
         </div>
       </div>
 
@@ -135,7 +151,9 @@ function VolunteerList() {
           <div className="empty-state">
             <div className="empty-state-icon">👤</div>
             <div className="empty-state-text">No volunteers found</div>
-            <div className="empty-state-sub">Register a new volunteer or adjust your filters</div>
+            <div className="empty-state-sub">
+              {canManage ? "Register a new volunteer or adjust your filters" : "Adjust your filters or contact a coordinator"}
+            </div>
           </div>
         </div>
       ) : (
@@ -154,45 +172,90 @@ function VolunteerList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {volunteers.map((v) => (
-                    <tr key={v.id}>
-                      <td>
-                        <Link to={`/volunteers/${v.id}`} style={{ fontWeight: "600", color: "var(--text-primary)" }}>
-                          {v.name}
-                        </Link>
-                      </td>
-                      <td style={{ fontSize: "12px" }}>{v.email}</td>
-                      <td style={{ fontSize: "12px" }}>{v.phone}</td>
-                      <td>
-                        <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
-                          {(v.skills || "").split(",").filter(Boolean).map((skill, i) => (
-                            <span key={i} className="badge badge-category">
-                              {skill.trim()}
-                            </span>
-                          ))}
-                        </div>
-                      </td>
-                      <td>
-                        <StatusBadge status={v.isAvailable ? "Available" : "Maintenance"} />
-                      </td>
-                      <td>
-                        <div style={{ display: "flex", gap: "6px" }}>
-                          <button
-                            className={`btn btn-sm ${v.isAvailable ? "btn-ghost" : "btn-success"}`}
-                            onClick={() => handleToggleAvailability(v.id, v.isAvailable)}
-                          >
-                            {v.isAvailable ? "Mark Unavailable" : "Mark Available"}
-                          </button>
-                          <button
-                            className="btn btn-sm btn-ghost-danger"
-                            onClick={() => handleDelete(v.id, v.name)}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {volunteers.map((v) => {
+                    const isSelf = Boolean(
+                      user?.email &&
+                      v.email &&
+                      v.email.trim().toLowerCase() === user.email.trim().toLowerCase()
+                    );
+
+                    return (
+                      <tr key={v.id}>
+                        <td>
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            <Link to={`/volunteers/${v.id}`} style={{ fontWeight: "600", color: "var(--text-primary)" }}>
+                              {v.name}
+                            </Link>
+                            {isSelf && (
+                              <span
+                                className="badge"
+                                style={{
+                                  background: "rgba(59, 130, 246, 0.18)",
+                                  color: "#60a5fa",
+                                  border: "1px solid rgba(59, 130, 246, 0.4)",
+                                  fontSize: "11px",
+                                  padding: "1px 6px",
+                                  borderRadius: "4px"
+                                }}
+                              >
+                                You
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td style={{ fontSize: "12px" }}>{v.email}</td>
+                        <td style={{ fontSize: "12px" }}>{v.phone}</td>
+                        <td>
+                          <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+                            {(v.skills || "").split(",").filter(Boolean).map((skill, i) => (
+                              <span key={i} className="badge badge-category">
+                                {skill.trim()}
+                              </span>
+                            ))}
+                          </div>
+                        </td>
+                        <td>
+                          <StatusBadge status={v.isAvailable ? "Available" : "Maintenance"} />
+                        </td>
+                        <td>
+                          <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+                            {canManage ? (
+                              <>
+                                <button
+                                  className={`btn btn-sm ${v.isAvailable ? "btn-ghost" : "btn-success"}`}
+                                  onClick={() => handleToggleAvailability(v.id, v.isAvailable)}
+                                >
+                                  {v.isAvailable ? "Mark Unavailable" : "Mark Available"}
+                                </button>
+                                <button
+                                  className="btn btn-sm btn-ghost-danger"
+                                  onClick={() => handleDelete(v.id, v.name)}
+                                >
+                                  Delete
+                                </button>
+                              </>
+                            ) : isSelf ? (
+                              <button
+                                className={`btn btn-sm ${v.isAvailable ? "btn-ghost" : "btn-success"}`}
+                                onClick={() => handleToggleAvailability(v.id, v.isAvailable)}
+                                title="Toggle your personal availability status"
+                              >
+                                {v.isAvailable ? "Go Off-Duty" : "Go On-Duty"}
+                              </button>
+                            ) : (
+                              <span
+                                className="text-dim font-mono"
+                                style={{ fontSize: "12px", padding: "4px 8px" }}
+                                title="Field volunteers cannot modify other responders' availability"
+                              >
+                                Read-Only
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

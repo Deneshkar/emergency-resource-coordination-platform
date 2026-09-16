@@ -2,20 +2,20 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/volunteer.dart';
 import '../models/shift.dart';
+import 'api_config.dart';
+import 'auth_service.dart';
 
 class VolunteerService {
-  // Use 10.0.2.2 instead of localhost when testing on an Android emulator
-  static const String baseUrl = "http://10.0.2.2:5009/api";
-
   static Future<Volunteer> registerVolunteer({
     required String name,
     required String email,
     required String phone,
     required String skills,
   }) async {
+    final token = await AuthService.getToken();
     final response = await http.post(
-      Uri.parse("$baseUrl/Volunteers"),
-      headers: {"Content-Type": "application/json"},
+      Uri.parse("${ApiConfig.baseUrl}/Volunteers"),
+      headers: ApiConfig.defaultHeaders(token),
       body: jsonEncode({
         "name": name,
         "email": email,
@@ -27,23 +27,39 @@ class VolunteerService {
     if (response.statusCode == 201) {
       return Volunteer.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception("Failed to register volunteer");
+      String msg = "Failed to register volunteer";
+      try {
+        final err = jsonDecode(response.body);
+        if (err is Map && err['message'] != null) msg = err['message'];
+      } catch (_) {}
+      throw Exception(msg);
     }
   }
 
   static Future<void> updateAvailability(String id, bool isAvailable) async {
+    final token = await AuthService.getToken();
     final response = await http.put(
-      Uri.parse("$baseUrl/Volunteers/$id/availability"),
-      headers: {"Content-Type": "application/json"},
+      Uri.parse("${ApiConfig.baseUrl}/Volunteers/$id/availability"),
+      headers: ApiConfig.defaultHeaders(token),
       body: jsonEncode({"isAvailable": isAvailable}),
     );
 
     if (response.statusCode != 204) {
-      throw Exception("Failed to update availability");
+      String msg = "Failed to update availability";
+      try {
+        final err = jsonDecode(response.body);
+        if (err is Map && err['message'] != null) msg = err['message'];
+      } catch (_) {}
+      throw Exception(msg);
     }
   }
+
   static Future<List<Volunteer>> getVolunteers() async {
-    final response = await http.get(Uri.parse("$baseUrl/Volunteers"));
+    final token = await AuthService.getToken();
+    final response = await http.get(
+      Uri.parse("${ApiConfig.baseUrl}/Volunteers"),
+      headers: ApiConfig.defaultHeaders(token),
+    );
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
@@ -52,8 +68,26 @@ class VolunteerService {
       throw Exception("Failed to load volunteers");
     }
   }
+
+  static Future<Volunteer?> getVolunteerByEmail(String email) async {
+    try {
+      final volunteers = await getVolunteers();
+      final clean = email.trim().toLowerCase();
+      for (final v in volunteers) {
+        if (v.email.trim().toLowerCase() == clean) {
+          return v;
+        }
+      }
+    } catch (_) {}
+    return null;
+  }
+
   static Future<List<Shift>> getShifts(String volunteerId) async {
-    final response = await http.get(Uri.parse("$baseUrl/Volunteers/$volunteerId/shifts"));
+    final token = await AuthService.getToken();
+    final response = await http.get(
+      Uri.parse("${ApiConfig.baseUrl}/Volunteers/$volunteerId/shifts"),
+      headers: ApiConfig.defaultHeaders(token),
+    );
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
