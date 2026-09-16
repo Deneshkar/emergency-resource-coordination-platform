@@ -29,7 +29,7 @@ function VolunteerList() {
       const data = await getVolunteers(search, isAvailable, page, pageSize + 1);
       setHasNextPage(data.length > pageSize);
       setVolunteers(data.slice(0, pageSize));
-    } catch (err) {
+    } catch {
       setError("Failed to load volunteers.");
     } finally {
       setLoading(false);
@@ -67,7 +67,7 @@ function VolunteerList() {
       await deleteAllVolunteers();
       setSuccessMessage("All volunteers deleted.");
       fetchVolunteers();
-    } catch (err) {
+    } catch {
       setError("Failed to delete volunteers.");
     }
   };
@@ -78,7 +78,7 @@ function VolunteerList() {
       await deleteVolunteer(id);
       setSuccessMessage(`"${name}" deleted.`);
       fetchVolunteers();
-    } catch (err) {
+    } catch {
       setError("Failed to delete volunteer.");
     }
   };

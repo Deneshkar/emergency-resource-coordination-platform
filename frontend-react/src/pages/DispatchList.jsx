@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import StatusBadge from "../components/StatusBadge";
-import Modal, { FormField, FormRow } from "../components/Modal";
+import Modal, { FormField } from "../components/Modal";
 import { getDispatches, createDispatch, updateDispatchStatus } from "../services/dispatchService";
 import { getIncidents } from "../services/incidentService";
 import { getVolunteers } from "../services/volunteerService";

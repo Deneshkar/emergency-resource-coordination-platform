@@ -16,7 +16,7 @@ function VolunteerDetail() {
       try {
         const data = await getVolunteerShifts(id);
         setShifts(data);
-      } catch (err) {
+      } catch {
         setError("Failed to load shift history.");
       } finally {
         setLoading(false);
