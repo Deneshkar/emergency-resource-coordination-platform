@@ -149,7 +149,6 @@ function VolunteerList() {
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Skills</th>
-                    <th>Rating</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
@@ -172,9 +171,6 @@ function VolunteerList() {
                             </span>
                           ))}
                         </div>
-                      </td>
-                      <td className="font-mono" style={{ fontSize: "12px" }}>
-                        {v.rating > 0 ? `★ ${v.rating.toFixed(1)}` : "—"}
                       </td>
                       <td>
                         <StatusBadge status={v.isAvailable ? "Available" : "Maintenance"} />
