@@ -15,18 +15,56 @@ import json
 import argparse
 from datetime import datetime, timezone
 
+# Explicit Allow-List of tools that the Coordinator/Planner Agent is permitted to execute
+ALLOWED_TOOLS = [
+    "get_incident",
+    "get_available_resources",
+    "get_available_volunteers",
+    "get_nearby_shelters",
+    "create_response_plan"
+]
+
 class CoordinatorPlannerAgent:
     def __init__(self, name="AI-Coordinator-Alpha"):
         self.name = name
+        self.allowed_tools = ALLOWED_TOOLS
+
+    def execute_tool(self, tool_name, parameters=None):
+        """
+        Safety check & invocation for allowed agent tools.
+        Disallows high-impact operations like deleting incidents or modifying DB state directly.
+        """
+        if tool_name not in self.allowed_tools:
+            raise ValueError(
+                f"Security Violation: Tool '{tool_name}' is not in the explicit allow-list. "
+                f"Allowed tools are: {', '.join(self.allowed_tools)}"
+            )
+
+        # Simulation stubs for allowed read-only/planning tools
+        if tool_name == "get_incident":
+            return {"incidentId": parameters.get("incident_id") if parameters else 0, "status": "Retrieved"}
+        elif tool_name == "get_available_resources":
+            return {"status": "Available", "resources": ["Engine-1", "Ambulance-A"]}
+        elif tool_name == "get_available_volunteers":
+            return {"status": "Available", "volunteersCount": 15}
+        elif tool_name == "get_nearby_shelters":
+            return {"status": "Available", "shelters": ["Central High Shelter"]}
+        elif tool_name == "create_response_plan":
+            return {"status": "DraftCreated"}
+
+        return {"status": "Executed", "tool": tool_name}
 
     def analyze_and_plan(self, incident_data):
         incident_id = incident_data.get("incident_id", 0)
+        if not incident_id:
+            incident_id = incident_data.get("incidentId", 0)
+
         title = incident_data.get("title", "Emergency Incident")
         description = incident_data.get("description", "")
         location = incident_data.get("location", "Unknown Location")
         category = incident_data.get("category", "General Emergency")
         priority = incident_data.get("priority", "Medium")
-        affected_count = int(incident_data.get("affected_count", 0))
+        affected_count = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
         custom_directives = incident_data.get("custom_directives", "")
         focus_phase = incident_data.get("focus_phase", "")
 
@@ -54,9 +92,23 @@ class CoordinatorPlannerAgent:
             f"Evaluated Risk: {risk_level}. Stated Impact: ~{affected_count} affected individuals."
         )
 
+        objective = f"Contain {category} emergency and protect affected civilians at {location}."
+
+        # Simplify list of actions for structured response
+        actions_list = [step["task"] for step in action_steps]
+        required_resources_list = [f"{res['quantity']} {res['unit']} ({res['resource_type']})" for res in estimated_resources]
+
         return {
             "agent_id": self.name,
             "timestamp": datetime.now(timezone.utc).isoformat(),
+            # Structured AI Output requirements
+            "incidentId": incident_id,
+            "priority": priority,
+            "objective": objective,
+            "actions": actions_list,
+            "requiredResources": required_resources_list,
+            "status": "Generated",
+            # Additional detailed schema attributes for backend model mapping
             "incident_id": incident_id,
             "plan_title": plan_title,
             "plan_description": plan_description,
@@ -65,7 +117,7 @@ class CoordinatorPlannerAgent:
             "action_steps": action_steps,
             "estimated_resources": estimated_resources,
             "subagent_directives": agent_directives,
-            "status": "Generated"
+            "allowed_tools": self.allowed_tools
         }
 
     def _evaluate_threat(self, category, priority, affected_count):
