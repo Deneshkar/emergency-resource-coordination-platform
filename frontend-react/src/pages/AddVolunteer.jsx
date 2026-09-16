@@ -19,7 +19,7 @@ function AddVolunteer() {
     try {
       await createVolunteer(form);
       navigate("/volunteers", { state: { successMessage: "Volunteer registered successfully!" } });
-    } catch (err) {
+    } catch {
       setError("Failed to register volunteer. Please check the details and try again.");
     } finally {
       setSubmitting(false);

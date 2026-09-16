@@ -36,14 +36,12 @@ const statusConfig = {
   LowStock: { color: "var(--amber)", bg: "var(--amber-glow)", dot: true },
   OutOfStock: { color: "var(--red)", bg: "var(--red-glow)", dot: true, pulse: true },
 
-  // Shift
+  // Shift (Active/Rejected reuse the identical shelter/dispatch entries above)
   Scheduled: { color: "var(--blue)", bg: "var(--blue-glow)" },
-  Active: { color: "var(--green)", bg: "var(--green-glow)", dot: true },
   Cancelled: { color: "var(--red)", bg: "var(--red-glow)" },
 
   // Dispatch task
   Accepted: { color: "var(--green)", bg: "var(--green-glow)" },
-  Rejected: { color: "var(--red)", bg: "var(--red-glow)" },
   OnTheWay: { color: "var(--cyan)", bg: "var(--cyan-glow)", dot: true },
   Arrived: { color: "var(--blue)", bg: "var(--blue-glow)" },
 };

@@ -33,10 +33,6 @@ function IncidentDetail() {
   const [noteDesc, setNoteDesc] = useState("");
   const [addingNote, setAddingNote] = useState(false);
 
-  useEffect(() => {
-    loadIncident();
-  }, [id]);
-
   const loadIncident = async () => {
     try {
       setLoading(true);
@@ -53,6 +49,11 @@ function IncidentDetail() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadIncident();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const handleGeneratePlan = async (e) => {
     e.preventDefault();

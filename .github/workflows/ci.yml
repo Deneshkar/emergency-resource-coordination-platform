@@ -1,4 +1,4 @@
-name: Backend CI
+name: ERCP Full-Stack CI
 
 on:
   push:
@@ -7,7 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  build-and-test:
+  backend-build-and-test:
+    name: Backend (.NET) build + test
     runs-on: ubuntu-latest
 
     steps:
@@ -27,3 +28,61 @@ jobs:
 
       - name: Run tests
         run: dotnet test ./backend-tests/ERCP.Api.Tests.csproj --no-build --verbosity normal
+
+      - name: Validate Python agents compile
+        run: python3 -m py_compile ai-agents/validation_safety_agent.py ai-agents/coordinator_planner_agent.py ai-agents/situation_analysis_agent.py
+
+  frontend-build-and-test:
+    name: Frontend (React) lint + test + build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend-react
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend-react/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  mobile-analyze-and-test:
+    name: Mobile (Flutter) analyze + test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: mobile-flutter
+
+      - name: Analyze
+        run: flutter analyze
+        working-directory: mobile-flutter
+
+      - name: Run widget tests
+        run: flutter test
+        working-directory: mobile-flutter
