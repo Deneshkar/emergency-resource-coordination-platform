@@ -3,11 +3,13 @@ using ERCP.Api.Data;
 using ERCP.Api.DTOs;
 using ERCP.Api.Models;
 using ERCP.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ERCP.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class IncidentController : ControllerBase
@@ -28,6 +30,7 @@ public class IncidentController : ControllerBase
 
     // GET: api/incident
     [HttpGet]
+    [Authorize(Roles = "Citizen,Coordinator,Admin")]
     public async Task<ActionResult<IEnumerable<IncidentResponseDto>>> GetIncidents(
         [FromQuery] string? status,
         [FromQuery] string? priority,
@@ -67,6 +70,7 @@ public class IncidentController : ControllerBase
 
     // GET: api/incident/stats/summary
     [HttpGet("stats/summary")]
+    [Authorize(Roles = "Citizen,Coordinator,Admin")]
     public async Task<ActionResult<IncidentSummaryStatsDto>> GetSummaryStats()
     {
         var all = await _context.Incidents.Include(i => i.Plans).ToListAsync();
@@ -89,6 +93,7 @@ public class IncidentController : ControllerBase
 
     // GET: api/incident/1
     [HttpGet("{id}")]
+    [Authorize(Roles = "Citizen,Coordinator,Admin")]
     public async Task<ActionResult<IncidentDetailDto>> GetIncident(int id)
     {
         var incident = await _context.Incidents
@@ -125,6 +130,7 @@ public class IncidentController : ControllerBase
 
     // POST: api/incident
     [HttpPost]
+    [Authorize(Roles = "Citizen,Coordinator,Admin")]
     public async Task<ActionResult<IncidentDetailDto>> CreateIncident([FromBody] CreateIncidentDto dto)
     {
         var incident = new Incident
@@ -184,6 +190,7 @@ public class IncidentController : ControllerBase
 
     // PUT: api/incident/1
     [HttpPut("{id}")]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<IActionResult> UpdateIncident(int id, [FromBody] UpdateIncidentDto dto)
     {
         var incident = await _context.Incidents.FindAsync(id);
@@ -192,8 +199,13 @@ public class IncidentController : ControllerBase
 
         var changes = new List<string>();
 
-        if (!string.IsNullOrWhiteSpace(dto.Status) && dto.Status != incident.Status)
+        if (!string.IsNullOrWhiteSpace(dto.Status) && !string.Equals(dto.Status, incident.Status, StringComparison.OrdinalIgnoreCase))
         {
+            if (!IsValidStatusTransition(incident.Status, dto.Status, out var errorMessage))
+            {
+                return BadRequest(new { message = errorMessage });
+            }
+
             changes.Add($"Status changed from '{incident.Status}' to '{dto.Status}'");
             incident.Status = dto.Status;
         }
@@ -232,11 +244,31 @@ public class IncidentController : ControllerBase
                 desc += string.IsNullOrEmpty(desc) ? dto.Note : $" | Note: {dto.Note}";
             }
 
+            var eventType = "StatusUpdate";
+            var eventTitle = "Incident Details Updated";
+
+            if (!string.IsNullOrWhiteSpace(dto.Status))
+            {
+                eventTitle = dto.Status switch
+                {
+                    "Verified" => "Incident Verified",
+                    "Assigned" or "Dispatched" => "Incident Assigned",
+                    "Resolved" => "Incident Resolved",
+                    "Closed" => "Incident Closed",
+                    _ => $"Incident Status Updated ({dto.Status})"
+                };
+            }
+            else if (!string.IsNullOrWhiteSpace(dto.Priority))
+            {
+                eventType = "PriorityChanged";
+                eventTitle = $"Priority Changed to {dto.Priority}";
+            }
+
             var timelineEvent = new IncidentTimelineEvent
             {
                 IncidentId = incident.Id,
-                EventType = "StatusUpdate",
-                Title = "Incident Details Updated",
+                EventType = eventType,
+                Title = eventTitle,
                 Description = desc,
                 CreatedBy = dto.AssignedCoordinator ?? "Dispatcher",
                 Timestamp = DateTime.UtcNow
@@ -250,6 +282,7 @@ public class IncidentController : ControllerBase
 
     // DELETE: api/incident/1
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,Coordinator")]
     public async Task<IActionResult> DeleteIncident(int id)
     {
         var incident = await _context.Incidents.FindAsync(id);
@@ -262,8 +295,10 @@ public class IncidentController : ControllerBase
         return NoContent();
     }
 
-    // POST: api/incident/1/generate-plan
+    // POST: api/incident/1/plan or api/incident/1/generate-plan
+    [HttpPost("{id}/plan")]
     [HttpPost("{id}/generate-plan")]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<ActionResult<IncidentPlanDto>> GeneratePlan(int id, [FromBody] GeneratePlanRequestDto? request)
     {
         var incident = await _context.Incidents.FindAsync(id);
@@ -299,8 +334,10 @@ public class IncidentController : ControllerBase
         return Ok(MapToPlanDto(plan));
     }
 
-    // GET: api/incident/1/plans
+    // GET: api/incident/1/plan or api/incident/1/plans
+    [HttpGet("{id}/plan")]
     [HttpGet("{id}/plans")]
+    [Authorize(Roles = "Citizen,Coordinator,Admin")]
     public async Task<ActionResult<IEnumerable<IncidentPlanDto>>> GetPlans(int id)
     {
         var incidentExists = await _context.Incidents.AnyAsync(i => i.Id == id);
@@ -317,6 +354,7 @@ public class IncidentController : ControllerBase
 
     // PUT: api/incident/plans/5/status
     [HttpPut("plans/{planId}/status")]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<IActionResult> UpdatePlanStatus(int planId, [FromBody] UpdatePlanStatusDto dto)
     {
         var plan = await _context.IncidentPlans.FindAsync(planId);
@@ -353,19 +391,43 @@ public class IncidentController : ControllerBase
         return NoContent();
     }
 
+    // GET: api/incident/1/timeline
+    [HttpGet("{id}/timeline")]
+    [Authorize(Roles = "Citizen,Coordinator,Admin")]
+    public async Task<ActionResult<IEnumerable<IncidentTimelineEventDto>>> GetTimeline(int id)
+    {
+        var incidentExists = await _context.Incidents.AnyAsync(i => i.Id == id);
+        if (!incidentExists)
+            return NotFound(new { message = $"Incident with ID {id} was not found." });
+
+        var events = await _context.IncidentTimelineEvents
+            .Where(e => e.IncidentId == id)
+            .OrderBy(e => e.Timestamp) // Chronological order
+            .ToListAsync();
+
+        return Ok(events.Select(MapToTimelineDto));
+    }
+
     // POST: api/incident/1/timeline
     [HttpPost("{id}/timeline")]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<ActionResult<IncidentTimelineEventDto>> AddTimelineEvent(int id, [FromBody] AddTimelineEventDto dto)
     {
         var incident = await _context.Incidents.FindAsync(id);
         if (incident == null)
-            return NotFound();
+            return NotFound(new { message = $"Incident with ID {id} was not found." });
+
+        // Safety constraint: Prevent manual note posts from forging system lifecycle event types
+        var reservedTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Created", "StatusUpdate", "PlanGenerated" };
+        var eventType = (string.IsNullOrWhiteSpace(dto.EventType) || reservedTypes.Contains(dto.EventType.Trim()))
+            ? "NoteAdded"
+            : dto.EventType.Trim();
 
         var evt = new IncidentTimelineEvent
         {
             IncidentId = id,
-            EventType = string.IsNullOrWhiteSpace(dto.EventType) ? "NoteAdded" : dto.EventType,
-            Title = dto.Title,
+            EventType = eventType,
+            Title = string.IsNullOrWhiteSpace(dto.Title) ? "Dispatcher Note Added" : dto.Title,
             Description = dto.Description,
             CreatedBy = string.IsNullOrWhiteSpace(dto.CreatedBy) ? "Dispatcher" : dto.CreatedBy,
             Timestamp = DateTime.UtcNow
@@ -480,5 +542,45 @@ public class IncidentController : ControllerBase
             CreatedBy = e.CreatedBy,
             Timestamp = e.Timestamp
         };
+    }
+
+    private static bool IsValidStatusTransition(string currentStatus, string newStatus, out string errorMessage)
+    {
+        errorMessage = string.Empty;
+        var current = currentStatus?.Trim() ?? "";
+        var target = newStatus?.Trim() ?? "";
+
+        if (string.Equals(current, target, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        var validStatuses = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Reported", "Verified", "Active Planning", "Assigned", "Dispatched", "Resolved", "Closed"
+        };
+
+        if (!validStatuses.Contains(target))
+        {
+            errorMessage = $"Invalid status '{newStatus}'. Allowed status values are: Reported, Verified, Assigned, Resolved, Closed.";
+            return false;
+        }
+
+        bool isValid = current.ToLowerInvariant() switch
+        {
+            "reported" => target.Equals("Verified", StringComparison.OrdinalIgnoreCase) ||
+                          target.Equals("Active Planning", StringComparison.OrdinalIgnoreCase),
+            "verified" or "active planning" => target.Equals("Assigned", StringComparison.OrdinalIgnoreCase) ||
+                                               target.Equals("Dispatched", StringComparison.OrdinalIgnoreCase) ||
+                                               target.Equals("Verified", StringComparison.OrdinalIgnoreCase),
+            "assigned" or "dispatched" => target.Equals("Resolved", StringComparison.OrdinalIgnoreCase),
+            "resolved" => target.Equals("Closed", StringComparison.OrdinalIgnoreCase),
+            _ => false
+        };
+
+        if (!isValid)
+        {
+            errorMessage = $"Invalid status transition from '{currentStatus}' to '{newStatus}'. Allowed workflow sequence: Reported -> Verified -> Assigned -> Resolved.";
+        }
+
+        return isValid;
     }
 }

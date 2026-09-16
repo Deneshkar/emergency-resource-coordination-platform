@@ -189,3 +189,18 @@ public class IncidentSummaryStatsDto
 
     public Dictionary<string, int> IncidentsByPriority { get; set; } = new();
 }
+
+public class StructuredAiPlannerOutputDto
+{
+    public int IncidentId { get; set; }
+
+    public string Priority { get; set; } = string.Empty;
+
+    public string Objective { get; set; } = string.Empty;
+
+    public List<string> Actions { get; set; } = new();
+
+    public List<string> RequiredResources { get; set; } = new();
+
+    public string Status { get; set; } = "Generated";
+}
