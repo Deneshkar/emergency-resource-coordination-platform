@@ -1,5 +1,8 @@
+using System.Text;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ERCP.Api.Data;
 using ERCP.Api.Services;
 using ERCP.Api.Models;
@@ -14,12 +17,37 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // JWT Authentication
+var jwtAuthority = builder.Configuration["Jwt:Authority"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "ERCP.Api";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "ERCP.Clients";
+var jwtKey = builder.Configuration["Jwt:SecretKey"] ?? "ERCP_EmergencyResourceCoordinationPlatform_SecretKey_2026!";
+
 builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(options =>
     {
         options.RequireHttpsMetadata = false;
         options.SaveToken = true;
+        if (!string.IsNullOrEmpty(jwtAuthority))
+        {
+            options.Authority = jwtAuthority;
+        }
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtIssuer,
+            ValidateAudience = true,
+            ValidAudience = jwtAudience,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            RoleClaimType = ClaimTypes.Role,
+            NameClaimType = ClaimTypes.NameIdentifier
+        };
     });
 
 // Check if PostgreSQL is accessible, otherwise fallback to InMemory Db for zero-config execution
