@@ -9,20 +9,23 @@
 | OpenCode + Muse Spark (agentic coding assistant) | Scaffolding `validation_safety_agent.py`, `DispatchValidationService.cs`, ValidationsController/DTOs, backend + frontend + widget tests, ADR drafts, CI expansion | muse-spark, Sept 2026 |
 | Manual review + local execution | All verification below | — |
 
-## Prompt / task history (summary)
-1. **“Analyse the team status report vs the actual repo and tell Student 4 what to do.”**
+## Prompt / task history (summary, all September 2026 — pre-existing volunteer component work is from Aug–early Sept 2026)
+1. **16 Sept — “Analyse the team status report vs the actual repo and tell Student 4 what to do.”**
    → Assistant read controllers, services, tests, Flutter screens, CI and docs, and produced a
    verified gap list. Key finding I confirmed myself: the report was outdated — JWT setup,
    `VolunteersController` (7 tests, not 4) and `widget_test.dart` were already fixed.
-2. **“Build the missing Validation/Safety Agent correctly.”**
+2. **16 Sept — “Build the missing Validation/Safety Agent correctly.”**
    → Assistant scaffolded the Python agent mirroring `situation_analysis_agent.py` conventions
    (allow-list, structured JSON I/O, `--json` CLI). I reviewed every rule code (V1–V3, S1–S2,
    R1–R2, I1, W1–W4) against `AppDbContext` relationships before accepting.
-3. **“Mirror it in C# with tests + endpoint + DI.”**
+3. **16 Sept — “Mirror it in C# with tests + endpoint + DI.”**
    → Assistant created `DispatchValidationService`, `ValidationDtos`, `ValidationsController`,
    `DispatchValidationServiceTests` and the `Program.cs` registration. I verified with
    `dotnet test` (34/34 green, incl. 6 new).
-4. **“Expand CI, write the 2 ADRs, add Flutter/React tests.”**
+4. **16 Sept — “Expand CI, write the 2 ADRs, add Flutter/React tests.”**
+   Follow-ups, same day: shift-creation endpoint + tests, Coordinator/Admin gate on the
+   validation endpoints, HTTP integration tests (incl. diagnosing the InMemory store-isolation
+   failure), and the Individual Report completion (reflection, challenges, declaration).
    → Assistant expanded `ci.yml` to 3 jobs, drafted both ADRs, added 4 Flutter test files and
    Vitest + 3 React test files. I ran every suite locally (see verification table).
 

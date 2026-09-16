@@ -157,6 +157,34 @@ public class VolunteersController : ControllerBase
         return Ok(shifts);
     }
 
+    // POST /api/volunteers/{id}/shifts
+    [HttpPost("{id}/shifts")]
+    [Authorize(Roles = "Coordinator,Admin")]
+    public async Task<ActionResult<Shift>> CreateShift(Guid id, CreateShiftDto dto)
+    {
+        var exists = await _context.Volunteers.AnyAsync(v => v.Id == id);
+        if (!exists) return NotFound();
+
+        if (dto.EndTime <= dto.StartTime)
+            return BadRequest(new { message = "Shift end time must be after start time." });
+
+        if (!Enum.TryParse<ShiftStatus>(dto.Status, ignoreCase: true, out var status))
+            return BadRequest(new { message = $"Invalid shift status '{dto.Status}'. Allowed: Scheduled, Active, Completed, Cancelled." });
+
+        var shift = new Shift
+        {
+            VolunteerId = id,
+            StartTime = dto.StartTime,
+            EndTime = dto.EndTime,
+            Status = status
+        };
+
+        _context.Shifts.Add(shift);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetShifts), new { id }, shift);
+    }
+
     // GET /api/volunteers/available?skill=medical
     [HttpGet("available")]
     public async Task<ActionResult<IEnumerable<VolunteerResponseDto>>> GetAvailableBySkill([FromQuery] string skill)
