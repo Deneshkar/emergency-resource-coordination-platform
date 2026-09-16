@@ -64,4 +64,28 @@ public class InventoryControllerTests
         Assert.Equal(10, updated!.Quantity);
         Assert.Equal("LowStock", updated.Status);
     }
+
+    [Fact]
+    public async Task AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative()
+    {
+        var context = GetInMemoryContext();
+        var item = new InventoryItem
+        {
+            ItemName = "Medical Bandages",
+            Category = "Medical",
+            Quantity = 10,
+            MinimumThreshold = 5,
+            Status = "InStock"
+        };
+        context.InventoryItems.Add(item);
+        await context.SaveChangesAsync();
+
+        var controller = new InventoryController(context);
+        var dto = new AdjustStockDto { QuantityAdjustment = -20 };
+
+        var result = await controller.AdjustStock(item.Id, dto);
+
+        Assert.IsType<Microsoft.AspNetCore.Mvc.BadRequestObjectResult>(result);
+    }
 }
+
