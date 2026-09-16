@@ -55,7 +55,7 @@ namespace ERCP.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dispatches");
+                    b.ToTable("Dispatches", (string)null);
                 });
 
             modelBuilder.Entity("ERCP.Api.Models.DispatchTask", b =>
@@ -98,7 +98,7 @@ namespace ERCP.Api.Migrations
 
                     b.HasIndex("VolunteerId");
 
-                    b.ToTable("DispatchTasks");
+                    b.ToTable("DispatchTasks", (string)null);
                 });
 
             modelBuilder.Entity("ERCP.Api.Models.Incident", b =>
@@ -137,7 +137,7 @@ namespace ERCP.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Incidents");
+                    b.ToTable("Incidents", (string)null);
                 });
 
             modelBuilder.Entity("ERCP.Api.Models.IncidentPlan", b =>
@@ -154,11 +154,7 @@ namespace ERCP.Api.Migrations
                     b.Property<int>("IncidentId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("PlanDescription")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlanTitle")
+                    b.Property<string>("PlanDetails")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -170,7 +166,151 @@ namespace ERCP.Api.Migrations
 
                     b.HasIndex("IncidentId");
 
-                    b.ToTable("IncidentPlans");
+                    b.ToTable("IncidentPlans", (string)null);
+                });
+
+            modelBuilder.Entity("ERCP.Api.Models.InventoryItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("MinimumThreshold")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ShelterId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UnitOfMeasure")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShelterId");
+
+                    b.ToTable("InventoryItems", (string)null);
+                });
+
+            modelBuilder.Entity("ERCP.Api.Models.Resource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResourceType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ShelterId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShelterId");
+
+                    b.ToTable("Resources", (string)null);
+                });
+
+            modelBuilder.Entity("ERCP.Api.Models.Shelter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ContactNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("CurrentOccupancy")
+                        .HasColumnType("integer");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TotalCapacity")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Shelters", (string)null);
                 });
 
             modelBuilder.Entity("ERCP.Api.Models.Shift", b =>
@@ -201,7 +341,7 @@ namespace ERCP.Api.Migrations
 
                     b.HasIndex("VolunteerId");
 
-                    b.ToTable("Shifts");
+                    b.ToTable("Shifts", (string)null);
                 });
 
             modelBuilder.Entity("ERCP.Api.Models.SituationAssessment", b =>
@@ -242,7 +382,7 @@ namespace ERCP.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SituationAssessments");
+                    b.ToTable("SituationAssessments", (string)null);
                 });
 
             modelBuilder.Entity("ERCP.Api.Models.Volunteer", b =>
@@ -281,7 +421,7 @@ namespace ERCP.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Volunteers");
+                    b.ToTable("Volunteers", (string)null);
                 });
 
             modelBuilder.Entity("ERCP.Api.Models.DispatchTask", b =>
@@ -314,6 +454,26 @@ namespace ERCP.Api.Migrations
                     b.Navigation("Incident");
                 });
 
+            modelBuilder.Entity("ERCP.Api.Models.InventoryItem", b =>
+                {
+                    b.HasOne("ERCP.Api.Models.Shelter", "Shelter")
+                        .WithMany("InventoryItems")
+                        .HasForeignKey("ShelterId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Shelter");
+                });
+
+            modelBuilder.Entity("ERCP.Api.Models.Resource", b =>
+                {
+                    b.HasOne("ERCP.Api.Models.Shelter", "Shelter")
+                        .WithMany("Resources")
+                        .HasForeignKey("ShelterId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Shelter");
+                });
+
             modelBuilder.Entity("ERCP.Api.Models.Shift", b =>
                 {
                     b.HasOne("ERCP.Api.Models.Volunteer", "Volunteer")
@@ -333,6 +493,13 @@ namespace ERCP.Api.Migrations
             modelBuilder.Entity("ERCP.Api.Models.Incident", b =>
                 {
                     b.Navigation("Plans");
+                });
+
+            modelBuilder.Entity("ERCP.Api.Models.Shelter", b =>
+                {
+                    b.Navigation("InventoryItems");
+
+                    b.Navigation("Resources");
                 });
 
             modelBuilder.Entity("ERCP.Api.Models.Volunteer", b =>

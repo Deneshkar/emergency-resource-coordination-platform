@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { incidentService } from "../services/incidentService";
+import { useAuth } from "../context/AuthContext";
 
 function IncidentDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user, hasRole } = useAuth();
+  const isCoordinator = hasRole(["Coordinator", "Admin"]);
+  const isVolunteer = user?.role === "Volunteer";
+  const isCitizen = user?.role === "Citizen";
+
   const [incident, setIncident] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -146,12 +152,15 @@ function IncidentDetail() {
         </Link>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <span className="detail-incident-id">Incident #{incident.id}</span>
-          <button
-            className="btn btn-ghost-danger"
-            onClick={handleDeleteIncident}
-          >
-            Delete
-          </button>
+          {isCoordinator && (
+            <button
+              className="btn btn-ghost-danger"
+              onClick={handleDeleteIncident}
+              title="Permanently remove this incident from command database"
+            >
+              Delete Incident
+            </button>
+          )}
         </div>
       </div>
 
@@ -169,16 +178,26 @@ function IncidentDetail() {
           <p className="detail-location">📍 Location: {incident.location}</p>
         </div>
 
-        <button
-          className="btn btn-accent shadow-glow"
-          onClick={() => setShowAiControls(!showAiControls)}
-        >
-          🤖 {showAiControls ? "Hide AI Coordinator Panel" : "Open AI Coordinator Workbench"}
-        </button>
+        {isCoordinator ? (
+          <button
+            className="btn btn-accent shadow-glow"
+            onClick={() => setShowAiControls(!showAiControls)}
+          >
+            🤖 {showAiControls ? "Hide AI Coordinator Panel" : "Open AI Coordinator Workbench"}
+          </button>
+        ) : isVolunteer ? (
+          <div className="badge badge-accent" style={{ fontSize: "13px", padding: "8px 14px", alignSelf: "center" }}>
+            🦺 Tactical Field Responder View
+          </div>
+        ) : (
+          <div className="badge badge-info" style={{ fontSize: "13px", padding: "8px 14px", alignSelf: "center" }}>
+            🛡️ Citizen Report Tracking
+          </div>
+        )}
       </div>
 
-      {/* AI Coordinator Workbench / Plan Generator Drawer */}
-      {showAiControls && (
+      {/* AI Coordinator Workbench / Plan Generator Drawer (Coordinators Only) */}
+      {isCoordinator && showAiControls && (
         <div className="ai-workbench-card">
           <div className="ai-card-header">
             <h3>🤖 AI Coordinator / Planner Agent Workbench</h3>
@@ -270,70 +289,179 @@ function IncidentDetail() {
             <p className="desc-box">{incident.description}</p>
           </div>
 
-          {/* Incident Control Panel */}
-          <div className="glass-card">
-            <h3>Update Incident Controls</h3>
-            <form onSubmit={handleStatusUpdate}>
-              <div className="form-group">
-                <label className="form-label">Update Status:</label>
-                <select
-                  value={newStatus}
-                  onChange={(e) => setNewStatus(e.target.value)}
-                  className="form-select"
+          {/* Role-Gated Incident Control Panel */}
+          {isCoordinator ? (
+            <div className="glass-card">
+              <h3>Update Incident Controls</h3>
+              <form onSubmit={handleStatusUpdate}>
+                <div className="form-group">
+                  <label className="form-label">Update Status:</label>
+                  <select
+                    value={newStatus}
+                    onChange={(e) => setNewStatus(e.target.value)}
+                    className="form-select"
+                  >
+                    <option value="Reported">Reported</option>
+                    <option value="Active Planning">Active Planning</option>
+                    <option value="Dispatched">Dispatched</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Closed">Closed</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Update Priority:</label>
+                  <select
+                    value={newPriority}
+                    onChange={(e) => setNewPriority(e.target.value)}
+                    className="form-select"
+                  >
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Critical">Critical</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Assigned Coordinator:</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Command Coordinator"
+                    value={newAssignedCoordinator}
+                    onChange={(e) => setNewAssignedCoordinator(e.target.value)}
+                    className="form-control"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Audit Log Note:</label>
+                  <textarea
+                    rows="2"
+                    placeholder="Optional rationale for status/priority change..."
+                    value={newNote}
+                    onChange={(e) => setNewNote(e.target.value)}
+                    className="form-control"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn btn-secondary btn-block"
+                  disabled={updatingStatus}
                 >
-                  <option value="Reported">Reported</option>
-                  <option value="Active Planning">Active Planning</option>
-                  <option value="Dispatched">Dispatched</option>
-                  <option value="Resolved">Resolved</option>
-                  <option value="Closed">Closed</option>
-                </select>
-              </div>
+                  {updatingStatus ? "Saving..." : "Save Control Updates"}
+                </button>
+              </form>
+            </div>
+          ) : isVolunteer ? (
+            <div className="glass-card">
+              <h3>Field Status Update</h3>
+              <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: "12px" }}>
+                Update on-ground status as you deploy and carry out tactical assignments.
+              </p>
+              <form onSubmit={handleStatusUpdate}>
+                <div className="form-group">
+                  <label className="form-label">Operational Status:</label>
+                  <select
+                    value={newStatus}
+                    onChange={(e) => setNewStatus(e.target.value)}
+                    className="form-select"
+                  >
+                    <option value="Reported">Reported</option>
+                    <option value="Active Planning">Active Planning</option>
+                    <option value="Dispatched">Dispatched / En Route</option>
+                    <option value="Resolved">Resolved / Complete</option>
+                  </select>
+                </div>
 
-              <div className="form-group">
-                <label className="form-label">Update Priority:</label>
-                <select
-                  value={newPriority}
-                  onChange={(e) => setNewPriority(e.target.value)}
-                  className="form-select"
+                <div className="form-group">
+                  <label className="form-label">Field Progress Note:</label>
+                  <textarea
+                    rows="3"
+                    placeholder="Describe scene conditions or actions taken..."
+                    value={newNote}
+                    onChange={(e) => setNewNote(e.target.value)}
+                    className="form-control"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-block"
+                  disabled={updatingStatus}
                 >
-                  <option value="Low">Low</option>
-                  <option value="Medium">Medium</option>
-                  <option value="High">High</option>
-                  <option value="Critical">Critical</option>
-                </select>
+                  {updatingStatus ? "Updating..." : "Update Field Progress"}
+                </button>
+              </form>
+            </div>
+          ) : (
+            <div className="glass-card citizen-tracker-card">
+              <h3>🛡️ Citizen Response Tracker</h3>
+              <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: "16px" }}>
+                Live tracking of emergency response units assigned to this incident report.
+              </p>
+
+              {/* Visual 4-Stage Stepper */}
+              <div className="citizen-stepper">
+                <div className="stepper-step completed">
+                  <div className="stepper-dot">✓</div>
+                  <div className="stepper-info">
+                    <div className="stepper-title">Report Received</div>
+                    <div className="stepper-sub">Logged in National Emergency Grid</div>
+                  </div>
+                </div>
+
+                <div className={`stepper-step ${incident.status !== "Reported" ? "completed" : "active"}`}>
+                  <div className="stepper-dot">{incident.status !== "Reported" ? "✓" : "2"}</div>
+                  <div className="stepper-info">
+                    <div className="stepper-title">Triage & Planning</div>
+                    <div className="stepper-sub">
+                      {incident.status === "Reported" ? "Under coordinator review" : "Assessed & verified"}
+                    </div>
+                  </div>
+                </div>
+
+                <div className={`stepper-step ${["Dispatched", "Resolved", "Closed"].includes(incident.status) ? "completed" : incident.status === "Active Planning" ? "active" : ""}`}>
+                  <div className="stepper-dot">
+                    {["Dispatched", "Resolved", "Closed"].includes(incident.status) ? "✓" : "3"}
+                  </div>
+                  <div className="stepper-info">
+                    <div className="stepper-title">Units Dispatched</div>
+                    <div className="stepper-sub">
+                      {["Dispatched", "Resolved", "Closed"].includes(incident.status)
+                        ? "Responders deployed to location"
+                        : "Preparing tactical mobilization"}
+                    </div>
+                  </div>
+                </div>
+
+                <div className={`stepper-step ${["Resolved", "Closed"].includes(incident.status) ? "completed" : ""}`}>
+                  <div className="stepper-dot">
+                    {["Resolved", "Closed"].includes(incident.status) ? "✓" : "4"}
+                  </div>
+                  <div className="stepper-info">
+                    <div className="stepper-title">Hazard Resolved</div>
+                    <div className="stepper-sub">
+                      {["Resolved", "Closed"].includes(incident.status)
+                        ? "Site confirmed secure & safe"
+                        : "Awaiting final clearance"}
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Assigned Coordinator:</label>
-                <input
-                  type="text"
-                  placeholder="e.g. John Doe"
-                  value={newAssignedCoordinator}
-                  onChange={(e) => setNewAssignedCoordinator(e.target.value)}
-                  className="form-control"
-                />
+              {/* Safety Notice Box */}
+              <div className="citizen-safety-box" style={{ marginTop: "16px" }}>
+                <div style={{ fontWeight: "700", color: "#fbbf24", fontSize: "0.85rem", marginBottom: "4px" }}>
+                  ⚠️ Safety Advisory
+                </div>
+                <div style={{ fontSize: "0.82rem", color: "#e2e8f0", lineHeight: "1.4" }}>
+                  Please keep your contact phone active. If water levels rise or immediate life threat escalates, call emergency hotline <strong>119</strong> / <strong>1990</strong> immediately.
+                </div>
               </div>
-
-              <div className="form-group">
-                <label className="form-label">Audit Log Note:</label>
-                <textarea
-                  rows="2"
-                  placeholder="Optional rationale for status/priority change..."
-                  value={newNote}
-                  onChange={(e) => setNewNote(e.target.value)}
-                  className="form-control"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-secondary btn-block"
-                disabled={updatingStatus}
-              >
-                {updatingStatus ? "Saving..." : "Save Control Updates"}
-              </button>
-            </form>
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Right Column: AI Plans & Timeline */}
@@ -346,15 +474,21 @@ function IncidentDetail() {
 
             {incident.plans?.length === 0 ? (
               <div className="empty-state">
-                <p>No response plans have been generated yet for this incident.</p>
-                <button
-                  className="btn btn-accent"
-                  style={{ marginTop: "10px" }}
-                  onClick={handleGeneratePlan}
-                  disabled={generatingPlan}
-                >
-                  ⚡ Generate Initial Response Plan
-                </button>
+                <p>
+                  {isCoordinator
+                    ? "No response plans have been generated yet for this incident."
+                    : "Operational response plans are currently being formulated by command dispatch."}
+                </p>
+                {isCoordinator && (
+                  <button
+                    className="btn btn-accent"
+                    style={{ marginTop: "10px" }}
+                    onClick={handleGeneratePlan}
+                    disabled={generatingPlan}
+                  >
+                    ⚡ Generate Initial Response Plan
+                  </button>
+                )}
               </div>
             ) : (
               incident.plans.map((plan) => (
@@ -373,43 +507,51 @@ function IncidentDetail() {
                       </p>
                     </div>
 
-                    <div className="plan-actions">
-                      {plan.status !== "Approved" && plan.status !== "InExecution" && (
-                        <button
-                          className="btn btn-sm btn-success"
-                          onClick={() => handlePlanStatusChange(plan.id, "Approved")}
-                        >
-                          ✓ Approve Plan
-                        </button>
-                      )}
+                    {isCoordinator ? (
+                      <div className="plan-actions">
+                        {plan.status !== "Approved" && plan.status !== "InExecution" && (
+                          <button
+                            className="btn btn-sm btn-success"
+                            onClick={() => handlePlanStatusChange(plan.id, "Approved")}
+                          >
+                            ✓ Approve Plan
+                          </button>
+                        )}
 
-                      {plan.status === "Approved" && (
-                        <button
-                          className="btn btn-sm btn-accent"
-                          onClick={() => handlePlanStatusChange(plan.id, "InExecution")}
-                        >
-                          🚀 Execute & Dispatch
-                        </button>
-                      )}
+                        {plan.status === "Approved" && (
+                          <button
+                            className="btn btn-sm btn-accent"
+                            onClick={() => handlePlanStatusChange(plan.id, "InExecution")}
+                          >
+                            🚀 Execute & Dispatch
+                          </button>
+                        )}
 
-                      {plan.status === "InExecution" && (
-                        <button
-                          className="btn btn-sm btn-secondary"
-                          onClick={() => handlePlanStatusChange(plan.id, "Completed")}
-                        >
-                          🏁 Mark Completed
-                        </button>
-                      )}
+                        {plan.status === "InExecution" && (
+                          <button
+                            className="btn btn-sm btn-secondary"
+                            onClick={() => handlePlanStatusChange(plan.id, "Completed")}
+                          >
+                            🏁 Mark Completed
+                          </button>
+                        )}
 
-                      {plan.status !== "Rejected" && (
-                        <button
-                          className="btn btn-sm btn-ghost-danger"
-                          onClick={() => handlePlanStatusChange(plan.id, "Rejected")}
-                        >
-                          Reject
-                        </button>
-                      )}
-                    </div>
+                        {plan.status !== "Rejected" && (
+                          <button
+                            className="btn btn-sm btn-ghost-danger"
+                            onClick={() => handlePlanStatusChange(plan.id, "Rejected")}
+                          >
+                            Reject
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="plan-actions">
+                        <span className="badge badge-outline" style={{ padding: "6px 12px", fontSize: "12px" }}>
+                          {plan.status === "Approved" ? "✓ Authorized by Command" : plan.status === "InExecution" ? "🚀 Active Field Deployment" : `Status: ${plan.status}`}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <p className="plan-desc">{plan.planDescription}</p>
@@ -444,8 +586,8 @@ function IncidentDetail() {
                     </div>
                   )}
 
-                  {/* Estimated Resources Requirement */}
-                  {plan.estimatedResources && plan.estimatedResources.length > 0 && (
+                  {/* Estimated Resources Requirement (Coordinators & Volunteers) */}
+                  {!isCitizen && plan.estimatedResources && plan.estimatedResources.length > 0 && (
                     <div className="plan-section">
                       <h4>Estimated Required Resources</h4>
                       <div className="resources-grid">
@@ -468,50 +610,58 @@ function IncidentDetail() {
           <div className="section-block">
             <h2 className="section-title">⏱️ Incident Timeline & Activity Log</h2>
 
-            {/* Add Timeline Note Form */}
-            <form onSubmit={handleAddTimelineNote} className="glass-card" style={{ marginBottom: "20px" }}>
-              <h4>Add Dispatcher Note / Event Log</h4>
-              <div className="form-grid-2">
-                <input
-                  type="text"
-                  placeholder="Note Title (e.g., On-Scene Arrival)"
-                  value={noteTitle}
-                  onChange={(e) => setNoteTitle(e.target.value)}
+            {/* Add Timeline Note Form (Coordinators & Volunteers only) */}
+            {(isCoordinator || isVolunteer) && (
+              <form onSubmit={handleAddTimelineNote} className="glass-card" style={{ marginBottom: "20px" }}>
+                <h4>Add {isVolunteer ? "Field Responder Update" : "Dispatcher Note / Event Log"}</h4>
+                <div className="form-grid-2">
+                  <input
+                    type="text"
+                    placeholder="Note Title (e.g., On-Scene Arrival)"
+                    value={noteTitle}
+                    onChange={(e) => setNoteTitle(e.target.value)}
+                    className="form-control"
+                    required
+                  />
+                  <button type="submit" className="btn btn-secondary" disabled={addingNote}>
+                    + Log Event
+                  </button>
+                </div>
+                <textarea
+                  rows="2"
+                  placeholder="Log details..."
+                  value={noteDesc}
+                  onChange={(e) => setNoteDesc(e.target.value)}
                   className="form-control"
+                  style={{ marginTop: "10px" }}
                   required
                 />
-                <button type="submit" className="btn btn-secondary" disabled={addingNote}>
-                  + Log Event
-                </button>
-              </div>
-              <textarea
-                rows="2"
-                placeholder="Log details..."
-                value={noteDesc}
-                onChange={(e) => setNoteDesc(e.target.value)}
-                className="form-control"
-                style={{ marginTop: "10px" }}
-                required
-              />
-            </form>
+              </form>
+            )}
 
-            {/* Timeline Stream */}
+            {/* Timeline Stream (Visible to all roles) */}
             <div className="timeline-stream">
-              {incident.timelineEvents?.map((evt) => (
-                <div key={evt.id} className="timeline-item">
-                  <div className="timeline-icon">📌</div>
-                  <div className="timeline-body">
-                    <div className="timeline-header">
-                      <strong className="timeline-title">{evt.title}</strong>
-                      <span className="timeline-time">
-                        {new Date(evt.timestamp).toLocaleString()}
-                      </span>
+              {incident.timelineEvents && incident.timelineEvents.length > 0 ? (
+                incident.timelineEvents.map((evt) => (
+                  <div key={evt.id} className="timeline-item">
+                    <div className="timeline-icon">📌</div>
+                    <div className="timeline-body">
+                      <div className="timeline-header">
+                        <strong className="timeline-title">{evt.title}</strong>
+                        <span className="timeline-time">
+                          {new Date(evt.timestamp).toLocaleString()}
+                        </span>
+                      </div>
+                      <p className="timeline-desc">{evt.description}</p>
+                      <div className="timeline-author">Log by: {evt.createdBy}</div>
                     </div>
-                    <p className="timeline-desc">{evt.description}</p>
-                    <div className="timeline-author">Log by: {evt.createdBy}</div>
                   </div>
+                ))
+              ) : (
+                <div className="empty-state" style={{ padding: "1.5rem" }}>
+                  <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>No timeline events recorded yet.</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
