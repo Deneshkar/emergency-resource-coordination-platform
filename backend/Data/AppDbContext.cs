@@ -27,10 +27,18 @@ public class AppDbContext : DbContext
     public DbSet<Resource> Resources => Set<Resource>();
     public DbSet<Shelter> Shelters => Set<Shelter>();
     public DbSet<InventoryItem> InventoryItems => Set<InventoryItem>();
+    // Authentication & User Identity (Cross-cutting / Shared Component)
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // User email uniqueness constraint
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+
 
         // Volunteer 1 → Many Shifts
         modelBuilder.Entity<Shift>()
