@@ -1,4 +1,11 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+
+import IncidentDashboard from "./pages/IncidentDashboard";
+import IncidentDetail from "./pages/IncidentDetail";
+import ReportIncident from "./pages/ReportIncident";
+import CitizenDashboard from "./pages/CitizenDashboard";
+
 import VolunteerList from "./pages/VolunteerList";
 import VolunteerDetail from "./pages/VolunteerDetail";
 import AddVolunteer from "./pages/AddVolunteer";
@@ -9,51 +16,81 @@ import ShelterList from "./pages/ShelterList";
 import InventoryList from "./pages/InventoryList";
 import SituationAnalysisView from "./pages/SituationAnalysisView";
 
+import Sidebar from "./components/Sidebar";
+import Topbar from "./components/Topbar";
+import Dashboard from "./pages/Dashboard";
+import IncidentList from "./pages/IncidentList";
+import DispatchList from "./pages/DispatchList";
+import { incidentService } from "./services/incidentService";
+
 function App() {
+  const [role, setRole] = useState("Admin");
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeCount, setActiveCount] = useState(0);
+
+  // Live badge count for the sidebar (non-blocking, fails silently)
+  useEffect(() => {
+    let alive = true;
+    incidentService
+      .getSummaryStats()
+      .then((s) => {
+        if (alive && s) setActiveCount(s.activeIncidents ?? 0);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
+
   return (
     <BrowserRouter>
-      <div>
-        <nav style={{ background: "#0f172a", padding: "1rem 2.5rem", display: "flex", gap: "24px", alignItems: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
-          <span style={{ color: "#fff", fontWeight: "800", fontSize: "1.25rem", letterSpacing: "-0.5px" }}>🚨 ERCP Platform</span>
-          
-          <Link to="/" style={{ color: "#cbd5e1", textDecoration: "none", fontWeight: "500" }}>Volunteers</Link>
-          
-          {/* Student 2 Primary Navbar Hub Button */}
-          <Link 
-            to="/inventory-hub" 
-            style={{ 
-              background: "linear-gradient(135deg, #0284c7 0%, #2563eb 100%)", 
-              color: "#fff", 
-              textDecoration: "none", 
-              fontWeight: "700",
-              padding: "8px 18px",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              boxShadow: "0 2px 8px rgba(37, 99, 235, 0.3)"
-            }}
-          >
-            <span>📦</span> Resource & Inventory Hub
-          </Link>
-        </nav>
+      <div className={`app-layout${collapsed ? " sidebar-collapsed" : ""}`}>
+        <Sidebar
+          collapsed={collapsed}
+          onToggle={() => setCollapsed((c) => !c)}
+          mobileOpen={mobileOpen}
+          onClose={closeMobile}
+          activeCount={activeCount}
+        />
 
-        <div style={{ padding: "2.5rem" }}>
-          <Routes>
-            {/* Student 4 Routes */}
-            <Route path="/" element={<VolunteerList />} />
-            <Route path="/volunteers/:id" element={<VolunteerDetail />} />
-            <Route path="/volunteers/new" element={<AddVolunteer />} />
+        <div className="main-col">
+          <Topbar
+            role={role}
+            onRoleChange={setRole}
+            onMenu={() => setMobileOpen(true)}
+            onToggle={() => setCollapsed((c) => !c)}
+            collapsed={collapsed}
+          />
 
-            {/* Student 2 Main Dashboard Route */}
-            <Route path="/inventory-hub" element={<ResourceInventoryHub />} />
+          <main className="app-main-content">
+            <Routes>
+              <Route path="/" element={<Navigate to="/incidents" replace />} />
 
-            {/* Student 2 Sub-routes */}
-            <Route path="/resources" element={<ResourceList />} />
-            <Route path="/shelters" element={<ShelterList />} />
-            <Route path="/inventory" element={<InventoryList />} />
-            <Route path="/situation-analysis" element={<SituationAnalysisView />} />
-          </Routes>
+              {/* Incident Intelligence & AI Coordinator Routes */}
+              <Route path="/incidents" element={<IncidentDashboard />} />
+              <Route path="/incidents/new" element={<ReportIncident />} />
+              <Route path="/incidents/:id" element={<IncidentDetail />} />
+
+              {/* Teammates' Routes */}
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/incident-list" element={<IncidentList />} />
+              <Route path="/dispatches" element={<DispatchList />} />
+              <Route path="/volunteers" element={<VolunteerList />} />
+              <Route path="/volunteers/:id" element={<VolunteerDetail />} />
+              <Route path="/volunteers/new" element={<AddVolunteer />} />
+              <Route path="/citizen" element={<CitizenDashboard />} />
+
+              {/* Resource & Situation Analysis Routes */}
+              <Route path="/inventory-hub" element={<ResourceInventoryHub />} />
+              <Route path="/resources" element={<ResourceList />} />
+              <Route path="/shelters" element={<ShelterList />} />
+              <Route path="/inventory" element={<InventoryList />} />
+              <Route path="/situation-analysis" element={<SituationAnalysisView />} />
+            </Routes>
+          </main>
         </div>
       </div>
     </BrowserRouter>

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { getResources, createResource, updateResourceStatus } from "../services/resourceService";
+import { getResources, createResource, updateResourceStatus, deleteResource } from "../services/resourceService";
+import StatusBadge from "../components/StatusBadge";
+import Modal, { FormField, FormRow } from "../components/Modal";
 
 export default function ResourceList() {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [newResource, setNewResource] = useState({ name: "", resourceType: "Vehicle", capacity: 1, location: "" });
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({ name: "", resourceType: "Vehicle", capacity: 1, location: "" });
 
   const fetchResources = async () => {
     try {
@@ -18,15 +21,13 @@ export default function ResourceList() {
     }
   };
 
-  useEffect(() => {
-    fetchResources();
-  }, []);
+  useEffect(() => { fetchResources(); }, []);
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    if (!newResource.name) return;
-    await createResource(newResource);
-    setNewResource({ name: "", resourceType: "Vehicle", capacity: 1, location: "" });
+    await createResource(form);
+    setForm({ name: "", resourceType: "Vehicle", capacity: 1, location: "" });
+    setShowModal(false);
     fetchResources();
   };
 
@@ -35,97 +36,130 @@ export default function ResourceList() {
     fetchResources();
   };
 
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete "${name}"?`)) return;
+    await deleteResource(id);
+    fetchResources();
+  };
+
+  if (loading) return <div className="loading-spinner">Loading resources...</div>;
+
   return (
-    <div style={{ maxWidth: "900px", margin: "0 auto", fontFamily: "sans-serif" }}>
-      <h2>🚛 Resource & Vehicle Fleet Management</h2>
-      <p style={{ color: "#666" }}>Track equipment, generators, vehicles, and operational readiness.</p>
+    <div className="page-wrapper">
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1>Resource Fleet</h1>
+          <p>Manage vehicles, equipment & operational assets &mdash; {resources.length} total</p>
+        </div>
+        <button className="btn btn-primary" onClick={() => setShowModal(true)}>+ Add Resource</button>
+      </div>
 
-      <form onSubmit={handleCreate} style={{ display: "flex", gap: "10px", marginBottom: "20px", flexWrap: "wrap", background: "#f5f5f5", padding: "15px", borderRadius: "8px" }}>
-        <input
-          type="text"
-          placeholder="Resource Name (e.g. Rescue Van 1)"
-          value={newResource.name}
-          onChange={(e) => setNewResource({ ...newResource, name: e.target.value })}
-          style={{ flex: 1, padding: "8px" }}
-          required
-        />
-        <select
-          value={newResource.resourceType}
-          onChange={(e) => setNewResource({ ...newResource, resourceType: e.target.value })}
-          style={{ padding: "8px" }}
-        >
-          <option value="Vehicle">Vehicle</option>
-          <option value="MedicalEquipment">Medical Equipment</option>
-          <option value="Generator">Generator</option>
-          <option value="FoodSupply">Food Supply</option>
-        </select>
-        <input
-          type="number"
-          placeholder="Capacity"
-          value={newResource.capacity}
-          onChange={(e) => setNewResource({ ...newResource, capacity: parseInt(e.target.value) || 1 })}
-          style={{ width: "80px", padding: "8px" }}
-        />
-        <input
-          type="text"
-          placeholder="Location"
-          value={newResource.location}
-          onChange={(e) => setNewResource({ ...newResource, location: e.target.value })}
-          style={{ padding: "8px" }}
-        />
-        <button type="submit" style={{ padding: "8px 16px", background: "#007bff", color: "#fff", border: "none", borderRadius: "4px" }}>
-          Add Resource
-        </button>
-      </form>
+      <div className="grid-stats" style={{ marginBottom: "24px" }}>
+        <div className="card" style={{ padding: "14px 18px" }}>
+          <div style={{ fontSize: "11px", color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>Available</div>
+          <div style={{ fontSize: "22px", fontWeight: "800", color: "var(--green)", marginTop: "2px" }}>{resources.filter(r => r.status === "Available").length}</div>
+        </div>
+        <div className="card" style={{ padding: "14px 18px" }}>
+          <div style={{ fontSize: "11px", color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>Dispatched</div>
+          <div style={{ fontSize: "22px", fontWeight: "800", color: "var(--amber)", marginTop: "2px" }}>{resources.filter(r => r.status === "Dispatched").length}</div>
+        </div>
+        <div className="card" style={{ padding: "14px 18px" }}>
+          <div style={{ fontSize: "11px", color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>Maintenance</div>
+          <div style={{ fontSize: "22px", fontWeight: "800", color: "var(--text-muted)", marginTop: "2px" }}>{resources.filter(r => r.status === "Maintenance").length}</div>
+        </div>
+        <div className="card" style={{ padding: "14px 18px" }}>
+          <div style={{ fontSize: "11px", color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>Reserved</div>
+          <div style={{ fontSize: "22px", fontWeight: "800", color: "var(--purple)", marginTop: "2px" }}>{resources.filter(r => r.status === "Reserved").length}</div>
+        </div>
+      </div>
 
-      {loading ? (
-        <p>Loading resources...</p>
-      ) : (
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ background: "#e9ecef", textAlign: "left" }}>
-              <th style={{ padding: "10px" }}>ID</th>
-              <th style={{ padding: "10px" }}>Name</th>
-              <th style={{ padding: "10px" }}>Type</th>
-              <th style={{ padding: "10px" }}>Status</th>
-              <th style={{ padding: "10px" }}>Capacity</th>
-              <th style={{ padding: "10px" }}>Location</th>
-              <th style={{ padding: "10px" }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {resources.map((r) => (
-              <tr key={r.id} style={{ borderBottom: "1px solid #ddd" }}>
-                <td style={{ padding: "10px" }}>#{r.id}</td>
-                <td style={{ padding: "10px", fontWeight: "bold" }}>{r.name}</td>
-                <td style={{ padding: "10px" }}>{r.resourceType}</td>
-                <td style={{ padding: "10px" }}>
-                  <span style={{
-                    padding: "4px 8px", borderRadius: "4px", fontSize: "12px", color: "#fff",
-                    background: r.status === "Available" ? "#28a745" : r.status === "Dispatched" ? "#ffc107" : "#dc3545"
-                  }}>
-                    {r.status}
-                  </span>
-                </td>
-                <td style={{ padding: "10px" }}>{r.capacity}</td>
-                <td style={{ padding: "10px" }}>{r.location || "N/A"}</td>
-                <td style={{ padding: "10px" }}>
-                  <select
-                    value={r.status}
-                    onChange={(e) => handleStatusChange(r.id, e.target.value)}
-                    style={{ padding: "4px" }}
-                  >
-                    <option value="Available">Available</option>
-                    <option value="Dispatched">Dispatched</option>
-                    <option value="Maintenance">Maintenance</option>
-                    <option value="Reserved">Reserved</option>
-                  </select>
-                </td>
+      <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+        <div style={{ overflowX: "auto" }}>
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Capacity</th>
+                <th>Location</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            </thead>
+            <tbody>
+              {resources.length === 0 ? (
+                <tr>
+                  <td colSpan="7">
+                    <div className="empty-state">
+                      <div className="empty-state-icon">📦</div>
+                      <div className="empty-state-text">No resources registered</div>
+                      <div className="empty-state-sub">Add resources to begin tracking</div>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                resources.map((r) => (
+                  <tr key={r.id}>
+                    <td>#{r.id}</td>
+                    <td style={{ fontWeight: "600", color: "var(--text-primary)" }}>{r.name}</td>
+                    <td>{r.resourceType}</td>
+                    <td><StatusBadge status={r.status} /></td>
+                    <td style={{ fontFamily: "var(--font-mono)" }}>{r.capacity}</td>
+                    <td>{r.location || "—"}</td>
+                    <td>
+                      <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+                        <select
+                          value={r.status}
+                          onChange={(e) => handleStatusChange(r.id, e.target.value)}
+                          style={{ padding: "5px 8px", fontSize: "12px", width: "auto" }}
+                        >
+                          <option value="Available">Available</option>
+                          <option value="Dispatched">Dispatched</option>
+                          <option value="Maintenance">Maintenance</option>
+                          <option value="Reserved">Reserved</option>
+                        </select>
+                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(r.id, r.name)}>
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Add Resource" subtitle="Register a new resource or vehicle">
+        <form onSubmit={handleCreate}>
+          <FormField label="Resource Name" required>
+            <input placeholder="e.g. Ambulance Unit 2" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+          </FormField>
+          <FormRow>
+            <FormField label="Type">
+              <select value={form.resourceType} onChange={(e) => setForm({ ...form, resourceType: e.target.value })}>
+                <option value="Vehicle">Vehicle</option>
+                <option value="MedicalEquipment">Medical Equipment</option>
+                <option value="Generator">Generator</option>
+                <option value="FoodSupply">Food Supply</option>
+                <option value="ShelterSupply">Shelter Supply</option>
+              </select>
+            </FormField>
+            <FormField label="Capacity">
+              <input type="number" value={form.capacity} onChange={(e) => setForm({ ...form, capacity: parseInt(e.target.value) || 1 })} />
+            </FormField>
+          </FormRow>
+          <FormField label="Location">
+            <input placeholder="e.g. Central Depot" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+          </FormField>
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "8px" }}>
+            <button type="button" className="btn btn-ghost" onClick={() => setShowModal(false)}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Add Resource</button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }
