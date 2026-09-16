@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ERCP.Api.DTOs;
 using ERCP.Api.Services;
@@ -8,9 +9,11 @@ namespace ERCP.Api.Controllers;
 /// Student 4 — Validation/Safety Agent endpoints.
 /// Deterministic pre-approval gate: POST /api/validations/dispatch/{id}
 /// must be called before coordinator approves a dispatch.
+/// Restricted to Coordinator/Admin per spec (authorized human approval).
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Coordinator,Admin")]
 public class ValidationsController : ControllerBase
 {
     private readonly DispatchValidationService _validation;

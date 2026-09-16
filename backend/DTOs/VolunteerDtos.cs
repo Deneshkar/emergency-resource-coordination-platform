@@ -13,6 +13,13 @@ public class UpdateAvailabilityDto
     public bool IsAvailable { get; set; }
 }
 
+public class CreateShiftDto
+{
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
+    public string Status { get; set; } = "Scheduled";
+}
+
 public class VolunteerResponseDto
 {
     public Guid Id { get; set; }

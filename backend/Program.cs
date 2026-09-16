@@ -346,3 +346,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Exposes the top-level entry point to the test project for
+// WebApplicationFactory-based HTTP integration tests (Student 4).
+public partial class Program { }
