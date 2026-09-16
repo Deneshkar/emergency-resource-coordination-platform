@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getInventory, createInventoryItem, updateInventoryItem, adjustStock, deleteInventoryItem } from "../services/resourceService";
 import StatusBadge from "../components/StatusBadge";
 import Modal, { FormField, FormRow } from "../components/Modal";
