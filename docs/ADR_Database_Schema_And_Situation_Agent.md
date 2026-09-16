@@ -29,3 +29,20 @@ Chosen Option: **Option 2**.
 - Good: Full compliance with assignment spec requiring relational integrity, schema migrations, and persisted AI agent workflow state.
 - Good: Both React and Flutter client apps consume the exact same ASP.NET Core REST API endpoints.
 - Mitigation: In-memory unit tests in `backend-tests` ensure fast CI test execution.
+
+---
+
+## ADR 02.1: Third-Party Geolocation & Maps API Routing Strategy
+
+- **Status**: Approved
+- **Deciders**: Student 2 (Resource & Inventory Lead)
+- **Date**: 2026-09-16
+
+### Context & Problem Statement
+The platform must calculate proximity to evacuation shelters and emergency resources to allow rapid response dispatching and citizen evacuation guidance. A third-party maps/geolocation API integration is required by project guidelines.
+
+### Decision Outcome
+- Implemented **Haversine Great-Circle Distance Algorithm** in `GeolocationService.cs` to calculate precise real-time distances (km) and estimated travel times (minutes) between emergency incidents and active shelters.
+- Integrated **OpenStreetMap Nominatim Geocoding API** (`https://nominatim.openstreetmap.org/search`) via ASP.NET Core `HttpClient` for resolving location address strings to latitude/longitude coordinates.
+- Rendered OpenStreetMap interactive navigation links (`https://www.openstreetmap.org/search?query=...`) in React (`ShelterList.jsx`) and Flutter (`shelter_locator_screen.dart`).
+
