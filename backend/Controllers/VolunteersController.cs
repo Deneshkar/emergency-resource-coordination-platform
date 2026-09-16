@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ namespace ERCP.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Coordinator,Admin,Volunteer")]
 public class VolunteersController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -20,6 +22,7 @@ public class VolunteersController : ControllerBase
 
     // POST /api/volunteers
     [HttpPost]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<ActionResult<VolunteerResponseDto>> Create(CreateVolunteerDto dto)
     {
         var volunteer = new Volunteer
@@ -38,6 +41,7 @@ public class VolunteersController : ControllerBase
 
     // DELETE /api/volunteers
     [HttpDelete]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<IActionResult> DeleteAll()
     {
         var volunteerIds = await _context.Volunteers.Select(v => v.Id).ToListAsync();
@@ -54,6 +58,7 @@ public class VolunteersController : ControllerBase
 
     // DELETE /api/volunteers/{id}
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var volunteer = await _context.Volunteers.FindAsync(id);
@@ -110,6 +115,26 @@ public class VolunteersController : ControllerBase
         var volunteer = await _context.Volunteers.FindAsync(id);
         if (volunteer == null) return NotFound();
 
+        // If authenticated, enforce that non-Coordinators/non-Admins can only toggle their own record
+        if (User?.Identity?.IsAuthenticated == true)
+        {
+            var isCoordinatorOrAdmin = User.IsInRole("Coordinator") || User.IsInRole("Admin")
+                || User.FindFirst(ClaimTypes.Role)?.Value == "Coordinator" || User.FindFirst(ClaimTypes.Role)?.Value == "Admin"
+                || User.FindFirst("role")?.Value == "Coordinator" || User.FindFirst("role")?.Value == "Admin";
+
+            if (!isCoordinatorOrAdmin)
+            {
+                var userEmail = User.FindFirst(ClaimTypes.Email)?.Value
+                    ?? User.FindFirst("email")?.Value
+                    ?? User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
+
+                if (string.IsNullOrWhiteSpace(userEmail) || !string.Equals(volunteer.Email, userEmail.Trim(), StringComparison.OrdinalIgnoreCase))
+                {
+                    return StatusCode(StatusCodes.Status403Forbidden, new { message = "Volunteers are only permitted to update their own availability." });
+                }
+            }
+        }
+
         volunteer.IsAvailable = dto.IsAvailable;
         volunteer.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
@@ -134,7 +159,6 @@ public class VolunteersController : ControllerBase
 
     // GET /api/volunteers/available?skill=medical
     [HttpGet("available")]
-    [Authorize]
     public async Task<ActionResult<IEnumerable<VolunteerResponseDto>>> GetAvailableBySkill([FromQuery] string skill)
     {
         var volunteers = await _context.Volunteers

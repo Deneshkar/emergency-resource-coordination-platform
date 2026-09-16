@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { incidentService } from "../services/incidentService";
+import { useAuth } from "../context/AuthContext";
 
 const CATEGORIES = [
   { value: "Fire", label: "Fire / Explosion", icon: "🔥" },
@@ -21,14 +22,19 @@ const PRIORITIES = [
 
 function ReportIncident() {
   const navigate = useNavigate();
+  const { user, hasRole } = useAuth();
+
+  const isCitizen = user?.role === "Citizen";
+  const isCoordinatorOrAdmin = hasRole(["Coordinator", "Admin"]);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("Fire");
   const [priority, setPriority] = useState("High");
   const [affectedCount, setAffectedCount] = useState(5);
-  const [reporterContact, setReporterContact] = useState("");
-  const [autoGeneratePlan, setAutoGeneratePlan] = useState(true);
+  const [reporterContact, setReporterContact] = useState(() => user?.email || "");
+  const [autoGeneratePlan, setAutoGeneratePlan] = useState(() => isCoordinatorOrAdmin);
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -76,10 +82,17 @@ function ReportIncident() {
         autoGeneratePlan,
       });
 
-      setMessage(`Incident reported successfully! Opening the AI Workbench…`);
-      setTimeout(() => {
-        navigate(`/incidents/${created.id}`);
-      }, 1500);
+      if (isCitizen) {
+        setMessage("Emergency report submitted successfully! Response coordinators are actively triaging your report.");
+        setTimeout(() => {
+          navigate("/incidents");
+        }, 1500);
+      } else {
+        setMessage("Incident reported successfully! Opening the AI Workbench…");
+        setTimeout(() => {
+          navigate(`/incidents/${created.id}`);
+        }, 1500);
+      }
     } catch (error) {
       console.error(error);
       setIsError(true);
@@ -264,20 +277,22 @@ function ReportIncident() {
               </div>
             </div>
 
-            <button
-              type="button"
-              className={`ai-toggle${autoGeneratePlan ? " ai-toggle-on" : ""}`}
-              onClick={() => setAutoGeneratePlan((v) => !v)}
-              aria-pressed={autoGeneratePlan}
-            >
-              <span className="ai-switch" aria-hidden="true">
-                <span className="ai-knob" />
-              </span>
-              <span className="ai-toggle-text">
-                <strong>🤖 Trigger AI Coordinator Agent automatically</strong>
-                <span>Instantly synthesize an emergency response plan & resource estimates upon submission.</span>
-              </span>
-            </button>
+            {isCoordinatorOrAdmin && (
+              <button
+                type="button"
+                className={`ai-toggle${autoGeneratePlan ? " ai-toggle-on" : ""}`}
+                onClick={() => setAutoGeneratePlan((v) => !v)}
+                aria-pressed={autoGeneratePlan}
+              >
+                <span className="ai-switch" aria-hidden="true">
+                  <span className="ai-knob" />
+                </span>
+                <span className="ai-toggle-text">
+                  <strong>🤖 Trigger AI Coordinator Agent automatically</strong>
+                  <span>Instantly synthesize an emergency response plan & resource estimates upon submission.</span>
+                </span>
+              </button>
+            )}
           </section>
 
           <div className="report-actions">

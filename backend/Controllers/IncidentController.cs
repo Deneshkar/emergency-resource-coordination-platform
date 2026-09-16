@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text.Json;
 using ERCP.Api.Data;
 using ERCP.Api.DTOs;
@@ -30,16 +31,39 @@ public class IncidentController : ControllerBase
 
     // GET: api/incident
     [HttpGet]
-    [Authorize(Roles = "Citizen,Coordinator,Admin")]
+    [Authorize(Roles = "Citizen,Coordinator,Admin,Volunteer")]
     public async Task<ActionResult<IEnumerable<IncidentResponseDto>>> GetIncidents(
         [FromQuery] string? status,
         [FromQuery] string? priority,
         [FromQuery] string? category,
-        [FromQuery] string? search)
+        [FromQuery] string? search,
+        [FromQuery] bool? myOnly)
     {
         var query = _context.Incidents
             .Include(i => i.Plans)
             .AsQueryable();
+
+        var userEmail = User.FindFirst(ClaimTypes.Email)?.Value
+            ?? User.FindFirst("email")?.Value
+            ?? User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
+        var isCitizen = User.IsInRole("Citizen")
+            || User.FindFirst(ClaimTypes.Role)?.Value == "Citizen"
+            || User.FindFirst("role")?.Value == "Citizen";
+
+        // Citizens see their own reported incidents by default; others can request myOnly=true
+        if ((isCitizen && myOnly != false) || myOnly == true)
+        {
+            if (!string.IsNullOrWhiteSpace(userEmail))
+            {
+                var emailLower = userEmail.Trim().ToLower();
+                query = query.Where(i => i.ReporterContact.ToLower().Contains(emailLower));
+            }
+            else
+            {
+                // Fallback: If citizen account has no email claim, return empty (never leak other users' incidents)
+                query = query.Where(i => false);
+            }
+        }
 
         if (!string.IsNullOrWhiteSpace(status))
             query = query.Where(i => i.Status.ToLower() == status.ToLower());
@@ -70,10 +94,32 @@ public class IncidentController : ControllerBase
 
     // GET: api/incident/stats/summary
     [HttpGet("stats/summary")]
-    [Authorize(Roles = "Citizen,Coordinator,Admin")]
-    public async Task<ActionResult<IncidentSummaryStatsDto>> GetSummaryStats()
+    [Authorize(Roles = "Citizen,Coordinator,Admin,Volunteer")]
+    public async Task<ActionResult<IncidentSummaryStatsDto>> GetSummaryStats([FromQuery] bool? myOnly)
     {
-        var all = await _context.Incidents.Include(i => i.Plans).ToListAsync();
+        var query = _context.Incidents.Include(i => i.Plans).AsQueryable();
+
+        var userEmail = User.FindFirst(ClaimTypes.Email)?.Value
+            ?? User.FindFirst("email")?.Value
+            ?? User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
+        var isCitizen = User.IsInRole("Citizen")
+            || User.FindFirst(ClaimTypes.Role)?.Value == "Citizen"
+            || User.FindFirst("role")?.Value == "Citizen";
+
+        if ((isCitizen && myOnly != false) || myOnly == true)
+        {
+            if (!string.IsNullOrWhiteSpace(userEmail))
+            {
+                var emailLower = userEmail.Trim().ToLower();
+                query = query.Where(i => i.ReporterContact.ToLower().Contains(emailLower));
+            }
+            else
+            {
+                query = query.Where(i => false);
+            }
+        }
+
+        var all = await query.ToListAsync();
 
         var stats = new IncidentSummaryStatsDto
         {
@@ -93,7 +139,7 @@ public class IncidentController : ControllerBase
 
     // GET: api/incident/1
     [HttpGet("{id}")]
-    [Authorize(Roles = "Citizen,Coordinator,Admin")]
+    [Authorize(Roles = "Citizen,Coordinator,Admin,Volunteer")]
     public async Task<ActionResult<IncidentDetailDto>> GetIncident(int id)
     {
         var incident = await _context.Incidents
@@ -130,9 +176,16 @@ public class IncidentController : ControllerBase
 
     // POST: api/incident
     [HttpPost]
-    [Authorize(Roles = "Citizen,Coordinator,Admin")]
+    [Authorize(Roles = "Citizen,Coordinator,Admin,Volunteer")]
     public async Task<ActionResult<IncidentDetailDto>> CreateIncident([FromBody] CreateIncidentDto dto)
     {
+        var userEmail = User?.FindFirst(ClaimTypes.Email)?.Value
+            ?? User?.FindFirst("email")?.Value
+            ?? User?.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
+        var reporter = string.IsNullOrWhiteSpace(dto.ReporterContact)
+            ? (userEmail ?? "Community Reporter")
+            : dto.ReporterContact;
+
         var incident = new Incident
         {
             Title = dto.Title,
@@ -141,7 +194,7 @@ public class IncidentController : ControllerBase
             Category = string.IsNullOrWhiteSpace(dto.Category) ? "General Emergency" : dto.Category,
             Priority = string.IsNullOrWhiteSpace(dto.Priority) ? "Medium" : dto.Priority,
             AffectedCount = dto.AffectedCount,
-            ReporterContact = dto.ReporterContact ?? string.Empty,
+            ReporterContact = reporter,
             Latitude = dto.Latitude,
             Longitude = dto.Longitude,
             Status = "Reported",
@@ -337,7 +390,7 @@ public class IncidentController : ControllerBase
     // GET: api/incident/1/plan or api/incident/1/plans
     [HttpGet("{id}/plan")]
     [HttpGet("{id}/plans")]
-    [Authorize(Roles = "Citizen,Coordinator,Admin")]
+    [Authorize(Roles = "Citizen,Coordinator,Admin,Volunteer")]
     public async Task<ActionResult<IEnumerable<IncidentPlanDto>>> GetPlans(int id)
     {
         var incidentExists = await _context.Incidents.AnyAsync(i => i.Id == id);
@@ -393,7 +446,7 @@ public class IncidentController : ControllerBase
 
     // GET: api/incident/1/timeline
     [HttpGet("{id}/timeline")]
-    [Authorize(Roles = "Citizen,Coordinator,Admin")]
+    [Authorize(Roles = "Citizen,Coordinator,Admin,Volunteer")]
     public async Task<ActionResult<IEnumerable<IncidentTimelineEventDto>>> GetTimeline(int id)
     {
         var incidentExists = await _context.Incidents.AnyAsync(i => i.Id == id);

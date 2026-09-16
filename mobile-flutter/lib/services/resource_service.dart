@@ -4,12 +4,16 @@ import '../models/resource.dart';
 import '../models/shelter.dart';
 import '../models/inventory_item.dart';
 import '../models/situation_assessment.dart';
+import 'api_config.dart';
+import 'auth_service.dart';
 
 class ResourceService {
-  static const String baseUrl = 'http://10.0.2.2:5009/api'; // Android Emulator default
-
   static Future<List<ShelterModel>> fetchShelters() async {
-    final response = await http.get(Uri.parse('$baseUrl/Shelters'));
+    final token = await AuthService.getToken();
+    final response = await http.get(
+      Uri.parse('${ApiConfig.baseUrl}/Shelters'),
+      headers: ApiConfig.defaultHeaders(token),
+    );
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => ShelterModel.fromJson(json)).toList();
@@ -19,7 +23,11 @@ class ResourceService {
   }
 
   static Future<List<ResourceModel>> fetchResources() async {
-    final response = await http.get(Uri.parse('$baseUrl/Resources'));
+    final token = await AuthService.getToken();
+    final response = await http.get(
+      Uri.parse('${ApiConfig.baseUrl}/Resources'),
+      headers: ApiConfig.defaultHeaders(token),
+    );
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => ResourceModel.fromJson(json)).toList();
@@ -29,7 +37,11 @@ class ResourceService {
   }
 
   static Future<List<InventoryItemModel>> fetchInventory() async {
-    final response = await http.get(Uri.parse('$baseUrl/Inventory'));
+    final token = await AuthService.getToken();
+    final response = await http.get(
+      Uri.parse('${ApiConfig.baseUrl}/Inventory'),
+      headers: ApiConfig.defaultHeaders(token),
+    );
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => InventoryItemModel.fromJson(json)).toList();
@@ -39,9 +51,10 @@ class ResourceService {
   }
 
   static Future<SituationAssessmentModel> assessSituation(int incidentId) async {
+    final token = await AuthService.getToken();
     final response = await http.post(
-      Uri.parse('$baseUrl/SituationAnalysis/assess'),
-      headers: {'Content-Type': 'application/json'},
+      Uri.parse('${ApiConfig.baseUrl}/SituationAnalysis/assess'),
+      headers: ApiConfig.defaultHeaders(token),
       body: json.encode({'incidentId': incidentId}),
     );
     if (response.statusCode == 200) {

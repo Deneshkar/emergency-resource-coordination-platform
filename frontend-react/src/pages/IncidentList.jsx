@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import StatusBadge from "../components/StatusBadge";
 import Modal, { FormField, FormRow } from "../components/Modal";
 import { getIncidents, createIncident, updateIncident, deleteIncident } from "../services/incidentService";
+import { useAuth } from "../context/AuthContext";
 
 export default function IncidentList() {
+  const { hasRole } = useAuth();
+  const canManage = hasRole(["Coordinator", "Admin"]);
+
   const [incidents, setIncidents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
@@ -125,8 +130,15 @@ export default function IncidentList() {
                     </td>
                     <td>
                       <div style={{ display: "flex", gap: "6px" }}>
-                        <button className="btn btn-ghost btn-sm" onClick={() => openUpdate(inc)}>Edit</button>
-                        <button className="btn btn-ghost btn-sm" style={{ color: "var(--red)" }} onClick={() => handleDelete(inc.id)}>Delete</button>
+                        <Link to={`/incidents/${inc.id}`} className="btn btn-ghost btn-sm">
+                          View
+                        </Link>
+                        {canManage && (
+                          <>
+                            <button className="btn btn-ghost btn-sm" onClick={() => openUpdate(inc)}>Edit</button>
+                            <button className="btn btn-ghost btn-sm" style={{ color: "var(--red)" }} onClick={() => handleDelete(inc.id)}>Delete</button>
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>
