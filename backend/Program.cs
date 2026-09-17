@@ -84,7 +84,29 @@ builder.Services
 
 // Check if PostgreSQL is accessible, otherwise fallback to InMemory Db for zero-config execution
 bool usePostgres = false;
-var connString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Support DATABASE_URL env var (Railway injects this automatically)
+// Format: postgresql://user:password@host:port/database
+static string? ConvertDatabaseUrl(string? databaseUrl)
+{
+    if (string.IsNullOrEmpty(databaseUrl)) return null;
+    try
+    {
+        var uri = new Uri(databaseUrl);
+        var userInfo = uri.UserInfo.Split(':');
+        var host = uri.Host;
+        var port = uri.Port > 0 ? uri.Port : 5432;
+        var database = uri.AbsolutePath.TrimStart('/');
+        var username = userInfo[0];
+        var password = userInfo.Length > 1 ? userInfo[1] : "";
+        return $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+    }
+    catch { return null; }
+}
+
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+var connString = ConvertDatabaseUrl(databaseUrl)
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
 if (!string.IsNullOrEmpty(connString))
 {
     try
@@ -114,9 +136,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add CORS configuration
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalDev", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+        policy.AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -332,14 +354,19 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure HTTP request pipeline
-if (app.Environment.IsDevelopment())
+// Enable Swagger in all environments (Railway production included)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ERCP API v1");
+    c.RoutePrefix = "swagger";
+});
 
-app.UseHttpsRedirection();
-app.UseCors("AllowLocalDev");
+// Health check endpoint for Railway
+app.MapGet("/api/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
+
+// Railway handles SSL at the edge — no HTTPS redirect needed
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
