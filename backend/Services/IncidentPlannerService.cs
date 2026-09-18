@@ -27,7 +27,7 @@ public class IncidentPlannerService
         return GenerateRuleBasedPlan(incident, customDirectives, focusPhase);
     }
 
-    private IncidentPlan? TryGeneratePythonAgentPlan(Incident incident, string? customDirectives, string? focusPhase)
+    private string? RunPythonAgentTask(string task, string inputPayload)
     {
         try
         {
@@ -36,29 +36,22 @@ public class IncidentPlannerService
             {
                 agentPath = Path.Combine(Directory.GetCurrentDirectory(), "ai-agents", "coordinator_planner_agent.py");
             }
+            if (!File.Exists(agentPath))
+            {
+                // Test runner fallback (backend-tests/bin/Debug/net8.0/)
+                agentPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "ai-agents", "coordinator_planner_agent.py");
+            }
 
             if (!File.Exists(agentPath))
             {
+                _logger.LogWarning($"Python script not found at {agentPath}");
                 return null;
             }
-
-            var inputPayload = JsonSerializer.Serialize(new
-            {
-                incident_id = incident.Id,
-                title = incident.Title,
-                description = incident.Description,
-                location = incident.Location,
-                category = incident.Category,
-                priority = incident.Priority,
-                affected_count = incident.AffectedCount,
-                custom_directives = customDirectives ?? "",
-                focus_phase = focusPhase ?? ""
-            });
 
             var psi = new ProcessStartInfo
             {
                 FileName = "python",
-                Arguments = $"\"{agentPath}\" --json \"{inputPayload.Replace("\"", "\\\"")}\"",
+                Arguments = $"\"{agentPath}\" --task \"{task}\" --json \"{inputPayload.Replace("\"", "\\\"")}\"",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -72,6 +65,36 @@ public class IncidentPlannerService
             process.WaitForExit(3000);
 
             if (process.ExitCode == 0 && !string.IsNullOrWhiteSpace(output))
+            {
+                return output;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, $"Python agent invocation failed for task: {task}.");
+        }
+        return null;
+    }
+
+    private IncidentPlan? TryGeneratePythonAgentPlan(Incident incident, string? customDirectives, string? focusPhase)
+    {
+        var inputPayload = JsonSerializer.Serialize(new
+        {
+            incident_id = incident.Id,
+            title = incident.Title,
+            description = incident.Description,
+            location = incident.Location,
+            category = incident.Category,
+            priority = incident.Priority,
+            affected_count = incident.AffectedCount,
+            custom_directives = customDirectives ?? "",
+            focus_phase = focusPhase ?? ""
+        });
+
+        var output = RunPythonAgentTask("plan", inputPayload);
+        if (!string.IsNullOrWhiteSpace(output))
+        {
+            try
             {
                 using var doc = JsonDocument.Parse(output);
                 var root = doc.RootElement;
@@ -109,13 +132,63 @@ public class IncidentPlannerService
                     };
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to parse Python agent output as JSON. Reverting to internal AI engine.");
+            }
         }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "Python agent invocation skipped or failed, reverting to internal AI engine.");
-        }
-
         return null;
+    }
+
+    public string? GenerateRiskAssessment(Incident incident)
+    {
+        var inputPayload = JsonSerializer.Serialize(new
+        {
+            incidentId = incident.Id,
+            title = incident.Title,
+            category = incident.Category,
+            priority = incident.Priority,
+            affectedCount = incident.AffectedCount
+        });
+        return RunPythonAgentTask("risk", inputPayload);
+    }
+
+    public string? GenerateSummary(Incident incident)
+    {
+        var inputPayload = JsonSerializer.Serialize(new
+        {
+            incidentId = incident.Id,
+            description = incident.Description,
+            category = incident.Category,
+            priority = incident.Priority,
+            affectedCount = incident.AffectedCount
+        });
+        return RunPythonAgentTask("summary", inputPayload);
+    }
+
+    public string? RecommendResources(Incident incident, IEnumerable<Resource> resources, IEnumerable<Volunteer> volunteers, IEnumerable<Shelter> shelters)
+    {
+        var inputPayload = JsonSerializer.Serialize(new
+        {
+            incidentId = incident.Id,
+            category = incident.Category,
+            priority = incident.Priority,
+            affectedCount = incident.AffectedCount,
+            available_resources = resources.Select(r => new { r.Id, r.Name, r.ResourceType }),
+            available_volunteers = volunteers.Select(v => new { v.Id, v.Name, v.Skills }),
+            available_shelters = shelters.Select(s => new { s.Id, s.Name, s.TotalCapacity, s.CurrentOccupancy })
+        });
+        return RunPythonAgentTask("recommend", inputPayload);
+    }
+
+    public string? CheckDuplicates(Incident incident, IEnumerable<Incident> otherIncidents)
+    {
+        var inputPayload = JsonSerializer.Serialize(new
+        {
+            incident = new { location = incident.Location, category = incident.Category },
+            other_incidents = otherIncidents.Select(i => new { id = i.Id, location = i.Location, category = i.Category })
+        });
+        return RunPythonAgentTask("duplicate", inputPayload);
     }
 
     private bool ValidateStructuredAiOutput(JsonElement root, int expectedIncidentId)
