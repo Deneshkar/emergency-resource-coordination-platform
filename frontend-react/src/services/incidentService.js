@@ -91,6 +91,30 @@ export const incidentService = {
     if (!res.ok) throw new Error("Failed to record timeline event");
     return res.json();
   },
+
+  async generateRiskAssessment(id) {
+    const res = await request(`${ENDPOINT}/${id}/risk-assessment`, { method: "POST" });
+    if (!res.ok) throw new Error("Failed to generate risk assessment");
+    return res.json();
+  },
+
+  async generateSummary(id) {
+    const res = await request(`${ENDPOINT}/${id}/summary`, { method: "POST" });
+    if (!res.ok) throw new Error("Failed to generate incident summary");
+    return res.json();
+  },
+
+  async recommendResources(id) {
+    const res = await request(`${ENDPOINT}/${id}/recommend-resources`, { method: "POST" });
+    if (!res.ok) throw new Error("Failed to recommend resources");
+    return res.json();
+  },
+
+  async checkDuplicates(id) {
+    const res = await request(`${ENDPOINT}/${id}/duplicate-check`, { method: "GET" });
+    if (!res.ok) throw new Error("Failed to check for duplicates");
+    return res.json();
+  }
 };
 
 // Direct named exports for backwards compatibility
