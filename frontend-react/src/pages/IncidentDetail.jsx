@@ -21,6 +21,13 @@ function IncidentDetail() {
   const [focusPhase, setFocusPhase] = useState("");
   const [showAiControls, setShowAiControls] = useState(true);
 
+  // AI Intelligence state
+  const [runningAi, setRunningAi] = useState(null);
+  const [aiRisk, setAiRisk] = useState(null);
+  const [aiSummary, setAiSummary] = useState(null);
+  const [aiResources, setAiResources] = useState(null);
+  const [aiDuplicates, setAiDuplicates] = useState(null);
+
   // Status & Priority edit state
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [newStatus, setNewStatus] = useState("");
@@ -106,6 +113,30 @@ function IncidentDetail() {
     } catch (err) {
       alert("Failed to delete incident: " + err.message);
     }
+  };
+
+  const handleAiRisk = async () => {
+    try { setRunningAi("risk"); setAiRisk(await incidentService.generateRiskAssessment(id)); }
+    catch(e) { alert(e.message); }
+    finally { setRunningAi(null); loadIncident(); }
+  };
+
+  const handleAiSummary = async () => {
+    try { setRunningAi("summary"); setAiSummary(await incidentService.generateSummary(id)); }
+    catch(e) { alert(e.message); }
+    finally { setRunningAi(null); loadIncident(); }
+  };
+
+  const handleAiRecommend = async () => {
+    try { setRunningAi("recommend"); setAiResources(await incidentService.recommendResources(id)); }
+    catch(e) { alert(e.message); }
+    finally { setRunningAi(null); loadIncident(); }
+  };
+
+  const handleAiDuplicate = async () => {
+    try { setRunningAi("duplicate"); setAiDuplicates(await incidentService.checkDuplicates(id)); }
+    catch(e) { alert(e.message); }
+    finally { setRunningAi(null); loadIncident(); }
   };
 
   const handleAddTimelineNote = async (e) => {
@@ -467,6 +498,67 @@ function IncidentDetail() {
 
         {/* Right Column: AI Plans & Timeline */}
         <div className="detail-content-area">
+
+          {/* AI Intelligence Toolkit */}
+          {isCoordinator && showAiControls && (
+            <div className="section-block">
+              <h2 className="section-title">🧠 AI Intelligence Toolkit</h2>
+              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "16px" }}>
+                <button className="btn btn-secondary" onClick={handleAiSummary} disabled={runningAi !== null}>
+                  {runningAi === "summary" ? "Summarizing..." : "1. Generate Summary"}
+                </button>
+                <button className="btn btn-secondary" onClick={handleAiRisk} disabled={runningAi !== null}>
+                  {runningAi === "risk" ? "Assessing..." : "2. Assess Risk"}
+                </button>
+                <button className="btn btn-secondary" onClick={handleAiRecommend} disabled={runningAi !== null}>
+                  {runningAi === "recommend" ? "Finding..." : "3. Recommend Resources"}
+                </button>
+                <button className="btn btn-secondary" onClick={handleAiDuplicate} disabled={runningAi !== null}>
+                  {runningAi === "duplicate" ? "Checking..." : "4. Check Duplicates"}
+                </button>
+              </div>
+
+              {/* AI Results Display */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginBottom: "20px" }}>
+                {aiSummary && (
+                  <div className="glass-card">
+                    <h4 style={{ color: "var(--accent-color)" }}>📝 AI Summary</h4>
+                    <p><strong>{aiSummary.summary}</strong></p>
+                    <p><em>Threat: {aiSummary.mainThreat}</em></p>
+                    <ul style={{ paddingLeft: "20px", marginTop: "8px" }}>
+                      {aiSummary.keyFacts?.map((f, i) => <li key={i}>{f}</li>)}
+                    </ul>
+                  </div>
+                )}
+                {aiRisk && (
+                  <div className="glass-card">
+                    <h4 style={{ color: "var(--danger-color)" }}>⚠️ Risk Assessment</h4>
+                    <p><strong>Risk Level: {aiRisk.riskLevel}</strong> (Recommended Priority: {aiRisk.recommendedPriority})</p>
+                    <p>{aiRisk.reason}</p>
+                    {aiRisk.immediateActionRequired && <p style={{ color: "var(--danger-color)", fontWeight: "bold" }}>Immediate Action Required!</p>}
+                  </div>
+                )}
+                {aiResources && (
+                  <div className="glass-card">
+                    <h4 style={{ color: "var(--success-color)" }}>🚑 Recommended Deployments</h4>
+                    {aiResources.recommendedResources?.map((r, i) => <p key={i}>- {r.quantity}x {r.resourceType}: {r.reason}</p>)}
+                    {aiResources.recommendedVolunteers?.map((v, i) => <p key={i}>- {v.count} Volunteers ({v.role}): {v.reason}</p>)}
+                    {aiResources.recommendedShelter && <p>- Shelter: {aiResources.recommendedShelter.name} ({aiResources.recommendedShelter.reason})</p>}
+                  </div>
+                )}
+                {aiDuplicates && (
+                  <div className="glass-card">
+                    <h4 style={{ color: "var(--warning-color)" }}>🔍 Duplicate Check</h4>
+                    <p>{aiDuplicates.isPotentialDuplicate ? "⚠️ Potential duplicates found!" : "✅ No duplicates found."}</p>
+                    {aiDuplicates.similarIncidents?.map((s, i) => (
+                      <p key={i}>- Incident #{s.incidentId}: {s.similarityReason}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* AI Response Plans Section */}
           <div className="section-block">
             <h2 className="section-title">
