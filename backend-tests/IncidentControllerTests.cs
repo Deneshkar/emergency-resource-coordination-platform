@@ -70,7 +70,7 @@ public class IncidentControllerTests
     }
 
     [Fact]
-    public async Task UpdateStatus_ValidTransition_ReportedToVerified_Succeeds()
+    public async Task UpdateStatus_ValidTransition_ReportedToActivePlanning_Succeeds()
     {
         // Arrange
         var context = GetInMemoryContext();
@@ -87,8 +87,8 @@ public class IncidentControllerTests
         var controller = CreateController(context);
         var updateDto = new UpdateIncidentDto
         {
-            Status = "Verified",
-            Note = "Verified on site by field officer"
+            Status = "Active Planning",
+            Note = "Planning initiated by field coordinator"
         };
 
         // Act
@@ -99,20 +99,20 @@ public class IncidentControllerTests
 
         var updatedIncident = await context.Incidents.FindAsync(incident.Id);
         Assert.NotNull(updatedIncident);
-        Assert.Equal("Verified", updatedIncident.Status);
+        Assert.Equal("Active Planning", updatedIncident.Status);
 
         // Verify timeline logging
         var timeline = await context.IncidentTimelineEvents
             .Where(e => e.IncidentId == incident.Id)
             .ToListAsync();
 
-        var statusEvent = timeline.FirstOrDefault(e => e.Title == "Incident Verified");
+        var statusEvent = timeline.FirstOrDefault(e => e.Title == "Incident Status Updated (Active Planning)");
         Assert.NotNull(statusEvent);
         Assert.Equal("StatusUpdate", statusEvent.EventType);
     }
 
     [Fact]
-    public async Task UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest()
+    public async Task UpdateStatus_InvalidStatus_ReturnsBadRequest()
     {
         // Arrange
         var context = GetInMemoryContext();
@@ -129,7 +129,7 @@ public class IncidentControllerTests
         var controller = CreateController(context);
         var updateDto = new UpdateIncidentDto
         {
-            Status = "Resolved" // Illegal jump: Reported -> Resolved
+            Status = "Investigating" // Invalid status not in the allowed set
         };
 
         // Act
