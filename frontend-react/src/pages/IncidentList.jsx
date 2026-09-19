@@ -40,9 +40,13 @@ export default function IncidentList() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    await updateIncident(showUpdate.id, updateForm);
-    setShowUpdate(null);
-    fetchData();
+    try {
+      await updateIncident(showUpdate.id, updateForm);
+      setShowUpdate(null);
+      fetchData();
+    } catch (err) {
+      alert("Failed to update incident: " + err.message);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -185,8 +189,8 @@ export default function IncidentList() {
             <FormField label="Status">
               <select className="form-select" value={updateForm.status} onChange={(e) => setUpdateForm({ ...updateForm, status: e.target.value })}>
                 <option value="Reported">Reported</option>
-                <option value="Investigating">Investigating</option>
-                <option value="InProgress">In Progress</option>
+                <option value="Active Planning">Active Planning</option>
+                <option value="Dispatched">Dispatched</option>
                 <option value="Resolved">Resolved</option>
                 <option value="Closed">Closed</option>
               </select>
