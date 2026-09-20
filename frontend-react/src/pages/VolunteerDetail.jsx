@@ -1,29 +1,73 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getVolunteerShifts } from "../services/volunteerService";
+import { getVolunteerShifts, createShift } from "../services/volunteerService";
+import { useAuth } from "../context/AuthContext";
+import Modal, { FormField } from "../components/Modal";
 import StatusBadge from "../components/StatusBadge";
+
+const SHIFT_STATUSES = ["Scheduled", "Active", "Completed", "Cancelled"];
 
 function VolunteerDetail() {
   const { id } = useParams();
+  const { hasRole } = useAuth();
+  const isCoordinator = hasRole(["Coordinator", "Admin"]);
   const [shifts, setShifts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchShifts = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await getVolunteerShifts(id);
-        setShifts(data);
-      } catch {
-        setError("Failed to load shift history.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchShifts();
+  // Student 4 — Assign Shift modal state (Coordinator/Admin only)
+  const [showAssign, setShowAssign] = useState(false);
+  const [shiftForm, setShiftForm] = useState({ start: "", end: "", status: "Scheduled" });
+  const [assignError, setAssignError] = useState(null);
+  const [assigning, setAssigning] = useState(false);
+
+  const fetchShifts = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getVolunteerShifts(id);
+      setShifts(data);
+    } catch {
+      setError("Failed to load shift history.");
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
+
+  useEffect(() => {
+    fetchShifts();
+  }, [fetchShifts]);
+
+  const handleAssignShift = async (e) => {
+    e.preventDefault();
+    setAssignError(null);
+    const start = new Date(shiftForm.start);
+    const end = new Date(shiftForm.end);
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      setAssignError("Please choose both a start and an end time.");
+      return;
+    }
+    // Client-side mirror of the API rule (server remains source of truth).
+    if (end <= start) {
+      setAssignError("Shift end time must be after start time.");
+      return;
+    }
+    try {
+      setAssigning(true);
+      await createShift(id, {
+        startTime: start.toISOString(),
+        endTime: end.toISOString(),
+        status: shiftForm.status,
+      });
+      setShiftForm({ start: "", end: "", status: "Scheduled" });
+      setShowAssign(false);
+      await fetchShifts();
+    } catch (err) {
+      setAssignError(err.response?.data?.message || err.message || "Failed to assign shift.");
+    } finally {
+      setAssigning(false);
+    }
+  };
 
   return (
     <div className="page-wrapper">
@@ -40,6 +84,11 @@ function VolunteerDetail() {
             ID: {id}
           </p>
         </div>
+        {isCoordinator && (
+          <button className="btn btn-primary" onClick={() => { setAssignError(null); setShowAssign(true); }}>
+            + Assign Shift
+          </button>
+        )}
       </div>
 
       {loading ? (
@@ -84,6 +133,51 @@ function VolunteerDetail() {
           </div>
         </div>
       )}
+
+      <Modal isOpen={showAssign} onClose={() => setShowAssign(false)} title="Assign Shift" subtitle={`Schedule a shift for volunteer ${id.slice(0, 8)}…`}>
+        <form onSubmit={handleAssignShift}>
+          <FormField label="Start Time" required>
+            <input
+              type="datetime-local"
+              className="form-control"
+              value={shiftForm.start}
+              onChange={(e) => setShiftForm({ ...shiftForm, start: e.target.value })}
+              required
+            />
+          </FormField>
+          <FormField label="End Time" required>
+            <input
+              type="datetime-local"
+              className="form-control"
+              value={shiftForm.end}
+              onChange={(e) => setShiftForm({ ...shiftForm, end: e.target.value })}
+              required
+            />
+          </FormField>
+          <FormField label="Status">
+            <select
+              className="form-select"
+              value={shiftForm.status}
+              onChange={(e) => setShiftForm({ ...shiftForm, status: e.target.value })}
+            >
+              {SHIFT_STATUSES.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </FormField>
+          {assignError && (
+            <div className="text-danger" style={{ fontSize: "13px", marginTop: "4px" }}>
+              {assignError}
+            </div>
+          )}
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "8px" }}>
+            <button type="button" className="btn btn-ghost" onClick={() => setShowAssign(false)}>Cancel</button>
+            <button type="submit" className="btn btn-primary" disabled={assigning}>
+              {assigning ? "Assigning…" : "Assign Shift"}
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }
