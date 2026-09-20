@@ -7,7 +7,7 @@ import { getDispatches, createDispatch, updateDispatchStatus } from "../services
 import { getIncidents } from "../services/incidentService";
 import { getVolunteers } from "../services/volunteerService";
 import { createDispatchTask } from "../services/dispatchService";
-import { validateDispatch, getValidationHistory } from "../services/validationService";
+import { validateDispatch, getValidationHistory, canApprove, approvalBlockReason } from "../services/validationService";
 
 export default function DispatchList() {
   const { hasRole } = useAuth();
@@ -144,14 +144,13 @@ export default function DispatchList() {
           {dispatches.map((d) => {
             const nextStatus = getNextStatus(d.status);
             const inc = incidents.find((i) => i.id === d.incidentId);
-            // Student 4 soft-gate: high-impact move to Approved requires a fresh
-            // APPROVE/REVISE validation. REJECT or no check blocks Approve (Reject stays allowed).
+            // Student 4 soft-gate: high-impact move to Approved requires a genuinely
+            // evaluated APPROVE/REVISE (at least one tool check). Empty, REJECT, or
+            // missing results block Approve (Reject stays allowed).
             const validation = validationById[d.id];
             const needsGate = nextStatus === "Approved";
-            const gatePassed =
-              validation?.result?.recommendation === "APPROVE" ||
-              validation?.result?.recommendation === "REVISE";
-            const gateBlocked = needsGate && !gatePassed;
+            const gateBlocked = needsGate && !canApprove(validation?.result);
+            const blockReason = approvalBlockReason(validation?.result);
             return (
               <div
                 key={d.id}
@@ -198,9 +197,7 @@ export default function DispatchList() {
                         disabled={isCoordinator && gateBlocked}
                         title={
                           isCoordinator && gateBlocked
-                            ? validation?.result?.recommendation === "REJECT"
-                              ? "Blocked: safety gate returned REJECT — fix blockers and re-run the check"
-                              : "Run the safety check first — approval requires APPROVE or REVISE"
+                            ? (blockReason ?? `Move to ${nextStatus}`)
                             : `Move to ${nextStatus}`
                         }
                       >
