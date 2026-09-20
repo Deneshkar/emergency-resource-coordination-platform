@@ -214,6 +214,17 @@ public class DispatchValidationService
             }
         }
 
+        // W0: an empty dispatch (no tasks) must not read as a clean APPROVE —
+        // nothing was evaluated, so the coordinator must add tasks and re-run
+        // before the high-impact approval. Advisory only (still IsValid).
+        if (!dispatch.Tasks.Any())
+        {
+            warnings.Add(new ValidationViolationDto(
+                "W0_EMPTY_DISPATCH",
+                $"Dispatch {dispatch.Id} has no tasks assigned — add at least one volunteer/resource task and re-run validation before approval.",
+                "WARNING"));
+        }
+
         bool isValid = violations.Count == 0;
         string recommendation;
         if (isValid)

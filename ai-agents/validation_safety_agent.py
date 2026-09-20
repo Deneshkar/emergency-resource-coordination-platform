@@ -254,6 +254,15 @@ class ValidationSafetyAgent:
                 "status": "COMPLETED",
             }
 
+        # W0: an empty proposal (no assignments) must not read as a clean
+        # APPROVE — nothing was evaluated (mirrors the C# gate).
+        if not payload.get("assignments"):
+            warnings.append({
+                "code": "W0_EMPTY_DISPATCH",
+                "message": "Dispatch has no tasks assigned — add at least one volunteer/resource task and re-run validation before approval.",
+                "severity": "WARNING",
+            })
+
         # ---- Volunteers: availability + double-booking + shift window ----
         for a in payload.get("assignments", []):
             vid = a.get("volunteer_id", a.get("id", "unknown"))
