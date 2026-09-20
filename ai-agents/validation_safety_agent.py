@@ -104,6 +104,7 @@ Rules:
 import sys
 import json
 import argparse
+import time
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
@@ -230,9 +231,28 @@ class ValidationSafetyAgent:
     # Full assignment validation (the gate)
     # ------------------------------------------------------------------
     def validate_assignment(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        started = time.perf_counter()
         violations: List[Dict[str, str]] = []
         warnings: List[Dict[str, str]] = []
         checks: List[Dict[str, Any]] = []
+        errors: List[Dict[str, str]] = []
+
+        if not isinstance(payload, dict):
+            return {
+                "agent_id": self.agent_id,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "dispatch_id": None,
+                "incident_id": None,
+                "is_valid": False,
+                "recommendation": "REJECT",
+                "violations": [{"code": "E0_INVALID_PAYLOAD", "message": "Input payload must be a JSON object.", "severity": "BLOCKER"}],
+                "warnings": [],
+                "checks": [],
+                "errors": [{"code": "E0_INVALID_PAYLOAD", "message": "Input payload must be a JSON object."}],
+                "allowed_tools": self.allowed_tools,
+                "duration_ms": 0,
+                "status": "COMPLETED",
+            }
 
         # ---- Volunteers: availability + double-booking + shift window ----
         for a in payload.get("assignments", []):
@@ -385,6 +405,7 @@ class ValidationSafetyAgent:
             codes = {v["code"] for v in violations}
             recommendation = "REVISE" if codes and codes.issubset(revisable) else "REJECT"
 
+        duration_ms = int((time.perf_counter() - started) * 1000)
         return {
             "agent_id": self.agent_id,
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -395,7 +416,9 @@ class ValidationSafetyAgent:
             "violations": violations,
             "warnings": warnings,
             "checks": checks,
+            "errors": errors,
             "allowed_tools": self.allowed_tools,
+            "duration_ms": duration_ms,
             "status": "COMPLETED",
         }
 

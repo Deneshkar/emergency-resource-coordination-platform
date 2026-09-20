@@ -43,5 +43,22 @@ public record ValidationResultDto(
     List<ValidationViolationDto> Violations,
     List<ValidationViolationDto> Warnings,
     List<ValidationCheckDto> Checks,
+    DateTime ValidatedAt,
+    int? AuditId = null,
+    long DurationMs = 0,
+    string ValidatedBy = "System"
+);
+
+public record ValidationHistoryDto(
+    int AuditId,
+    int DispatchId,
+    int? IncidentId,
+    bool IsValid,
+    string Recommendation,
+    int ViolationCount,
+    int WarningCount,
+    int CheckCount,
+    string ValidatedBy,
+    long DurationMs,
     DateTime ValidatedAt
 );
