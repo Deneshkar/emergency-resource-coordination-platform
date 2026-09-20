@@ -19,4 +19,22 @@ export const getValidationTools = async () => apiGet("/validations/tools");
 export const getValidationHistory = async (dispatchId) =>
   apiGet(`/validations/dispatch/${dispatchId}/history`);
 
+// Student 4 — approval soft-gate rule (mirrors the backend verdict contract):
+// approval requires a genuinely evaluated result — APPROVE/REVISE *and*
+// at least one tool check. Empty (0-check) or REJECT results stay blocked.
+export const canApprove = (result) => {
+  const rec = result?.recommendation;
+  const checkCount = result?.checks?.length ?? 0;
+  return (rec === "APPROVE" || rec === "REVISE") && checkCount > 0;
+};
+
+export const approvalBlockReason = (result) => {
+  if (!result) return "Run the safety check first — approval requires APPROVE or REVISE";
+  if ((result.checks?.length ?? 0) === 0)
+    return "Add at least one task and re-run the safety check — approval requires an evaluated result";
+  if (result.recommendation === "REJECT")
+    return "Blocked: safety gate returned REJECT — fix blockers and re-run the check";
+  return null;
+};
+
 export const RECOMMENDATIONS = ["APPROVE", "REVISE", "REJECT"];

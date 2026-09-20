@@ -38,18 +38,22 @@
   `set-state-in-effect` rule to `warn` with a documented incremental-fix plan.
 
 ### 3. Testing summary (all executed locally)
-- Backend **53/53** (`dotnet test`): 7 `VolunteersControllerTests`
-  (role-based 403/own-update/coordinator-override) + **8** `DispatchValidationServiceTests`
+- Backend **54/54** (`dotnet test`): 7 `VolunteersControllerTests`
+  (role-based 403/own-update/coordinator-override) + **9** `DispatchValidationServiceTests`
   (approve, V1 reject, V2 revise, S2 revise, I1, unknown-dispatch 404, **audit-persist + history**,
-  **timeline-event on real incident**) + **4** `VolunteerShiftTests`
+  **timeline-event on real incident**, **empty-dispatch W0 → REVISE**) + **4** `VolunteerShiftTests`
   (create, unknown-volunteer 404, invalid window 400, invalid status 400) + **5**
   `VolunteersApiIntegrationTests` (anonymous 401 enforcement, register→login→profile token flow,
   full volunteer→shift→availability lifecycle over HTTP, invalid-window 400, startup seed-data check).
 - Python agent: happy-path → APPROVE; crafted multi-violation payload → REJECT (V1+V3+S1);
   invalid payload → safe REJECT (`E0_INVALID_PAYLOAD`); every result carries `duration_ms + errors[]`.
-- React **24/24** (Vitest): `validationService` contract (**5**, incl. history), `AddVolunteer` submit/error (3),
+- React **26/26** (Vitest): `validationService` contract (**7**, incl. history + `canApprove`/`approvalBlockReason` gate rule),
+  `AddVolunteer` submit/error (3),
   `VolunteerList` table/empty/error/role-gating (4), **`ValidationPanel` empty/APPROVE/REJECT/loading-error/no-tasks-hint (6)**,
   **`VolunteerDetail` empty/table/assign-submit/invalid-window/server-error/role-gating (6)**.
+- Empty-dispatch hardening (spec §5.2 validation-before-action): taskless dispatches now return
+  **REVISE + `W0_EMPTY_DISPATCH`** (both C# and Python gates), and the UI approves only results with
+  ≥1 evaluated check — so an empty dispatch can no longer be moved to Approved.
 - Shift creation gap closed: `POST {id}/shifts` now has a UI — coordinator-only **Assign Shift** modal on
   `VolunteerDetail` (datetime range + status dropdown, client-side window guard, server errors shown inline,
   list refreshes on success) backed by a new `createShift` service client.
