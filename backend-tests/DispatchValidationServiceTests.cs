@@ -155,6 +155,23 @@ public class DispatchValidationServiceTests
     }
 
     [Fact]
+    public async Task ValidateDispatch_NoTasks_ReturnsRevise_WithW0()
+    {
+        var ctx = GetInMemoryContext();
+        var dispatch = new Dispatch { IncidentId = 1, Priority = "High", Status = "Proposed" };
+        ctx.Dispatches.Add(dispatch);
+        await ctx.SaveChangesAsync();
+
+        var service = new DispatchValidationService(ctx);
+        var result = await service.ValidateDispatchAsync(dispatch.Id, new ValidateDispatchRequestDto());
+
+        Assert.True(result.IsValid);
+        Assert.Equal("REVISE", result.Recommendation);
+        Assert.Contains(result.Warnings, w => w.Code == "W0_EMPTY_DISPATCH");
+        Assert.Empty(result.Checks);
+    }
+
+    [Fact]
     public async Task ValidateDispatch_UnknownDispatch_ThrowsNotFound()
     {
         var ctx = GetInMemoryContext();
