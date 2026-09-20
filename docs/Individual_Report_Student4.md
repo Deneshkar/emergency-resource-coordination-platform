@@ -47,8 +47,12 @@
   full volunteer→shift→availability lifecycle over HTTP, invalid-window 400, startup seed-data check).
 - Python agent: happy-path → APPROVE; crafted multi-violation payload → REJECT (V1+V3+S1);
   invalid payload → safe REJECT (`E0_INVALID_PAYLOAD`); every result carries `duration_ms + errors[]`.
-- React **18/18** (Vitest): `validationService` contract (**5**, incl. history), `AddVolunteer` submit/error (3),
-  `VolunteerList` table/empty/error/role-gating (4), **`ValidationPanel` empty/APPROVE/REJECT/loading-error/no-tasks-hint (6)**.
+- React **24/24** (Vitest): `validationService` contract (**5**, incl. history), `AddVolunteer` submit/error (3),
+  `VolunteerList` table/empty/error/role-gating (4), **`ValidationPanel` empty/APPROVE/REJECT/loading-error/no-tasks-hint (6)**,
+  **`VolunteerDetail` empty/table/assign-submit/invalid-window/server-error/role-gating (6)**.
+- Shift creation gap closed: `POST {id}/shifts` now has a UI — coordinator-only **Assign Shift** modal on
+  `VolunteerDetail` (datetime range + status dropdown, client-side window guard, server errors shown inline,
+  list refreshes on success) backed by a new `createShift` service client.
 - Post-fix polish: `ValidationsController` prefers the JWT email claim for `ValidatedBy`
   (was persisting numeric `NameIdentifier`, shown as `by 2`); panel shows an info hint on zero-check
   results; demo audit history reset (`TRUNCATE ... RESTART IDENTITY`) after verification runs.
