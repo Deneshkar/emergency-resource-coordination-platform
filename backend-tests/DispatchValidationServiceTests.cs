@@ -163,4 +163,70 @@ public class DispatchValidationServiceTests
         await Assert.ThrowsAsync<KeyNotFoundException>(
             () => service.ValidateDispatchAsync(9999, new ValidateDispatchRequestDto()));
     }
+
+    [Fact]
+    public async Task ValidateDispatch_PersistsAudit_WithDurationAndHistory()
+    {
+        var (ctx, dispatch, _) = await SeedDispatchAsync(volunteerAvailable: true);
+        var service = new DispatchValidationService(ctx);
+
+        var result = await service.ValidateDispatchAsync(dispatch.Id, new ValidateDispatchRequestDto(), "coordinator@ercp.org");
+
+        Assert.NotNull(result.AuditId);
+        Assert.Equal("coordinator@ercp.org", result.ValidatedBy);
+        Assert.True(result.DurationMs >= 0);
+        Assert.Single(ctx.ValidationAudits);
+        Assert.Equal(result.AuditId, ctx.ValidationAudits.Single().Id);
+
+        var history = await service.GetHistoryAsync(dispatch.Id);
+        Assert.Single(history);
+        Assert.Equal("APPROVE", history[0].Recommendation);
+        Assert.Equal(1, history[0].CheckCount);
+    }
+
+    [Fact]
+    public async Task ValidateDispatch_EmitsTimelineEvent_WhenIncidentExists()
+    {
+        var ctx = GetInMemoryContext();
+        var incident = new Incident
+        {
+            Title = "Timeline Incident",
+            Description = "desc",
+            Location = "Sector 1",
+            Category = "Fire",
+            Priority = "High",
+            Status = "Reported",
+        };
+        ctx.Incidents.Add(incident);
+        await ctx.SaveChangesAsync();
+
+        var volunteer = new Volunteer
+        {
+            Name = "Timeline Responder",
+            Email = "timeline@test.local",
+            Phone = "0770000001",
+            Skills = "medical",
+            IsAvailable = true,
+        };
+        ctx.Volunteers.Add(volunteer);
+        await ctx.SaveChangesAsync();
+
+        var dispatch = new Dispatch { IncidentId = incident.Id, Priority = "High", Status = "Proposed" };
+        ctx.Dispatches.Add(dispatch);
+        await ctx.SaveChangesAsync();
+        ctx.DispatchTasks.Add(new DispatchTask
+        {
+            DispatchId = dispatch.Id,
+            VolunteerId = volunteer.Id,
+            TaskType = "MedicalEvac",
+            Status = "Assigned",
+            AssignedAt = DateTime.UtcNow,
+        });
+        await ctx.SaveChangesAsync();
+
+        var service = new DispatchValidationService(ctx);
+        await service.ValidateDispatchAsync(dispatch.Id, new ValidateDispatchRequestDto(), "Coordinator");
+
+        Assert.Single(ctx.IncidentTimelineEvents.Where(e => e.EventType == "ValidationPerformed"));
+    }
 }

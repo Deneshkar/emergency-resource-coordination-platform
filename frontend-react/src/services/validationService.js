@@ -16,4 +16,7 @@ export const validateDispatch = async (dispatchId, options = {}) => {
 
 export const getValidationTools = async () => apiGet("/validations/tools");
 
+export const getValidationHistory = async (dispatchId) =>
+  apiGet(`/validations/dispatch/${dispatchId}/history`);
+
 export const RECOMMENDATIONS = ["APPROVE", "REVISE", "REJECT"];

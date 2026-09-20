@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using ERCP.Api.Data;
 using ERCP.Api.DTOs;
@@ -30,8 +32,9 @@ public class DispatchValidationService
         _context = context;
     }
 
-    public async Task<ValidationResultDto> ValidateDispatchAsync(int dispatchId, ValidateDispatchRequestDto? request = null)
+    public async Task<ValidationResultDto> ValidateDispatchAsync(int dispatchId, ValidateDispatchRequestDto? request = null, string validatedBy = "System")
     {
+        var stopwatch = Stopwatch.StartNew();
         var dispatch = await _context.Dispatches
             .Include(d => d.Tasks)
             .FirstOrDefaultAsync(d => d.Id == dispatchId);
@@ -223,6 +226,48 @@ public class DispatchValidationService
             recommendation = codes.IsSubsetOf(revisable) ? "REVISE" : "REJECT";
         }
 
+        stopwatch.Stop();
+        var validatedAt = DateTime.UtcNow;
+
+        // ---- Persist auditable result (spec 5.2: workflow state + auditable result) ----
+        var audit = new ValidationAudit
+        {
+            DispatchId = dispatch.Id,
+            IncidentId = dispatch.IncidentId,
+            IsValid = isValid,
+            Recommendation = recommendation,
+            ViolationsJson = JsonSerializer.Serialize(violations),
+            WarningsJson = JsonSerializer.Serialize(warnings),
+            ChecksJson = JsonSerializer.Serialize(checks),
+            ValidatedBy = string.IsNullOrWhiteSpace(validatedBy) ? "System" : validatedBy,
+            DurationMs = stopwatch.ElapsedMilliseconds,
+            ValidatedAt = validatedAt,
+        };
+        _context.ValidationAudits.Add(audit);
+
+        // Timeline entry so the decision is visible in IncidentDetail activity log.
+        // Guarded: seed/test dispatches may reference a non-existent incident.
+        if (await _context.Incidents.AnyAsync(i => i.Id == dispatch.IncidentId))
+        {
+            var topCodes = violations.Select(v => v.Code).Take(3).ToList();
+            var summary = violations.Count == 0
+                ? warnings.Count == 0
+                    ? "All safety checks passed."
+                    : $"{warnings.Count} warning(s): {string.Join(", ", warnings.Select(w => w.Code).Take(3))}."
+                : $"{violations.Count} blocker(s): {string.Join(", ", topCodes)}.";
+            _context.IncidentTimelineEvents.Add(new IncidentTimelineEvent
+            {
+                IncidentId = dispatch.IncidentId,
+                EventType = "ValidationPerformed",
+                Title = $"Safety {recommendation} — Dispatch #{dispatch.Id}",
+                Description = $"Validation/Safety Agent checked Dispatch #{dispatch.Id}: {summary} ({checks.Count} checks, {audit.DurationMs}ms).",
+                CreatedBy = audit.ValidatedBy,
+                Timestamp = validatedAt,
+            });
+        }
+
+        await _context.SaveChangesAsync();
+
         return new ValidationResultDto(
             dispatch.Id,
             dispatch.IncidentId,
@@ -231,7 +276,42 @@ public class DispatchValidationService
             violations,
             warnings,
             checks,
-            DateTime.UtcNow
+            validatedAt,
+            audit.Id,
+            audit.DurationMs,
+            audit.ValidatedBy
         );
+    }
+
+    public async Task<List<ValidationHistoryDto>> GetHistoryAsync(int dispatchId)
+    {
+        var audits = await _context.ValidationAudits
+            .Where(a => a.DispatchId == dispatchId)
+            .OrderByDescending(a => a.ValidatedAt)
+            .ToListAsync();
+
+        static int CountJsonArray(string json)
+        {
+            try
+            {
+                using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "[]" : json);
+                return doc.RootElement.ValueKind == JsonValueKind.Array ? doc.RootElement.GetArrayLength() : 0;
+            }
+            catch { return 0; }
+        }
+
+        return audits.Select(a => new ValidationHistoryDto(
+            a.Id,
+            a.DispatchId,
+            a.IncidentId,
+            a.IsValid,
+            a.Recommendation,
+            CountJsonArray(a.ViolationsJson),
+            CountJsonArray(a.WarningsJson),
+            CountJsonArray(a.ChecksJson),
+            a.ValidatedBy,
+            a.DurationMs,
+            a.ValidatedAt
+        )).ToList();
     }
 }
