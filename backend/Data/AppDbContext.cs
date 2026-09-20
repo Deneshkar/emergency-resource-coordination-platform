@@ -17,6 +17,9 @@ public class AppDbContext : DbContext
     public DbSet<Dispatch> Dispatches => Set<Dispatch>();
     public DbSet<DispatchTask> DispatchTasks => Set<DispatchTask>();
 
+    // Student 4 - Validation/Safety Agent audit trail (persisted gate results)
+    public DbSet<ValidationAudit> ValidationAudits => Set<ValidationAudit>();
+
     // Component - Incident Intelligence & Management
     public DbSet<Incident> Incidents => Set<Incident>();
     public DbSet<IncidentPlan> IncidentPlans => Set<IncidentPlan>();
@@ -73,6 +76,13 @@ public class AppDbContext : DbContext
             .HasOne(e => e.Incident)
             .WithMany(i => i.TimelineEvents)
             .HasForeignKey(e => e.IncidentId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Dispatch 1 → Many ValidationAudits (audit history survives refresh)
+        modelBuilder.Entity<ValidationAudit>()
+            .HasOne(a => a.Dispatch)
+            .WithMany()
+            .HasForeignKey(a => a.DispatchId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { validateDispatch, getValidationTools, RECOMMENDATIONS } from "../validationService";
+import { validateDispatch, getValidationTools, getValidationHistory, RECOMMENDATIONS } from "../validationService";
 import * as api from "../api";
 
 vi.mock("../api", () => ({
@@ -69,5 +69,17 @@ describe("validationService", () => {
 
   it("only allows APPROVE / REVISE / REJECT recommendations", () => {
     expect(RECOMMENDATIONS).toEqual(["APPROVE", "REVISE", "REJECT"]);
+  });
+
+  it("getValidationHistory fetches persisted audits for a dispatch", async () => {
+    api.apiGet.mockResolvedValue([
+      { auditId: 3, dispatchId: 5, recommendation: "APPROVE", validatedBy: "Coordinator" },
+    ]);
+
+    const history = await getValidationHistory(5);
+
+    expect(api.apiGet).toHaveBeenCalledWith("/validations/dispatch/5/history");
+    expect(history).toHaveLength(1);
+    expect(history[0].recommendation).toBe("APPROVE");
   });
 });

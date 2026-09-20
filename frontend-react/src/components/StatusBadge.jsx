@@ -44,6 +44,11 @@ const statusConfig = {
   Accepted: { color: "var(--green)", bg: "var(--green-glow)" },
   OnTheWay: { color: "var(--cyan)", bg: "var(--cyan-glow)", dot: true },
   Arrived: { color: "var(--blue)", bg: "var(--blue-glow)" },
+
+  // Student 4 — Validation/Safety Agent verdicts
+  APPROVE: { color: "var(--green)", bg: "var(--green-glow)" },
+  REVISE: { color: "var(--amber)", bg: "var(--amber-glow)", dot: true },
+  REJECT: { color: "var(--red)", bg: "var(--red-glow)" },
 };
 
 const fallback = { color: "var(--text-muted)", bg: "rgba(100,116,139,0.15)" };
