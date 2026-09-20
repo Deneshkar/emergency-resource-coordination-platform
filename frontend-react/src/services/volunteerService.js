@@ -19,6 +19,17 @@ export const getVolunteerShifts = async (id) => {
   return response.data;
 };
 
+// Student 4 — assign a shift to a volunteer (Coordinator/Admin only, 403 otherwise).
+// Backend: POST /api/Volunteers/{id}/shifts { startTime, endTime, status }
+export const createShift = async (id, { startTime, endTime, status }) => {
+  const response = await axios.post(`${API_BASE_URL}/Volunteers/${id}/shifts`, {
+    startTime,
+    endTime,
+    status,
+  });
+  return response.data;
+};
+
 export const createVolunteer = async (volunteerData) => {
   const response = await axios.post(`${API_BASE_URL}/Volunteers`, volunteerData);
   return response.data;
