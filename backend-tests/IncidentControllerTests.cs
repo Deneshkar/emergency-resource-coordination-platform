@@ -1,5 +1,7 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using ERCP.Api.Controllers;
 using ERCP.Api.Data;
@@ -24,7 +26,7 @@ public class IncidentControllerTests
     private IncidentController CreateController(AppDbContext context)
     {
         var plannerLogger = NullLogger<IncidentPlannerService>.Instance;
-        var plannerService = new IncidentPlannerService(plannerLogger);
+        var plannerService = new IncidentPlannerService(plannerLogger, context);
         var controllerLogger = NullLogger<IncidentController>.Instance;
 
         return new IncidentController(context, plannerService, controllerLogger);

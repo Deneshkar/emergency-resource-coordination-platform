@@ -705,6 +705,22 @@ public class IncidentController : ControllerBase
         {
             resources = new List<EstimatedResourceDto>();
         }
+        
+        List<string> risks;
+        try { risks = JsonSerializer.Deserialize<List<string>>(p.RisksJson ?? "[]") ?? new(); }
+        catch { risks = new(); }
+
+        List<string> constraints;
+        try { constraints = JsonSerializer.Deserialize<List<string>>(p.ConstraintsJson ?? "[]") ?? new(); }
+        catch { constraints = new(); }
+
+        List<SuggestedAssignmentDto> assignments;
+        try { assignments = JsonSerializer.Deserialize<List<SuggestedAssignmentDto>>(p.SuggestedAssignmentsJson ?? "[]") ?? new(); }
+        catch { assignments = new(); }
+
+        List<DispatchPlanStepDto> dispatchPlan;
+        try { dispatchPlan = JsonSerializer.Deserialize<List<DispatchPlanStepDto>>(p.DispatchPlanJson ?? "[]") ?? new(); }
+        catch { dispatchPlan = new(); }
 
         return new IncidentPlanDto
         {
@@ -717,6 +733,12 @@ public class IncidentController : ControllerBase
             ActionSteps = steps,
             EstimatedResources = resources,
             RiskAssessment = p.RiskAssessment,
+            Reasoning = p.Reasoning,
+            Risks = risks,
+            Constraints = constraints,
+            RequiresHumanApproval = p.RequiresHumanApproval,
+            SuggestedAssignments = assignments,
+            DispatchPlan = dispatchPlan,
             ApprovedBy = p.ApprovedBy,
             ApprovedAt = p.ApprovedAt,
             CreatedAt = p.CreatedAt

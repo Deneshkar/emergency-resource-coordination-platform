@@ -1,17 +1,21 @@
 using System.Diagnostics;
 using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 using ERCP.Api.DTOs;
 using ERCP.Api.Models;
+using ERCP.Api.Data;
 
 namespace ERCP.Api.Services;
 
 public class IncidentPlannerService
 {
     private readonly ILogger<IncidentPlannerService> _logger;
+    private readonly AppDbContext _context;
 
-    public IncidentPlannerService(ILogger<IncidentPlannerService> logger)
+    public IncidentPlannerService(ILogger<IncidentPlannerService> logger, AppDbContext context)
     {
         _logger = logger;
+        _context = context;
     }
 
     public IncidentPlan GeneratePlan(Incident incident, string? customDirectives = null, string? focusPhase = null)
@@ -78,6 +82,9 @@ public class IncidentPlannerService
 
     private IncidentPlan? TryGeneratePythonAgentPlan(Incident incident, string? customDirectives, string? focusPhase)
     {
+        var availableResources = _context.Resources.Where(r => r.Status == "Available").ToList();
+        var availableVolunteers = _context.Volunteers.Where(v => v.IsAvailable).ToList();
+
         var inputPayload = JsonSerializer.Serialize(new
         {
             incident_id = incident.Id,
@@ -88,7 +95,9 @@ public class IncidentPlannerService
             priority = incident.Priority,
             affected_count = incident.AffectedCount,
             custom_directives = customDirectives ?? "",
-            focus_phase = focusPhase ?? ""
+            focus_phase = focusPhase ?? "",
+            resources = availableResources.Select(r => new { r.Id, name = r.Name, resourceType = r.ResourceType, r.Status }),
+            volunteers = availableVolunteers.Select(v => new { v.Id, name = v.Name, v.Skills, status = v.IsAvailable ? "Available" : "Unavailable" })
         });
 
         var output = RunPythonAgentTask("plan", inputPayload);
@@ -116,6 +125,13 @@ public class IncidentPlannerService
                 var resources = root.TryGetProperty("estimated_resources", out var res) ? res.GetRawText() : "[]";
                 var risk = root.TryGetProperty("risk_assessment", out var rk) ? rk.GetString() : "";
 
+                var reasoning = root.TryGetProperty("reasoning", out var rsProp) ? rsProp.GetString() : "";
+                var risksJson = root.TryGetProperty("risks", out var rProp) ? rProp.GetRawText() : "[]";
+                var constraintsJson = root.TryGetProperty("constraints", out var cProp) ? cProp.GetRawText() : "[]";
+                var requiresHumanApproval = root.TryGetProperty("requiresHumanApproval", out var reqProp) ? reqProp.GetBoolean() : true;
+                var suggestedAssignmentsJson = root.TryGetProperty("suggestedAssignments", out var sProp) ? sProp.GetRawText() : "[]";
+                var dispatchPlanJson = root.TryGetProperty("dispatchPlan", out var dProp) ? dProp.GetRawText() : "[]";
+
                 if (!string.IsNullOrEmpty(planTitle))
                 {
                     return new IncidentPlan
@@ -128,6 +144,12 @@ public class IncidentPlannerService
                         ActionStepsJson = steps,
                         EstimatedResourcesJson = resources,
                         RiskAssessment = risk ?? "Standard risk parameters applied.",
+                        Reasoning = reasoning ?? "",
+                        RisksJson = risksJson ?? "[]",
+                        ConstraintsJson = constraintsJson ?? "[]",
+                        RequiresHumanApproval = requiresHumanApproval,
+                        SuggestedAssignmentsJson = suggestedAssignmentsJson ?? "[]",
+                        DispatchPlanJson = dispatchPlanJson ?? "[]",
                         CreatedAt = DateTime.UtcNow
                     };
                 }
