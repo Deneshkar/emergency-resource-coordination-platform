@@ -32,7 +32,7 @@ public class AuthControllerTests
         {
             {"Jwt:Issuer", "ERCP.Api"},
             {"Jwt:Audience", "ERCP.Clients"},
-            {"Jwt:SecretKey", "ERCP_EmergencyResourceCoordinationPlatform_SecretKey_2026!"}
+            {"Jwt:SecretKey", "DEVELOPMENT_ONLY_SecretKey_MustBeChangedInProduction!!"}
         };
 
         IConfiguration configuration = new ConfigurationBuilder()

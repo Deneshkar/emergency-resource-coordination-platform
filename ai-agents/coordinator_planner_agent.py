@@ -152,11 +152,6 @@ class CoordinatorPlannerAgent:
         if GEMINI_API_KEY:
             reasoning_log = "[LLM ENHANCED] " + reasoning_log
 
-        objective = f"Contain {category} emergency and protect affected civilians at {location}."
-
-        # Simplify list of actions for structured response
-        actions_list = [step["task"] for step in action_steps]
-        required_resources_list = [f"{res['quantity']} {res['unit']} ({res['resource_type']})" for res in estimated_resources]
 
         return {
             "agent_id": self.name,
