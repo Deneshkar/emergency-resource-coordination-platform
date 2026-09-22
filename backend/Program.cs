@@ -1,5 +1,6 @@
 using System.Text;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -31,11 +32,11 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Enter 'Bearer' [space] and then your valid JWT token.\r\n\r\nExample: \"Bearer eyJhbGciOi...\""
+        Description = "Enter your raw JWT Bearer token only (without 'Bearer ' prefix).\r\n\r\nExample: \"eyJhbGciOi...\""
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -80,6 +81,54 @@ builder.Services
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
             RoleClaimType = ClaimTypes.Role,
             NameClaimType = ClaimTypes.NameIdentifier
+        };
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                string? authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(authHeader))
+                {
+                    var headerVal = authHeader.Trim();
+                    if (headerVal.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var token = headerVal.Substring("Bearer ".Length).Trim();
+                        if (token.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                        {
+                            token = token.Substring("Bearer ".Length).Trim();
+                        }
+                        context.Token = token;
+                    }
+                }
+                return Task.CompletedTask;
+            },
+            OnAuthenticationFailed = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                var keyFp = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(jwtKey)))[..8];
+                logger.LogWarning("JWT Authentication failed for request {Path}: {Message} (Validation Key Fingerprint: {Fingerprint}, Length: {KeyLength})",
+                    context.Request.Path, context.Exception.Message, keyFp, jwtKey.Length);
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                var userId = context.Principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var email = context.Principal?.FindFirst(ClaimTypes.Email)?.Value;
+                var roles = context.Principal?.Claims
+                    .Where(c => c.Type == ClaimTypes.Role || c.Type == "role")
+                    .Select(c => c.Value);
+                logger.LogInformation("JWT Token validated successfully for UserId: {UserId}, Email: {Email}, Roles: [{Roles}]",
+                    userId, email, string.Join(",", roles ?? Array.Empty<string>()));
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogWarning("JWT Authorization Challenge triggered for {Path}: Error={Error}, Description={Description}",
+                    context.Request.Path, context.Error, context.ErrorDescription);
+                return Task.CompletedTask;
+            }
         };
     });
 
