@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import StatusBadge from "../components/StatusBadge";
 import Modal, { FormField } from "../components/Modal";
+import ValidationPanel from "../components/ValidationPanel";
+import { useAuth } from "../context/AuthContext";
 import { getDispatches, createDispatch, updateDispatchStatus } from "../services/dispatchService";
 import { getIncidents } from "../services/incidentService";
 import { getVolunteers } from "../services/volunteerService";
 import { createDispatchTask } from "../services/dispatchService";
+import { validateDispatch, getValidationHistory, canApprove, approvalBlockReason } from "../services/validationService";
 
 export default function DispatchList() {
+  const { hasRole } = useAuth();
+  const isCoordinator = hasRole(["Coordinator", "Admin"]);
   const [dispatches, setDispatches] = useState([]);
   const [incidents, setIncidents] = useState([]);
   const [volunteers, setVolunteers] = useState([]);
@@ -15,6 +20,26 @@ export default function DispatchList() {
   const [showTask, setShowTask] = useState(null);
   const [form, setForm] = useState({ incidentId: "", priority: "Medium" });
   const [taskForm, setTaskForm] = useState({ volunteerId: "", taskType: "" });
+  // Student 4 — Validation/Safety gate state per dispatch: { [id]: { result, loading, error } }
+  const [validationById, setValidationById] = useState({});
+  const [historyById, setHistoryById] = useState({});
+
+  const handleValidate = async (id) => {
+    setValidationById((prev) => ({ ...prev, [id]: { result: prev[id]?.result ?? null, loading: true, error: null } }));
+    try {
+      const result = await validateDispatch(id);
+      setValidationById((prev) => ({ ...prev, [id]: { result, loading: false, error: null } }));
+      try {
+        const history = await getValidationHistory(id).catch(() => []);
+        setHistoryById((prev) => ({ ...prev, [id]: Array.isArray(history) ? history : [] }));
+      } catch {
+        // history is best-effort; main result already shown
+      }
+    } catch (err) {
+      const message = err?.message || "Validation request failed.";
+      setValidationById((prev) => ({ ...prev, [id]: { result: null, loading: false, error: message } }));
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -119,6 +144,13 @@ export default function DispatchList() {
           {dispatches.map((d) => {
             const nextStatus = getNextStatus(d.status);
             const inc = incidents.find((i) => i.id === d.incidentId);
+            // Student 4 soft-gate: high-impact move to Approved requires a genuinely
+            // evaluated APPROVE/REVISE (at least one tool check). Empty, REJECT, or
+            // missing results block Approve (Reject stays allowed).
+            const validation = validationById[d.id];
+            const needsGate = nextStatus === "Approved";
+            const gateBlocked = needsGate && !canApprove(validation?.result);
+            const blockReason = approvalBlockReason(validation?.result);
             return (
               <div
                 key={d.id}
@@ -147,9 +179,28 @@ export default function DispatchList() {
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", gap: "6px", alignItems: "center", flexShrink: 0 }}>
+                  <div style={{ display: "flex", gap: "6px", alignItems: "center", flexShrink: 0, flexWrap: "wrap" }}>
+                    {isCoordinator && (
+                      <button
+                        className="btn btn-ghost btn-sm"
+                        onClick={() => handleValidate(d.id)}
+                        disabled={validation?.loading}
+                        title="Run the deterministic Validation/Safety Agent before approval"
+                      >
+                        {validation?.loading ? "Checking…" : validation?.result ? "🛡️ Re-check" : "🛡️ Run Safety Check"}
+                      </button>
+                    )}
                     {nextStatus && (
-                      <button className="btn btn-primary btn-sm" onClick={() => handleStatusChange(d.id, nextStatus)}>
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => handleStatusChange(d.id, nextStatus)}
+                        disabled={isCoordinator && gateBlocked}
+                        title={
+                          isCoordinator && gateBlocked
+                            ? (blockReason ?? `Move to ${nextStatus}`)
+                            : `Move to ${nextStatus}`
+                        }
+                      >
                         Move to {nextStatus}
                       </button>
                     )}
@@ -163,6 +214,16 @@ export default function DispatchList() {
                     </button>
                   </div>
                 </div>
+
+                {isCoordinator && (
+                  <ValidationPanel
+                    result={validation?.result ?? null}
+                    loading={validation?.loading ?? false}
+                    error={validation?.error ?? null}
+                    history={historyById[d.id] ?? []}
+                    onRerun={() => handleValidate(d.id)}
+                  />
+                )}
 
                 {d.tasks && d.tasks.length > 0 && (
                   <div style={{ marginTop: "14px", paddingTop: "14px", borderTop: "1px solid var(--border-subtle)" }}>

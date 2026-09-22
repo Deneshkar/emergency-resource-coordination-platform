@@ -1,5 +1,7 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using ERCP.Api.Controllers;
 using ERCP.Api.Data;
@@ -24,7 +26,7 @@ public class IncidentControllerTests
     private IncidentController CreateController(AppDbContext context)
     {
         var plannerLogger = NullLogger<IncidentPlannerService>.Instance;
-        var plannerService = new IncidentPlannerService(plannerLogger);
+        var plannerService = new IncidentPlannerService(plannerLogger, context);
         var controllerLogger = NullLogger<IncidentController>.Instance;
 
         return new IncidentController(context, plannerService, controllerLogger);
@@ -70,7 +72,7 @@ public class IncidentControllerTests
     }
 
     [Fact]
-    public async Task UpdateStatus_ValidTransition_ReportedToVerified_Succeeds()
+    public async Task UpdateStatus_ValidTransition_ReportedToActivePlanning_Succeeds()
     {
         // Arrange
         var context = GetInMemoryContext();
@@ -87,8 +89,8 @@ public class IncidentControllerTests
         var controller = CreateController(context);
         var updateDto = new UpdateIncidentDto
         {
-            Status = "Verified",
-            Note = "Verified on site by field officer"
+            Status = "Active Planning",
+            Note = "Planning initiated by field coordinator"
         };
 
         // Act
@@ -99,20 +101,20 @@ public class IncidentControllerTests
 
         var updatedIncident = await context.Incidents.FindAsync(incident.Id);
         Assert.NotNull(updatedIncident);
-        Assert.Equal("Verified", updatedIncident.Status);
+        Assert.Equal("Active Planning", updatedIncident.Status);
 
         // Verify timeline logging
         var timeline = await context.IncidentTimelineEvents
             .Where(e => e.IncidentId == incident.Id)
             .ToListAsync();
 
-        var statusEvent = timeline.FirstOrDefault(e => e.Title == "Incident Verified");
+        var statusEvent = timeline.FirstOrDefault(e => e.Title == "Incident Status Updated (Active Planning)");
         Assert.NotNull(statusEvent);
         Assert.Equal("StatusUpdate", statusEvent.EventType);
     }
 
     [Fact]
-    public async Task UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest()
+    public async Task UpdateStatus_InvalidStatus_ReturnsBadRequest()
     {
         // Arrange
         var context = GetInMemoryContext();
@@ -129,7 +131,7 @@ public class IncidentControllerTests
         var controller = CreateController(context);
         var updateDto = new UpdateIncidentDto
         {
-            Status = "Resolved" // Illegal jump: Reported -> Resolved
+            Status = "Investigating" // Invalid status not in the allowed set
         };
 
         // Act

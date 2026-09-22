@@ -38,25 +38,41 @@
   `set-state-in-effect` rule to `warn` with a documented incremental-fix plan.
 
 ### 3. Testing summary (all executed locally)
-- Backend **43/43** (`dotnet test`): 7 `VolunteersControllerTests`
-  (role-based 403/own-update/coordinator-override) + **6** `DispatchValidationServiceTests`
-  (approve, V1 reject, V2 revise, S2 revise, I1, unknown-dispatch 404) + **4** `VolunteerShiftTests`
+- Backend **54/54** (`dotnet test`): 7 `VolunteersControllerTests`
+  (role-based 403/own-update/coordinator-override) + **9** `DispatchValidationServiceTests`
+  (approve, V1 reject, V2 revise, S2 revise, I1, unknown-dispatch 404, **audit-persist + history**,
+  **timeline-event on real incident**, **empty-dispatch W0 → REVISE**) + **4** `VolunteerShiftTests`
   (create, unknown-volunteer 404, invalid window 400, invalid status 400) + **5**
   `VolunteersApiIntegrationTests` (anonymous 401 enforcement, register→login→profile token flow,
   full volunteer→shift→availability lifecycle over HTTP, invalid-window 400, startup seed-data check).
-- Python agent: happy-path → APPROVE; crafted multi-violation payload → REJECT (V1+V2+S2+R1).
-- React **11/11** (Vitest): `validationService` contract (4), `AddVolunteer` submit/error (3),
-  `VolunteerList` table/empty/error/role-gating (4).
+- Python agent: happy-path → APPROVE; crafted multi-violation payload → REJECT (V1+V3+S1);
+  invalid payload → safe REJECT (`E0_INVALID_PAYLOAD`); every result carries `duration_ms + errors[]`.
+- React **26/26** (Vitest): `validationService` contract (**7**, incl. history + `canApprove`/`approvalBlockReason` gate rule),
+  `AddVolunteer` submit/error (3),
+  `VolunteerList` table/empty/error/role-gating (4), **`ValidationPanel` empty/APPROVE/REJECT/loading-error/no-tasks-hint (6)**,
+  **`VolunteerDetail` empty/table/assign-submit/invalid-window/server-error/role-gating (6)**.
+- Empty-dispatch hardening (spec §5.2 validation-before-action): taskless dispatches now return
+  **REVISE + `W0_EMPTY_DISPATCH`** (both C# and Python gates), and the UI approves only results with
+  ≥1 evaluated check — so an empty dispatch can no longer be moved to Approved.
+- Shift creation gap closed: `POST {id}/shifts` now has a UI — coordinator-only **Assign Shift** modal on
+  `VolunteerDetail` (datetime range + status dropdown, client-side window guard, server errors shown inline,
+  list refreshes on success) backed by a new `createShift` service client.
+- Post-fix polish: `ValidationsController` prefers the JWT email claim for `ValidatedBy`
+  (was persisting numeric `NameIdentifier`, shown as `by 2`); panel shows an info hint on zero-check
+  results; demo audit history reset (`TRUNCATE ... RESTART IDENTITY`) after verification runs.
 - Flutter **12/12** + `flutter analyze` clean: smoke, 4 model, 4 register (one caught and fixed a
   real 48px dropdown overflow → `isExpanded: true`), 3 profile duty-toggle tests.
 
 ### 4. End-to-end demo contribution (Section 6.1)
-My slice covers the responder half of the workflow: citizen/coordinator flow hands a proposed
-dispatch to `POST /api/validations/dispatch/{id}` → validation evidence (violations/warnings/checks)
-is shown to the coordinator for approve/revise/reject → assigned volunteer toggles duty status
-in Flutter `ProfileScreen` and views missions in `ShiftsScreen`; React `VolunteerList` reflects
-availability live. Tool contract at `GET /api/validations/tools` lets Student 3's orchestrator
-call the gate uniformly with the other agents.
+My slice covers the responder half of the workflow: coordinator creates a dispatch in React
+`DispatchList` → clicks **🛡️ Run Safety Check** (`POST /api/validations/dispatch/{id}`) →
+`ValidationPanel` shows APPROVE/REVISE/REJECT with blockers, warnings, per-tool checks,
+`durationMs`, `auditId` and validated-by → **Move to Approved stays disabled until APPROVE/REVISE**
+(REJECT blocks Approve; Reject always allowed) → every run is persisted to `ValidationAudits`
+(survives refresh via `GET .../history`) and appended to the incident timeline as
+`ValidationPerformed` → assigned volunteer toggles duty status in Flutter `ProfileScreen`
+and views missions in `ShiftsScreen`. Tool contract at `GET /api/validations/tools` lets
+Student 3's orchestrator call the gate uniformly with the other agents.
 
 ### 5. Risks & follow-ups
 - Student 3 schema debt (`DispatchTask.ResourceId` type) — W4 workaround in place; proper fix is

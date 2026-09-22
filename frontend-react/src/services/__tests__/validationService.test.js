@@ -1,5 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { validateDispatch, getValidationTools, RECOMMENDATIONS } from "../validationService";
+import {
+  validateDispatch,
+  getValidationTools,
+  getValidationHistory,
+  canApprove,
+  approvalBlockReason,
+  RECOMMENDATIONS,
+} from "../validationService";
 import * as api from "../api";
 
 vi.mock("../api", () => ({
@@ -69,5 +76,34 @@ describe("validationService", () => {
 
   it("only allows APPROVE / REVISE / REJECT recommendations", () => {
     expect(RECOMMENDATIONS).toEqual(["APPROVE", "REVISE", "REJECT"]);
+  });
+
+  it("canApprove requires APPROVE/REVISE with at least one check", () => {
+    expect(canApprove({ recommendation: "APPROVE", checks: [{ tool: "t", passed: true }] })).toBe(true);
+    expect(canApprove({ recommendation: "REVISE", checks: [{ tool: "t", passed: false }] })).toBe(true);
+    // Empty (0-check) results never approve — even with APPROVE verdict
+    expect(canApprove({ recommendation: "APPROVE", checks: [] })).toBe(false);
+    expect(canApprove({ recommendation: "REJECT", checks: [{ tool: "t", passed: false }] })).toBe(false);
+    expect(canApprove(null)).toBe(false);
+    expect(canApprove(undefined)).toBe(false);
+  });
+
+  it("approvalBlockReason explains each blocked state", () => {
+    expect(approvalBlockReason(null)).toMatch(/Run the safety check first/);
+    expect(approvalBlockReason({ recommendation: "APPROVE", checks: [] })).toMatch(/Add at least one task/);
+    expect(approvalBlockReason({ recommendation: "REJECT", checks: [{ tool: "t" }] })).toMatch(/REJECT/);
+    expect(approvalBlockReason({ recommendation: "APPROVE", checks: [{ tool: "t" }] })).toBeNull();
+  });
+
+  it("getValidationHistory fetches persisted audits for a dispatch", async () => {
+    api.apiGet.mockResolvedValue([
+      { auditId: 3, dispatchId: 5, recommendation: "APPROVE", validatedBy: "Coordinator" },
+    ]);
+
+    const history = await getValidationHistory(5);
+
+    expect(api.apiGet).toHaveBeenCalledWith("/validations/dispatch/5/history");
+    expect(history).toHaveLength(1);
+    expect(history[0].recommendation).toBe("APPROVE");
   });
 });

@@ -705,6 +705,22 @@ public class IncidentController : ControllerBase
         {
             resources = new List<EstimatedResourceDto>();
         }
+        
+        List<string> risks;
+        try { risks = JsonSerializer.Deserialize<List<string>>(p.RisksJson ?? "[]") ?? new(); }
+        catch { risks = new(); }
+
+        List<string> constraints;
+        try { constraints = JsonSerializer.Deserialize<List<string>>(p.ConstraintsJson ?? "[]") ?? new(); }
+        catch { constraints = new(); }
+
+        List<SuggestedAssignmentDto> assignments;
+        try { assignments = JsonSerializer.Deserialize<List<SuggestedAssignmentDto>>(p.SuggestedAssignmentsJson ?? "[]") ?? new(); }
+        catch { assignments = new(); }
+
+        List<DispatchPlanStepDto> dispatchPlan;
+        try { dispatchPlan = JsonSerializer.Deserialize<List<DispatchPlanStepDto>>(p.DispatchPlanJson ?? "[]") ?? new(); }
+        catch { dispatchPlan = new(); }
 
         return new IncidentPlanDto
         {
@@ -717,6 +733,12 @@ public class IncidentController : ControllerBase
             ActionSteps = steps,
             EstimatedResources = resources,
             RiskAssessment = p.RiskAssessment,
+            Reasoning = p.Reasoning,
+            Risks = risks,
+            Constraints = constraints,
+            RequiresHumanApproval = p.RequiresHumanApproval,
+            SuggestedAssignments = assignments,
+            DispatchPlan = dispatchPlan,
             ApprovedBy = p.ApprovedBy,
             ApprovedAt = p.ApprovedAt,
             CreatedAt = p.CreatedAt
@@ -748,33 +770,22 @@ public class IncidentController : ControllerBase
 
         var validStatuses = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "Reported", "Verified", "Active Planning", "Assigned", "Dispatched", "Resolved", "Closed"
+            "Reported", "Active Planning", "Dispatched", "Resolved", "Closed"
         };
 
         if (!validStatuses.Contains(target))
         {
-            errorMessage = $"Invalid status '{newStatus}'. Allowed status values are: Reported, Verified, Assigned, Resolved, Closed.";
+            errorMessage = $"Invalid status '{newStatus}'. Allowed status values are: Reported, Active Planning, Dispatched, Resolved, Closed.";
             return false;
         }
 
-        bool isValid = current.ToLowerInvariant() switch
+        if (!validStatuses.Contains(current))
         {
-            "reported" => target.Equals("Verified", StringComparison.OrdinalIgnoreCase) ||
-                          target.Equals("Active Planning", StringComparison.OrdinalIgnoreCase),
-            "verified" or "active planning" => target.Equals("Assigned", StringComparison.OrdinalIgnoreCase) ||
-                                               target.Equals("Dispatched", StringComparison.OrdinalIgnoreCase) ||
-                                               target.Equals("Verified", StringComparison.OrdinalIgnoreCase),
-            "assigned" or "dispatched" => target.Equals("Resolved", StringComparison.OrdinalIgnoreCase),
-            "resolved" => target.Equals("Closed", StringComparison.OrdinalIgnoreCase),
-            _ => false
-        };
-
-        if (!isValid)
-        {
-            errorMessage = $"Invalid status transition from '{currentStatus}' to '{newStatus}'. Allowed workflow sequence: Reported -> Verified -> Assigned/Dispatched -> Resolved -> Closed.";
+            errorMessage = $"Current status '{currentStatus}' is not a recognized status. Allowed status values are: Reported, Active Planning, Dispatched, Resolved, Closed.";
+            return false;
         }
 
-        return isValid;
+        return true;
     }
 
     private static bool IsValidPriority(string? priority)
