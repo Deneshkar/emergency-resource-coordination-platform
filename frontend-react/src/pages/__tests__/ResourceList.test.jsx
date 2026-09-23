@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import React from 'react';
+
 import ResourceList from '../ResourceList';
 
 describe('ResourceList Component', () => {

@@ -1,5 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
-import React from 'react';
+import { describe, it, expect } from 'vitest';
 import ShelterList from '../ShelterList';
 
 describe('ShelterList Component', () => {

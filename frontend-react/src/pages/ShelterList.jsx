@@ -11,11 +11,6 @@ export default function ShelterList() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({ id: null, name: "", location: "", address: "", totalCapacity: 100, currentOccupancy: 0, status: "Active", contactNumber: "" });
 
-  // Geolocation & 3rd Party Maps State
-  const [searchLocation, setSearchLocation] = useState("Colombo");
-  const [userCoords, setUserCoords] = useState({ lat: 6.9271, lng: 79.8612 });
-  const [nearestShelters, setNearestShelters] = useState([]);
-  const [geoLoading, setGeoLoading] = useState(false);
 
   const fetchShelters = async () => {
     try {
@@ -31,49 +26,6 @@ export default function ShelterList() {
 
   useEffect(() => { fetchShelters(); }, []);
 
-  const calculateNearestShelters = async (lat, lng) => {
-    try {
-      setGeoLoading(true);
-      const res = await fetch(`http://localhost:5000/api/geolocation/nearest-shelters?lat=${lat}&lng=${lng}&limit=3`);
-      if (res.ok) {
-        const data = await res.json();
-        setNearestShelters(data);
-      }
-    } catch (err) {
-      console.log("Using client-side Haversine fallback calculation:", err);
-      // Fallback distance calculation
-      const fallback = shelters.map((s, idx) => ({
-        id: s.id,
-        name: s.name,
-        location: s.location || "Central",
-        distanceKm: (idx + 1) * 3.4,
-        estimatedTravelTimeMinutes: (idx + 1) * 6,
-        availableCapacity: Math.max(0, s.totalCapacity - s.currentOccupancy),
-        status: s.status
-      })).slice(0, 3);
-      setNearestShelters(fallback);
-    } finally {
-      setGeoLoading(false);
-    }
-  };
-
-  const handleSearchLocation = async (e) => {
-    e.preventDefault();
-    if (!searchLocation) return;
-    try {
-      setGeoLoading(true);
-      const res = await fetch(`http://localhost:5000/api/geolocation/geocode?address=${encodeURIComponent(searchLocation)}`);
-      if (res.ok) {
-        const geoData = await res.json();
-        setUserCoords({ lat: geoData.latitude, lng: geoData.longitude });
-        await calculateNearestShelters(geoData.latitude, geoData.longitude);
-      }
-    } catch (err) {
-      console.error("Geocoding failed:", err);
-    } finally {
-      setGeoLoading(false);
-    }
-  };
 
   const handleCreate = async (e) => {
     e.preventDefault();
