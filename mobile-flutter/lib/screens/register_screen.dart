@@ -93,6 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     // Role selector
                     DropdownButtonFormField<String>(
+                      isExpanded: true,
                       initialValue: _selectedRole,
                       decoration: InputDecoration(
                         labelText: "Select Role",
