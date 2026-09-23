@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:ercp_app/providers/auth_provider.dart';
 import 'package:ercp_app/screens/shelter_locator_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   testWidgets('ShelterLocatorScreen renders title and search bar', (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final auth = AuthProvider();
+
     await tester.pumpWidget(
-      const MaterialApp(
-        home: ShelterLocatorScreen(),
+      ChangeNotifierProvider.value(
+        value: auth,
+        child: const MaterialApp(
+          home: ShelterLocatorScreen(),
+        ),
       ),
     );
 
