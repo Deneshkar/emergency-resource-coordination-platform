@@ -1123,3 +1123,5 @@
 @media (max-width: 480px) { .priority-grid { grid-template-columns: 1fr; } }
 
 @media (max-width: 768px) { .data-table { display: block; overflow-x: auto; white-space: nowrap; } }
+
+@media (max-width: 768px) { .btn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; } }
