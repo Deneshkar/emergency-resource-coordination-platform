@@ -13,6 +13,11 @@ class ApiConfig {
       return _customBaseUrl!;
     }
 
+    // To use local backend during development, comment out the line below 
+    // and uncomment the platform-specific local URLs.
+    return 'https://ercp-backend-production.up.railway.app/api';
+
+    /*
     if (kIsWeb) {
       return 'http://localhost:5009/api';
     }
@@ -27,6 +32,7 @@ class ApiConfig {
     }
 
     return 'http://localhost:5009/api';
+    */
   }
 
   static Map<String, String> defaultHeaders([String? token]) {
