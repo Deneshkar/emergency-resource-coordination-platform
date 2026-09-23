@@ -142,4 +142,10 @@ class AuthService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_userKey, jsonEncode(user.toJson()));
   }
+
+  static Future<void> resetPassword(String email) async {
+    // Simulate API call for reset password
+    await Future.delayed(const Duration(seconds: 1));
+    // In a real app, this would hit ${ApiConfig.baseUrl}/auth/reset-password
+  }
 }

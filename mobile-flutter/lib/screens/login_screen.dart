@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'register_screen.dart';
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -192,7 +193,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             )
                           : const Text("Sign In to Operations", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 12),
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()));
+                        },
+                        child: const Text('Forgot Password?', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
 
                     // Demo Accounts Quick Fill
                     Container(
