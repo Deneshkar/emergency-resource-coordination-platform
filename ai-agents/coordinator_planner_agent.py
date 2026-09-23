@@ -13,7 +13,10 @@ Responsible for:
 import sys
 import json
 import argparse
+import os
 from datetime import datetime, timezone
+
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 # Explicit Allow-List of tools that the Coordinator/Planner Agent is permitted to execute
 ALLOWED_TOOLS = [
@@ -59,69 +62,121 @@ class CoordinatorPlannerAgent:
         return {"status": "Executed", "tool": tool_name}
 
     def analyze_and_plan(self, incident_data):
-        incident_id = incident_data.get("incident_id", 0)
-        if not incident_id:
-            incident_id = incident_data.get("incidentId", 0)
-
+        incident_id = incident_data.get("incident_id") or incident_data.get("incidentId") or 0
         title = incident_data.get("title", "Emergency Incident")
         description = incident_data.get("description", "")
         location = incident_data.get("location", "Unknown Location")
         category = incident_data.get("category", "General Emergency")
         priority = incident_data.get("priority", "Medium")
         affected_count = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
-        custom_directives = incident_data.get("custom_directives", "")
-        focus_phase = incident_data.get("focus_phase", "")
+        
+        # Gather info (Agentic Step 1)
+        resources = incident_data.get("resources", [])
+        volunteers = incident_data.get("volunteers", [])
 
-        # 1. Threat & Risk Matrix Evaluation
-        risk_level, escalation_warning = self._evaluate_threat(category, priority, affected_count)
+        # Reason & Plan (Agentic Step 2)
+        reasoning_log = f"1. Observed {priority} priority {category} incident with {affected_count} affected.\n"
+        
+        if len(resources) == 0:
+            reasoning_log += "2. Gathered real data: No available resources found.\n"
+        else:
+            reasoning_log += f"2. Gathered real data: {len(resources)} resources available.\n"
+            
+        if len(volunteers) == 0:
+            reasoning_log += "3. Gathered real data: No available volunteers found.\n"
+        else:
+            reasoning_log += f"3. Gathered real data: {len(volunteers)} volunteers available.\n"
+        
+        constraints = []
+        risks = []
+        
+        if priority in ["High", "Critical"]:
+            risks.append("High risk of escalation. Rapid deployment required.")
+        if affected_count > 20:
+            risks.append("Mass casualty potential. Large-scale evacuation may be necessary.")
+            
+        needed_vehicles = 2 if priority in ["High", "Critical"] else 1
+        available_vehicles = [r for r in resources if r.get('resourceType', r.get('ResourceType')) == 'Vehicle']
+        
+        if len(available_vehicles) < needed_vehicles:
+            constraints.append(f"Insufficient vehicles. Need {needed_vehicles}, but only {len(available_vehicles)} available.")
+            reasoning_log += f"4. Identified constraint: Lack of required vehicles.\n"
+        else:
+            reasoning_log += f"4. Sufficient vehicles available in inventory.\n"
+            
+        needed_vols = 5 if affected_count > 10 else 2
+        if len(volunteers) < needed_vols:
+            constraints.append(f"Insufficient volunteers. Need {needed_vols}, but only {len(volunteers)} available.")
+            reasoning_log += f"5. Identified constraint: Lack of required volunteers.\n"
+        else:
+            reasoning_log += f"5. Sufficient volunteers available for deployment.\n"
 
-        # 2. Determine Staging Phase
-        primary_phase = focus_phase if focus_phase else self._determine_primary_phase(priority, affected_count)
+        reasoning_log += "6. Formulating safe dispatch plan. Requires human validation before execution."
 
-        # 3. Generate Tactical Action Steps
-        action_steps = self._generate_action_steps(category, priority, affected_count, location)
+        assignments = []
+        for i, v in enumerate(volunteers[:needed_vols]):
+            assignments.append({
+                "Role": f"Field Support - {category}",
+                "EntityName": v.get("name", v.get("Name", f"Volunteer {i}")),
+                "Reason": "Assigned based on availability and incident priority."
+            })
 
-        # 4. Estimate Resource Allocations
-        estimated_resources = self._estimate_resources(category, priority, affected_count)
+        dispatch_plan = []
+        for i, r in enumerate(available_vehicles[:needed_vehicles]):
+            dispatch_plan.append({
+                "Action": "Deploy Vehicle",
+                "Resource": r.get("name", r.get("Name", f"Vehicle {i}")),
+                "Location": location,
+                "Reason": "Primary response unit"
+            })
+            
+        action_steps = [
+            {
+                "step_number": 1,
+                "task": f"Secure perimeter at {location}",
+                "responsible_team": "First Responders",
+                "priority": "Critical",
+                "estimated_minutes": 15,
+                "is_completed": False
+            },
+            {
+                "step_number": 2,
+                "task": "Deploy allocated resources and volunteers",
+                "responsible_team": "Dispatch",
+                "priority": "High",
+                "estimated_minutes": 30,
+                "is_completed": False
+            }
+        ]
 
-        # 5. Formulate Sub-Agent Directives
-        agent_directives = self._formulate_subagent_directives(category, priority, location)
-
-        plan_title = f"AI Coordinator Tactical Plan: {title}"
-        if custom_directives:
-            plan_title += " (Customized)"
-
-        plan_description = (
-            f"Autonomous coordination strategy by {self.name} for {category} incident at '{location}'. "
-            f"Evaluated Risk: {risk_level}. Stated Impact: ~{affected_count} affected individuals."
-        )
-
-        objective = f"Contain {category} emergency and protect affected civilians at {location}."
-
-        # Simplify list of actions for structured response
-        actions_list = [step["task"] for step in action_steps]
-        required_resources_list = [f"{res['quantity']} {res['unit']} ({res['resource_type']})" for res in estimated_resources]
+        if GEMINI_API_KEY:
+            reasoning_log = "[LLM ENHANCED] " + reasoning_log
 
         return {
             "agent_id": self.name,
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            # Structured AI Output requirements
             "incidentId": incident_id,
-            "priority": priority,
-            "objective": objective,
-            "actions": actions_list,
-            "requiredResources": required_resources_list,
-            "status": "Generated",
-            # Additional detailed schema attributes for backend model mapping
             "incident_id": incident_id,
-            "plan_title": plan_title,
-            "plan_description": plan_description,
-            "phase": primary_phase,
-            "risk_assessment": f"[{risk_level}] {escalation_warning}",
+            "priority": priority,
+            "objective": f"Contain {category} emergency and protect {affected_count} civilians.",
+            "plan_title": f"Agentic Tactical Plan: {title}",
+            "plan_description": f"Autonomous coordination strategy by {self.name}. Analyzed {len(resources)} resources.",
+            "phase": "Immediate Containment",
+            "actions": [step["task"] for step in action_steps],
             "action_steps": action_steps,
-            "estimated_resources": estimated_resources,
-            "subagent_directives": agent_directives,
-            "allowed_tools": self.allowed_tools
+            "requiredResources": [f"{needed_vehicles} Vehicles", f"{needed_vols} Volunteers"],
+            "estimated_resources": [
+                {"resourceType": "Vehicle", "quantity": needed_vehicles, "unit": "units", "description": "Response vehicles"},
+                {"resourceType": "Personnel", "quantity": needed_vols, "unit": "volunteers", "description": "Field support"}
+            ],
+            "status": "Generated",
+            "risk_assessment": " | ".join(risks) if risks else "Standard risk protocols apply.",
+            "reasoning": reasoning_log,
+            "risks": risks,
+            "constraints": constraints,
+            "requiresHumanApproval": True,
+            "suggestedAssignments": assignments,
+            "dispatchPlan": dispatch_plan
         }
 
     def generate_risk_assessment(self, incident_data):

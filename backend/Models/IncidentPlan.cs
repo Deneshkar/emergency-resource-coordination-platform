@@ -20,6 +20,18 @@ public class IncidentPlan
 
     public string RiskAssessment { get; set; } = string.Empty;
 
+    public string Reasoning { get; set; } = string.Empty;
+
+    public string RisksJson { get; set; } = "[]";
+
+    public string ConstraintsJson { get; set; } = "[]";
+
+    public bool RequiresHumanApproval { get; set; } = true;
+
+    public string SuggestedAssignmentsJson { get; set; } = "[]";
+
+    public string DispatchPlanJson { get; set; } = "[]";
+
     public string ApprovedBy { get; set; } = string.Empty;
 
     public DateTime? ApprovedAt { get; set; }

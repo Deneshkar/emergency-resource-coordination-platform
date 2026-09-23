@@ -129,7 +129,6 @@ public class AuthService : IAuthService
             new(ClaimTypes.Email, user.Email),
             new(ClaimTypes.Name, user.FullName),
             new(ClaimTypes.Role, user.Role),
-            new("role", user.Role), // Add custom lowercase role claim for standard client compatibility
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

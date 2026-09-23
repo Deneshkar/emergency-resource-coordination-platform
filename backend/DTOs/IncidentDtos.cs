@@ -105,6 +105,18 @@ public class IncidentPlanDto
 
     public string RiskAssessment { get; set; } = string.Empty;
 
+    public string Reasoning { get; set; } = string.Empty;
+
+    public List<string> Risks { get; set; } = new();
+
+    public List<string> Constraints { get; set; } = new();
+
+    public bool RequiresHumanApproval { get; set; } = true;
+
+    public List<SuggestedAssignmentDto> SuggestedAssignments { get; set; } = new();
+
+    public List<DispatchPlanStepDto> DispatchPlan { get; set; } = new();
+
     public string ApprovedBy { get; set; } = string.Empty;
 
     public DateTime? ApprovedAt { get; set; }
@@ -136,6 +148,21 @@ public class EstimatedResourceDto
     public string Unit { get; set; } = string.Empty;
 
     public string Description { get; set; } = string.Empty;
+}
+
+public class SuggestedAssignmentDto
+{
+    public string Role { get; set; } = string.Empty;
+    public string EntityName { get; set; } = string.Empty;
+    public string Reason { get; set; } = string.Empty;
+}
+
+public class DispatchPlanStepDto
+{
+    public string Action { get; set; } = string.Empty;
+    public string Resource { get; set; } = string.Empty;
+    public string Location { get; set; } = string.Empty;
+    public string Reason { get; set; } = string.Empty;
 }
 
 public class UpdatePlanStatusDto
