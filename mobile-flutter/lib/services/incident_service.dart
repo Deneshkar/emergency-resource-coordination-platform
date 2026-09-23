@@ -7,7 +7,7 @@ class IncidentService {
   static Future<List<Incident>> getIncidents() async {
     try {
       final response = await http.get(
-        Uri.parse('${ApiConfig.baseUrl}/Incidents'),
+        Uri.parse('${ApiConfig.baseUrl}/Incident'),
         headers: {'Content-Type': 'application/json'},
       );
 
@@ -25,7 +25,7 @@ class IncidentService {
   static Future<Incident> getIncident(int id) async {
     try {
       final response = await http.get(
-        Uri.parse('${ApiConfig.baseUrl}/Incidents/$id'),
+        Uri.parse('${ApiConfig.baseUrl}/Incident/$id'),
         headers: {'Content-Type': 'application/json'},
       );
 
@@ -42,7 +42,7 @@ class IncidentService {
   static Future<Incident> createIncident(Map<String, dynamic> incidentData) async {
     try {
       final response = await http.post(
-        Uri.parse('${ApiConfig.baseUrl}/Incidents'),
+        Uri.parse('${ApiConfig.baseUrl}/Incident'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(incidentData),
       );
@@ -59,7 +59,7 @@ class IncidentService {
   static Future<void> updateIncident(int id, Map<String, dynamic> data) async {
     try {
       final response = await http.put(
-        Uri.parse('${ApiConfig.baseUrl}/Incidents/$id'),
+        Uri.parse('${ApiConfig.baseUrl}/Incident/$id'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(data),
       );
@@ -75,7 +75,7 @@ class IncidentService {
   static Future<void> deleteIncident(int id) async {
     try {
       final response = await http.delete(
-        Uri.parse('${ApiConfig.baseUrl}/Incidents/$id'),
+        Uri.parse('${ApiConfig.baseUrl}/Incident/$id'),
         headers: {'Content-Type': 'application/json'},
       );
 
