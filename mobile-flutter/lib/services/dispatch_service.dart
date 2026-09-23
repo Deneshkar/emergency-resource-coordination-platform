@@ -37,4 +37,20 @@ class DispatchService {
       throw Exception('Error updating dispatch status: $e');
     }
   }
+
+  static Future<void> createDispatch(Map<String, dynamic> data) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${ApiConfig.baseUrl}/dispatches'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(data),
+      );
+
+      if (response.statusCode != 201 && response.statusCode != 200) {
+        throw Exception('Failed to create dispatch');
+      }
+    } catch (e) {
+      throw Exception('Error creating dispatch: $e');
+    }
+  }
 }

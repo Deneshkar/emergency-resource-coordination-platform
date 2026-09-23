@@ -96,4 +96,28 @@ class VolunteerService {
       throw Exception("Failed to load shifts");
     }
   }
+
+  static Future<void> deleteVolunteer(String id) async {
+    final token = await AuthService.getToken();
+    final response = await http.delete(
+      Uri.parse("${ApiConfig.baseUrl}/Volunteers/$id"),
+      headers: ApiConfig.defaultHeaders(token),
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception("Failed to delete volunteer");
+    }
+  }
+
+  static Future<void> deleteAllVolunteers() async {
+    final token = await AuthService.getToken();
+    final response = await http.delete(
+      Uri.parse("${ApiConfig.baseUrl}/Volunteers"),
+      headers: ApiConfig.defaultHeaders(token),
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception("Failed to delete all volunteers");
+    }
+  }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 import '../models/dispatch.dart';
 import '../services/dispatch_service.dart';
+import 'add_edit_dispatch_screen.dart';
 
 class DispatchListScreen extends StatefulWidget {
   const DispatchListScreen({super.key});
@@ -26,6 +29,9 @@ class _DispatchListScreenState extends State<DispatchListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<AuthProvider>(context).user;
+    final isCoordinator = user?.canCoordinate ?? false;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dispatch Management'),
@@ -36,6 +42,20 @@ class _DispatchListScreenState extends State<DispatchListScreen> {
           ),
         ],
       ),
+      floatingActionButton: isCoordinator
+          ? FloatingActionButton(
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AddEditDispatchScreen()),
+                );
+                if (result == true) {
+                  _refreshDispatches();
+                }
+              },
+              child: const Icon(Icons.add),
+            )
+          : null,
       body: FutureBuilder<List<Dispatch>>(
         future: _dispatchesFuture,
         builder: (context, snapshot) {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 import '../models/incident.dart';
 import '../services/incident_service.dart';
 import 'incident_detail_screen.dart';
@@ -25,6 +27,29 @@ class _IncidentListScreenState extends State<IncidentListScreen> {
     });
   }
 
+  Future<void> _handleDelete(int id, String title) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: const Text('Delete Incident'),
+        content: Text('Are you sure you want to delete "$title"?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Cancel')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+            onPressed: () => Navigator.pop(c, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    
+    if (confirm == true) {
+      await IncidentService.deleteIncident(id);
+      _refreshIncidents();
+    }
+  }
+
   Color _getPriorityColor(String priority) {
     switch (priority.toLowerCase()) {
       case 'critical':
@@ -41,6 +66,9 @@ class _IncidentListScreenState extends State<IncidentListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<AuthProvider>(context).user;
+    final isCoordinator = user?.canCoordinate ?? false;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Active Incidents'),
@@ -132,11 +160,18 @@ class _IncidentListScreenState extends State<IncidentListScreen> {
                       ),
                     ],
                   ),
-                  onTap: () {
-                    Navigator.push(
+                  trailing: isCoordinator
+                      ? IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _handleDelete(incident.id, incident.title),
+                        )
+                      : null,
+                  onTap: () async {
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => IncidentDetailScreen(incidentId: incident.id)),
                     );
+                    _refreshIncidents();
                   },
                 ),
               );

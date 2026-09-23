@@ -36,6 +36,53 @@ class ResourceService {
     }
   }
 
+  static Future<void> createResource(Map<String, dynamic> data) async {
+    final token = await AuthService.getToken();
+    final response = await http.post(
+      Uri.parse('${ApiConfig.baseUrl}/Resources'),
+      headers: ApiConfig.defaultHeaders(token),
+      body: json.encode(data),
+    );
+    if (response.statusCode != 201 && response.statusCode != 200) {
+      throw Exception('Failed to create resource');
+    }
+  }
+
+  static Future<void> updateResource(int id, Map<String, dynamic> data) async {
+    final token = await AuthService.getToken();
+    final response = await http.put(
+      Uri.parse('${ApiConfig.baseUrl}/Resources/$id'),
+      headers: ApiConfig.defaultHeaders(token),
+      body: json.encode(data),
+    );
+    if (response.statusCode != 204 && response.statusCode != 200) {
+      throw Exception('Failed to update resource');
+    }
+  }
+
+  static Future<void> deleteResource(int id) async {
+    final token = await AuthService.getToken();
+    final response = await http.delete(
+      Uri.parse('${ApiConfig.baseUrl}/Resources/$id'),
+      headers: ApiConfig.defaultHeaders(token),
+    );
+    if (response.statusCode != 204 && response.statusCode != 200) {
+      throw Exception('Failed to delete resource');
+    }
+  }
+
+  static Future<void> updateResourceStatus(int id, String status) async {
+    final token = await AuthService.getToken();
+    final response = await http.put(
+      Uri.parse('${ApiConfig.baseUrl}/Resources/$id/status'),
+      headers: ApiConfig.defaultHeaders(token),
+      body: json.encode({'status': status}),
+    );
+    if (response.statusCode != 204 && response.statusCode != 200) {
+      throw Exception('Failed to update resource status');
+    }
+  }
+
   static Future<List<InventoryItemModel>> fetchInventory() async {
     final token = await AuthService.getToken();
     final response = await http.get(

@@ -56,4 +56,34 @@ class IncidentService {
       throw Exception('Error reporting emergency: $e');
     }
   }
+  static Future<void> updateIncident(int id, Map<String, dynamic> data) async {
+    try {
+      final response = await http.put(
+        Uri.parse('${ApiConfig.baseUrl}/Incidents/$id'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(data),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw Exception('Failed to update incident: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Error updating incident: $e');
+    }
+  }
+
+  static Future<void> deleteIncident(int id) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('${ApiConfig.baseUrl}/Incidents/$id'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw Exception('Failed to delete incident: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Error deleting incident: $e');
+    }
+  }
 }
