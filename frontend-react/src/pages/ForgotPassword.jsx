@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner";
-import "./Login.css"; // Reuse login layout styles
 
 const API_BASE_URL = "http://localhost:5009/api";
 
@@ -71,38 +70,45 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="login-wrapper">
+    <div className="auth-page-container">
       <Toaster position="top-right" theme="dark" richColors />
       
-      <div className="login-card anim-slide-up">
-        <div className="login-header">
-          <div className="login-logo-box">
-            <span className="logo-icon glow-pulse">🔒</span>
+      <div className="auth-card anim-slide-up">
+        <div className="auth-header">
+          <div className="auth-brand-badge">
+            <span className="auth-beacon" />
+            <span>ERCP OPS-AUTH</span>
           </div>
-          <h1>Reset Password</h1>
-          <p>
+          <h1 className="auth-title">Reset Password</h1>
+          <p className="auth-subtitle">
             {step === 1 
-              ? "Enter your email to receive an OTP code." 
-              : "Enter the OTP code sent to your email."}
+              ? "Enter your email to receive a One-Time Password (OTP) code." 
+              : "Enter the 6-digit OTP code sent to your email and your new password."}
           </p>
         </div>
 
         {error && (
-          <div className="alert alert-error" style={{ marginBottom: "20px" }}>
-            {error}
+          <div className="auth-alert-error" role="alert">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{error}</span>
           </div>
         )}
 
         {step === 1 ? (
-          <form onSubmit={handleSendOtp} className="form-stack">
+          <form onSubmit={handleSendOtp} className="auth-form">
             <div className="form-group">
-              <label className="form-label">Email Address</label>
+              <label htmlFor="auth-email">Email Address</label>
               <input
+                id="auth-email"
                 type="email"
-                className="form-control"
+                className="auth-input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder="e.g. citizen@ercp.org"
                 required
                 autoFocus
               />
@@ -110,36 +116,37 @@ function ForgotPassword() {
             
             <button
               type="submit"
-              className="btn btn-primary"
-              style={{ width: "100%", justifyContent: "center", marginTop: "10px" }}
+              className="auth-submit-btn"
               disabled={loading}
             >
-              {loading ? "Sending..." : "Send Reset Code"}
+              {loading ? "Sending OTP..." : "Send Reset Code"}
             </button>
             
-            <div style={{ textAlign: "center", marginTop: "1rem" }}>
-              <Link to="/login" className="login-link">
-                ← Back to Login
+            <div className="auth-footer" style={{ marginTop: "1rem" }}>
+              <Link to="/login" className="auth-link">
+                ← Back to Sign In
               </Link>
             </div>
           </form>
         ) : (
-          <form onSubmit={handleResetPassword} className="form-stack">
+          <form onSubmit={handleResetPassword} className="auth-form">
             <div className="form-group">
-              <label className="form-label">Email Address</label>
+              <label htmlFor="auth-email">Email Address</label>
               <input
+                id="auth-email"
                 type="email"
-                className="form-control"
+                className="auth-input"
                 value={email}
                 disabled
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">6-Digit OTP</label>
+              <label htmlFor="auth-otp">6-Digit OTP</label>
               <input
+                id="auth-otp"
                 type="text"
-                className="form-control"
+                className="auth-input"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 placeholder="123456"
@@ -150,10 +157,11 @@ function ForgotPassword() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">New Password</label>
+              <label htmlFor="auth-new-password">New Password</label>
               <input
+                id="auth-new-password"
                 type="password"
-                className="form-control"
+                className="auth-input"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Enter new password"
@@ -164,14 +172,14 @@ function ForgotPassword() {
             
             <button
               type="submit"
-              className="btn btn-success"
-              style={{ width: "100%", justifyContent: "center", marginTop: "10px" }}
+              className="auth-submit-btn"
               disabled={loading}
+              style={{ background: "var(--success)" }}
             >
-              {loading ? "Resetting..." : "Reset Password"}
+              {loading ? "Resetting Password..." : "Reset Password"}
             </button>
             
-            <div style={{ textAlign: "center", marginTop: "1rem" }}>
+            <div className="auth-footer" style={{ marginTop: "1rem" }}>
               <button 
                 type="button" 
                 className="btn btn-ghost btn-sm" 
