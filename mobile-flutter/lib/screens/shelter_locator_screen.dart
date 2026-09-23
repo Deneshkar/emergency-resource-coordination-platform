@@ -12,8 +12,6 @@ class ShelterLocatorScreen extends StatefulWidget {
 class _ShelterLocatorScreenState extends State<ShelterLocatorScreen> {
   late Future<List<ShelterModel>> _sheltersFuture;
   final TextEditingController _locationController = TextEditingController(text: "Colombo Central");
-  double _userLat = 6.9271;
-  double _userLng = 79.8612;
 
   @override
   void initState() {
