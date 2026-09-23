@@ -11,8 +11,6 @@ Role:
 
     It does NOT use an LLM for decisions. All checks are pure, deterministic
     business-rule evaluations so results are auditable and reproducible.
-    An LLM (Google Gemini, optional) may add a plain-language explanation of
-    an already-computed verdict — it can never change the verdict.
 
 Pipeline position:
     Coordinator/Planner → Situation Analysis → Resource Allocation (propose)
@@ -106,37 +104,9 @@ Rules:
 import sys
 import json
 import argparse
-import os
 import time
-import urllib.request
-import urllib.error
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
-
-
-def _load_dotenv():
-    """Load KEY=VALUE pairs from ai-agents/.env and repo root .env (stdlib only)."""
-    here = os.path.dirname(os.path.abspath(__file__))
-    for _p in (os.path.join(here, ".env"), os.path.join(here, "..", ".env")):
-        try:
-            if os.path.isfile(_p):
-                with open(_p, encoding="utf-8") as _f:
-                    for _line in _f:
-                        _line = _line.strip()
-                        if not _line or _line.startswith("#") or "=" not in _line:
-                            continue
-                        _k, _v = _line.split("=", 1)
-                        _k = _k.strip()
-                        _v = _v.strip().strip('"').strip("'")
-                        if _k and _k not in os.environ:
-                            os.environ[_k] = _v
-        except Exception:
-            pass
-
-
-_load_dotenv()
-
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 
 ALLOWED_TOOLS = [
@@ -192,41 +162,6 @@ class ValidationSafetyAgent:
         if tool_name == "check_resource_stock":
             return self.check_resource_stock(parameters)
         return {"status": "Executed", "tool": tool_name}
-
-    # ------------------------------------------------------------------
-    # Optional LLM explainer (verdict is NEVER delegated to the LLM)
-    # ------------------------------------------------------------------
-    def _gemini_explain(self, recommendation, violations, warnings) -> Optional[str]:
-        """Ask Gemini to word Smith an already-computed verdict. Returns None on any failure."""
-        if not GEMINI_API_KEY:
-            return None
-        try:
-            lines = [f"Recommendation: {recommendation}."]
-            for v in violations:
-                lines.append(f"Violation {v.get('code')}: {v.get('message')}")
-            for w in warnings:
-                lines.append(f"Warning {w.get('code')}: {w.get('message')}")
-            prompt = (
-                "You are assisting an emergency-response coordinator. "
-                "A deterministic safety system already decided the verdict below — "
-                "do NOT re-decide it, do NOT approve anything, only explain. "
-                "In 3 short sentences max: (1) what failed, (2) why it matters for safety, "
-                "(3) one concrete fix the coordinator can apply. Facts:\n" + "\n".join(lines)
-            )
-            body = json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode("utf-8")
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
-            req = urllib.request.Request(url, data=body, headers={"Content-Type": "application/json"})
-            with urllib.request.urlopen(req, timeout=10) as response:
-                res_json = json.loads(response.read().decode("utf-8"))
-                text = res_json["candidates"][0]["content"]["parts"][0]["text"].strip()
-                if text.startswith("```"):
-                    text = text.strip("`")
-                    if text.lower().startswith("json"):
-                        text = text[4:].strip()
-                return text
-        except Exception as e:
-            sys.stderr.write(f"[Warning] Gemini explanation skipped ({e}). Verdict stands.\n")
-            return None
 
     # ------------------------------------------------------------------
     # Individual deterministic tools
@@ -317,8 +252,6 @@ class ValidationSafetyAgent:
                 "allowed_tools": self.allowed_tools,
                 "duration_ms": 0,
                 "status": "COMPLETED",
-                "ai_explanation": None,
-                "llm_enhanced": False,
             }
 
         # W0: an empty proposal (no assignments) must not read as a clean
@@ -482,10 +415,6 @@ class ValidationSafetyAgent:
             recommendation = "REVISE" if codes and codes.issubset(revisable) else "REJECT"
 
         duration_ms = int((time.perf_counter() - started) * 1000)
-
-        # Optional LLM wording of the verdict (never changes it).
-        ai_explanation = self._gemini_explain(recommendation, violations, warnings)
-
         return {
             "agent_id": self.agent_id,
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -500,8 +429,6 @@ class ValidationSafetyAgent:
             "allowed_tools": self.allowed_tools,
             "duration_ms": duration_ms,
             "status": "COMPLETED",
-            "ai_explanation": ai_explanation,
-            "llm_enhanced": ai_explanation is not None,
         }
 
 
