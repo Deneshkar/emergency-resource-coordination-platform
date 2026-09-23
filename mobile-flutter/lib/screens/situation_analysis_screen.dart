@@ -114,6 +114,37 @@ class _SituationAnalysisScreenState extends State<SituationAnalysisScreen> {
                       Text('Recommended: ${_assessment!.recommendedResourceTypes}', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
                       const SizedBox(height: 6),
                       Text('Nearest Shelter: ${_assessment!.nearestShelterName ?? "N/A"} (Avail: ${_assessment!.availableShelterCapacity})', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
+                      if (_assessment!.resourceDeficiencies.isNotEmpty) ...[
+                        const Divider(height: 32),
+                        const Text('Resource Deficiency Breakdown', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.deepPurple)),
+                        const SizedBox(height: 12),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                            headingRowHeight: 40,
+                            dataRowMinHeight: 40,
+                            dataRowMaxHeight: 48,
+                            columns: const [
+                              DataColumn(label: Text('Category', style: TextStyle(fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text('Avail', style: TextStyle(fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text('Rec', style: TextStyle(fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text('Gap', style: TextStyle(fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text('Status', style: TextStyle(fontWeight: FontWeight.bold))),
+                            ],
+                            rows: _assessment!.resourceDeficiencies.map((d) {
+                              final gap = d.isDeficit ? (d.recommended - d.available) : 0;
+                              final color = d.isDeficit ? Colors.red : Colors.green;
+                              return DataRow(cells: [
+                                DataCell(Text(d.category, style: const TextStyle(fontWeight: FontWeight.w600))),
+                                DataCell(Text('${d.available}')),
+                                DataCell(Text('${d.recommended}')),
+                                DataCell(Text(d.isDeficit ? '-$gap' : '0', style: TextStyle(color: color, fontWeight: FontWeight.bold))),
+                                DataCell(Text(d.isDeficit ? 'DEFICIT' : 'ADEQUATE', style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 12))),
+                              ]);
+                            }).toList(),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

@@ -11,6 +11,7 @@ import 'select_profile_screen.dart';
 import 'register_screen.dart';
 import 'report_incident_screen.dart';
 import 'incident_list_screen.dart';
+import 'dispatch_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -275,6 +276,15 @@ class _ResourcesTab extends StatelessWidget {
             icon: Icons.inventory_2,
             color: Colors.indigo,
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const InventoryOverviewScreen())),
+          ),
+          const SizedBox(height: 16),
+          _buildResourceCard(
+            context,
+            title: "Active Dispatches",
+            subtitle: "View and manage current dispatch operations",
+            icon: Icons.local_shipping,
+            color: Colors.deepOrange,
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const DispatchListScreen())),
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/volunteer.dart';
 import '../services/volunteer_service.dart';
 import 'profile_screen.dart';
+import 'add_volunteer_screen.dart';
 
 class SelectProfileScreen extends StatefulWidget {
   const SelectProfileScreen({super.key});
@@ -22,7 +23,21 @@ class _SelectProfileScreenState extends State<SelectProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Select Your Profile (temporary)")),
+      appBar: AppBar(title: const Text("Volunteer Directory")),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AddVolunteerScreen()),
+          );
+          if (result == true) {
+            setState(() {
+              _volunteersFuture = VolunteerService.getVolunteers();
+            });
+          }
+        },
+        child: const Icon(Icons.person_add),
+      ),
       body: FutureBuilder<List<Volunteer>>(
         future: _volunteersFuture,
         builder: (context, snapshot) {
@@ -41,8 +56,8 @@ class _SelectProfileScreenState extends State<SelectProfileScreen> {
             itemBuilder: (context, index) {
               final v = volunteers[index];
               return ListTile(
-                title: Text(v.name),
-                subtitle: Text(v.email),
+                title: Text(v.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text('${v.skills} • ${v.email}'),
                 onTap: () {
                   Navigator.push(
                     context,
