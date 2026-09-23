@@ -8,7 +8,12 @@ Output: Structured Urgency Assessment & Gap Analysis JSON
 """
 
 import json
+import os
+import urllib.request
+import urllib.error
 from typing import Dict, List, Any
+
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 class SituationAnalysisAgent:
     def __init__(self, agent_id: str = "agent-situation-analysis-02"):
@@ -93,6 +98,48 @@ class SituationAnalysisAgent:
             f"{deficit_msg} {shelter_msg}"
         )
 
+        llm_enhanced = False
+
+        if GEMINI_API_KEY:
+            try:
+                # LLM Integration
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+                
+                prompt = (
+                    f"Analyze this emergency incident: {incident.get('title')} - {incident.get('description')}. "
+                    f"Priority reported: {incident.get('priority')}. "
+                    "Return ONLY a valid JSON object with: "
+                    "'urgency_score' (integer 0-100), "
+                    "'urgency_level' (string: Critical, High, Medium, Low), "
+                    "'ai_insight' (a short 1-sentence tactical summary)."
+                )
+                
+                payload = json.dumps({
+                    "contents": [{"parts": [{"text": prompt}]}]
+                }).encode('utf-8')
+                
+                req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json'})
+                with urllib.request.urlopen(req, timeout=10) as response:
+                    res_body = response.read().decode('utf-8')
+                    res_json = json.loads(res_body)
+                    text_content = res_json['candidates'][0]['content']['parts'][0]['text']
+                    
+                    # Clean markdown code blocks if any
+                    if text_content.startswith('```json'):
+                        text_content = text_content[7:-3]
+                    elif text_content.startswith('```'):
+                        text_content = text_content[3:-3]
+                        
+                    llm_data = json.loads(text_content.strip())
+                    
+                    score_res["urgency_score"] = llm_data.get("urgency_score", score_res["urgency_score"])
+                    score_res["urgency_level"] = llm_data.get("urgency_level", score_res["urgency_level"])
+                    summary = f"[LLM ENHANCED] AI Insight: {llm_data.get('ai_insight', 'Analyzed.')} " + summary
+                    llm_enhanced = True
+            except Exception as e:
+                # Fallback to deterministic logic on any failure
+                print(f"[Warning] Gemini API failed, falling back to deterministic rules. Error: {e}")
+
         return {
             "agent_id": self.agent_id,
             "incident_id": incident.get("id"),
@@ -101,6 +148,7 @@ class SituationAnalysisAgent:
             "analysis_summary": summary,
             "nearest_shelter": best_shelter,
             "resource_deficiencies": deficiencies,
+            "llm_enhanced": llm_enhanced,
             "status": "COMPLETED"
         }
 
