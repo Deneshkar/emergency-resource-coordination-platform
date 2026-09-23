@@ -94,6 +94,7 @@ export default function IncidentList() {
       {/* Table */}
       <div className="card" style={{ padding: 0, overflow: "hidden" }}>
         <div style={{ overflowX: "auto" }}>
+        <div className="table-responsive">
           <table className="data-table">
             <thead>
               <tr>
@@ -146,6 +147,7 @@ export default function IncidentList() {
               )}
             </tbody>
           </table>
+        </div>
         </div>
       </div>
 

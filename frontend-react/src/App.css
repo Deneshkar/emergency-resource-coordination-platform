@@ -429,7 +429,12 @@
 }
 
 /* ═══ Data Tables ═══ */
-.data-table { width: 100%; border-collapse: collapse; }
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.data-table { width: 100%; border-collapse: collapse; min-width: 600px; }
 
 .data-table thead th {
   padding: 10px 14px;
