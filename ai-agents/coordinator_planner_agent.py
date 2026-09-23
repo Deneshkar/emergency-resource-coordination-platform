@@ -16,6 +16,31 @@ import argparse
 import os
 from datetime import datetime, timezone
 
+
+def _load_dotenv():
+    """Load KEY=VALUE pairs from ai-agents/.env and repo root .env (stdlib only)."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    for _p in (os.path.join(here, ".env"), os.path.join(here, "..", ".env")):
+        try:
+            if os.path.isfile(_p):
+                with open(_p, encoding="utf-8") as _f:
+                    for _line in _f:
+                        _line = _line.strip()
+                        if not _line or _line.startswith("#") or "=" not in _line:
+                            continue
+                        _k, _v = _line.split("=", 1)
+                        _k = _k.strip()
+                        _v = _v.strip().strip('"').strip("'")
+                        if _k and _k not in os.environ:
+                            os.environ[_k] = _v
+        except Exception:
+            pass
+
+
+_load_dotenv()
+
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+
 # Explicit Allow-List of tools that the Coordinator/Planner Agent is permitted to execute
 ALLOWED_TOOLS = [
     "get_incident",
@@ -68,6 +93,8 @@ class CoordinatorPlannerAgent:
         affected_count = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
         custom_directives = incident_data.get("custom_directives", "")
         focus_phase = incident_data.get("focus_phase", "")
+        resources = incident_data.get("resources", []) or []
+        volunteers = incident_data.get("volunteers", []) or []
 
         # Reason & Plan (Agentic Step 2)
         reasoning_log = f"1. Observed {priority} priority {category} incident with {affected_count} affected.\n"
@@ -147,6 +174,14 @@ class CoordinatorPlannerAgent:
         if GEMINI_API_KEY:
             reasoning_log = "[LLM ENHANCED] " + reasoning_log
 
+        objective = f"Contain {category} emergency and protect {affected_count} civilians."
+        actions_list = [step["task"] for step in action_steps]
+        estimated_resources = self._estimate_resources(category, priority, affected_count)
+        required_resources_list = [
+            {"resource_type": r["resource_type"], "quantity": r["quantity"], "unit": r["unit"]}
+            for r in estimated_resources
+        ]
+        agent_directives = self._formulate_subagent_directives(category, priority, location)
 
         return {
             "agent_id": self.name,
@@ -160,16 +195,52 @@ class CoordinatorPlannerAgent:
             "status": "Generated",
             # Additional detailed schema attributes for backend model mapping
             "incident_id": incident_id,
-            "priority": priority,
-            "objective": f"Contain {category} emergency and protect {affected_count} civilians.",
             "plan_title": f"Agentic Tactical Plan: {title}",
             "plan_description": f"Autonomous coordination strategy by {self.name}. Analyzed {len(resources)} resources.",
             "phase": "Immediate Containment",
-            "actions": [step["task"] for step in action_steps],
             "action_steps": action_steps,
             "estimated_resources": estimated_resources,
             "subagent_directives": agent_directives,
             "allowed_tools": self.allowed_tools
+        }
+
+    def generate_risk_assessment(self, incident_data):
+        category = incident_data.get("category", "General Emergency")
+        priority = incident_data.get("priority", "Medium")
+        affected = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
+        risk_level, escalation_warning = self._evaluate_threat(category, priority, affected)
+        return {
+            "incident_id": incident_data.get("incident_id", incident_data.get("incidentId", 0)),
+            "risk_level": risk_level,
+            "escalation_warning": escalation_warning,
+            "status": "Generated",
+        }
+
+    def generate_summary(self, incident_data):
+        title = incident_data.get("title", "Emergency Incident")
+        category = incident_data.get("category", "General Emergency")
+        priority = incident_data.get("priority", "Medium")
+        return {
+            "incident_id": incident_data.get("incident_id", incident_data.get("incidentId", 0)),
+            "summary": f"{priority} priority {category} incident '{title}' at {incident_data.get('location', 'Unknown Location')}.",
+            "status": "Generated",
+        }
+
+    def recommend_resources(self, incident_data):
+        category = incident_data.get("category", "General Emergency")
+        priority = incident_data.get("priority", "Medium")
+        affected = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
+        return {
+            "incident_id": incident_data.get("incident_id", incident_data.get("incidentId", 0)),
+            "recommended_resources": self._estimate_resources(category, priority, affected),
+            "status": "Generated",
+        }
+
+    def check_duplicates(self, incident_data):
+        return {
+            "incident_id": incident_data.get("incident_id", incident_data.get("incidentId", incident_data.get("id", 0))),
+            "duplicates": [],
+            "status": "Generated",
         }
 
     def _evaluate_threat(self, category, priority, affected_count):

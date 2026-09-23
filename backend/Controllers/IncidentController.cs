@@ -823,7 +823,7 @@ public class IncidentController : ControllerBase
 
         if (!validStatuses.Contains(target))
         {
-            errorMessage = $"Invalid status '{newStatus}'. Allowed status values are: Reported, Verified, Assigned, Resolved, Closed.";
+            errorMessage = $"Invalid status '{newStatus}'. Allowed status values are: Reported, Verified, Active Planning, Assigned, Dispatched, Resolved, Closed.";
             return false;
         }
 
@@ -834,14 +834,18 @@ public class IncidentController : ControllerBase
             "verified" or "active planning" => target.Equals("Assigned", StringComparison.OrdinalIgnoreCase) ||
                                                target.Equals("Dispatched", StringComparison.OrdinalIgnoreCase) ||
                                                target.Equals("Verified", StringComparison.OrdinalIgnoreCase),
-            "assigned" or "dispatched" => target.Equals("Resolved", StringComparison.OrdinalIgnoreCase),
+            "assigned" or "dispatched" => target.Equals("Resolved", StringComparison.OrdinalIgnoreCase) ||
+                                          target.Equals("Closed", StringComparison.OrdinalIgnoreCase),
             "resolved" => target.Equals("Closed", StringComparison.OrdinalIgnoreCase),
+            // Reopen support: a closed incident can be sent back for rework.
+            "closed" => target.Equals("Reported", StringComparison.OrdinalIgnoreCase) ||
+                        target.Equals("Active Planning", StringComparison.OrdinalIgnoreCase),
             _ => false
         };
 
         if (!isValid)
         {
-            errorMessage = $"Invalid status transition from '{currentStatus}' to '{newStatus}'. Allowed workflow sequence: Reported -> Verified -> Assigned -> Resolved.";
+            errorMessage = $"Invalid status transition from '{currentStatus}' to '{newStatus}'. Allowed workflow sequence: Reported -> Verified / Active Planning -> Assigned / Dispatched -> Resolved -> Closed (Closed can be reopened to Reported / Active Planning).";
         }
 
         return isValid;

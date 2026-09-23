@@ -62,6 +62,11 @@ public class IncidentPlannerService
                 CreateNoWindow = true
             };
 
+            // Forward Gemini key loaded from .env so the Python agent can call the LLM.
+            var geminiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+            if (!string.IsNullOrWhiteSpace(geminiKey) && !psi.Environment.ContainsKey("GEMINI_API_KEY"))
+                psi.Environment["GEMINI_API_KEY"] = geminiKey;
+
             using var process = Process.Start(psi);
             if (process == null) return null;
 
