@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/settings_provider.dart';
 import 'situation_analysis_screen.dart';
 import 'shelter_locator_screen.dart';
 import 'resource_status_screen.dart';
@@ -21,11 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 0: Home/Dashboard
-    // 1: Shelters
-    // 2: Resources
-    // 3: Settings
-
     final List<Widget> pages = [
       const _HomeTab(),
       const ShelterLocatorScreen(),
@@ -38,6 +34,20 @@ class _HomeScreenState extends State<HomeScreen> {
         index: _currentIndex,
         children: pages,
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const SituationAnalysisScreen()),
+          );
+        },
+        icon: const Icon(Icons.psychology),
+        label: const Text("AI Agent"),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+        elevation: 4,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (index) {
@@ -87,7 +97,7 @@ class _HomeTab extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 80),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -100,7 +110,7 @@ class _HomeTab extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
-                    BoxShadow(color: Colors.blue.shade200, blurRadius: 10, offset: const Offset(0, 4)),
+                    BoxShadow(color: Colors.blue.withAlpha(51), blurRadius: 10, offset: const Offset(0, 4)),
                   ],
                 ),
                 child: Row(
@@ -148,58 +158,49 @@ class _HomeTab extends StatelessWidget {
               ),
               const SizedBox(height: 24),
             ],
+            
             const Text(
-              "QUICK ACTIONS",
+              "RESPONDER & IDENTITY",
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey),
             ),
             const SizedBox(height: 12),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: BorderSide(color: Colors.deepPurple.shade100, width: 1.5),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.account_circle),
+              label: const Text("My Profile & Duty Status"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue.shade800,
+                foregroundColor: Colors.white,
+                minimumSize: const Size.fromHeight(46),
               ),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(16),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const SituationAnalysisScreen()),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.deepPurple.shade50,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(Icons.psychology, size: 36, color: Colors.deepPurple.shade600),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Situation Analysis AI",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "Run AI urgency & gap analysis for incidents.",
-                              style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Icon(Icons.chevron_right, color: Colors.grey),
-                    ],
-                  ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+              ),
+            ),
+            const SizedBox(height: 10),
+            if (user?.canCoordinate == true) ...[
+              OutlinedButton.icon(
+                icon: const Icon(Icons.people_outline),
+                label: const Text("Volunteer Directory (Team Roster)"),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(44),
                 ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SelectProfileScreen()),
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
+            OutlinedButton.icon(
+              icon: const Icon(Icons.person_add_alt_1),
+              label: const Text("Register Another Account"),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size.fromHeight(44),
+              ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const RegisterScreen()),
               ),
             ),
           ],
@@ -219,7 +220,7 @@ class _ResourcesTab extends StatelessWidget {
         title: const Text('Resources & Logistics'),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 80),
         children: [
           _buildResourceCard(
             context,
@@ -287,41 +288,74 @@ class _SettingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthProvider>(context);
-    final user = auth.user;
+    final settings = Provider.of<SettingsProvider>(context);
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+
+    final List<Map<String, String>> displayModes = [
+      {'name': 'Dark (Default)', 'value': 'dark', 'icon': '🌙'},
+      {'name': 'Light Mode', 'value': 'light', 'icon': '☀️'},
+      {'name': 'Midnight', 'value': 'midnight', 'icon': '🌌'},
+      {'name': 'Hacker', 'value': 'hacker', 'icon': '💻'},
+      {'name': 'Sunset', 'value': 'sunset', 'icon': '🌅'},
+      {'name': 'Ocean', 'value': 'ocean', 'icon': '🌊'},
+      {'name': 'OLED Black', 'value': 'oled', 'icon': '⬛'},
+      {'name': 'Purple Royal', 'value': 'purple', 'icon': '🔮'},
+    ];
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
       ),
       body: ListView(
+        padding: const EdgeInsets.only(bottom: 80),
         children: [
-          const SizedBox(height: 8),
-          ListTile(
-            leading: const Icon(Icons.account_circle, color: Colors.blue),
-            title: const Text("My Profile & Duty Status"),
-            subtitle: const Text("Manage your personal responder profile"),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileScreen())),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              "PREFERENCES",
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey),
+            ),
+          ),
+          SwitchListTile(
+            title: const Text("System Notifications"),
+            subtitle: const Text("Receive critical alerts and AI updates"),
+            secondary: const Icon(Icons.notifications_active),
+            value: settings.notificationsEnabled,
+            onChanged: (val) {
+              settings.setNotificationsEnabled(val);
+              if (val) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("System notifications enabled")),
+                );
+              }
+            },
           ),
           const Divider(),
-          if (user?.canCoordinate == true) ...[
-            ListTile(
-              leading: const Icon(Icons.people_outline, color: Colors.teal),
-              title: const Text("Volunteer Directory"),
-              subtitle: const Text("View team roster and assign roles"),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SelectProfileScreen())),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              "DISPLAY MODES",
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey),
             ),
-            const Divider(),
-          ],
-          ListTile(
-            leading: const Icon(Icons.person_add_alt_1, color: Colors.indigo),
-            title: const Text("Register Another Account"),
-            subtitle: const Text("Create a new citizen or volunteer profile"),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen())),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: displayModes.map((mode) {
+                final isSelected = settings.themeMode == mode['value'];
+                return ChoiceChip(
+                  label: Text('${mode['icon']} ${mode['name']}'),
+                  selected: isSelected,
+                  onSelected: (selected) {
+                    if (selected) settings.setThemeMode(mode['value']!);
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 32),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
