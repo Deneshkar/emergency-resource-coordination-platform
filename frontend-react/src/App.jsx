@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation, Link } from "react
 import { useState, useEffect, useCallback } from "react";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { Toaster } from "sonner";
 
 import IncidentDashboard from "./pages/IncidentDashboard";
 import IncidentDetail from "./pages/IncidentDetail";
@@ -17,6 +18,7 @@ import ResourceList from "./pages/ResourceList";
 import ShelterList from "./pages/ShelterList";
 import InventoryList from "./pages/InventoryList";
 import SituationAnalysisView from "./pages/SituationAnalysisView";
+import Settings from "./pages/Settings";
 
 import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
@@ -78,6 +80,14 @@ function AppShell() {
       alive = false;
     };
   }, [isAuthPage]);
+
+  // Load global theme
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("ercp_theme");
+    if (savedTheme) {
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    }
+  }, []);
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
@@ -192,6 +202,14 @@ function AppShell() {
             <Route path="/shelters" element={<ShelterList />} />
             <Route path="/inventory" element={<InventoryList />} />
             <Route path="/situation-analysis" element={<SituationAnalysisView />} />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute allowedRoles={["Coordinator", "Admin", "Citizen", "Volunteer"]}>
+                  <Settings />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Catch-all redirect */}
             <Route path="*" element={<Navigate to="/incidents" replace />} />
@@ -205,6 +223,7 @@ function AppShell() {
 function App() {
   return (
     <BrowserRouter>
+      <Toaster richColors position="top-right" />
       <AuthProvider>
         <AppShell />
       </AuthProvider>

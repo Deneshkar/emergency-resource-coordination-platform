@@ -54,6 +54,203 @@
   background-color: var(--bg-dark);
   color: var(--text-main);
   line-height: 1.5;
+  
+  --bg-gradient-center: #1e1b4b;
+  --bg-gradient-edge: var(--bg-dark);
+}
+
+/* --- 7 GLOBAL DISPLAY MODES --- */
+
+/* 1. Dark Mode (Default) */
+[data-theme="dark"] {
+  --bg-dark: #0b0f19;
+  --bg-base: #0b0f19;
+  --bg-surface: rgba(23, 31, 48, 0.85);
+  --bg-elevated: #1a2338;
+  --bg-hover: rgba(255, 255, 255, 0.06);
+  --bg-active: rgba(255, 255, 255, 0.1);
+  --card-bg: rgba(23, 31, 48, 0.75);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.14);
+  --text-main: #f1f5f9;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --accent-primary: #38bdf8;
+  --accent-glow: rgba(56, 189, 248, 0.25);
+  --bg-gradient-center: #1e1b4b;
+  --bg-gradient-edge: var(--bg-dark);
+  color-scheme: dark;
+}
+
+/* 2. Light Mode */
+[data-theme="light"] {
+  --bg-dark: #f8fafc;
+  --bg-base: #f8fafc;
+  --bg-surface: rgba(255, 255, 255, 0.9);
+  --bg-elevated: #ffffff;
+  --bg-hover: rgba(0, 0, 0, 0.05);
+  --bg-active: rgba(0, 0, 0, 0.1);
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(0, 0, 0, 0.1);
+  --border-subtle: rgba(0, 0, 0, 0.05);
+  --border-default: rgba(0, 0, 0, 0.15);
+  --text-main: #0f172a;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #475569;
+  --text-dim: #64748b;
+  --accent-primary: #3b82f6;
+  --accent-glow: rgba(59, 130, 246, 0.15);
+  --bg-gradient-center: #e2e8f0;
+  --bg-gradient-edge: var(--bg-dark);
+  color-scheme: light;
+}
+
+/* 3. Midnight */
+[data-theme="midnight"] {
+  --bg-dark: #020617;
+  --bg-base: #020617;
+  --bg-surface: rgba(15, 23, 42, 0.85);
+  --bg-elevated: #1e293b;
+  --bg-hover: rgba(255, 255, 255, 0.08);
+  --bg-active: rgba(255, 255, 255, 0.12);
+  --card-bg: rgba(15, 23, 42, 0.75);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.15);
+  --text-main: #e2e8f0;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #475569;
+  --accent-primary: #6366f1;
+  --accent-glow: rgba(99, 102, 241, 0.3);
+  --bg-gradient-center: #1e1b4b;
+  --bg-gradient-edge: var(--bg-dark);
+  color-scheme: dark;
+}
+
+/* 4. Hacker */
+[data-theme="hacker"] {
+  --bg-dark: #000000;
+  --bg-base: #000000;
+  --bg-surface: rgba(0, 20, 0, 0.85);
+  --bg-elevated: #002200;
+  --bg-hover: rgba(0, 255, 0, 0.1);
+  --bg-active: rgba(0, 255, 0, 0.2);
+  --card-bg: rgba(0, 15, 0, 0.75);
+  --card-border: rgba(0, 255, 0, 0.3);
+  --border-subtle: rgba(0, 255, 0, 0.15);
+  --border-default: rgba(0, 255, 0, 0.4);
+  --text-main: #22c55e;
+  --text-primary: #4ade80;
+  --text-secondary: #16a34a;
+  --text-muted: #15803d;
+  --text-dim: #166534;
+  --accent-primary: #22c55e;
+  --accent-glow: rgba(34, 197, 94, 0.4);
+  --bg-gradient-center: #064e3b;
+  --bg-gradient-edge: var(--bg-dark);
+  color-scheme: dark;
+}
+
+/* 5. Sunset */
+[data-theme="sunset"] {
+  --bg-dark: #1e0b0b;
+  --bg-base: #1e0b0b;
+  --bg-surface: rgba(43, 17, 17, 0.85);
+  --bg-elevated: #3b1717;
+  --bg-hover: rgba(255, 255, 255, 0.08);
+  --bg-active: rgba(255, 255, 255, 0.15);
+  --card-bg: rgba(43, 17, 17, 0.75);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.15);
+  --text-main: #fecaca;
+  --text-primary: #fee2e2;
+  --text-secondary: #fca5a5;
+  --text-muted: #f87171;
+  --text-dim: #ef4444;
+  --accent-primary: #f59e0b;
+  --accent-glow: rgba(245, 158, 11, 0.3);
+  --bg-gradient-center: #450a0a;
+  --bg-gradient-edge: var(--bg-dark);
+  color-scheme: dark;
+}
+
+/* 6. Ocean */
+[data-theme="ocean"] {
+  --bg-dark: #083344;
+  --bg-base: #083344;
+  --bg-surface: rgba(14, 116, 144, 0.4);
+  --bg-elevated: #164e63;
+  --bg-hover: rgba(255, 255, 255, 0.1);
+  --bg-active: rgba(255, 255, 255, 0.2);
+  --card-bg: rgba(14, 116, 144, 0.3);
+  --card-border: rgba(6, 182, 212, 0.3);
+  --border-subtle: rgba(6, 182, 212, 0.15);
+  --border-default: rgba(6, 182, 212, 0.4);
+  --text-main: #cffafe;
+  --text-primary: #ecfeff;
+  --text-secondary: #a5f3fc;
+  --text-muted: #67e8f9;
+  --text-dim: #22d3ee;
+  --accent-primary: #06b6d4;
+  --accent-glow: rgba(6, 182, 212, 0.4);
+  --bg-gradient-center: #164e63;
+  --bg-gradient-edge: var(--bg-dark);
+  color-scheme: dark;
+}
+
+/* 7. OLED Black */
+[data-theme="oled"] {
+  --bg-dark: #000000;
+  --bg-base: #000000;
+  --bg-surface: rgba(20, 20, 20, 0.95);
+  --bg-elevated: #1a1a1a;
+  --bg-hover: rgba(255, 255, 255, 0.1);
+  --bg-active: rgba(255, 255, 255, 0.15);
+  --card-bg: rgba(10, 10, 10, 0.95);
+  --card-border: rgba(255, 255, 255, 0.2);
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-default: rgba(255, 255, 255, 0.3);
+  --text-main: #ffffff;
+  --text-primary: #ffffff;
+  --text-secondary: #e5e5e5;
+  --text-muted: #a3a3a3;
+  --text-dim: #737373;
+  --accent-primary: #d4d4d4;
+  --accent-glow: rgba(255, 255, 255, 0.2);
+  --bg-gradient-center: #171717;
+  --bg-gradient-edge: var(--bg-dark);
+  color-scheme: dark;
+}
+
+/* 8. Purple (Dark) */
+[data-theme="purple"] {
+  --bg-dark: #0f0a20;
+  --bg-base: #0f0a20;
+  --bg-surface: rgba(22, 12, 45, 0.85);
+  --bg-elevated: #28144f;
+  --bg-hover: rgba(255, 255, 255, 0.08);
+  --bg-active: rgba(255, 255, 255, 0.15);
+  --card-bg: rgba(22, 12, 45, 0.75);
+  --card-border: rgba(168, 85, 247, 0.2);
+  --border-subtle: rgba(168, 85, 247, 0.1);
+  --border-default: rgba(168, 85, 247, 0.3);
+  --text-main: #f3e8ff;
+  --text-primary: #faf5ff;
+  --text-secondary: #e9d5ff;
+  --text-muted: #d8b4fe;
+  --text-dim: #c084fc;
+  --accent-primary: #a855f7;
+  --accent-glow: rgba(168, 85, 247, 0.4);
+  --bg-gradient-center: #28144f;
+  --bg-gradient-edge: var(--bg-dark);
+  color-scheme: dark;
 }
 
 * {
@@ -63,7 +260,8 @@
 }
 
 body {
-  background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0b0f19 75%);
+  background: radial-gradient(circle at 50% 0%, var(--bg-gradient-center) 0%, var(--bg-gradient-edge) 75%);
+  background-color: var(--bg-dark);
   min-height: 100vh;
   overflow-x: hidden;
 }
