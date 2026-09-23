@@ -182,6 +182,7 @@ class CoordinatorPlannerAgent:
             for r in estimated_resources
         ]
         agent_directives = self._formulate_subagent_directives(category, priority, location)
+        risk_level, escalation_warning = self._evaluate_threat(category, priority, affected_count)
 
         return {
             "agent_id": self.name,
@@ -200,6 +201,13 @@ class CoordinatorPlannerAgent:
             "phase": "Immediate Containment",
             "action_steps": action_steps,
             "estimated_resources": estimated_resources,
+            "risk_assessment": f"[{risk_level}] {escalation_warning}",
+            "reasoning": reasoning_log,
+            "risks": risks,
+            "constraints": constraints,
+            "requiresHumanApproval": True,
+            "suggestedAssignments": assignments,
+            "dispatchPlan": dispatch_plan,
             "subagent_directives": agent_directives,
             "allowed_tools": self.allowed_tools
         }
