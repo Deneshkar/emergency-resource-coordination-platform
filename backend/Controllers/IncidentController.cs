@@ -260,12 +260,25 @@ public class IncidentController : ControllerBase
 
     // PUT: api/incident/1
     [HttpPut("{id}")]
-    [Authorize(Roles = "Coordinator,Admin")]
+    [Authorize(Roles = "Coordinator,Admin,Volunteer")]
     public async Task<IActionResult> UpdateIncident(int id, [FromBody] UpdateIncidentDto dto)
     {
         var incident = await _context.Incidents.FindAsync(id);
         if (incident == null)
             return NotFound();
+
+        var isVolunteer = User?.IsInRole("Volunteer") == true && User?.IsInRole("Coordinator") != true && User?.IsInRole("Admin") != true;
+
+        if (isVolunteer)
+        {
+            if ((!string.IsNullOrWhiteSpace(dto.Priority) && dto.Priority != incident.Priority) ||
+                (!string.IsNullOrWhiteSpace(dto.Category) && dto.Category != incident.Category) ||
+                (dto.AffectedCount.HasValue && dto.AffectedCount.Value != incident.AffectedCount) ||
+                (!string.IsNullOrWhiteSpace(dto.AssignedCoordinator) && dto.AssignedCoordinator != incident.AssignedCoordinator))
+            {
+                return Forbid();
+            }
+        }
 
         var changes = new List<string>();
 
