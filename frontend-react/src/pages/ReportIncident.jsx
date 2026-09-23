@@ -42,15 +42,75 @@ function ReportIncident() {
   const [isError, setIsError] = useState(false);
   const [touched, setTouched] = useState(false);
 
-  const errors = {
-    title: title.trim().length < 5 ? "Give the incident a clear title (min 5 characters)." : "",
-    location: location.trim().length < 3 ? "A specific location or address is required." : "",
-    description:
-      description.trim().length < 20
-        ? `Add more situational detail (${description.trim().length}/20 min characters).`
-        : "",
+  const validateTitle = (val) => {
+    const t = val.trim();
+    if (t.length < 5) return "Give the incident a clear title (min 5 characters).";
+    if (/^\d+$/.test(t)) return "Title must contain meaningful text, not just numbers.";
+    if (/^(.)\1+$/.test(t)) return "Title must contain meaningful text.";
+    if (!/[a-zA-Z]/.test(t)) return "Title must contain at least some letters.";
+    
+    if (/[bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ]{4,}/.test(t)) return "Title appears to be random text (keyboard mashing).";
+    if (!/[aeiouAEIOU]/.test(t)) return "Title must contain readable words.";
+    
+    if (t.split(/\s+/).length < 2) return "Title should be descriptive (at least two words).";
+    
+    return "";
   };
-  const isValid = !errors.title && !errors.location && !errors.description;
+
+  const validateLocation = (val) => {
+    const l = val.trim();
+    if (l.length < 5) return "A specific location or address is required (min 5 characters).";
+    if (/^\d+$/.test(l)) return "Address must contain meaningful text, not just numbers.";
+    if (/^(.)\1+$/.test(l)) return "Address must contain meaningful text.";
+    
+    const letters = l.match(/[a-zA-Z]/g);
+    if (!letters || letters.length < 3) return "Address must contain enough letters to be meaningful.";
+    
+    if (/[bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ]{4,}/.test(l)) return "Address appears to be random text (keyboard mashing).";
+    if (!/[aeiouAEIOU]/.test(l)) return "Address must contain readable words.";
+    
+    const lower = l.toLowerCase();
+    if (["test", "none", "n/a", "unknown", "placeholder"].includes(lower)) return "Please provide a real address.";
+    
+    return "";
+  };
+
+  const validateDescription = (val) => {
+    const d = val.trim();
+    if (d.length < 20) return `Add more situational detail (${d.length}/20 min characters).`;
+    if (/^\d+$/.test(d)) return "Summary must contain meaningful text, not just numbers.";
+    if (/^(.)\1+$/.test(d)) return "Summary must contain meaningful text.";
+    if (!/[a-zA-Z]/.test(d)) return "Summary must contain at least some letters.";
+    
+    if (/[bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ]{6,}/.test(d)) return "Summary appears to contain random text (keyboard mashing).";
+    
+    const vowels = d.match(/[aeiouAEIOU]/g);
+    if (!vowels || vowels.length < 2) return "Summary must contain readable words.";
+    
+    const words = d.toLowerCase().split(/\s+/);
+    if (words.length < 3) return "Summary must be descriptive (at least 3 words).";
+    
+    const allSame = words.length > 2 && words.every(w => w === words[0]);
+    if (allSame) return "Summary must contain meaningful content, not repeated words.";
+    
+    return "";
+  };
+
+  const validateEmail = (val) => {
+    const e = val.trim();
+    if (!e) return "Reporter email is required.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return "Please enter a valid email address.";
+    return "";
+  };
+
+  const errors = {
+    title: validateTitle(title),
+    location: validateLocation(location),
+    description: validateDescription(description),
+    affectedCount: parseInt(affectedCount) < 0 || String(affectedCount).includes('.') ? "Affected count cannot be negative or a decimal." : "",
+    reporterContact: validateEmail(reporterContact),
+  };
+  const isValid = !errors.title && !errors.location && !errors.description && !errors.affectedCount && !errors.reporterContact;
 
   const activeCategory = CATEGORIES.find((c) => c.value === category) ?? CATEGORIES[0];
   const activePriority = PRIORITIES.find((p) => p.value === priority) ?? PRIORITIES[1];
@@ -111,7 +171,19 @@ function ReportIncident() {
     } catch (error) {
       console.error(error);
       setIsError(true);
-      setMessage("Failed to submit incident report. Please check backend connection.");
+      let errMsg = "Failed to submit incident report. Please check backend connection.";
+      if (error.response?.data) {
+        const data = error.response.data;
+        if (data.errors) {
+          const firstErr = Object.values(data.errors)[0];
+          errMsg = Array.isArray(firstErr) ? firstErr[0] : firstErr;
+        } else if (data.message) {
+          errMsg = data.message;
+        } else if (data.title) {
+          errMsg = data.title;
+        }
+      }
+      setMessage(errMsg);
     } finally {
       setLoading(false);
     }
@@ -233,7 +305,7 @@ function ReportIncident() {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="ri-affected">People Affected (est.)</label>
-                <div className="stepper">
+                <div className={`stepper ${touched && errors.affectedCount ? "input-error" : ""}`}>
                   <button className="stepper-btn" onClick={(e) => stepCount(e, -1)} aria-label="Decrease affected count">−</button>
                   <input
                     id="ri-affected"
@@ -245,6 +317,7 @@ function ReportIncident() {
                   />
                   <button className="stepper-btn" onClick={(e) => stepCount(e, 1)} aria-label="Increase affected count">＋</button>
                 </div>
+                {touched && errors.affectedCount && <span className="field-error">{errors.affectedCount}</span>}
               </div>
             </div>
 
@@ -256,8 +329,9 @@ function ReportIncident() {
                 placeholder="e.g. Dispatch Officer Jane Doe · +1 555-0199"
                 value={reporterContact}
                 onChange={(e) => setReporterContact(e.target.value)}
-                className="form-control"
+                className={`form-control ${touched && errors.reporterContact ? "input-error" : ""}`}
               />
+              {touched && errors.reporterContact && <span className="field-error">{errors.reporterContact}</span>}
             </div>
           </section>
 

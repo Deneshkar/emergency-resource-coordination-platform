@@ -1,6 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
+
 namespace ERCP.Api.DTOs;
 
-public class CreateIncidentDto
+public class CreateIncidentDto : IValidatableObject
 {
     public string Title { get; set; } = string.Empty;
 
@@ -12,6 +15,7 @@ public class CreateIncidentDto
 
     public string Priority { get; set; } = "Medium"; // Low, Medium, High, Critical
 
+    [Range(0, int.MaxValue, ErrorMessage = "Affected count cannot be negative.")]
     public int AffectedCount { get; set; } = 0;
 
     public string ReporterContact { get; set; } = string.Empty;
@@ -21,9 +25,68 @@ public class CreateIncidentDto
     public double? Longitude { get; set; }
 
     public bool AutoGeneratePlan { get; set; } = true;
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        var title = Title?.Trim() ?? string.Empty;
+        if (title.Length < 5) yield return new ValidationResult("Give the incident a clear title (min 5 characters).", new[] { nameof(Title) });
+        if (Regex.IsMatch(title, @"^\d+$")) yield return new ValidationResult("Title must contain meaningful text, not just numbers.", new[] { nameof(Title) });
+        if (Regex.IsMatch(title, @"^(.)\1+$")) yield return new ValidationResult("Title must contain meaningful text.", new[] { nameof(Title) });
+        if (!Regex.IsMatch(title, @"[a-zA-Z]")) yield return new ValidationResult("Title must contain at least some letters.", new[] { nameof(Title) });
+        
+        if (Regex.IsMatch(title, @"[bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ]{4,}")) yield return new ValidationResult("Title appears to be random text (keyboard mashing).", new[] { nameof(Title) });
+        if (!Regex.IsMatch(title, @"[aeiouAEIOU]")) yield return new ValidationResult("Title must contain readable words.", new[] { nameof(Title) });
+        
+        var titleWords = title.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        if (titleWords.Length < 2) yield return new ValidationResult("Title should be descriptive (at least two words).", new[] { nameof(Title) });
+
+        var loc = Location?.Trim() ?? string.Empty;
+        if (loc.Length < 5) yield return new ValidationResult("A specific location or address is required (min 5 characters).", new[] { nameof(Location) });
+        if (Regex.IsMatch(loc, @"^\d+$")) yield return new ValidationResult("Address must contain meaningful text, not just numbers.", new[] { nameof(Location) });
+        if (Regex.IsMatch(loc, @"^(.)\1+$")) yield return new ValidationResult("Address must contain meaningful text.", new[] { nameof(Location) });
+        
+        var letters = Regex.Matches(loc, @"[a-zA-Z]");
+        if (letters.Count < 3) yield return new ValidationResult("Address must contain enough letters to be meaningful.", new[] { nameof(Location) });
+        
+        if (Regex.IsMatch(loc, @"[bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ]{4,}")) yield return new ValidationResult("Address appears to be random text (keyboard mashing).", new[] { nameof(Location) });
+        if (!Regex.IsMatch(loc, @"[aeiouAEIOU]")) yield return new ValidationResult("Address must contain readable words.", new[] { nameof(Location) });
+        
+        var lower = loc.ToLower();
+        if (lower == "test" || lower == "none" || lower == "n/a" || lower == "unknown" || lower == "placeholder") 
+            yield return new ValidationResult("Please provide a real address.", new[] { nameof(Location) });
+
+        var desc = Description?.Trim() ?? string.Empty;
+        if (desc.Length < 20) yield return new ValidationResult($"Add more situational detail ({desc.Length}/20 min characters).", new[] { nameof(Description) });
+        if (Regex.IsMatch(desc, @"^\d+$")) yield return new ValidationResult("Summary must contain meaningful text, not just numbers.", new[] { nameof(Description) });
+        if (Regex.IsMatch(desc, @"^(.)\1+$")) yield return new ValidationResult("Summary must contain meaningful text.", new[] { nameof(Description) });
+        if (!Regex.IsMatch(desc, @"[a-zA-Z]")) yield return new ValidationResult("Summary must contain at least some letters.", new[] { nameof(Description) });
+        
+        if (Regex.IsMatch(desc, @"[bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ]{6,}")) yield return new ValidationResult("Summary appears to contain random text (keyboard mashing).", new[] { nameof(Description) });
+        
+        var vowels = Regex.Matches(desc, @"[aeiouAEIOU]");
+        if (vowels.Count < 2) yield return new ValidationResult("Summary must contain readable words.", new[] { nameof(Description) });
+        
+        var words = desc.ToLower().Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        if (words.Length < 3) yield return new ValidationResult("Summary must be descriptive (at least 3 words).", new[] { nameof(Description) });
+        
+        if (words.Length > 2 && words.All(w => w == words[0]))
+        {
+            yield return new ValidationResult("Summary must contain meaningful content, not repeated words.", new[] { nameof(Description) });
+        }
+
+        var rep = ReporterContact?.Trim() ?? string.Empty;
+        if (string.IsNullOrEmpty(rep))
+        {
+            yield return new ValidationResult("Reporter email is required.", new[] { nameof(ReporterContact) });
+        }
+        else if (!Regex.IsMatch(rep, @"^[^\s@]+@[^\s@]+\.[^\s@]+$"))
+        {
+            yield return new ValidationResult("Please enter a valid email address.", new[] { nameof(ReporterContact) });
+        }
+    }
 }
 
-public class UpdateIncidentDto
+public class UpdateIncidentDto : IValidatableObject
 {
     public string? Status { get; set; }
 
@@ -31,11 +94,20 @@ public class UpdateIncidentDto
 
     public string? Category { get; set; }
 
+    [Range(0, int.MaxValue, ErrorMessage = "Affected count cannot be negative.")]
     public int? AffectedCount { get; set; }
 
     public string? AssignedCoordinator { get; set; }
 
     public string? Note { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (AffectedCount.HasValue && AffectedCount.Value < 0)
+        {
+            yield return new ValidationResult("Affected count cannot be negative.", new[] { nameof(AffectedCount) });
+        }
+    }
 }
 
 public class IncidentResponseDto
