@@ -13,6 +13,29 @@ import urllib.request
 import urllib.error
 from typing import Dict, List, Any
 
+
+def _load_dotenv():
+    """Load KEY=VALUE pairs from ai-agents/.env and repo root .env (stdlib only)."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    for _p in (os.path.join(here, ".env"), os.path.join(here, "..", ".env")):
+        try:
+            if os.path.isfile(_p):
+                with open(_p, encoding="utf-8") as _f:
+                    for _line in _f:
+                        _line = _line.strip()
+                        if not _line or _line.startswith("#") or "=" not in _line:
+                            continue
+                        _k, _v = _line.split("=", 1)
+                        _k = _k.strip()
+                        _v = _v.strip().strip('"').strip("'")
+                        if _k and _k not in os.environ:
+                            os.environ[_k] = _v
+        except Exception:
+            pass
+
+
+_load_dotenv()
+
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 class SituationAnalysisAgent:

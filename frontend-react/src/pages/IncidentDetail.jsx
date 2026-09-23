@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { toast } from "sonner";
 import { incidentService } from "../services/incidentService";
 import { useAuth } from "../context/AuthContext";
 
@@ -89,11 +90,32 @@ function IncidentDetail() {
         payload.priority = newPriority;
         payload.assignedCoordinator = newAssignedCoordinator;
       }
+      // Describe what actually changed (incident still holds pre-update values here)
+      const changes = [];
+      if (newStatus !== incident?.status) {
+        changes.push(`Status ${incident?.status} → ${newStatus}`);
+      }
+      if (!isVolunteer) {
+        if (newPriority !== incident?.priority) {
+          changes.push(`Priority ${incident?.priority} → ${newPriority}`);
+        }
+        if (newAssignedCoordinator !== (incident?.assignedCoordinator || "")) {
+          changes.push(`Coordinator → ${newAssignedCoordinator || "—"}`);
+        }
+      }
+      if (newNote.trim()) {
+        changes.push("Audit note recorded");
+      }
       await incidentService.updateIncident(id, payload);
       setNewNote("");
       await loadIncident();
+      toast.success(
+        changes.length
+          ? `Incident #${id} updated: ${changes.join("; ")}`
+          : `Incident #${id}: no changes to save`
+      );
     } catch (err) {
-      alert("Failed to update status: " + err.message);
+      toast.error("Failed to update status: " + err.message);
     } finally {
       setUpdatingStatus(false);
     }
