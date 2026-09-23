@@ -10,6 +10,41 @@ using ERCP.Api.Services;
 using ERCP.Api.Models;
 using Npgsql;
 
+// Load local .env (repo root + backend dir) into process env so
+// GEMINI_API_KEY and Jwt__/ConnectionStrings__ overrides work with `dotnet run`.
+// No extra NuGet dependency; gitignored file, never committed.
+static void LoadDotEnv()
+{
+    var candidates = new[]
+    {
+        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".env"),
+        Path.Combine(Directory.GetCurrentDirectory(), "..", ".env"),
+        Path.Combine(Directory.GetCurrentDirectory(), ".env"),
+    };
+    foreach (var path in candidates)
+    {
+        string full;
+        try { full = Path.GetFullPath(path); }
+        catch { continue; }
+        if (!File.Exists(full)) continue;
+        foreach (var rawLine in File.ReadAllLines(full))
+        {
+            var line = rawLine.Trim();
+            if (line.Length == 0 || line.StartsWith("#")) continue;
+            var eq = line.IndexOf('=');
+            if (eq <= 0) continue;
+            var key = line[..eq].Trim();
+            var value = line[(eq + 1)..].Trim().Trim('"').Trim('\'');
+            if (key.Length == 0) continue;
+            if (Environment.GetEnvironmentVariable(key) is null)
+                Environment.SetEnvironmentVariable(key, value);
+        }
+        break; // first found .env wins
+    }
+}
+
+LoadDotEnv();
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,6 +52,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IncidentPlannerService>();
 builder.Services.AddScoped<SituationAnalysisService>();
 builder.Services.AddScoped<DispatchValidationService>();
+builder.Services.AddScoped<GeolocationService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddEndpointsApiExplorer();
@@ -172,6 +208,36 @@ using (var scope = app.Services.CreateScope())
                     ""UpdatedAt"" timestamp with time zone NOT NULL
                 );
                 CREATE UNIQUE INDEX IF NOT EXISTS ""IX_Users_Email"" ON ""Users"" (""Email"");
+            ");
+
+            // Self-heal databases created by an older model (EnsureCreated never
+            // alters existing tables, so new columns like ConstraintsJson would
+            // otherwise cause 42703 "column does not exist"). All statements are
+            // idempotent and safe to run on every startup, including Railway.
+            context.Database.ExecuteSqlRaw(@"
+                ALTER TABLE ""Incidents"" ADD COLUMN IF NOT EXISTS ""Category"" text NOT NULL DEFAULT 'General Emergency';
+                ALTER TABLE ""Incidents"" ADD COLUMN IF NOT EXISTS ""AffectedCount"" integer NOT NULL DEFAULT 0;
+                ALTER TABLE ""Incidents"" ADD COLUMN IF NOT EXISTS ""ReporterContact"" text NOT NULL DEFAULT '';
+                ALTER TABLE ""Incidents"" ADD COLUMN IF NOT EXISTS ""Latitude"" double precision NULL;
+                ALTER TABLE ""Incidents"" ADD COLUMN IF NOT EXISTS ""Longitude"" double precision NULL;
+                ALTER TABLE ""Incidents"" ADD COLUMN IF NOT EXISTS ""AssignedCoordinator"" text NOT NULL DEFAULT 'AI Coordinator';
+
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""PlanTitle"" text NOT NULL DEFAULT '';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""PlanDescription"" text NOT NULL DEFAULT '';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""Status"" text NOT NULL DEFAULT 'Draft';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""Phase"" text NOT NULL DEFAULT 'Immediate Containment';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""ActionStepsJson"" text NOT NULL DEFAULT '[]';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""EstimatedResourcesJson"" text NOT NULL DEFAULT '[]';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""RiskAssessment"" text NOT NULL DEFAULT '';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""Reasoning"" text NOT NULL DEFAULT '';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""RisksJson"" text NOT NULL DEFAULT '[]';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""ConstraintsJson"" text NOT NULL DEFAULT '[]';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""RequiresHumanApproval"" boolean NOT NULL DEFAULT TRUE;
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""SuggestedAssignmentsJson"" text NOT NULL DEFAULT '[]';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""DispatchPlanJson"" text NOT NULL DEFAULT '[]';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""ApprovedBy"" text NOT NULL DEFAULT '';
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""ApprovedAt"" timestamp with time zone NULL;
+                ALTER TABLE ""IncidentPlans"" ADD COLUMN IF NOT EXISTS ""CreatedAt"" timestamp with time zone NOT NULL DEFAULT NOW();
             ");
         }
 

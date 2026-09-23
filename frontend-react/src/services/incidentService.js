@@ -54,7 +54,10 @@ export const incidentService = {
       method: "PUT",
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error(`Failed to update incident #${id}`);
+    if (!res.ok) {
+      const body = await res.json().catch(() => null);
+      throw new Error(body?.message || `Failed to update incident #${id} (HTTP ${res.status})`);
+    }
   },
 
   // Delete incident
