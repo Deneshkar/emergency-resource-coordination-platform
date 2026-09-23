@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 import '../models/shelter.dart';
 import '../services/resource_service.dart';
+import 'add_edit_shelter_screen.dart';
 
 class ShelterLocatorScreen extends StatefulWidget {
   const ShelterLocatorScreen({super.key});
@@ -19,8 +22,46 @@ class _ShelterLocatorScreenState extends State<ShelterLocatorScreen> {
     _sheltersFuture = ResourceService.fetchShelters();
   }
 
+  void _refresh() {
+    setState(() {
+      _sheltersFuture = ResourceService.fetchShelters();
+    });
+  }
+
+  Future<void> _handleDelete(int id, String name) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: const Text('Delete Shelter'),
+        content: Text('Are you sure you want to delete "$name"?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Cancel')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+            onPressed: () => Navigator.pop(c, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    if (confirm == true) {
+      await ResourceService.deleteShelter(id);
+      _refresh();
+    }
+  }
+
+  Future<void> _handleOccupancy(int id, int current, int delta) async {
+    final newOcc = current + delta;
+    if (newOcc < 0) return;
+    await ResourceService.updateShelterOccupancy(id, newOcc);
+    _refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<AuthProvider>(context).user;
+    final isCoordinator = user?.canCoordinate ?? false;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Evacuation Shelters & Geolocation'),
@@ -59,11 +100,7 @@ class _ShelterLocatorScreenState extends State<ShelterLocatorScreen> {
                     const SizedBox(width: 8),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.teal, foregroundColor: Colors.white),
-                      onPressed: () {
-                        setState(() {
-                          _sheltersFuture = ResourceService.fetchShelters();
-                        });
-                      },
+                      onPressed: _refresh,
                       child: const Text('Find'),
                     ),
                   ],
@@ -96,32 +133,79 @@ class _ShelterLocatorScreenState extends State<ShelterLocatorScreen> {
                       elevation: 3,
                       margin: const EdgeInsets.symmetric(vertical: 8),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: isFull ? Colors.red : Colors.green,
-                          child: Icon(isFull ? Icons.hotel : Icons.night_shelter, color: Colors.white),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: isFull ? Colors.red : Colors.green,
+                              child: Icon(isFull ? Icons.hotel : Icons.night_shelter, color: Colors.white),
+                            ),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(shelter.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                Text('📍 $estDistanceKm km', style: const TextStyle(fontSize: 12, color: Colors.teal, fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Location: ${shelter.location}'),
+                                Text('Capacity: ${shelter.currentOccupancy} / ${shelter.totalCapacity}'),
+                                if (shelter.contactNumber.isNotEmpty) Text('Contact: ${shelter.contactNumber}'),
+                              ],
+                            ),
+                            trailing: Chip(
+                              label: Text(shelter.status),
+                              backgroundColor: isFull ? Colors.red.shade100 : Colors.green.shade100,
+                            ),
+                          ),
+                      if (isCoordinator) ...[
+                        const Divider(height: 1),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
+                                    onPressed: () => _handleOccupancy(shelter.id, shelter.currentOccupancy, -10),
+                                    tooltip: '-10 Occupancy',
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.add_circle_outline, color: Colors.green),
+                                    onPressed: () => _handleOccupancy(shelter.id, shelter.currentOccupancy, 10),
+                                    tooltip: '+10 Occupancy',
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit, color: Colors.blue),
+                                    onPressed: () async {
+                                      final res = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (_) => AddEditShelterScreen(shelter: shelter)),
+                                      );
+                                      if (res == true) _refresh();
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () => _handleDelete(shelter.id, shelter.name),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(shelter.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                            Text('📍 $estDistanceKm km', style: const TextStyle(fontSize: 12, color: Colors.teal, fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Location: ${shelter.location}'),
-                            Text('Capacity: ${shelter.currentOccupancy} / ${shelter.totalCapacity}'),
-                            if (shelter.contactNumber.isNotEmpty) Text('Contact: ${shelter.contactNumber}'),
-                          ],
-                        ),
-                        trailing: Chip(
-                          label: Text(shelter.status),
-                          backgroundColor: isFull ? Colors.red.shade100 : Colors.green.shade100,
-                        ),
-                      ),
-                    );
+                      ],
+                    ],
+                  ),
+                );
                   },
                 );
               },
@@ -129,6 +213,17 @@ class _ShelterLocatorScreenState extends State<ShelterLocatorScreen> {
           ),
         ],
       ),
+      floatingActionButton: isCoordinator
+          ? FloatingActionButton(
+              onPressed: () async {
+                final res = await Navigator.push(context, MaterialPageRoute(builder: (_) => const AddEditShelterScreen()));
+                if (res == true) _refresh();
+              },
+              backgroundColor: Colors.teal,
+              foregroundColor: Colors.white,
+              child: const Icon(Icons.add),
+            )
+          : null,
     );
   }
 }

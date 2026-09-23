@@ -63,4 +63,106 @@ class ResourceService {
       throw Exception('Failed to run Situation Analysis Agent');
     }
   }
+
+  // ==========================================
+  // SHELTER CRUD
+  // ==========================================
+  
+  static Future<void> createShelter(Map<String, dynamic> data) async {
+    final token = await AuthService.getToken();
+    final response = await http.post(
+      Uri.parse('${ApiConfig.baseUrl}/Shelters'),
+      headers: ApiConfig.defaultHeaders(token),
+      body: json.encode(data),
+    );
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to create shelter');
+    }
+  }
+
+  static Future<void> updateShelter(int id, Map<String, dynamic> data) async {
+    final token = await AuthService.getToken();
+    final response = await http.put(
+      Uri.parse('${ApiConfig.baseUrl}/Shelters/$id'),
+      headers: ApiConfig.defaultHeaders(token),
+      body: json.encode(data),
+    );
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Failed to update shelter');
+    }
+  }
+
+  static Future<void> deleteShelter(int id) async {
+    final token = await AuthService.getToken();
+    final response = await http.delete(
+      Uri.parse('${ApiConfig.baseUrl}/Shelters/$id'),
+      headers: ApiConfig.defaultHeaders(token),
+    );
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Failed to delete shelter');
+    }
+  }
+
+  static Future<void> updateShelterOccupancy(int id, int occupancy) async {
+    final token = await AuthService.getToken();
+    final response = await http.patch(
+      Uri.parse('${ApiConfig.baseUrl}/Shelters/$id/occupancy'),
+      headers: ApiConfig.defaultHeaders(token),
+      body: json.encode(occupancy),
+    );
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Failed to update shelter occupancy');
+    }
+  }
+
+  // ==========================================
+  // INVENTORY CRUD
+  // ==========================================
+
+  static Future<void> createInventoryItem(Map<String, dynamic> data) async {
+    final token = await AuthService.getToken();
+    final response = await http.post(
+      Uri.parse('${ApiConfig.baseUrl}/Inventory'),
+      headers: ApiConfig.defaultHeaders(token),
+      body: json.encode(data),
+    );
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to create inventory item');
+    }
+  }
+
+  static Future<void> updateInventoryItem(int id, Map<String, dynamic> data) async {
+    final token = await AuthService.getToken();
+    final response = await http.put(
+      Uri.parse('${ApiConfig.baseUrl}/Inventory/$id'),
+      headers: ApiConfig.defaultHeaders(token),
+      body: json.encode(data),
+    );
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Failed to update inventory item');
+    }
+  }
+
+  static Future<void> deleteInventoryItem(int id) async {
+    final token = await AuthService.getToken();
+    final response = await http.delete(
+      Uri.parse('${ApiConfig.baseUrl}/Inventory/$id'),
+      headers: ApiConfig.defaultHeaders(token),
+    );
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Failed to delete inventory item');
+    }
+  }
+
+  static Future<void> adjustStock(int id, int delta) async {
+    final token = await AuthService.getToken();
+    final response = await http.patch(
+      Uri.parse('${ApiConfig.baseUrl}/Inventory/$id/adjust'),
+      headers: ApiConfig.defaultHeaders(token),
+      body: json.encode(delta),
+    );
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Failed to adjust stock');
+    }
+  }
 }
