@@ -721,8 +721,8 @@
 
 @media (max-width: 768px) {
   .main-col::before { left: 0; }
-  .main-content, .app-main-content { padding: 18px 14px 32px; }
-  .topbar { padding: 0 14px; }
+  .main-content, .app-main-content { padding: 16px 10px 24px; }
+  .topbar { padding: 0 10px; gap: 8px; }
   .topbar-hamburger { display: inline-flex; }
   .sidebar {
     position: fixed;
@@ -737,8 +737,17 @@
   .grid-stats { grid-template-columns: 1fr; }
   .grid-2 { grid-template-columns: 1fr; }
   .grid-3 { grid-template-columns: 1fr; }
-  .topbar-title { font-size: 0.88rem; }
+  .topbar-title { font-size: 0.88rem; display: none; } /* Hide title on very small screens to save space */
   .role-label { display: none; }
+  .role-select { width: 80px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+  .user-profile-pill span.profile-text { display: none; }
+  .user-profile-pill span:last-child { display: none; } /* Hide the '👤 Profile' text */
+}
+
+@media (max-width: 480px) {
+  .topbar-breadcrumb { display: none; }
+  .role-badge-picker { padding: 4px 8px; }
+  .topbar-status { display: none; }
 }
 
 /* ==========================================================================
