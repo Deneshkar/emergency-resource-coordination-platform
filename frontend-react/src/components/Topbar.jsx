@@ -146,7 +146,7 @@ export default function Topbar({ onMenu, onToggle, collapsed }) {
             >
               {user?.fullName?.charAt(0) || "U"}
             </span>
-            <span style={{ fontWeight: 600, color: colors.text }}>
+            <span className="profile-text" style={{ fontWeight: 600, color: colors.text }}>
               {user?.fullName ? user.fullName.split(" ")[0] : activeRole}
             </span>
             <span style={{ fontSize: "11px", color: "var(--text-muted)", marginLeft: "2px" }}>👤 Profile</span>

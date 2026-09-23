@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from "sonner";
 import { incidentService } from "../services/incidentService";
 import { useAuth } from "../context/AuthContext";
 
@@ -81,6 +82,20 @@ function ReportIncident() {
         reporterContact: reporterContact.trim(),
         autoGeneratePlan,
       });
+
+      const notify = localStorage.getItem("ercp_notifications") === "true";
+      if (notify) {
+        toast.error(`🚨 New Incident: ${title.trim()}`, {
+          description: `Priority: ${priority} | Location: ${location.trim()}`
+        });
+        if (autoGeneratePlan && !isCitizen) {
+          setTimeout(() => {
+            toast.info("🤖 AI Agent analyzing incident...", {
+              description: "Generating response plan and resource estimates."
+            });
+          }, 800);
+        }
+      }
 
       if (isCitizen) {
         setMessage("Emergency report submitted successfully! Response coordinators are actively triaging your report.");

@@ -51,7 +51,7 @@
   align-items: center;
   gap: 14px;
   padding: 0 24px;
-  background: rgba(11, 15, 25, 0.85);
+  background: var(--bg-surface);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-subtle);
 }
@@ -157,7 +157,7 @@
   z-index: 90;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #0f1628 0%, #0b0f19 100%);
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-dark) 100%);
   border-right: 1px solid var(--border-subtle);
   transition: width 0.25s ease;
 }
@@ -429,7 +429,12 @@
 }
 
 /* ═══ Data Tables ═══ */
-.data-table { width: 100%; border-collapse: collapse; }
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.data-table { width: 100%; border-collapse: collapse; min-width: 600px; }
 
 .data-table thead th {
   padding: 10px 14px;
@@ -721,8 +726,8 @@
 
 @media (max-width: 768px) {
   .main-col::before { left: 0; }
-  .main-content, .app-main-content { padding: 18px 14px 32px; }
-  .topbar { padding: 0 14px; }
+  .main-content, .app-main-content { padding: 16px 10px 24px; }
+  .topbar { padding: 0 10px; gap: 8px; }
   .topbar-hamburger { display: inline-flex; }
   .sidebar {
     position: fixed;
@@ -737,8 +742,17 @@
   .grid-stats { grid-template-columns: 1fr; }
   .grid-2 { grid-template-columns: 1fr; }
   .grid-3 { grid-template-columns: 1fr; }
-  .topbar-title { font-size: 0.88rem; }
+  .topbar-title { font-size: 0.88rem; display: none; } /* Hide title on very small screens to save space */
   .role-label { display: none; }
+  .role-select { width: 80px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+  .user-profile-pill span.profile-text { display: none; }
+  .user-profile-pill span:last-child { display: none; } /* Hide the '👤 Profile' text */
+}
+
+@media (max-width: 480px) {
+  .topbar-breadcrumb { display: none; }
+  .role-badge-picker { padding: 4px 8px; }
+  .topbar-status { display: none; }
 }
 
 /* ==========================================================================
@@ -1105,3 +1119,9 @@
   margin-left: 6px;
 }
 
+
+@media (max-width: 480px) { .priority-grid { grid-template-columns: 1fr; } }
+
+@media (max-width: 768px) { .data-table { display: block; overflow-x: auto; white-space: nowrap; } }
+
+@media (max-width: 768px) { .btn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; } }

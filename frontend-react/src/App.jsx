@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation, Link } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { Toaster } from "sonner";
 
 import IncidentDashboard from "./pages/IncidentDashboard";
 import IncidentDetail from "./pages/IncidentDetail";
@@ -17,6 +18,7 @@ import ResourceList from "./pages/ResourceList";
 import ShelterList from "./pages/ShelterList";
 import InventoryList from "./pages/InventoryList";
 import SituationAnalysisView from "./pages/SituationAnalysisView";
+import Settings from "./pages/Settings";
 
 import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
@@ -25,6 +27,7 @@ import IncidentList from "./pages/IncidentList";
 import DispatchList from "./pages/DispatchList";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
 import { incidentService } from "./services/incidentService";
 
@@ -58,7 +61,7 @@ function AuthLayout({ children }) {
 
 function AppShell() {
   const location = useLocation();
-  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/forgot-password";
 
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -79,6 +82,14 @@ function AppShell() {
     };
   }, [isAuthPage]);
 
+  // Load global theme
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("ercp_theme");
+    if (savedTheme) {
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    }
+  }, []);
+
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
   // Standalone full-screen layout without Sidebar or Topbar for authentication pages
@@ -88,6 +99,7 @@ function AppShell() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </AuthLayout>
     );
@@ -192,6 +204,14 @@ function AppShell() {
             <Route path="/shelters" element={<ShelterList />} />
             <Route path="/inventory" element={<InventoryList />} />
             <Route path="/situation-analysis" element={<SituationAnalysisView />} />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute allowedRoles={["Coordinator", "Admin", "Citizen", "Volunteer"]}>
+                  <Settings />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Catch-all redirect */}
             <Route path="*" element={<Navigate to="/incidents" replace />} />
@@ -205,6 +225,7 @@ function AppShell() {
 function App() {
   return (
     <BrowserRouter>
+      <Toaster richColors position="top-right" />
       <AuthProvider>
         <AppShell />
       </AuthProvider>

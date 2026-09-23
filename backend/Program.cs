@@ -1,6 +1,5 @@
 using System.Text;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<IncidentPlannerService>();
 builder.Services.AddScoped<SituationAnalysisService>();
-builder.Services.AddScoped<DispatchValidationService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -32,11 +31,11 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Enter your raw JWT Bearer token only (without 'Bearer ' prefix).\r\n\r\nExample: \"eyJhbGciOi...\""
+        Description = "Enter 'Bearer' [space] and then your valid JWT token.\r\n\r\nExample: \"Bearer eyJhbGciOi...\""
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -82,59 +81,33 @@ builder.Services
             RoleClaimType = ClaimTypes.Role,
             NameClaimType = ClaimTypes.NameIdentifier
         };
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                string? authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
-                if (!string.IsNullOrEmpty(authHeader))
-                {
-                    var headerVal = authHeader.Trim();
-                    if (headerVal.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-                    {
-                        var token = headerVal.Substring("Bearer ".Length).Trim();
-                        if (token.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-                        {
-                            token = token.Substring("Bearer ".Length).Trim();
-                        }
-                        context.Token = token;
-                    }
-                }
-                return Task.CompletedTask;
-            },
-            OnAuthenticationFailed = context =>
-            {
-                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                var keyFp = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(jwtKey)))[..8];
-                logger.LogWarning("JWT Authentication failed for request {Path}: {Message} (Validation Key Fingerprint: {Fingerprint}, Length: {KeyLength})",
-                    context.Request.Path, context.Exception.Message, keyFp, jwtKey.Length);
-                return Task.CompletedTask;
-            },
-            OnTokenValidated = context =>
-            {
-                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                var userId = context.Principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var email = context.Principal?.FindFirst(ClaimTypes.Email)?.Value;
-                var roles = context.Principal?.Claims
-                    .Where(c => c.Type == ClaimTypes.Role || c.Type == "role")
-                    .Select(c => c.Value);
-                logger.LogInformation("JWT Token validated successfully for UserId: {UserId}, Email: {Email}, Roles: [{Roles}]",
-                    userId, email, string.Join(",", roles ?? Array.Empty<string>()));
-                return Task.CompletedTask;
-            },
-            OnChallenge = context =>
-            {
-                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                logger.LogWarning("JWT Authorization Challenge triggered for {Path}: Error={Error}, Description={Description}",
-                    context.Request.Path, context.Error, context.ErrorDescription);
-                return Task.CompletedTask;
-            }
-        };
     });
 
 // Check if PostgreSQL is accessible, otherwise fallback to InMemory Db for zero-config execution
 bool usePostgres = false;
-var connString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Support DATABASE_URL env var (Railway injects this automatically)
+// Format: postgresql://user:password@host:port/database
+static string? ConvertDatabaseUrl(string? databaseUrl)
+{
+    if (string.IsNullOrEmpty(databaseUrl)) return null;
+    try
+    {
+        var uri = new Uri(databaseUrl);
+        var userInfo = uri.UserInfo.Split(':');
+        var host = uri.Host;
+        var port = uri.Port > 0 ? uri.Port : 5432;
+        var database = uri.AbsolutePath.TrimStart('/');
+        var username = userInfo[0];
+        var password = userInfo.Length > 1 ? userInfo[1] : "";
+        return $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+    }
+    catch { return null; }
+}
+
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+var connString = ConvertDatabaseUrl(databaseUrl)
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
 if (!string.IsNullOrEmpty(connString))
 {
     try
@@ -164,9 +137,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add CORS configuration
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalDev", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+        policy.AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -198,27 +171,6 @@ using (var scope = app.Services.CreateScope())
                     ""UpdatedAt"" timestamp with time zone NOT NULL
                 );
                 CREATE UNIQUE INDEX IF NOT EXISTS ""IX_Users_Email"" ON ""Users"" (""Email"");
-            ");
-
-            // Student 4 — Validation/Safety Agent audit trail. EnsureCreated() is a no-op on
-            // existing databases, so create the table idempotently here (same pattern as Users
-            // above) to cover databases created before this entity existed.
-            context.Database.ExecuteSqlRaw(@"
-                CREATE TABLE IF NOT EXISTS ""ValidationAudits"" (
-                    ""Id"" integer GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
-                    ""DispatchId"" integer NOT NULL,
-                    ""IncidentId"" integer NULL,
-                    ""IsValid"" boolean NOT NULL,
-                    ""Recommendation"" text NOT NULL,
-                    ""ViolationsJson"" text NOT NULL,
-                    ""WarningsJson"" text NOT NULL,
-                    ""ChecksJson"" text NOT NULL,
-                    ""ValidatedBy"" text NOT NULL,
-                    ""DurationMs"" bigint NOT NULL,
-                    ""ValidatedAt"" timestamp with time zone NOT NULL,
-                    CONSTRAINT ""FK_ValidationAudits_Dispatches_DispatchId"" FOREIGN KEY (""DispatchId"") REFERENCES ""Dispatches"" (""Id"") ON DELETE CASCADE
-                );
-                CREATE INDEX IF NOT EXISTS ""IX_ValidationAudits_DispatchId"" ON ""ValidationAudits"" (""DispatchId"");
             ");
         }
 
@@ -403,14 +355,19 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure HTTP request pipeline
-if (app.Environment.IsDevelopment())
+// Enable Swagger in all environments (Railway production included)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ERCP API v1");
+    c.RoutePrefix = "swagger";
+});
 
-app.UseHttpsRedirection();
-app.UseCors("AllowLocalDev");
+// Health check endpoint for Railway
+app.MapGet("/api/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
+
+// Railway handles SSL at the edge — no HTTPS redirect needed
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

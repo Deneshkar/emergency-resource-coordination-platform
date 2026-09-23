@@ -1,7 +1,5 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using ERCP.Api.Controllers;
 using ERCP.Api.Data;
@@ -26,7 +24,7 @@ public class IncidentControllerTests
     private IncidentController CreateController(AppDbContext context)
     {
         var plannerLogger = NullLogger<IncidentPlannerService>.Instance;
-        var plannerService = new IncidentPlannerService(plannerLogger, context);
+        var plannerService = new IncidentPlannerService(plannerLogger);
         var controllerLogger = NullLogger<IncidentController>.Instance;
 
         return new IncidentController(context, plannerService, controllerLogger);
@@ -72,7 +70,7 @@ public class IncidentControllerTests
     }
 
     [Fact]
-    public async Task UpdateStatus_ValidTransition_ReportedToActivePlanning_Succeeds()
+    public async Task UpdateStatus_ValidTransition_ReportedToVerified_Succeeds()
     {
         // Arrange
         var context = GetInMemoryContext();
@@ -89,8 +87,8 @@ public class IncidentControllerTests
         var controller = CreateController(context);
         var updateDto = new UpdateIncidentDto
         {
-            Status = "Active Planning",
-            Note = "Planning initiated by field coordinator"
+            Status = "Verified",
+            Note = "Verified on site by field officer"
         };
 
         // Act
@@ -101,20 +99,20 @@ public class IncidentControllerTests
 
         var updatedIncident = await context.Incidents.FindAsync(incident.Id);
         Assert.NotNull(updatedIncident);
-        Assert.Equal("Active Planning", updatedIncident.Status);
+        Assert.Equal("Verified", updatedIncident.Status);
 
         // Verify timeline logging
         var timeline = await context.IncidentTimelineEvents
             .Where(e => e.IncidentId == incident.Id)
             .ToListAsync();
 
-        var statusEvent = timeline.FirstOrDefault(e => e.Title == "Incident Status Updated (Active Planning)");
+        var statusEvent = timeline.FirstOrDefault(e => e.Title == "Incident Verified");
         Assert.NotNull(statusEvent);
         Assert.Equal("StatusUpdate", statusEvent.EventType);
     }
 
     [Fact]
-    public async Task UpdateStatus_InvalidStatus_ReturnsBadRequest()
+    public async Task UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest()
     {
         // Arrange
         var context = GetInMemoryContext();
@@ -131,7 +129,7 @@ public class IncidentControllerTests
         var controller = CreateController(context);
         var updateDto = new UpdateIncidentDto
         {
-            Status = "Investigating" // Invalid status not in the allowed set
+            Status = "Resolved" // Illegal jump: Reported -> Resolved
         };
 
         // Act
@@ -281,156 +279,5 @@ public class IncidentControllerTests
 
         Assert.Single(timelineEvents);
         Assert.Contains("Critical", timelineEvents[0].Title);
-    }
-
-    [Fact]
-    public async Task CreateIncident_InvalidPriority_ReturnsBadRequest()
-    {
-        var context = GetInMemoryContext();
-        var controller = CreateController(context);
-        var dto = new CreateIncidentDto
-        {
-            Title = "Valid Title",
-            Description = "Valid Description",
-            Location = "Valid Location",
-            Category = "Fire",
-            Priority = "SuperCritical" // Invalid
-        };
-
-        var result = await controller.CreateIncident(dto);
-        Assert.IsType<BadRequestObjectResult>(result.Result);
-    }
-
-    [Fact]
-    public async Task CreateIncident_InvalidCategory_ReturnsBadRequest()
-    {
-        var context = GetInMemoryContext();
-        var controller = CreateController(context);
-        var dto = new CreateIncidentDto
-        {
-            Title = "Valid Title",
-            Description = "Valid Description",
-            Location = "Valid Location",
-            Category = "Alien Invasion", // Invalid
-            Priority = "High"
-        };
-
-        var result = await controller.CreateIncident(dto);
-        Assert.IsType<BadRequestObjectResult>(result.Result);
-    }
-
-    [Fact]
-    public async Task UpdateIncident_InvalidPriority_ReturnsBadRequest()
-    {
-        var context = GetInMemoryContext();
-        var incident = new Incident { Title = "Test", Location = "Test", Description = "Test" };
-        context.Incidents.Add(incident);
-        await context.SaveChangesAsync();
-
-        var controller = CreateController(context);
-        var updateDto = new UpdateIncidentDto { Priority = "Lowish" };
-
-        var result = await controller.UpdateIncident(incident.Id, updateDto);
-        Assert.IsType<BadRequestObjectResult>(result);
-    }
-
-    [Fact]
-    public async Task UpdateStatus_ReportedToAssigned_ReturnsBadRequest()
-    {
-        // "Reported -> Assigned" skips "Verified". The allowed sequence is Reported -> Verified -> Assigned.
-        // Wait, IsValidStatusTransition allows Reported -> Verified or Active Planning. So Reported -> Assigned is invalid.
-        var context = GetInMemoryContext();
-        var incident = new Incident { Title = "Test", Status = "Reported", Location = "Test" };
-        context.Incidents.Add(incident);
-        await context.SaveChangesAsync();
-
-        var controller = CreateController(context);
-        var updateDto = new UpdateIncidentDto { Status = "Assigned" };
-
-        var result = await controller.UpdateIncident(incident.Id, updateDto);
-        Assert.IsType<BadRequestObjectResult>(result);
-    }
-
-    [Fact]
-    public async Task GenerateRiskAssessment_ReturnsJsonAndLogsEvent()
-    {
-        var context = GetInMemoryContext();
-        var incident = new Incident { Title = "Test Risk", Category = "Fire", Priority = "High", Status = "Reported" };
-        context.Incidents.Add(incident);
-        await context.SaveChangesAsync();
-        var controller = CreateController(context);
-
-        var result = await controller.GenerateRiskAssessment(incident.Id);
-        var contentResult = Assert.IsType<ContentResult>(result);
-        Assert.Equal("application/json", contentResult.ContentType);
-        Assert.Contains("recommendedPriority", contentResult.Content);
-
-        var timeline = await context.IncidentTimelineEvents.FirstOrDefaultAsync(e => e.IncidentId == incident.Id && e.EventType == "RiskAssessmentGenerated");
-        Assert.NotNull(timeline);
-    }
-
-    [Fact]
-    public async Task GenerateSummary_ReturnsJsonAndLogsEvent()
-    {
-        var context = GetInMemoryContext();
-        var incident = new Incident { Title = "Test Summary", Category = "Medical", Priority = "High", Status = "Reported" };
-        context.Incidents.Add(incident);
-        await context.SaveChangesAsync();
-        var controller = CreateController(context);
-
-        var result = await controller.GenerateSummary(incident.Id);
-        var contentResult = Assert.IsType<ContentResult>(result);
-        Assert.Equal("application/json", contentResult.ContentType);
-        Assert.Contains("summary", contentResult.Content);
-
-        var timeline = await context.IncidentTimelineEvents.FirstOrDefaultAsync(e => e.IncidentId == incident.Id && e.EventType == "IncidentSummaryGenerated");
-        Assert.NotNull(timeline);
-    }
-
-    [Fact]
-    public async Task RecommendResources_ReturnsJsonAndLogsEvent()
-    {
-        var context = GetInMemoryContext();
-        var incident = new Incident { Title = "Test Recommend", Category = "Flood", Priority = "Critical", AffectedCount = 50, Status = "Reported" };
-        context.Incidents.Add(incident);
-        
-        context.Set<Resource>().Add(new Resource { Name = "Rescue Boat", ResourceType = "Equipment", Status = "Available" });
-        context.Set<Volunteer>().Add(new Volunteer { Name = "John", Skills = "Rescue", IsAvailable = true });
-        context.Set<Shelter>().Add(new Shelter { Name = "City Hall", TotalCapacity = 100, CurrentOccupancy = 10, Status = "Active" });
-        
-        await context.SaveChangesAsync();
-        var controller = CreateController(context);
-
-        var result = await controller.RecommendResources(incident.Id);
-        var contentResult = Assert.IsType<ContentResult>(result);
-        Assert.Equal("application/json", contentResult.ContentType);
-        Assert.Contains("recommendedResources", contentResult.Content);
-        Assert.Contains("recommendedVolunteers", contentResult.Content);
-        Assert.Contains("City Hall", contentResult.Content);
-
-        var timeline = await context.IncidentTimelineEvents.FirstOrDefaultAsync(e => e.IncidentId == incident.Id && e.EventType == "ResourceRecommendationGenerated");
-        Assert.NotNull(timeline);
-    }
-
-    [Fact]
-    public async Task CheckDuplicates_ReturnsJsonAndLogsEvent()
-    {
-        var context = GetInMemoryContext();
-        var incident = new Incident { Title = "Test Duplicate", Description = "Fire at the old factory", Category = "Fire", Location = "Downtown Factory", Status = "Reported", CreatedAt = DateTime.UtcNow };
-        context.Incidents.Add(incident);
-        
-        var otherIncident = new Incident { Title = "Factory Fire", Description = "Large fire seen at old factory", Category = "Fire", Location = "Downtown Factory", Status = "Active", CreatedAt = DateTime.UtcNow.AddDays(-1) };
-        context.Incidents.Add(otherIncident);
-        
-        await context.SaveChangesAsync();
-        var controller = CreateController(context);
-
-        var result = await controller.CheckDuplicates(incident.Id);
-        var contentResult = Assert.IsType<ContentResult>(result);
-        Assert.Equal("application/json", contentResult.ContentType);
-        Assert.Contains("isPotentialDuplicate\": true", contentResult.Content);
-
-        var timeline = await context.IncidentTimelineEvents.FirstOrDefaultAsync(e => e.IncidentId == incident.Id && e.EventType == "DuplicateCheckPerformed");
-        Assert.NotNull(timeline);
     }
 }

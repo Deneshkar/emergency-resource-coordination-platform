@@ -1,16 +1,38 @@
-# React + Vite
+# Emergency Resource Coordination Platform - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite frontend for the Emergency Resource Coordination Platform.
 
-Currently, two official plugins are available:
+## Environment Variables
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+For local development, create a `.env` file:
 
-## React Compiler
+```
+VITE_API_URL=http://localhost:5009
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+For production (Vercel), set the environment variable:
 
-## Expanding the ESLint configuration
+```
+VITE_API_URL=https://your-railway-backend-url.up.railway.app
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Development
+
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+```
+
+## Deployment (Vercel)
+
+1. Push code to GitHub
+2. Connect repo to Vercel
+3. Set root directory to `frontend-react`
+4. Add environment variable: `VITE_API_URL` = your Railway backend URL
+5. Deploy!

@@ -183,7 +183,11 @@ export default function Login() {
           </button>
         </form>
 
-        <div className="auth-footer">
+        <div className="auth-footer" style={{ marginTop: "1rem" }}>
+          <Link to="/forgot-password" style={{ color: "var(--text-muted)", fontSize: "0.85rem", textDecoration: "none", marginBottom: "0.5rem", display: "inline-block" }}>
+            Forgot Password?
+          </Link>
+          <br />
           <span>Don't have an account?</span>{" "}
           <Link to="/register" className="auth-link">
             Register as Citizen or Volunteer

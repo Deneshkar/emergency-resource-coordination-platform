@@ -278,6 +278,71 @@ public class IncidentPlannerService
         return true;
     }
 
+    private bool ValidateStructuredAiOutput(JsonElement root, int expectedIncidentId)
+    {
+        // 1. incidentId validation
+        int incId = 0;
+        if (root.TryGetProperty("incidentId", out var idProp))
+        {
+            idProp.TryGetInt32(out incId);
+        }
+        else if (root.TryGetProperty("incident_id", out var idPropSnake))
+        {
+            idPropSnake.TryGetInt32(out incId);
+        }
+
+        if (incId != expectedIncidentId && expectedIncidentId > 0 && incId > 0)
+        {
+            _logger.LogWarning("AI validation failed: incidentId mismatch. Expected {Expected}, got {Actual}", expectedIncidentId, incId);
+            return false;
+        }
+
+        // 2. priority present
+        var priority = root.TryGetProperty("priority", out var pProp) ? pProp.GetString() : null;
+        if (string.IsNullOrWhiteSpace(priority))
+        {
+            _logger.LogWarning("AI validation failed: priority property missing.");
+            return false;
+        }
+
+        // 3. objective present
+        var objective = root.TryGetProperty("objective", out var objProp) ? objProp.GetString() :
+                        (root.TryGetProperty("plan_title", out var ptProp) ? ptProp.GetString() : null);
+        if (string.IsNullOrWhiteSpace(objective))
+        {
+            _logger.LogWarning("AI validation failed: objective property missing.");
+            return false;
+        }
+
+        // 4. actions present
+        bool hasActions = (root.TryGetProperty("actions", out var actProp) && actProp.ValueKind == JsonValueKind.Array && actProp.GetArrayLength() > 0) ||
+                          (root.TryGetProperty("action_steps", out var stProp) && stProp.ValueKind == JsonValueKind.Array && stProp.GetArrayLength() > 0);
+        if (!hasActions)
+        {
+            _logger.LogWarning("AI validation failed: actions array missing or empty.");
+            return false;
+        }
+
+        // 5. status present
+        var status = root.TryGetProperty("status", out var statusProp) ? statusProp.GetString() : null;
+        if (string.IsNullOrWhiteSpace(status))
+        {
+            _logger.LogWarning("AI validation failed: status property missing.");
+            return false;
+        }
+
+        // 6. requiredResources present
+        bool hasResources = (root.TryGetProperty("requiredResources", out var resProp) && resProp.ValueKind == JsonValueKind.Array) ||
+                            (root.TryGetProperty("estimated_resources", out var resSnakeProp) && resSnakeProp.ValueKind == JsonValueKind.Array);
+        if (!hasResources)
+        {
+            _logger.LogWarning("AI validation failed: requiredResources array missing.");
+            return false;
+        }
+
+        return true;
+    }
+
     private IncidentPlan GenerateRuleBasedPlan(Incident incident, string? customDirectives, string? focusPhase)
     {
         var category = (incident.Category ?? "General").Trim();

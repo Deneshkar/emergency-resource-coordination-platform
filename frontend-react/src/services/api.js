@@ -113,24 +113,14 @@ export async function apiGet(endpoint, params = {}) {
   return res.json();
 }
 
-// ASP.NET ProblemDetails uses title/detail (not message) — surface those so UI
-// error states show the server's actual reason instead of a bare HTTP status.
-function toApiError(prefix, endpoint, status, body) {
-  const detail =
-    body?.message || body?.title
-      ? [body.message || body.title, body.detail].filter(Boolean).join(" — ")
-      : `HTTP ${status}`;
-  return new Error(`${prefix} ${endpoint} failed: ${detail}`);
-}
-
 export async function apiPost(endpoint, body = {}) {
   const res = await request(endpoint, {
     method: "POST",
     body: JSON.stringify(body),
   });
   if (!res.ok) {
-    const errorBody = await res.json().catch(() => null);
-    throw toApiError("POST", endpoint, res.status, errorBody);
+    const errorBody = await res.json().catch(() => ({ message: `HTTP ${res.status}` }));
+    throw new Error(errorBody.message || `POST ${endpoint} failed with status ${res.status}`);
   }
   return res.json();
 }
@@ -141,8 +131,8 @@ export async function apiPut(endpoint, body = {}) {
     body: JSON.stringify(body),
   });
   if (!res.ok) {
-    const errorBody = await res.json().catch(() => null);
-    throw toApiError("PUT", endpoint, res.status, errorBody);
+    const errorBody = await res.json().catch(() => ({ message: `HTTP ${res.status}` }));
+    throw new Error(errorBody.message || `PUT ${endpoint} failed with status ${res.status}`);
   }
   return res.status === 204 ? null : res.json().catch(() => null);
 }

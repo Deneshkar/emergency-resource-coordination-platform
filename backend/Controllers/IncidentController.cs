@@ -17,15 +17,18 @@ public class IncidentController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly IncidentPlannerService _plannerService;
+    private readonly IEmailService _emailService;
     private readonly ILogger<IncidentController> _logger;
 
     public IncidentController(
         AppDbContext context,
         IncidentPlannerService plannerService,
+        IEmailService emailService,
         ILogger<IncidentController> logger)
     {
         _context = context;
         _plannerService = plannerService;
+        _emailService = emailService;
         _logger = logger;
     }
 
@@ -179,23 +182,6 @@ public class IncidentController : ControllerBase
     [Authorize(Roles = "Citizen,Coordinator,Admin,Volunteer")]
     public async Task<ActionResult<IncidentDetailDto>> CreateIncident([FromBody] CreateIncidentDto dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Location) || string.IsNullOrWhiteSpace(dto.Description))
-        {
-            return BadRequest(new { message = "Title, Location, and Description are required." });
-        }
-
-        var category = string.IsNullOrWhiteSpace(dto.Category) ? "General Emergency" : dto.Category.Trim();
-        if (!IsValidCategory(category))
-        {
-            return BadRequest(new { message = $"Invalid Category: '{category}'. Valid categories are: Fire, Flood, Medical, Earthquake, Infrastructure, Chemical, General Emergency." });
-        }
-
-        var priority = string.IsNullOrWhiteSpace(dto.Priority) ? "Medium" : dto.Priority.Trim();
-        if (!IsValidPriority(priority))
-        {
-            return BadRequest(new { message = $"Invalid Priority: '{priority}'. Valid priorities are: Low, Medium, High, Critical." });
-        }
-
         var userEmail = User?.FindFirst(ClaimTypes.Email)?.Value
             ?? User?.FindFirst("email")?.Value
             ?? User?.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
@@ -254,6 +240,46 @@ public class IncidentController : ControllerBase
         }
 
         await _context.SaveChangesAsync();
+
+        // Send Email Notification (Fire and Forget)
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                var subject = $"🚨 CRITICAL EMERGENCY REPORTED: {incident.Title}";
+                var htmlBody = $@"
+                    <h2>New Emergency Reported</h2>
+                    <p><strong>Title:</strong> {incident.Title}</p>
+                    <p><strong>Category:</strong> {incident.Category}</p>
+                    <p><strong>Priority:</strong> {incident.Priority}</p>
+                    <p><strong>Location:</strong> {incident.Location}</p>
+                    <p><strong>Description:</strong> {incident.Description}</p>
+                    <p><strong>Reporter Contact:</strong> {incident.ReporterContact}</p>
+                    <hr/>
+                    <p>Log in to the Command Center to dispatch resources.</p>
+                ";
+
+                // Send to Admin
+                await _emailService.SendEmailAsync("admin@ercp.org", subject, htmlBody);
+
+                // Send to Reporter if they provided a valid email format
+                if (incident.ReporterContact.Contains("@"))
+                {
+                    var reporterSubject = "✅ Emergency Report Received";
+                    var reporterHtml = $@"
+                        <h2>Your report has been received</h2>
+                        <p>Thank you for reporting the incident: <strong>{incident.Title}</strong>.</p>
+                        <p>Authorities have been notified and resources will be dispatched if necessary.</p>
+                        <p>Stay safe!</p>
+                    ";
+                    await _emailService.SendEmailAsync(incident.ReporterContact, reporterSubject, reporterHtml);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Background email sending failed in CreateIncident.");
+            }
+        });
 
         return CreatedAtAction(nameof(GetIncident), new { id = incident.Id }, await GetIncidentDetailObj(incident.Id));
     }
@@ -770,35 +796,32 @@ public class IncidentController : ControllerBase
 
         var validStatuses = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "Reported", "Active Planning", "Dispatched", "Resolved", "Closed"
+            "Reported", "Verified", "Active Planning", "Assigned", "Dispatched", "Resolved", "Closed"
         };
 
         if (!validStatuses.Contains(target))
         {
-            errorMessage = $"Invalid status '{newStatus}'. Allowed status values are: Reported, Active Planning, Dispatched, Resolved, Closed.";
+            errorMessage = $"Invalid status '{newStatus}'. Allowed status values are: Reported, Verified, Assigned, Resolved, Closed.";
             return false;
         }
 
-        if (!validStatuses.Contains(current))
+        bool isValid = current.ToLowerInvariant() switch
         {
-            errorMessage = $"Current status '{currentStatus}' is not a recognized status. Allowed status values are: Reported, Active Planning, Dispatched, Resolved, Closed.";
-            return false;
+            "reported" => target.Equals("Verified", StringComparison.OrdinalIgnoreCase) ||
+                          target.Equals("Active Planning", StringComparison.OrdinalIgnoreCase),
+            "verified" or "active planning" => target.Equals("Assigned", StringComparison.OrdinalIgnoreCase) ||
+                                               target.Equals("Dispatched", StringComparison.OrdinalIgnoreCase) ||
+                                               target.Equals("Verified", StringComparison.OrdinalIgnoreCase),
+            "assigned" or "dispatched" => target.Equals("Resolved", StringComparison.OrdinalIgnoreCase),
+            "resolved" => target.Equals("Closed", StringComparison.OrdinalIgnoreCase),
+            _ => false
+        };
+
+        if (!isValid)
+        {
+            errorMessage = $"Invalid status transition from '{currentStatus}' to '{newStatus}'. Allowed workflow sequence: Reported -> Verified -> Assigned -> Resolved.";
         }
 
-        return true;
-    }
-
-    private static bool IsValidPriority(string? priority)
-    {
-        if (string.IsNullOrWhiteSpace(priority)) return false;
-        var valid = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Low", "Medium", "High", "Critical" };
-        return valid.Contains(priority.Trim());
-    }
-
-    private static bool IsValidCategory(string? category)
-    {
-        if (string.IsNullOrWhiteSpace(category)) return false;
-        var valid = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Fire", "Flood", "Medical", "Earthquake", "Infrastructure", "Chemical", "General Emergency" };
-        return valid.Contains(category.Trim());
+        return isValid;
     }
 }

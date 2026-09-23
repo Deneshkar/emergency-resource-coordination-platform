@@ -16,18 +16,12 @@ import argparse
 import os
 from datetime import datetime, timezone
 
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-
 # Explicit Allow-List of tools that the Coordinator/Planner Agent is permitted to execute
 ALLOWED_TOOLS = [
     "get_incident",
     "get_available_resources",
     "get_available_volunteers",
     "get_nearby_shelters",
-    "assess_incident_risk",
-    "summarize_incident",
-    "check_duplicate_incidents",
-    "recommend_resources",
     "create_response_plan"
 ]
 
@@ -62,17 +56,18 @@ class CoordinatorPlannerAgent:
         return {"status": "Executed", "tool": tool_name}
 
     def analyze_and_plan(self, incident_data):
-        incident_id = incident_data.get("incident_id") or incident_data.get("incidentId") or 0
+        incident_id = incident_data.get("incident_id", 0)
+        if not incident_id:
+            incident_id = incident_data.get("incidentId", 0)
+
         title = incident_data.get("title", "Emergency Incident")
         description = incident_data.get("description", "")
         location = incident_data.get("location", "Unknown Location")
         category = incident_data.get("category", "General Emergency")
         priority = incident_data.get("priority", "Medium")
         affected_count = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
-        
-        # Gather info (Agentic Step 1)
-        resources = incident_data.get("resources", [])
-        volunteers = incident_data.get("volunteers", [])
+        custom_directives = incident_data.get("custom_directives", "")
+        focus_phase = incident_data.get("focus_phase", "")
 
         # Reason & Plan (Agentic Step 2)
         reasoning_log = f"1. Observed {priority} priority {category} incident with {affected_count} affected.\n"
@@ -152,10 +147,23 @@ class CoordinatorPlannerAgent:
         if GEMINI_API_KEY:
             reasoning_log = "[LLM ENHANCED] " + reasoning_log
 
+        objective = f"Contain {category} emergency and protect affected civilians at {location}."
+
+        # Simplify list of actions for structured response
+        actions_list = [step["task"] for step in action_steps]
+        required_resources_list = [f"{res['quantity']} {res['unit']} ({res['resource_type']})" for res in estimated_resources]
+
         return {
             "agent_id": self.name,
             "timestamp": datetime.now(timezone.utc).isoformat(),
+            # Structured AI Output requirements
             "incidentId": incident_id,
+            "priority": priority,
+            "objective": objective,
+            "actions": actions_list,
+            "requiredResources": required_resources_list,
+            "status": "Generated",
+            # Additional detailed schema attributes for backend model mapping
             "incident_id": incident_id,
             "priority": priority,
             "objective": f"Contain {category} emergency and protect {affected_count} civilians.",
@@ -164,170 +172,9 @@ class CoordinatorPlannerAgent:
             "phase": "Immediate Containment",
             "actions": [step["task"] for step in action_steps],
             "action_steps": action_steps,
-            "requiredResources": [f"{needed_vehicles} Vehicles", f"{needed_vols} Volunteers"],
-            "estimated_resources": [
-                {"resourceType": "Vehicle", "quantity": needed_vehicles, "unit": "units", "description": "Response vehicles"},
-                {"resourceType": "Personnel", "quantity": needed_vols, "unit": "volunteers", "description": "Field support"}
-            ],
-            "status": "Generated",
-            "risk_assessment": " | ".join(risks) if risks else "Standard risk protocols apply.",
-            "reasoning": reasoning_log,
-            "risks": risks,
-            "constraints": constraints,
-            "requiresHumanApproval": True,
-            "suggestedAssignments": assignments,
-            "dispatchPlan": dispatch_plan
-        }
-
-    def generate_risk_assessment(self, incident_data):
-        incident_id = incident_data.get("incidentId") or incident_data.get("incident_id") or 0
-        title = incident_data.get("title", "")
-        category = incident_data.get("category", "")
-        priority = incident_data.get("priority", "Medium")
-        affected_count = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
-
-        risk_level, escalation_warning = self._evaluate_threat(category, priority, affected_count)
-        recommended_priority = "Critical" if "CRITICAL" in risk_level else ("High" if "MODERATE" in risk_level else "Medium")
-        immediate_action = recommended_priority in ["Critical", "High"]
-
-        return {
-            "incidentId": incident_id,
-            "recommendedPriority": recommended_priority,
-            "riskLevel": "High" if "CRITICAL" in risk_level else ("Medium" if "MODERATE" in risk_level else "Low"),
-            "reason": escalation_warning,
-            "immediateActionRequired": immediate_action
-        }
-
-    def generate_summary(self, incident_data):
-        incident_id = incident_data.get("incidentId") or incident_data.get("incident_id") or 0
-        desc = incident_data.get("description", "")
-        category = incident_data.get("category", "")
-        affected_count = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
-        priority = incident_data.get("priority", "Medium")
-
-        return {
-            "incidentId": incident_id,
-            "summary": f"{priority} priority {category} incident reported.",
-            "keyFacts": [
-                f"Category: {category}",
-                f"Description: {desc[:100]}...",
-                f"Affected: {affected_count}"
-            ],
-            "mainThreat": f"Potential escalation of {category} hazard.",
-            "immediateNeeds": ["Incident verification", "Initial resource dispatch"],
-            "urgency": priority
-        }
-
-    def recommend_resources(self, incident_data):
-        incident_id = incident_data.get("incidentId") or incident_data.get("incident_id") or 0
-        category = incident_data.get("category", "").lower()
-        priority = incident_data.get("priority", "Medium").upper()
-        affected_count = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
-        
-        avail_resources = incident_data.get("available_resources", [])
-        avail_vols = incident_data.get("available_volunteers", [])
-        avail_shelters = incident_data.get("available_shelters", [])
-
-        mult = 3 if priority == "CRITICAL" else (2 if priority == "HIGH" else 1)
-        needed_qty = max(1, (affected_count // 10) * mult)
-        
-        cat_map = {
-            "fire": ["Vehicle", "Equipment"],
-            "medical": ["Medical", "Vehicle"],
-            "flood": ["Equipment", "Vehicle"],
-            "chemical": ["Equipment", "Medical"]
-        }
-        target_types = cat_map.get(category, ["Vehicle", "Personnel", "Equipment"])
-
-        rec_res = []
-        for res in avail_resources:
-            r_type = res.get("resourceType", res.get("ResourceType", ""))
-            if r_type in target_types and needed_qty > 0:
-                rec_res.append({
-                    "resourceType": r_type,
-                    "quantity": 1,
-                    "reason": f"Matched {r_type} for {category} incident."
-                })
-                needed_qty -= 1
-            if needed_qty <= 0:
-                break
-                
-        rec_vol = []
-        matched_vols = []
-        for v in avail_vols:
-            skills = v.get("skills", v.get("Skills", "")).lower()
-            if category in skills or "rescue" in skills or "general" in skills or not skills:
-                matched_vols.append(v)
-        
-        if matched_vols:
-            vol_count = min(len(matched_vols), max(1, affected_count // 5))
-            rec_vol.append({
-                "count": vol_count,
-                "role": f"Support for {category.title()}",
-                "reason": f"Allocated {vol_count} volunteers with matching skills."
-            })
-
-        rec_shelt = None
-        if avail_shelters and affected_count > 0:
-            best_shelter = None
-            for s in avail_shelters:
-                cap = s.get("totalCapacity", s.get("TotalCapacity", 0))
-                occ = s.get("currentOccupancy", s.get("CurrentOccupancy", 0))
-                if cap - occ >= affected_count:
-                    best_shelter = s
-                    break
-            
-            if not best_shelter and avail_shelters:
-                best_shelter = avail_shelters[0]
-                
-            if best_shelter:
-                rec_shelt = {
-                    "name": best_shelter.get("name", best_shelter.get("Name", "Nearest Shelter")),
-                    "reason": f"Selected based on capacity for {affected_count} affected persons."
-                }
-
-        return {
-            "incidentId": incident_id,
-            "recommendedResources": rec_res,
-            "recommendedVolunteers": rec_vol,
-            "recommendedShelter": rec_shelt
-        }
-
-    def check_duplicates(self, incident_data):
-        target = incident_data.get("incident", {})
-        others = incident_data.get("other_incidents", [])
-
-        is_dup = False
-        similar = []
-
-        target_loc = target.get("location", "").lower()
-        target_cat = target.get("category", "").lower()
-        target_desc = target.get("description", target.get("title", "")).lower()
-
-        for o in others:
-            o_loc = o.get("location", "").lower()
-            o_cat = o.get("category", "").lower()
-            o_desc = o.get("description", o.get("title", "")).lower()
-            
-            loc_match = target_loc and o_loc and (target_loc in o_loc or o_loc in target_loc)
-            cat_match = target_cat == o_cat
-            
-            t_words = set(target_desc.split())
-            o_words = set(o_desc.split())
-            desc_overlap = len(t_words.intersection(o_words)) > 2 if t_words else False
-
-            if cat_match and (loc_match or desc_overlap):
-                is_dup = True
-                reason = "Matched category and "
-                reason += "similar location." if loc_match else "overlapping description."
-                similar.append({
-                    "incidentId": o.get("id"),
-                    "similarityReason": reason
-                })
-
-        return {
-            "isPotentialDuplicate": is_dup,
-            "similarIncidents": similar
+            "estimated_resources": estimated_resources,
+            "subagent_directives": agent_directives,
+            "allowed_tools": self.allowed_tools
         }
 
     def _evaluate_threat(self, category, priority, affected_count):

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5009/api"; // change port to match your backend
+const API_BASE_URL = `${import.meta.env.VITE_API_URL || "http://localhost:5009"}/api`;
 
 export const getVolunteers = async (search = "", isAvailable = null, page = 1, pageSize = 10) => {
   const params = { search, page, pageSize };
