@@ -105,10 +105,10 @@ class ResourceService {
 
   static Future<void> updateShelterOccupancy(int id, int occupancy) async {
     final token = await AuthService.getToken();
-    final response = await http.patch(
+    final response = await http.put(
       Uri.parse('${ApiConfig.baseUrl}/Shelters/$id/occupancy'),
       headers: ApiConfig.defaultHeaders(token),
-      body: json.encode(occupancy),
+      body: json.encode({'currentOccupancy': occupancy}),
     );
     if (response.statusCode != 200 && response.statusCode != 204) {
       throw Exception('Failed to update shelter occupancy');
@@ -156,10 +156,10 @@ class ResourceService {
 
   static Future<void> adjustStock(int id, int delta) async {
     final token = await AuthService.getToken();
-    final response = await http.patch(
-      Uri.parse('${ApiConfig.baseUrl}/Inventory/$id/adjust'),
+    final response = await http.put(
+      Uri.parse('${ApiConfig.baseUrl}/Inventory/$id/adjust-stock'),
       headers: ApiConfig.defaultHeaders(token),
-      body: json.encode(delta),
+      body: json.encode({'quantityAdjustment': delta}),
     );
     if (response.statusCode != 200 && response.statusCode != 204) {
       throw Exception('Failed to adjust stock');
