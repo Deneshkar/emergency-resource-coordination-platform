@@ -32,7 +32,7 @@ public class AuthControllerTests
         {
             {"Jwt:Issuer", "ERCP.Api"},
             {"Jwt:Audience", "ERCP.Clients"},
-            {"Jwt:SecretKey", "ERCP_EmergencyResourceCoordinationPlatform_SecretKey_2026!"}
+            {"Jwt:SecretKey", "DEVELOPMENT_ONLY_SecretKey_MustBeChangedInProduction!!"}
         };
 
         IConfiguration configuration = new ConfigurationBuilder()
@@ -265,7 +265,7 @@ public class AuthControllerTests
             ValidAudience = "ERCP.Clients",
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ERCP_EmergencyResourceCoordinationPlatform_SecretKey_2026!")),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("DEVELOPMENT_ONLY_SecretKey_MustBeChangedInProduction!!")),
             RoleClaimType = ClaimTypes.Role,
             NameClaimType = ClaimTypes.NameIdentifier
         };

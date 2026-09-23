@@ -152,6 +152,7 @@ class CoordinatorPlannerAgent:
         if GEMINI_API_KEY:
             reasoning_log = "[LLM ENHANCED] " + reasoning_log
 
+
         return {
             "agent_id": self.name,
             "timestamp": datetime.now(timezone.utc).isoformat(),
