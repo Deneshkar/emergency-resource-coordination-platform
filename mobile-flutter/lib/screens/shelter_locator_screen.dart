@@ -141,10 +141,17 @@ class _ShelterLocatorScreenState extends State<ShelterLocatorScreen> {
                               child: Icon(isFull ? Icons.hotel : Icons.night_shelter, color: Colors.white),
                             ),
                             title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(shelter.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                Text('📍 $estDistanceKm km', style: const TextStyle(fontSize: 12, color: Colors.teal, fontWeight: FontWeight.bold)),
+                                Expanded(
+                                  child: Text(
+                                    shelter.name,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                Text('📍 $estDistanceKm km', softWrap: false, style: const TextStyle(fontSize: 12, color: Colors.teal, fontWeight: FontWeight.bold)),
                               ],
                             ),
                             subtitle: Column(
@@ -156,8 +163,9 @@ class _ShelterLocatorScreenState extends State<ShelterLocatorScreen> {
                               ],
                             ),
                             trailing: Chip(
-                              label: Text(shelter.status),
+                              label: Text(shelter.status, style: const TextStyle(fontSize: 12)),
                               backgroundColor: isFull ? Colors.red.shade100 : Colors.green.shade100,
+                              visualDensity: VisualDensity.compact,
                             ),
                           ),
                       if (isCoordinator) ...[
