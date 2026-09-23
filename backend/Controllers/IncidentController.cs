@@ -17,15 +17,18 @@ public class IncidentController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly IncidentPlannerService _plannerService;
+    private readonly IEmailService _emailService;
     private readonly ILogger<IncidentController> _logger;
 
     public IncidentController(
         AppDbContext context,
         IncidentPlannerService plannerService,
+        IEmailService emailService,
         ILogger<IncidentController> logger)
     {
         _context = context;
         _plannerService = plannerService;
+        _emailService = emailService;
         _logger = logger;
     }
 
@@ -237,6 +240,46 @@ public class IncidentController : ControllerBase
         }
 
         await _context.SaveChangesAsync();
+
+        // Send Email Notification (Fire and Forget)
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                var subject = $"🚨 CRITICAL EMERGENCY REPORTED: {incident.Title}";
+                var htmlBody = $@"
+                    <h2>New Emergency Reported</h2>
+                    <p><strong>Title:</strong> {incident.Title}</p>
+                    <p><strong>Category:</strong> {incident.Category}</p>
+                    <p><strong>Priority:</strong> {incident.Priority}</p>
+                    <p><strong>Location:</strong> {incident.Location}</p>
+                    <p><strong>Description:</strong> {incident.Description}</p>
+                    <p><strong>Reporter Contact:</strong> {incident.ReporterContact}</p>
+                    <hr/>
+                    <p>Log in to the Command Center to dispatch resources.</p>
+                ";
+
+                // Send to Admin
+                await _emailService.SendEmailAsync("admin@ercp.org", subject, htmlBody);
+
+                // Send to Reporter if they provided a valid email format
+                if (incident.ReporterContact.Contains("@"))
+                {
+                    var reporterSubject = "✅ Emergency Report Received";
+                    var reporterHtml = $@"
+                        <h2>Your report has been received</h2>
+                        <p>Thank you for reporting the incident: <strong>{incident.Title}</strong>.</p>
+                        <p>Authorities have been notified and resources will be dispatched if necessary.</p>
+                        <p>Stay safe!</p>
+                    ";
+                    await _emailService.SendEmailAsync(incident.ReporterContact, reporterSubject, reporterHtml);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Background email sending failed in CreateIncident.");
+            }
+        });
 
         return CreatedAtAction(nameof(GetIncident), new { id = incident.Id }, await GetIncidentDetailObj(incident.Id));
     }
