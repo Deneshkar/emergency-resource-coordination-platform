@@ -11,7 +11,7 @@ void main() {
     );
 
     // Verify Title text exists
-    expect(find.text('Resource Availability'), findsOneWidget);
+    expect(find.text('Resource Fleet Status'), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }

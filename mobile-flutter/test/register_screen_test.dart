@@ -13,7 +13,7 @@ Future<void> _pumpRegister(WidgetTester tester) async {
   final auth = AuthProvider();
   await auth.init();
   await tester.pumpWidget(
-    ChangeNotifierProvider.value(
+    ChangeNotifierProvider<AuthProvider>.value(
       value: auth,
       child: const MaterialApp(home: RegisterScreen()),
     ),
