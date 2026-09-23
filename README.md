@@ -1,141 +1,109 @@
-# Emergency Resource Coordination Platform
+# Emergency Resource Coordination Platform (ERCP)
 
-SE3090 Assignment — Integrated Full-Stack and Agentic AI Application
+An Integrated Full-Stack and Agentic AI Application for real-time disaster management and emergency resource coordination. 
+
+This platform allows dispatchers, emergency coordinators, volunteers, and citizens to seamlessly collaborate during crises. It leverages **Agentic AI** to autonomously analyze incident telemetry, allocate resources, and draft tactical emergency response plans.
 
 ## Team
-
-- Student 1 — Incident Management + Coordinator/Planner Agent
-- Student 2 — Resource & Inventory Management + Situation Analysis Agent
-- Student 3 — Dispatch & Task Assignment + Resource Allocation Agent
-- Student 4 — Volunteer/Responder Management + Validation/Safety Agent
-
-## Structure
-
-- `/backend` — ASP.NET Core Web API (.NET 8)
-- `/frontend-react` — React + Vite web app
-- `/mobile-flutter` — Flutter mobile app
-- `/ai-agents` — Agentic AI subsystem
-- `/docs` — ER diagrams, ADRs, reports
+- **Student 1** — Incident Management + Coordinator/Planner Agent
+- **Student 2** — Resource & Inventory Management + Situation Analysis Agent
+- **Student 3** — Dispatch & Task Assignment + Resource Allocation Agent
+- **Student 4** — Volunteer/Responder Management + Validation/Safety Agent
 
 ---
 
-## 🚀 Local Development Setup (Team Members)
-
-### Prerequisites — ஒரே ஒரு தடவை install பண்ணணும்
-
-| Tool | Download Link | Check |
-|------|--------------|-------|
-| .NET 8 SDK | https://dotnet.microsoft.com/download/dotnet/8.0 | `dotnet --version` |
-| Node.js 18+ | https://nodejs.org | `node --version` |
-| Git | https://git-scm.com | `git --version` |
+## 🛠 Technology Stack
+- **Backend:** C# / ASP.NET Core 8 Web API
+- **Frontend:** React + Vite
+- **Mobile:** Flutter (in `/mobile-flutter`)
+- **Database:** PostgreSQL (with Entity Framework Core)
+- **AI Integration:** Python 3 + Google Gemini AI (via CLI Agents)
 
 ---
 
-### Step 1 — Clone the Repo
+## 👥 User Roles
+- **Citizen:** Can report new emergency incidents and view public safety updates.
+- **Volunteer:** Field responders who can update their availability, accept shifts, and receive tactical field assignments.
+- **Coordinator:** Operational commanders who dispatch resources, oversee incidents, and interact with the AI Planning Agent.
+- **Admin:** System administrators who manage users, roles, and global inventory.
 
+---
+
+## 🤖 Incident Intelligence & AI Agents
+
+The platform features an autonomous AI subsystem located in `/ai-agents` that integrates directly with the C# backend.
+- **Incident Summary & Risk Assessment:** Automatically analyzes citizen reports to gauge threat levels.
+- **Duplicate Detection:** Flags overlapping incident reports to prevent resource waste.
+- **Coordinator / Planner Agent:** An advanced ReAct agent that:
+  - Consumes live database telemetry (Available Vehicles, Available Volunteers).
+  - Drafts a structured 4-phase tactical dispatch plan.
+  - Mitigates hallucinations by verifying actual inventory availability.
+  - Submits the plan for **Human Approval** before any field dispatch occurs.
+
+---
+
+## 🚀 Setup Instructions
+
+### 1. Environment Configuration
+
+Copy the example configuration file and set your credentials:
 ```bash
-git clone https://github.com/Deneshkar/emergency-resource-coordination-platform.git
-cd emergency-resource-coordination-platform
+cp .env.example .env
 ```
+Inside your `.env` (or set as system environment variables):
+- `GEMINI_API_KEY`: Your Google Gemini API Key (required for AI features).
+- `Jwt__SecretKey`: A secure random string (minimum 32 characters) for token signing.
+- `ConnectionStrings__DefaultConnection`: Your PostgreSQL connection string. 
+  *(Note: If PostgreSQL is not available, the app safely falls back to an InMemory database).*
 
----
-
-### Step 2 — Run Backend
-
+### 2. Backend Setup
+1. Ensure **.NET 8 SDK** is installed.
+2. Navigate to the backend:
 ```bash
 cd backend
+```
+3. Run the application:
+```bash
 dotnet run
 ```
+The API and Swagger UI will be available at `http://localhost:5009/swagger`.
 
-✅ Backend starts at: **http://localhost:5009**  
-✅ Swagger UI at: **http://localhost:5009/swagger**  
-✅ No database setup needed — auto uses InMemory DB locally!
-
----
-
-### Step 3 — Run Frontend (new terminal)
-
+### 3. Frontend Setup
+1. Ensure **Node.js** (v18+) is installed.
+2. Navigate to the frontend directory:
 ```bash
 cd frontend-react
+```
+3. Install dependencies:
+```bash
 npm install
+```
+4. Start the Vite dev server:
+```bash
 npm run dev
 ```
 
-✅ Frontend starts at: **http://localhost:5173**
+### 4. Database Seeding & Testing
+If you are running the default **InMemory Database**, the database wipes on restart.
+To test the AI Coordinator properly:
+1. Log in or use Swagger to create at least one `Resource` (e.g. Fire Engine).
+2. Create at least one `Volunteer` and set their status to Available.
+3. Open an Incident and trigger the AI Coordinator Workbench to see real data flow into the Agent's reasoning logs.
 
----
-
-### 🔐 Demo Login Credentials
-
-| Role | Email | Password |
-|------|-------|----------|
-| 👑 Admin | admin@ercp.org | Admin@123 |
-| 🎯 Coordinator | coordinator@ercp.org | Coord@123 |
-| 🙋 Volunteer | volunteer@ercp.org | Vol@123 |
-| 👤 Citizen | citizen@ercp.org | Citizen@123 |
-
----
-
-### 📌 How It Works Locally vs Production
-
-| | Local (Your PC) | Production (Railway) |
-|--|----------------|---------------------|
-| **Database** | InMemory (auto) | PostgreSQL (Railway) |
-| **Data persists?** | ❌ Resets on restart | ✅ Permanent |
-| **Setup needed?** | None | Railway deploys auto |
-| **URL** | localhost:5173 | Railway domain |
-
-> **Note:** No `.env` file needed locally. The backend auto-detects the database — if Railway PostgreSQL is reachable, it uses that; otherwise it falls back to InMemory automatically.
-
----
-
-### 🌿 Git Branching Strategy
-
-Each team member works on their own feature branch:
-
+### 5. Running Automated Tests
+The backend has comprehensive xUnit test coverage ensuring core validation, agent payload mapping, and JWT authorization rules are enforced.
 ```bash
-# Before starting work — pull latest
-git pull origin main
-
-# Switch to your branch
-git checkout <your-branch-name>
-
-# After changes — push
-git add .
-git commit -m "Your message"
-git push
+dotnet test backend-tests/ERCP.Api.Tests.csproj
 ```
 
 ---
 
-### ⚙️ Railway Production Deployment
-
-Production is auto-deployed via Railway when code is pushed.
-
-**Environment Variables (set in Railway Dashboard):**
-```
-DATABASE_URL = ${{Postgres.DATABASE_URL}}   ← auto from Railway Postgres
-ASPNETCORE_ENVIRONMENT = Production
-ASPNETCORE_URLS = http://0.0.0.0:${{PORT}}
-```
-
-These are already configured in `backend/railway.toml` — no manual action needed.
+## 🔐 Authentication & JWT
+The system uses JWT (JSON Web Tokens) for role-based authorization.
+- When testing via **Swagger UI**, simply paste your raw token into the Authorize prompt (the `Bearer ` prefix is handled automatically).
+- The `VolunteersController` and specific operational endpoints enforce `[Authorize(Roles = "Coordinator,Admin,Volunteer")]`.
 
 ---
 
-### ❓ Troubleshooting
-
-**Backend port conflict?**
-```bash
-# Change port in backend/Properties/launchSettings.json
-```
-
-**Frontend can't reach backend?**
-- Make sure backend is running on port 5009
-- Check `frontend-react/src` for API base URL config
-
-**node_modules missing?**
-```bash
-cd frontend-react
-npm install
-```
+## ⚠️ Security Notice
+The `appsettings.json` file contains a dummy development JWT key and database password. **Never use these default placeholders in production.** Always override them via Environment Variables. Git history prior to Finalization may contain development credentials; these should be considered compromised and rotated if applicable to any real infrastructure.

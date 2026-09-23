@@ -30,7 +30,7 @@ public class AuthControllerTests
         {
             {"Jwt:Issuer", "ERCP.Api"},
             {"Jwt:Audience", "ERCP.Clients"},
-            {"Jwt:SecretKey", "ERCP_EmergencyResourceCoordinationPlatform_SecretKey_2026!"}
+            {"Jwt:SecretKey", "DEVELOPMENT_ONLY_SecretKey_MustBeChangedInProduction!!"}
         };
 
         IConfiguration configuration = new ConfigurationBuilder()
@@ -220,5 +220,57 @@ public class AuthControllerTests
         Assert.Equal("alice@example.com", profile.Email);
         Assert.Equal("Coordinator", profile.Role);
         Assert.Equal("Alice Walker", profile.FullName);
+    }
+
+    [Theory]
+    [InlineData("Admin")]
+    [InlineData("Citizen")]
+    [InlineData("Coordinator")]
+    [InlineData("Volunteer")]
+    public async Task GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim(string roleName)
+    {
+        // Arrange
+        var context = GetInMemoryContext();
+        var (_, authService, _) = CreateController(context);
+
+        var regResult = await authService.RegisterAsync(new RegisterRequestDto
+        {
+            FullName = $"Test User {roleName}",
+            Email = $"{roleName.ToLower()}@test.local",
+            Password = "Password123!",
+            Role = roleName
+        });
+
+        Assert.True(regResult.Success);
+        var tokenString = regResult.Response!.Token;
+        Assert.NotEmpty(tokenString);
+
+        // Act - Read token claims using JwtSecurityTokenHandler
+        var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+        var jwtToken = tokenHandler.ReadJwtToken(tokenString);
+
+        // Assert role claim presence and uniqueness
+        var roleClaims = jwtToken.Claims.Where(c => c.Type == "role" || c.Type == ClaimTypes.Role).ToList();
+        Assert.Single(roleClaims);
+        Assert.Equal(roleName, roleClaims[0].Value);
+
+        // Act & Assert - Validate token with TokenValidationParameters
+        var validationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = "ERCP.Api",
+            ValidateAudience = true,
+            ValidAudience = "ERCP.Clients",
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("DEVELOPMENT_ONLY_SecretKey_MustBeChangedInProduction!!")),
+            RoleClaimType = ClaimTypes.Role,
+            NameClaimType = ClaimTypes.NameIdentifier
+        };
+
+        var principal = tokenHandler.ValidateToken(tokenString, validationParameters, out var validatedToken);
+        Assert.NotNull(principal);
+        Assert.NotNull(validatedToken);
+        Assert.True(principal.IsInRole(roleName));
     }
 }
