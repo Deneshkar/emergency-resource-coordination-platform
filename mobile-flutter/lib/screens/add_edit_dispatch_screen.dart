@@ -67,7 +67,7 @@ class _AddEditDispatchScreenState extends State<AddEditDispatchScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _priority,
+                initialValue: _priority,
                 decoration: const InputDecoration(labelText: 'Priority', border: OutlineInputBorder()),
                 items: const [
                   DropdownMenuItem(value: 'High', child: Text('High')),
@@ -78,7 +78,7 @@ class _AddEditDispatchScreenState extends State<AddEditDispatchScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _status,
+                initialValue: _status,
                 decoration: const InputDecoration(labelText: 'Status', border: OutlineInputBorder()),
                 items: const [
                   DropdownMenuItem(value: 'Proposed', child: Text('Proposed')),

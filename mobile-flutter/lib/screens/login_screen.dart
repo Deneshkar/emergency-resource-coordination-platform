@@ -58,7 +58,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: Container(
@@ -86,11 +85,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 10,
                             spreadRadius: 2,
                           ),
@@ -127,9 +126,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Container(
                           padding: const EdgeInsets.all(24),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.08),
+                            color: Colors.white.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.white.withOpacity(0.2)),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
                           ),
                           child: Form(
                             key: _formKey,
@@ -140,9 +139,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Container(
                                     padding: const EdgeInsets.all(10),
                                     decoration: BoxDecoration(
-                                      color: Colors.redAccent.withOpacity(0.2),
+                                      color: Colors.redAccent.withValues(alpha: 0.2),
                                       borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(color: Colors.redAccent.withOpacity(0.5)),
+                                      border: Border.all(color: Colors.redAccent.withValues(alpha: 0.5)),
                                     ),
                                     child: Row(
                                       children: [
@@ -168,11 +167,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   textInputAction: TextInputAction.next,
                                   decoration: InputDecoration(
                                     labelText: "Email Address",
-                                    labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
-                                    prefixIcon: Icon(CupertinoIcons.mail, color: Colors.white.withOpacity(0.7)),
+                                    labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+                                    prefixIcon: Icon(CupertinoIcons.mail, color: Colors.white.withValues(alpha: 0.7)),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+                                      borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -187,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       borderSide: const BorderSide(color: Colors.redAccent),
                                     ),
                                     filled: true,
-                                    fillColor: Colors.black.withOpacity(0.2),
+                                    fillColor: Colors.black.withValues(alpha: 0.2),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.trim().isEmpty) return "Required";
@@ -205,18 +204,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onFieldSubmitted: (_) => _handleLogin(),
                                   decoration: InputDecoration(
                                     labelText: "Password",
-                                    labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
-                                    prefixIcon: Icon(CupertinoIcons.lock, color: Colors.white.withOpacity(0.7)),
+                                    labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+                                    prefixIcon: Icon(CupertinoIcons.lock, color: Colors.white.withValues(alpha: 0.7)),
                                     suffixIcon: IconButton(
                                       icon: Icon(
                                         _obscurePassword ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
-                                        color: Colors.white.withOpacity(0.7),
+                                        color: Colors.white.withValues(alpha: 0.7),
                                       ),
                                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+                                      borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -231,7 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       borderSide: const BorderSide(color: Colors.redAccent),
                                     ),
                                     filled: true,
-                                    fillColor: Colors.black.withOpacity(0.2),
+                                    fillColor: Colors.black.withValues(alpha: 0.2),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) return "Required";
@@ -327,9 +326,9 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withOpacity(0.2)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

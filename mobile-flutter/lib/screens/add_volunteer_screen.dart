@@ -101,7 +101,7 @@ class _AddVolunteerScreenState extends State<AddVolunteerScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _selectedSkills,
+                initialValue: _selectedSkills,
                 decoration: const InputDecoration(
                   labelText: 'Primary Skills',
                   border: OutlineInputBorder(),
