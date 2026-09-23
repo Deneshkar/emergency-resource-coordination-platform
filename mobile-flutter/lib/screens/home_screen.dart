@@ -9,6 +9,8 @@ import 'inventory_overview_screen.dart';
 import 'profile_screen.dart';
 import 'select_profile_screen.dart';
 import 'register_screen.dart';
+import 'report_incident_screen.dart';
+import 'incident_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -159,6 +161,41 @@ class _HomeTab extends StatelessWidget {
               const SizedBox(height: 24),
             ],
             
+            const Text(
+              "EMERGENCY REPORTING (CITIZEN)",
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.warning_amber_rounded),
+              label: const Text("REPORT EMERGENCY"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red.shade700,
+                foregroundColor: Colors.white,
+                minimumSize: const Size.fromHeight(56),
+                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ReportIncidentScreen()),
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.list_alt),
+              label: const Text("View Active Incidents Feed"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepOrange.shade600,
+                foregroundColor: Colors.white,
+                minimumSize: const Size.fromHeight(46),
+              ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const IncidentListScreen()),
+              ),
+            ),
+            const SizedBox(height: 32),
+
             const Text(
               "RESPONDER & IDENTITY",
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey),
