@@ -1,43 +1,28 @@
 """
 Situation Analysis Agent (Student 2 - SE3090 Team Project)
 Domain: Emergency Resource Coordination Platform
-LLM Integration: Google Gemini API (gemini-3.5-flash / gemini-2.5-flash / gemini-1.5-flash)
 
 Role: Analyzes incident severity/urgency against current resource inventory and shelter capacity.
 Input: Incident Data + Resource/Inventory/Shelter Data
-Output: Structured Urgency Assessment & Gap Analysis JSON + LLM Tactical Guidance
+Output: Structured Urgency Assessment & Gap Analysis JSON
 """
 
-import os
 import json
+import os
 import urllib.request
 import urllib.error
 from typing import Dict, List, Any
 
-# Load environment variables from .env if available
-def load_env():
-    env_path = os.path.join(os.path.dirname(__file__), ".env")
-    if os.path.exists(env_path):
-        with open(env_path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    key, val = line.split("=", 1)
-                    os.environ.setdefault(key.strip(), val.strip())
-
-load_env()
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 class SituationAnalysisAgent:
     def __init__(self, agent_id: str = "agent-situation-analysis-02"):
         self.agent_id = agent_id
         self.role = "Situation Analysis Agent"
-        self.api_key = os.getenv("GOOGLE_API_KEY", "")
-        self.model = os.getenv("CHAT_MODEL", "gemini-2.5-flash")
         self.allowed_tools = [
             "calculate_urgency_score",
             "evaluate_inventory_deficiencies",
-            "find_nearest_available_shelter",
-            "generate_gemini_tactical_guidance"
+            "find_nearest_available_shelter"
         ]
 
     def calculate_urgency_score(self, incident: Dict[str, Any]) -> Dict[str, Any]:
@@ -93,50 +78,6 @@ class SituationAnalysisAgent:
             return suitable[0]
         return None
 
-    def generate_gemini_tactical_guidance(self, incident: Dict[str, Any], score_res: Dict[str, Any], deficits: List[str], shelter: Dict[str, Any]) -> str:
-        """Invokes Google Gemini API to generate real-time AI tactical guidance."""
-        if not self.api_key:
-            return "Gemini API key missing. Defaulting to deterministic guidance."
-
-        prompt_text = (
-            f"You are the Situation Analysis AI Agent for an Emergency Resource Coordination Platform.\n"
-            f"Incident: {incident.get('title')} - {incident.get('description')} (Priority: {incident.get('priority')})\n"
-            f"Assessed Urgency Score: {score_res['urgency_score']}/100 ({score_res['urgency_level']})\n"
-            f"Deficit Categories: {', '.join(deficits) if deficits else 'None'}\n"
-            f"Nearest Shelter: {shelter.get('name', 'None') if shelter else 'None'}\n"
-            f"Provide 2-3 concise, bulleted tactical deployment recommendations for emergency responders."
-        )
-
-        # Candidate models to try in order
-        candidate_models = [self.model, "gemini-2.5-flash", "gemini-1.5-flash"]
-        
-        for m in candidate_models:
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={self.api_key}"
-            payload = {
-                "contents": [{"parts": [{"text": prompt_text}]}]
-            }
-            try:
-                req = urllib.request.Request(
-                    url,
-                    data=json.dumps(payload).encode("utf-8"),
-                    headers={"Content-Type": "application/json"}
-                )
-                with urllib.request.urlopen(req, timeout=10) as response:
-                    res_body = json.loads(response.read().decode("utf-8"))
-                    candidates = res_body.get("candidates", [])
-                    if candidates:
-                        parts = candidates[0].get("content", {}).get("parts", [])
-                        if parts:
-                            return parts[0].get("text", "").strip()
-            except Exception as err:
-                continue
-
-        return (
-            "1. Deploy rapid medical triage team to the incident perimeter.\n"
-            "2. Establish emergency supply line for food/water rations.\n"
-            "3. Prepare shelter transport shuttle."
-        )
-
     def run_assessment(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         incident = payload.get("incident", {})
         inventory = payload.get("inventory", [])
@@ -157,7 +98,47 @@ class SituationAnalysisAgent:
             f"{deficit_msg} {shelter_msg}"
         )
 
-        tactical_guidance = self.generate_gemini_tactical_guidance(incident, score_res, deficits, best_shelter)
+        llm_enhanced = False
+
+        if GEMINI_API_KEY:
+            try:
+                # LLM Integration
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+                
+                prompt = (
+                    f"Analyze this emergency incident: {incident.get('title')} - {incident.get('description')}. "
+                    f"Priority reported: {incident.get('priority')}. "
+                    "Return ONLY a valid JSON object with: "
+                    "'urgency_score' (integer 0-100), "
+                    "'urgency_level' (string: Critical, High, Medium, Low), "
+                    "'ai_insight' (a short 1-sentence tactical summary)."
+                )
+                
+                payload = json.dumps({
+                    "contents": [{"parts": [{"text": prompt}]}]
+                }).encode('utf-8')
+                
+                req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json'})
+                with urllib.request.urlopen(req, timeout=10) as response:
+                    res_body = response.read().decode('utf-8')
+                    res_json = json.loads(res_body)
+                    text_content = res_json['candidates'][0]['content']['parts'][0]['text']
+                    
+                    # Clean markdown code blocks if any
+                    if text_content.startswith('```json'):
+                        text_content = text_content[7:-3]
+                    elif text_content.startswith('```'):
+                        text_content = text_content[3:-3]
+                        
+                    llm_data = json.loads(text_content.strip())
+                    
+                    score_res["urgency_score"] = llm_data.get("urgency_score", score_res["urgency_score"])
+                    score_res["urgency_level"] = llm_data.get("urgency_level", score_res["urgency_level"])
+                    summary = f"[LLM ENHANCED] AI Insight: {llm_data.get('ai_insight', 'Analyzed.')} " + summary
+                    llm_enhanced = True
+            except Exception as e:
+                # Fallback to deterministic logic on any failure
+                print(f"[Warning] Gemini API failed, falling back to deterministic rules. Error: {e}")
 
         return {
             "agent_id": self.agent_id,
@@ -167,8 +148,7 @@ class SituationAnalysisAgent:
             "analysis_summary": summary,
             "nearest_shelter": best_shelter,
             "resource_deficiencies": deficiencies,
-            "gemini_model_used": self.model,
-            "ai_tactical_guidance": tactical_guidance,
+            "llm_enhanced": llm_enhanced,
             "status": "COMPLETED"
         }
 
