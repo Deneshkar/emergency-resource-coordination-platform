@@ -3,6 +3,7 @@ import StatusBadge from "../components/StatusBadge";
 import Modal, { FormField } from "../components/Modal";
 import ValidationPanel from "../components/ValidationPanel";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "sonner";
 import { getDispatches, createDispatch, updateDispatchStatus } from "../services/dispatchService";
 import { getIncidents } from "../services/incidentService";
 import { getVolunteers } from "../services/volunteerService";
@@ -63,26 +64,41 @@ export default function DispatchList() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    await createDispatch({ incidentId: parseInt(form.incidentId), priority: form.priority });
-    setForm({ incidentId: "", priority: "Medium" });
-    setShowCreate(false);
-    fetchData();
+    try {
+      await createDispatch({ incidentId: parseInt(form.incidentId), priority: form.priority });
+      setForm({ incidentId: "", priority: "Medium" });
+      setShowCreate(false);
+      toast.success("Dispatch created successfully");
+      fetchData();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to create dispatch.");
+    }
   };
 
   const handleStatusChange = async (id, status) => {
-    await updateDispatchStatus(id, status);
-    fetchData();
+    try {
+      await updateDispatchStatus(id, status);
+      toast.success(`Dispatch status updated to ${status}`);
+      fetchData();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to update dispatch status.");
+    }
   };
 
   const handleCreateTask = async (e) => {
     e.preventDefault();
-    await createDispatchTask(showTask.id, {
-      volunteerId: taskForm.volunteerId,
-      taskType: taskForm.taskType,
-    });
-    setTaskForm({ volunteerId: "", taskType: "" });
-    setShowTask(null);
-    fetchData();
+    try {
+      await createDispatchTask(showTask.id, {
+        volunteerId: taskForm.volunteerId,
+        taskType: taskForm.taskType,
+      });
+      setTaskForm({ volunteerId: "", taskType: "" });
+      setShowTask(null);
+      toast.success("Task assigned successfully");
+      fetchData();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to assign task.");
+    }
   };
 
   const statusFlow = ["Proposed", "PendingApproval", "Approved", "Assigned", "InProgress", "Completed"];

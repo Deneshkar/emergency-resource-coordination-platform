@@ -20,7 +20,7 @@ public class DispatchesController : ControllerBase
     // POST: api/Dispatches
     [HttpPost]
     public async Task<ActionResult<DispatchResponseDto>> Create(
-        CreateDispatchDto dto)
+        [FromBody] CreateDispatchDto dto)
     {
         var dispatch = new Dispatch
         {
@@ -76,7 +76,7 @@ public class DispatchesController : ControllerBase
     [HttpPut("{id}/status")]
     public async Task<IActionResult> UpdateStatus(
         int id,
-        UpdateDispatchStatusDto dto)
+        [FromBody] UpdateDispatchStatusDto dto)
     {
         var dispatch = await _context.Dispatches
             .FirstOrDefaultAsync(d => d.Id == id);
@@ -124,7 +124,7 @@ public class DispatchesController : ControllerBase
     [HttpPost("{id}/tasks")]
     public async Task<ActionResult> CreateTask(
         int id,
-        CreateDispatchTaskDto dto)
+        [FromBody] CreateDispatchTaskDto dto)
     {
         var dispatch = await _context.Dispatches
             .FirstOrDefaultAsync(d => d.Id == id);

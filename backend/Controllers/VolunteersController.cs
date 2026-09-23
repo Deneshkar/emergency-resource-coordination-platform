@@ -23,7 +23,7 @@ public class VolunteersController : ControllerBase
     // POST /api/volunteers
     [HttpPost]
     [Authorize(Roles = "Coordinator,Admin")]
-    public async Task<ActionResult<VolunteerResponseDto>> Create(CreateVolunteerDto dto)
+    public async Task<ActionResult<VolunteerResponseDto>> Create([FromBody] CreateVolunteerDto dto)
     {
         var volunteer = new Volunteer
         {
@@ -110,7 +110,7 @@ public class VolunteersController : ControllerBase
 
     // PUT /api/volunteers/{id}/availability
     [HttpPut("{id}/availability")]
-    public async Task<IActionResult> UpdateAvailability(Guid id, UpdateAvailabilityDto dto)
+    public async Task<IActionResult> UpdateAvailability(Guid id, [FromBody] UpdateAvailabilityDto dto)
     {
         var volunteer = await _context.Volunteers.FindAsync(id);
         if (volunteer == null) return NotFound();
@@ -160,7 +160,7 @@ public class VolunteersController : ControllerBase
     // POST /api/volunteers/{id}/shifts
     [HttpPost("{id}/shifts")]
     [Authorize(Roles = "Coordinator,Admin")]
-    public async Task<ActionResult<Shift>> CreateShift(Guid id, CreateShiftDto dto)
+    public async Task<ActionResult<Shift>> CreateShift(Guid id, [FromBody] CreateShiftDto dto)
     {
         var exists = await _context.Volunteers.AnyAsync(v => v.Id == id);
         if (!exists) return NotFound();

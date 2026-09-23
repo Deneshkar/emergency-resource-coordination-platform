@@ -81,12 +81,15 @@ function IncidentDetail() {
     e.preventDefault();
     try {
       setUpdatingStatus(true);
-      await incidentService.updateIncident(id, {
+      const payload = {
         status: newStatus,
-        priority: newPriority,
-        assignedCoordinator: newAssignedCoordinator,
         note: newNote,
-      });
+      };
+      if (!isVolunteer) {
+        payload.priority = newPriority;
+        payload.assignedCoordinator = newAssignedCoordinator;
+      }
+      await incidentService.updateIncident(id, payload);
       setNewNote("");
       await loadIncident();
     } catch (err) {
