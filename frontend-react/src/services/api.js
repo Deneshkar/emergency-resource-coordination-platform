@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_HOST = "http://localhost:5009";
+const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+const API_HOST = import.meta.env.VITE_API_URL || (isLocalhost ? "http://localhost:5009" : "https://ercp-backend-production.up.railway.app");
 const API_BASE = `${API_HOST}/api`;
 
 export const getStoredToken = () => {
