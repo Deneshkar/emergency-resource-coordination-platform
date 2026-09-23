@@ -1119,3 +1119,5 @@
   margin-left: 6px;
 }
 
+
+@media (max-width: 480px) { .priority-grid { grid-template-columns: 1fr; } }
