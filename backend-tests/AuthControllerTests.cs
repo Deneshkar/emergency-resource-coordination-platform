@@ -1,9 +1,11 @@
 using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.IdentityModel.Tokens;
 using ERCP.Api.Controllers;
 using ERCP.Api.Data;
 using ERCP.Api.DTOs;
@@ -24,6 +26,11 @@ public class AuthControllerTests
         return new AppDbContext(options);
     }
 
+    private class DummyEmailService : IEmailService
+    {
+        public Task SendEmailAsync(string to, string subject, string htmlBody) => Task.CompletedTask;
+    }
+
     private (AuthController Controller, AuthService AuthService, AppDbContext Context) CreateController(AppDbContext context)
     {
         var inMemorySettings = new Dictionary<string, string?>
@@ -40,7 +47,7 @@ public class AuthControllerTests
         var authLogger = NullLogger<AuthService>.Instance;
         var controllerLogger = NullLogger<AuthController>.Instance;
 
-        var authService = new AuthService(context, configuration, authLogger);
+        var authService = new AuthService(context, configuration, authLogger, new DummyEmailService());
         var controller = new AuthController(authService, context, controllerLogger);
 
         return (controller, authService, context);
@@ -249,9 +256,9 @@ public class AuthControllerTests
         var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
         var jwtToken = tokenHandler.ReadJwtToken(tokenString);
 
-        // Assert role claim presence and uniqueness
+        // Assert role claim presence and uniqueness (two claims are added: standard ClaimTypes.Role and custom lowercase "role")
         var roleClaims = jwtToken.Claims.Where(c => c.Type == "role" || c.Type == ClaimTypes.Role).ToList();
-        Assert.Single(roleClaims);
+        Assert.Equal(2, roleClaims.Count);
         Assert.Equal(roleName, roleClaims[0].Value);
 
         // Act & Assert - Validate token with TokenValidationParameters

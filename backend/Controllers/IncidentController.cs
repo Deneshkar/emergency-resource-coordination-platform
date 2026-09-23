@@ -189,6 +189,15 @@ public class IncidentController : ControllerBase
             ? (userEmail ?? "Community Reporter")
             : dto.ReporterContact;
 
+        var category = string.IsNullOrWhiteSpace(dto.Category) ? "General Emergency" : dto.Category.Trim();
+        var priority = string.IsNullOrWhiteSpace(dto.Priority) ? "Medium" : dto.Priority.Trim();
+
+        if (!IsValidCategory(category))
+            return BadRequest(new { message = $"Invalid Category: '{category}'. Valid categories are: Fire, Flood, Medical, Earthquake, Infrastructure, Chemical, General Emergency." });
+            
+        if (!IsValidPriority(priority))
+            return BadRequest(new { message = $"Invalid Priority: '{priority}'. Valid priorities are: Low, Medium, High, Critical." });
+
         var incident = new Incident
         {
             Title = dto.Title.Trim(),
@@ -823,5 +832,17 @@ public class IncidentController : ControllerBase
         }
 
         return isValid;
+    }
+
+    private static bool IsValidCategory(string category)
+    {
+        var validCategories = new[] { "Fire", "Flood", "Medical", "Earthquake", "Infrastructure", "Chemical", "General Emergency" };
+        return validCategories.Contains(category, StringComparer.OrdinalIgnoreCase);
+    }
+
+    private static bool IsValidPriority(string priority)
+    {
+        var validPriorities = new[] { "Low", "Medium", "High", "Critical" };
+        return validPriorities.Contains(priority, StringComparer.OrdinalIgnoreCase);
     }
 }
