@@ -123,4 +123,39 @@ public class AuthController : ControllerBase
 
         return Ok(demoUsers);
     }
+
+    /// <summary>
+    /// Request a password reset OTP to be sent to the user's email.
+    /// </summary>
+    [HttpPost("forgot-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        await _authService.GeneratePasswordResetOtpAsync(request.Email);
+        
+        return Ok(new { message = "If the email is registered, an OTP has been sent." });
+    }
+
+    /// <summary>
+    /// Reset password using the OTP received via email.
+    /// </summary>
+    [HttpPost("reset-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var (success, message) = await _authService.ResetPasswordWithOtpAsync(request.Email, request.Otp, request.NewPassword);
+        
+        if (!success)
+            return BadRequest(new { message });
+
+        return Ok(new { message });
+    }
 }

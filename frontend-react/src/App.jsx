@@ -27,6 +27,7 @@ import IncidentList from "./pages/IncidentList";
 import DispatchList from "./pages/DispatchList";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
 import { incidentService } from "./services/incidentService";
 
@@ -60,7 +61,7 @@ function AuthLayout({ children }) {
 
 function AppShell() {
   const location = useLocation();
-  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/forgot-password";
 
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -98,6 +99,7 @@ function AppShell() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </AuthLayout>
     );

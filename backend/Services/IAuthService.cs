@@ -10,4 +10,7 @@ public interface IAuthService
     string GenerateJwtToken(User user);
     string HashPassword(User user, string password);
     bool VerifyPassword(User user, string hashedPassword, string providedPassword);
+    
+    Task<bool> GeneratePasswordResetOtpAsync(string email);
+    Task<(bool Success, string Message)> ResetPasswordWithOtpAsync(string email, string otp, string newPassword);
 }
