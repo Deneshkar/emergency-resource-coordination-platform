@@ -48,6 +48,12 @@ function ReportIncident() {
     if (/^\d+$/.test(t)) return "Title must contain meaningful text, not just numbers.";
     if (/^(.)\1+$/.test(t)) return "Title must contain meaningful text.";
     if (!/[a-zA-Z]/.test(t)) return "Title must contain at least some letters.";
+    
+    if (/[bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ]{4,}/.test(t)) return "Title appears to be random text (keyboard mashing).";
+    if (!/[aeiouAEIOU]/.test(t)) return "Title must contain readable words.";
+    
+    if (t.split(/\s+/).length < 2) return "Title should be descriptive (at least two words).";
+    
     return "";
   };
 
@@ -59,6 +65,9 @@ function ReportIncident() {
     
     const letters = l.match(/[a-zA-Z]/g);
     if (!letters || letters.length < 3) return "Address must contain enough letters to be meaningful.";
+    
+    if (/[bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ]{4,}/.test(l)) return "Address appears to be random text (keyboard mashing).";
+    if (!/[aeiouAEIOU]/.test(l)) return "Address must contain readable words.";
     
     const lower = l.toLowerCase();
     if (["test", "none", "n/a", "unknown", "placeholder"].includes(lower)) return "Please provide a real address.";
@@ -73,7 +82,14 @@ function ReportIncident() {
     if (/^(.)\1+$/.test(d)) return "Summary must contain meaningful text.";
     if (!/[a-zA-Z]/.test(d)) return "Summary must contain at least some letters.";
     
+    if (/[bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ]{6,}/.test(d)) return "Summary appears to contain random text (keyboard mashing).";
+    
+    const vowels = d.match(/[aeiouAEIOU]/g);
+    if (!vowels || vowels.length < 2) return "Summary must contain readable words.";
+    
     const words = d.toLowerCase().split(/\s+/);
+    if (words.length < 3) return "Summary must be descriptive (at least 3 words).";
+    
     const allSame = words.length > 2 && words.every(w => w === words[0]);
     if (allSame) return "Summary must contain meaningful content, not repeated words.";
     
@@ -82,7 +98,7 @@ function ReportIncident() {
 
   const validateEmail = (val) => {
     const e = val.trim();
-    if (!e) return ""; // Optional, but if provided, validate
+    if (!e) return "Reporter email is required.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return "Please enter a valid email address.";
     return "";
   };
