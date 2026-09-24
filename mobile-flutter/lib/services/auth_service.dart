@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io' show Platform;
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,15 +12,6 @@ class AuthService {
   static const String _expiryKey = 'auth_expires_at';
   static const _secure = FlutterSecureStorage();
   static const Duration _timeout = Duration(seconds: 15);
-
-  static bool get _isTest {
-    if (kIsWeb) return false;
-    try {
-      return Platform.environment.containsKey('FLUTTER_TEST');
-    } catch (_) {
-      return false;
-    }
-  }
 
   /// Authenticates user with credentials and persists the JWT session.
   /// Token goes to secure storage; non-secret profile stays in prefs.
@@ -139,23 +128,19 @@ class AuthService {
   /// (falls back to prefs when secure storage is unavailable,
   /// e.g. Windows dev builds, and migrates legacy copies).
   static Future<String?> getToken() async {
-    if (!_isTest) {
-      try {
-        final secure = await _secure.read(key: _tokenKey).timeout(const Duration(milliseconds: 500));
-        if (secure != null && secure.isNotEmpty) return secure;
-      } catch (_) {
-        // Secure storage unavailable (e.g. desktop plugin missing or in test) — use prefs.
-      }
+    try {
+      final secure = await _secure.read(key: _tokenKey);
+      if (secure != null && secure.isNotEmpty) return secure;
+    } catch (_) {
+      // Secure storage unavailable (e.g. desktop plugin missing) — use prefs.
     }
     final prefs = await SharedPreferences.getInstance();
     final legacy = prefs.getString(_tokenKey);
     if (legacy != null && legacy.isNotEmpty) {
-      if (!_isTest) {
-        try {
-          await _secure.write(key: _tokenKey, value: legacy).timeout(const Duration(milliseconds: 500));
-          await prefs.remove(_tokenKey);
-        } catch (_) {}
-      }
+      try {
+        await _secure.write(key: _tokenKey, value: legacy);
+        await prefs.remove(_tokenKey);
+      } catch (_) {}
       return legacy;
     }
     return null;
@@ -189,11 +174,9 @@ class AuthService {
   /// Never throws: secure-storage failures still clear prefs so the
   /// user is always signed out locally.
   static Future<void> logout() async {
-    if (!_isTest) {
-      try {
-        await _secure.delete(key: _tokenKey).timeout(const Duration(milliseconds: 500));
-      } catch (_) {}
-    }
+    try {
+      await _secure.delete(key: _tokenKey);
+    } catch (_) {}
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_tokenKey); // legacy cleanup
     await prefs.remove(_userKey);
@@ -202,13 +185,11 @@ class AuthService {
 
   static Future<void> _saveSession(String token, AuthUser user, {String? expiresAt}) async {
     bool savedSecure = false;
-    if (!_isTest) {
-      try {
-        await _secure.write(key: _tokenKey, value: token).timeout(const Duration(milliseconds: 500));
-        savedSecure = true;
-      } catch (_) {
-        savedSecure = false;
-      }
+    try {
+      await _secure.write(key: _tokenKey, value: token);
+      savedSecure = true;
+    } catch (_) {
+      savedSecure = false;
     }
     final prefs = await SharedPreferences.getInstance();
     if (savedSecure) {
