@@ -2,13 +2,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/dispatch.dart';
 import 'api_config.dart';
+import 'auth_service.dart';
 
 class DispatchService {
   static Future<List<Dispatch>> getDispatches() async {
     try {
+      final token = await AuthService.getToken();
       final response = await http.get(
         Uri.parse('${ApiConfig.baseUrl}/dispatches'),
-        headers: {'Content-Type': 'application/json'},
+        headers: ApiConfig.defaultHeaders(token),
       );
 
       if (response.statusCode == 200) {
@@ -24,9 +26,10 @@ class DispatchService {
 
   static Future<void> updateDispatchStatus(int id, String status) async {
     try {
+      final token = await AuthService.getToken();
       final response = await http.put(
         Uri.parse('${ApiConfig.baseUrl}/dispatches/$id/status'),
-        headers: {'Content-Type': 'application/json'},
+        headers: ApiConfig.defaultHeaders(token),
         body: json.encode({'status': status}),
       );
 
@@ -40,9 +43,10 @@ class DispatchService {
 
   static Future<void> createDispatch(Map<String, dynamic> data) async {
     try {
+      final token = await AuthService.getToken();
       final response = await http.post(
         Uri.parse('${ApiConfig.baseUrl}/dispatches'),
-        headers: {'Content-Type': 'application/json'},
+        headers: ApiConfig.defaultHeaders(token),
         body: json.encode(data),
       );
 

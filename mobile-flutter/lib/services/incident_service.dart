@@ -2,13 +2,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/incident.dart';
 import 'api_config.dart';
+import 'auth_service.dart';
 
 class IncidentService {
   static Future<List<Incident>> getIncidents() async {
     try {
+      final token = await AuthService.getToken();
       final response = await http.get(
         Uri.parse('${ApiConfig.baseUrl}/Incident'),
-        headers: {'Content-Type': 'application/json'},
+        headers: ApiConfig.defaultHeaders(token),
       );
 
       if (response.statusCode == 200) {
@@ -24,9 +26,10 @@ class IncidentService {
 
   static Future<Incident> getIncident(int id) async {
     try {
+      final token = await AuthService.getToken();
       final response = await http.get(
         Uri.parse('${ApiConfig.baseUrl}/Incident/$id'),
-        headers: {'Content-Type': 'application/json'},
+        headers: ApiConfig.defaultHeaders(token),
       );
 
       if (response.statusCode == 200) {
@@ -41,9 +44,10 @@ class IncidentService {
 
   static Future<Incident> createIncident(Map<String, dynamic> incidentData) async {
     try {
+      final token = await AuthService.getToken();
       final response = await http.post(
         Uri.parse('${ApiConfig.baseUrl}/Incident'),
-        headers: {'Content-Type': 'application/json'},
+        headers: ApiConfig.defaultHeaders(token),
         body: json.encode(incidentData),
       );
 
@@ -56,11 +60,13 @@ class IncidentService {
       throw Exception('Error reporting emergency: $e');
     }
   }
+
   static Future<void> updateIncident(int id, Map<String, dynamic> data) async {
     try {
+      final token = await AuthService.getToken();
       final response = await http.put(
         Uri.parse('${ApiConfig.baseUrl}/Incident/$id'),
-        headers: {'Content-Type': 'application/json'},
+        headers: ApiConfig.defaultHeaders(token),
         body: json.encode(data),
       );
 
@@ -74,9 +80,10 @@ class IncidentService {
 
   static Future<void> deleteIncident(int id) async {
     try {
+      final token = await AuthService.getToken();
       final response = await http.delete(
         Uri.parse('${ApiConfig.baseUrl}/Incident/$id'),
-        headers: {'Content-Type': 'application/json'},
+        headers: ApiConfig.defaultHeaders(token),
       );
 
       if (response.statusCode != 200 && response.statusCode != 204) {
