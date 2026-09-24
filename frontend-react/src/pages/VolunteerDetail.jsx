@@ -20,7 +20,6 @@ function VolunteerDetail() {
   const [shiftForm, setShiftForm] = useState({ start: "", end: "", status: "Scheduled" });
   const [assignError, setAssignError] = useState(null);
   const [assigning, setAssigning] = useState(false);
-  const [editingShift, setEditingShift] = useState(null);
 
   const canEditShifts = isCoordinator || hasRole(["Volunteer"]);
 
