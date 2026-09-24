@@ -19,6 +19,7 @@ import '../models/inventory_item.dart';
 
 // Screens
 import 'situation_analysis_screen.dart';
+import 'validation_result_screen.dart';
 import 'shelter_locator_screen.dart';
 import 'resource_status_screen.dart';
 import 'inventory_overview_screen.dart';
@@ -485,6 +486,12 @@ class _CoordinatorDashboardState extends State<_CoordinatorDashboard> {
                   avatar: const Icon(Icons.person_add_alt_1, size: 16),
                   label: const Text("Register User"),
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen())),
+                ),
+                ActionChip(
+                  avatar: const Icon(Icons.verified_user, size: 16),
+                  label: const Text("Safety Validation"),
+                  onPressed: () => Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => const ValidationResultScreen())),
                 ),
               ],
             ),

@@ -73,6 +73,33 @@ public class VolunteersController : ControllerBase
         return NoContent();
     }
 
+    // PUT /api/volunteers/{id} — Coordinator/Admin any record, Volunteer own record only
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult<VolunteerResponseDto>> Update(Guid id, [FromBody] UpdateVolunteerDto dto)
+    {
+        var volunteer = await _context.Volunteers.FindAsync(id);
+        if (volunteer == null) return NotFound();
+
+        if (User?.Identity?.IsAuthenticated == true
+            && !IsCoordinatorOrAdmin() && !IsOwnVolunteerRecord(volunteer))
+            return StatusCode(StatusCodes.Status403Forbidden, new { message = "Volunteers are only permitted to update their own profile." });
+
+        if (string.IsNullOrWhiteSpace(dto.Name))
+            return BadRequest(new { message = "Name is required." });
+        if (string.IsNullOrWhiteSpace(dto.Phone))
+            return BadRequest(new { message = "Phone is required." });
+        if (string.IsNullOrWhiteSpace(dto.Skills))
+            return BadRequest(new { message = "At least one skill is required." });
+
+        volunteer.Name = dto.Name.Trim();
+        volunteer.Phone = dto.Phone.Trim();
+        volunteer.Skills = dto.Skills.Trim();
+        volunteer.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        return Ok(ToResponseDto(volunteer));
+    }
+
     // GET /api/volunteers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<VolunteerResponseDto>>> GetAll(
@@ -185,6 +212,55 @@ public class VolunteersController : ControllerBase
         return CreatedAtAction(nameof(GetShifts), new { id }, shift);
     }
 
+    // PUT /api/volunteers/{id}/shifts/{shiftId} — Coordinator/Admin any, Volunteer own record only
+    [HttpPut("{id:guid}/shifts/{shiftId:guid}")]
+    public async Task<ActionResult<Shift>> UpdateShift(Guid id, Guid shiftId, [FromBody] UpdateShiftDto dto)
+    {
+        var volunteer = await _context.Volunteers.FindAsync(id);
+        if (volunteer == null) return NotFound();
+
+        if (User?.Identity?.IsAuthenticated == true
+            && !IsCoordinatorOrAdmin() && !IsOwnVolunteerRecord(volunteer))
+            return StatusCode(StatusCodes.Status403Forbidden, new { message = "Volunteers are only permitted to update their own shifts." });
+
+        var shift = await _context.Shifts.FirstOrDefaultAsync(s => s.Id == shiftId && s.VolunteerId == id);
+        if (shift == null) return NotFound();
+
+        if (dto.EndTime <= dto.StartTime)
+            return BadRequest(new { message = "Shift end time must be after start time." });
+
+        if (!Enum.TryParse<ShiftStatus>(dto.Status, ignoreCase: true, out var status))
+            return BadRequest(new { message = $"Invalid shift status '{dto.Status}'. Allowed: Scheduled, Active, Completed, Cancelled." });
+
+        shift.StartTime = dto.StartTime;
+        shift.EndTime = dto.EndTime;
+        shift.Status = status;
+        shift.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        return Ok(shift);
+    }
+
+    // DELETE /api/volunteers/{id}/shifts/{shiftId} — Coordinator/Admin any, Volunteer own record only
+    [HttpDelete("{id:guid}/shifts/{shiftId:guid}")]
+    public async Task<IActionResult> DeleteShift(Guid id, Guid shiftId)
+    {
+        var volunteer = await _context.Volunteers.FindAsync(id);
+        if (volunteer == null) return NotFound();
+
+        if (User?.Identity?.IsAuthenticated == true
+            && !IsCoordinatorOrAdmin() && !IsOwnVolunteerRecord(volunteer))
+            return StatusCode(StatusCodes.Status403Forbidden, new { message = "Volunteers are only permitted to delete their own shifts." });
+
+        var shift = await _context.Shifts.FirstOrDefaultAsync(s => s.Id == shiftId && s.VolunteerId == id);
+        if (shift == null) return NotFound();
+
+        _context.Shifts.Remove(shift);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
     // GET /api/volunteers/available?skill=medical
     [HttpGet("available")]
     public async Task<ActionResult<IEnumerable<VolunteerResponseDto>>> GetAvailableBySkill([FromQuery] string skill)
@@ -195,6 +271,23 @@ public class VolunteersController : ControllerBase
             .ToListAsync();
 
         return Ok(volunteers);
+    }
+
+    private bool IsCoordinatorOrAdmin()
+    {
+        if (User?.Identity?.IsAuthenticated != true) return false;
+        return User.IsInRole("Coordinator") || User.IsInRole("Admin")
+            || User.FindFirst(ClaimTypes.Role)?.Value == "Coordinator" || User.FindFirst(ClaimTypes.Role)?.Value == "Admin"
+            || User.FindFirst("role")?.Value == "Coordinator" || User.FindFirst("role")?.Value == "Admin";
+    }
+
+    private bool IsOwnVolunteerRecord(Volunteer volunteer)
+    {
+        var userEmail = User.FindFirst(ClaimTypes.Email)?.Value
+            ?? User.FindFirst("email")?.Value
+            ?? User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
+        return !string.IsNullOrWhiteSpace(userEmail)
+            && string.Equals(volunteer.Email, userEmail.Trim(), StringComparison.OrdinalIgnoreCase);
     }
 
     private static VolunteerResponseDto ToResponseDto(Volunteer v) => new()

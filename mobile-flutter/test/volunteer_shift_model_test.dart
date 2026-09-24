@@ -38,6 +38,35 @@ void main() {
     });
   });
 
+  group('Volunteer robustness (Student 4)', () {
+    test('tolerates nulls and string rating', () {
+      final v = Volunteer.fromJson({
+        'id': 'x',
+        'name': null,
+        'email': null,
+        'phone': null,
+        'skills': null,
+        'isAvailable': null,
+        'rating': '4.5',
+      });
+      expect(v.name, 'Unknown');
+      expect(v.rating, 4.5);
+    });
+
+    test('copyWith toggles availability', () {
+      final v = Volunteer.fromJson({
+        'id': 'a',
+        'name': 'N',
+        'email': 'e@x.com',
+        'phone': '1',
+        'skills': 's',
+        'isAvailable': false,
+        'rating': 1,
+      });
+      expect(v.copyWith(isAvailable: true).isAvailable, isTrue);
+    });
+  });
+
   group('Shift model (Student 4)', () {
     test('fromJson parses shift history entry', () {
       final s = Shift.fromJson({
@@ -49,10 +78,11 @@ void main() {
 
       expect(s.id, 'shift-1');
       expect(s.status, 'Scheduled');
-      expect(s.startTime, contains('2026-09-20'));
+      expect(s.startTime, isNotNull);
+      expect(s.displayRange, contains('2026-09-20'));
     });
 
-    test('numeric status is stringified (backend enum serialises as int)', () {
+    test('numeric status maps to enum name (backend enum serialises as int)', () {
       final s = Shift.fromJson({
         'id': 'shift-2',
         'startTime': '2026-09-21T08:00:00Z',
@@ -60,7 +90,17 @@ void main() {
         'status': 1,
       });
 
-      expect(s.status, '1');
+      expect(s.status, 'Active');
+    });
+
+    test('string int status maps too', () {
+      final s = Shift.fromJson({
+        'id': 'shift-3',
+        'startTime': '2026-09-21T08:00:00Z',
+        'endTime': '2026-09-21T16:00:00Z',
+        'status': '2',
+      });
+      expect(s.status, 'Completed');
     });
   });
 }

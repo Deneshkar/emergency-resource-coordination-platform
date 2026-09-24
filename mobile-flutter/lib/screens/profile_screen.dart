@@ -5,6 +5,7 @@ import '../providers/auth_provider.dart';
 import '../services/volunteer_service.dart';
 import '../services/notification_service.dart';
 import 'shifts_screen.dart';
+import 'edit_volunteer_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Volunteer? volunteer;
@@ -36,8 +37,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _loadVolunteerDetails() async {
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final user = auth.user;
-    if (user != null && user.isVolunteer) {
-      setState(() => _loadingVolunteerRecord = true);
+    if (user == null) return;
+    // Volunteers load their own record; coordinators viewing own profile
+    // fall back to user fields when no linked volunteer record exists.
+    if (user.isVolunteer) {
+      setState(() {
+        _loadingVolunteerRecord = true;
+        _error = null;
+      });
       try {
         final v = await VolunteerService.getVolunteerByEmail(user.email);
         if (v != null && mounted) {
@@ -45,16 +52,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _volunteer = v;
             _isAvailable = v.isAvailable;
           });
+        } else if (mounted) {
+          setState(() => _error = 'No volunteer record linked to ${user.email}. Ask a coordinator to register you.');
         }
-      } catch (_) {}
-      if (mounted) {
-        setState(() => _loadingVolunteerRecord = false);
+      } catch (e) {
+        if (mounted) {
+          setState(() => _error = 'Failed to load duty status: ${e.toString().replaceFirst('Exception: ', '')}');
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _loadingVolunteerRecord = false);
+        }
       }
     }
   }
 
   Future<void> _toggleAvailability(bool value) async {
-    if (_volunteer == null) return;
+    if (_volunteer == null) {
+      setState(() => _error = 'No volunteer record loaded — cannot update duty status.');
+      return;
+    }
 
     setState(() {
       _updating = true;
@@ -80,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     } catch (e) {
       setState(() {
-        _error = "Failed to update availability: $e";
+        _error = "Failed to update availability: ${e.toString().replaceFirst('Exception: ', '')}";
       });
     } finally {
       if (mounted) {
@@ -110,9 +127,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (confirmed == true && mounted) {
       final auth = Provider.of<AuthProvider>(context, listen: false);
-      await auth.logout();
+      try {
+        await auth.logout();
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  'Sign-out storage issue, session cleared locally: ${e.toString().replaceFirst('Exception: ', '')}'),
+            ),
+          );
+        }
+      }
       if (mounted) {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        // AuthGate rebuilds to LoginScreen once isAuthenticated is false;
+        // pop any pushed routes (e.g. this ProfileScreen) to reveal it.
+        Navigator.of(context).popUntil((route) => route.isFirst);
       }
     }
   }
@@ -337,6 +367,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 builder: (_) => ShiftsScreen(volunteerId: _volunteer!.id),
                               ),
                             );
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        OutlinedButton.icon(
+                          icon: const Icon(Icons.edit),
+                          label: const Text("Edit Profile"),
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: const Size.fromHeight(42),
+                          ),
+                          onPressed: () async {
+                            final ok = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    EditVolunteerScreen(volunteer: _volunteer!),
+                              ),
+                            );
+                            if (ok == true && mounted) {
+                              try {
+                                final fresh =
+                                    await VolunteerService.getVolunteerById(
+                                        _volunteer!.id);
+                                if (mounted) {
+                                  setState(() {
+                                    _volunteer = fresh;
+                                    _isAvailable = fresh.isAvailable;
+                                  });
+                                }
+                              } catch (_) {
+                                _loadVolunteerDetails();
+                              }
+                            }
                           },
                         ),
                       ],

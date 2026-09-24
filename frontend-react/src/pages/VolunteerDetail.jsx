@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getVolunteerShifts, createShift } from "../services/volunteerService";
+import { getVolunteerShifts, createShift, updateShift, deleteShift } from "../services/volunteerService";
 import { useAuth } from "../context/AuthContext";
 import Modal, { FormField } from "../components/Modal";
 import StatusBadge from "../components/StatusBadge";
@@ -20,6 +20,8 @@ function VolunteerDetail() {
   const [shiftForm, setShiftForm] = useState({ start: "", end: "", status: "Scheduled" });
   const [assignError, setAssignError] = useState(null);
   const [assigning, setAssigning] = useState(false);
+
+  const canEditShifts = isCoordinator || hasRole(["Volunteer"]);
 
   const fetchShifts = useCallback(async () => {
     setLoading(true);
@@ -69,6 +71,29 @@ function VolunteerDetail() {
     }
   };
 
+  const handleEditStatus = async (shift, nextStatus) => {
+    try {
+      await updateShift(id, shift.id, {
+        startTime: shift.startTime,
+        endTime: shift.endTime,
+        status: nextStatus,
+      });
+      await fetchShifts();
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to update shift.");
+    }
+  };
+
+  const handleDeleteShift = async (shift) => {
+    if (!window.confirm(`Delete shift #${String(shift.id).slice(0, 8)}?`)) return;
+    try {
+      await deleteShift(id, shift.id);
+      await fetchShifts();
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to delete shift.");
+    }
+  };
+
   return (
     <div className="page-wrapper">
       <div style={{ marginBottom: "20px" }}>
@@ -113,19 +138,42 @@ function VolunteerDetail() {
                   <th>Start Time</th>
                   <th>End Time</th>
                   <th>Status</th>
+                  {canEditShifts && <th>Actions</th>}
                 </tr>
               </thead>
               <tbody>
                 {shifts.map((s) => (
                   <tr key={s.id}>
-                    <td>#{s.id}</td>
+                    <td>#{String(s.id).slice(0, 8)}</td>
                     <td style={{ fontFamily: "var(--font-mono)", fontSize: "12px" }}>
                       {new Date(s.startTime).toLocaleString()}
                     </td>
                     <td style={{ fontFamily: "var(--font-mono)", fontSize: "12px" }}>
                       {new Date(s.endTime).toLocaleString()}
                     </td>
-                    <td><StatusBadge status={s.status} /></td>
+                    <td><StatusBadge status={typeof s.status === "number" ? SHIFT_STATUSES[s.status] || s.status : s.status} /></td>
+                    {canEditShifts && (
+                      <td>
+                        <div style={{ display: "flex", gap: "6px" }}>
+                          <select
+                            className="form-select"
+                            value={typeof s.status === "number" ? SHIFT_STATUSES[s.status] : s.status}
+                            onChange={(e) => handleEditStatus(s, e.target.value)}
+                            style={{ fontSize: "12px", padding: "4px 8px" }}
+                          >
+                            {SHIFT_STATUSES.map((st) => (
+                              <option key={st} value={st}>{st}</option>
+                            ))}
+                          </select>
+                          <button
+                            className="btn btn-sm btn-ghost-danger"
+                            onClick={() => handleDeleteShift(s)}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
