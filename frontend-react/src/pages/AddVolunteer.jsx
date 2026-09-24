@@ -12,15 +12,36 @@ function AddVolunteer() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const validate = () => {
+    if (!form.name.trim() || form.name.trim().length < 3)
+      return "Full name must be at least 3 characters.";
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim()))
+      return "Enter a valid email address.";
+    if (!/^[0-9]{7,15}$/.test(form.phone.trim().replace(/[\s\-()+]/g, "")))
+      return "Phone must be 7-15 digits.";
+    if (!form.skills.trim()) return "Enter at least one skill.";
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const v = validate();
+    if (v) {
+      setError(v);
+      return;
+    }
     setSubmitting(true);
     setError(null);
     try {
-      await createVolunteer(form);
+      await createVolunteer({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        skills: form.skills.trim(),
+      });
       navigate("/volunteers", { state: { successMessage: "Volunteer registered successfully!" } });
-    } catch {
-      setError("Failed to register volunteer. Please check the details and try again.");
+    } catch (err) {
+      setError(err?.response?.data?.message || "Failed to register volunteer. Please check the details and try again.");
     } finally {
       setSubmitting(false);
     }

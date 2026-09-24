@@ -42,3 +42,30 @@ export const deleteAllVolunteers = async () => {
 export const deleteVolunteer = async (id) => {
   await axios.delete(`${API_BASE_URL}/Volunteers/${id}`);
 };
+
+export const getVolunteerById = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/Volunteers/${id}`);
+  return response.data;
+};
+
+// Student 4 — edit profile (Coordinator/Admin any, Volunteer own only, 403 otherwise).
+export const updateVolunteer = async (id, { name, phone, skills }) => {
+  const response = await axios.put(`${API_BASE_URL}/Volunteers/${id}`, {
+    name,
+    phone,
+    skills,
+  });
+  return response.data;
+};
+
+export const updateShift = async (volunteerId, shiftId, { startTime, endTime, status }) => {
+  const response = await axios.put(
+    `${API_BASE_URL}/Volunteers/${volunteerId}/shifts/${shiftId}`,
+    { startTime, endTime, status }
+  );
+  return response.data;
+};
+
+export const deleteShift = async (volunteerId, shiftId) => {
+  await axios.delete(`${API_BASE_URL}/Volunteers/${volunteerId}/shifts/${shiftId}`);
+};

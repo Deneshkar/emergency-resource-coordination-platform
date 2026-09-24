@@ -12,6 +12,7 @@ import CitizenDashboard from "./pages/CitizenDashboard";
 import VolunteerList from "./pages/VolunteerList";
 import VolunteerDetail from "./pages/VolunteerDetail";
 import AddVolunteer from "./pages/AddVolunteer";
+import EditVolunteer from "./pages/EditVolunteer";
 
 import ResourceInventoryHub from "./pages/ResourceInventoryHub";
 import ResourceList from "./pages/ResourceList";
@@ -185,6 +186,14 @@ function AppShell() {
               element={
                 <ProtectedRoute allowedRoles={["Coordinator", "Admin", "Volunteer"]}>
                   <VolunteerDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/volunteers/:id/edit"
+              element={
+                <ProtectedRoute allowedRoles={["Coordinator", "Admin", "Volunteer"]}>
+                  <EditVolunteer />
                 </ProtectedRoute>
               }
             />

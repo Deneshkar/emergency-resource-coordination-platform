@@ -100,11 +100,18 @@ class AuthProvider with ChangeNotifier {
   }
 
   /// Signs out of the application and clears stored session credentials.
+  /// Always clears in-memory state even if storage throws, so the
+  /// AuthGate reliably returns to LoginScreen.
   Future<void> logout() async {
-    await AuthService.logout();
-    _user = null;
-    _token = null;
-    _errorMessage = null;
-    notifyListeners();
+    try {
+      await AuthService.logout();
+    } catch (_) {
+      // Storage failure must not keep the user signed in.
+    } finally {
+      _user = null;
+      _token = null;
+      _errorMessage = null;
+      notifyListeners();
+    }
   }
 }

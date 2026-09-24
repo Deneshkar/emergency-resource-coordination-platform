@@ -85,7 +85,7 @@ describe("AddVolunteer", () => {
       target: { value: "dupe@email.com" },
     });
     fireEvent.change(screen.getByPlaceholderText("+94 77 123 4567"), {
-      target: { value: "000" },
+      target: { value: "+94771234567" },
     });
     fireEvent.change(screen.getByPlaceholderText("e.g. medical, driving, rescue"), {
       target: { value: "rescue" },

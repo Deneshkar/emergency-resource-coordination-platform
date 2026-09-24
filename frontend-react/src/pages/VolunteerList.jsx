@@ -18,6 +18,7 @@ function VolunteerList() {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(location.state?.successMessage || null);
   const [hasNextPage, setHasNextPage] = useState(false);
+  const [sort, setSort] = useState("name");
 
   const fetchVolunteers = async () => {
     setLoading(true);
@@ -28,7 +29,11 @@ function VolunteerList() {
         availabilityFilter === "unavailable" ? false : null;
       const data = await getVolunteers(search, isAvailable, page, pageSize + 1);
       setHasNextPage(data.length > pageSize);
-      setVolunteers(data.slice(0, pageSize));
+      const sliced = data.slice(0, pageSize);
+      if (sort === "name") sliced.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+      else if (sort === "available")
+        sliced.sort((a, b) => Number(b.isAvailable || false) - Number(a.isAvailable || false));
+      setVolunteers(sliced);
     } catch {
       setError("Failed to load volunteers.");
     } finally {
@@ -36,7 +41,7 @@ function VolunteerList() {
     }
   };
 
-  useEffect(() => { fetchVolunteers(); }, [page, availabilityFilter, search]);
+  useEffect(() => { fetchVolunteers(); }, [page, availabilityFilter]);
 
   useEffect(() => {
     if (successMessage) {
@@ -137,6 +142,16 @@ function VolunteerList() {
             </button>
           ))}
         </div>
+        <select
+          className="form-select"
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+          style={{ maxWidth: "150px" }}
+          title="Sort volunteers"
+        >
+          <option value="name">Sort: Name</option>
+          <option value="available">Sort: Availability</option>
+        </select>
       </div>
 
       {loading ? (
@@ -219,6 +234,14 @@ function VolunteerList() {
                         </td>
                         <td>
                           <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+                            {(canManage || isSelf) && (
+                              <Link
+                                to={`/volunteers/${v.id}/edit`}
+                                className="btn btn-sm btn-ghost"
+                              >
+                                Edit
+                              </Link>
+                            )}
                             {canManage ? (
                               <>
                                 <button

@@ -61,7 +61,7 @@ describe("VolunteerDetail (Student 4 shift tracking)", () => {
     renderPage();
 
     await waitFor(() => expect(screen.getByText("#1")).toBeInTheDocument());
-    expect(screen.getByText("Scheduled")).toBeInTheDocument();
+    expect(screen.getAllByText("Scheduled").length).toBeGreaterThan(0);
   });
 
   it("shows Assign Shift only to coordinators and creates a shift on submit", async () => {

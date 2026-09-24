@@ -1,5 +1,7 @@
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { getVolunteers, updateAvailability } from "../services/volunteerService";
 
 const ROLE_THEMES = {
   Citizen: {
@@ -47,6 +49,38 @@ const ROLE_THEMES = {
 export default function Profile() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [duty, setDuty] = useState(null);
+  const [dutyId, setDutyId] = useState(null);
+  const [dutyMsg, setDutyMsg] = useState(null);
+
+  useEffect(() => {
+    if (user?.role !== "Volunteer" || !user?.email) return;
+    (async () => {
+      try {
+        const all = await getVolunteers("", null, 1, 50);
+        const me = all.find(
+          (v) => v.email?.trim().toLowerCase() === user.email.trim().toLowerCase()
+        );
+        if (me) {
+          setDuty(me.isAvailable);
+          setDutyId(me.id);
+        }
+      } catch {
+        // duty toggle unavailable offline
+      }
+    })();
+  }, [user]);
+
+  const toggleDuty = async () => {
+    if (dutyId == null) return;
+    try {
+      await updateAvailability(dutyId, !duty);
+      setDuty(!duty);
+      setDutyMsg(!duty ? "You are now ON-DUTY (Available)" : "You are now OFF-DUTY");
+    } catch (err) {
+      setDutyMsg(err?.response?.data?.message || "Failed to update duty status.");
+    }
+  };
 
   if (!user) {
     return (
@@ -215,6 +249,17 @@ export default function Profile() {
               <Link to="/incidents" className="btn btn-secondary">
                 📍 Incident Hub
               </Link>
+              {dutyId != null && (
+                <button
+                  className={`btn ${duty ? "btn-ghost" : "btn-success"}`}
+                  onClick={toggleDuty}
+                >
+                  {duty ? "Go Off-Duty" : "Go On-Duty"}
+                </button>
+              )}
+              {dutyMsg && (
+                <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>{dutyMsg}</span>
+              )}
             </>
           )}
 
