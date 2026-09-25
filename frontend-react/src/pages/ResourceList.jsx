@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { getResources, createResource, updateResourceStatus, deleteResource } from "../services/resourceService";
+import { useNotification } from "../context/NotificationContext";
+import { sendResourceDispatchedEmail, sendResourceMaintenanceEmail, sendResourceAddedEmail } from "../services/emailNotificationService";
 import StatusBadge from "../components/StatusBadge";
 import Modal, { FormField, FormRow } from "../components/Modal";
 
 export default function ResourceList() {
+  const { notify } = useNotification();
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -16,6 +19,7 @@ export default function ResourceList() {
       setResources(data);
     } catch (err) {
       console.error(err);
+      notify.error("Failed to load resource data.");
     } finally {
       setLoading(false);
     }
@@ -26,19 +30,37 @@ export default function ResourceList() {
   const handleCreate = async (e) => {
     e.preventDefault();
     await createResource(form);
+    notify.success(`✅ Resource "${form.name}" added to the fleet!`);
+    sendResourceAddedEmail(form.name, form.resourceType, form.location);
     setForm({ name: "", resourceType: "Vehicle", capacity: 1, location: "" });
     setShowModal(false);
     fetchResources();
   };
 
-  const handleStatusChange = async (id, status) => {
-    await updateResourceStatus(id, status);
+  const handleStatusChange = async (id, newStatus) => {
+    const resource = resources.find((r) => r.id === id);
+    const oldStatus = resource?.status;
+    await updateResourceStatus(id, newStatus);
+
+    if (newStatus === "Dispatched") {
+      notify.error(`🚛 DISPATCHED: "${resource?.name}" sent to field — No longer available!`, 7000);
+      sendResourceDispatchedEmail(resource?.name, resource?.resourceType, resource?.location);
+    } else if (newStatus === "Maintenance") {
+      notify.warning(`🔧 MAINTENANCE: "${resource?.name}" taken offline for maintenance.`);
+      sendResourceMaintenanceEmail(resource?.name, resource?.resourceType);
+    } else if (newStatus === "Available" && oldStatus !== "Available") {
+      notify.success(`✅ "${resource?.name}" is now Available again!`);
+    } else if (newStatus === "Reserved") {
+      notify.info(`🔒 "${resource?.name}" has been Reserved.`);
+    }
+
     fetchResources();
   };
 
   const handleDelete = async (id, name) => {
     if (!window.confirm(`Delete "${name}"?`)) return;
     await deleteResource(id);
+    notify.info(`🗑️ Resource "${name}" removed from fleet.`);
     fetchResources();
   };
 

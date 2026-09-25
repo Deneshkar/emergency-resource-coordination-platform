@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { getInventory, createInventoryItem, updateInventoryItem, adjustStock, deleteInventoryItem } from "../services/resourceService";
+import { useNotification } from "../context/NotificationContext";
+import { sendLowStockEmail, sendOutOfStockEmail, sendStockRestoredEmail } from "../services/emailNotificationService";
 import StatusBadge from "../components/StatusBadge";
 import Modal, { FormField, FormRow } from "../components/Modal";
 
 export default function InventoryList() {
+  const { notify } = useNotification();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -11,13 +14,27 @@ export default function InventoryList() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({ id: null, itemName: "", category: "Medical", quantity: 0, unitOfMeasure: "", minimumThreshold: 0, location: "" });
 
+  const checkAndNotifyStock = (fetchedItems) => {
+    fetchedItems.forEach((item) => {
+      if (item.quantity === 0 || item.status === "OutOfStock") {
+        notify.error(`🚨 OUT OF STOCK: "${item.itemName}" — Immediate restock required!`, 8000);
+        sendOutOfStockEmail(item.itemName, item.location);
+      } else if (item.status === "LowStock" || item.quantity <= item.minimumThreshold) {
+        notify.warning(`⚠️ Low Stock: "${item.itemName}" — ${item.quantity} ${item.unitOfMeasure} remaining (min: ${item.minimumThreshold})`);
+        sendLowStockEmail(item.itemName, item.quantity, item.minimumThreshold, item.location);
+      }
+    });
+  };
+
   const fetchInventory = async () => {
     try {
       setLoading(true);
       const data = await getInventory();
       setItems(data);
+      checkAndNotifyStock(data);
     } catch (err) {
       console.error(err);
+      notify.error("Failed to load inventory data.");
     } finally {
       setLoading(false);
     }
@@ -28,19 +45,40 @@ export default function InventoryList() {
   const handleCreate = async (e) => {
     e.preventDefault();
     await createInventoryItem(form);
+    notify.success(`✅ Item "${form.itemName}" added to inventory!`);
     setForm({ itemName: "", category: "Medical", quantity: 50, unitOfMeasure: "Kits", minimumThreshold: 10, location: "" });
     setShowModal(false);
     fetchInventory();
   };
 
   const handleAdjust = async (id, delta) => {
+    const item = items.find((i) => i.id === id);
     await adjustStock(id, delta);
-    fetchInventory();
+    const updated = await getInventory();
+    const updatedItem = updated.find((i) => i.id === id);
+    if (updatedItem) {
+      if (delta > 0 && item && (item.status === "LowStock" || item.status === "OutOfStock")) {
+        notify.success(`✅ Stock Restocked: "${updatedItem.itemName}" — Now: ${updatedItem.quantity} ${updatedItem.unitOfMeasure}`);
+        sendStockRestoredEmail(updatedItem.itemName, updatedItem.quantity, updatedItem.unitOfMeasure);
+      } else if (updatedItem.quantity === 0 || updatedItem.status === "OutOfStock") {
+        notify.error(`🚨 OUT OF STOCK: "${updatedItem.itemName}" — Restock immediately!`, 8000);
+        sendOutOfStockEmail(updatedItem.itemName, updatedItem.location);
+      } else if (updatedItem.status === "LowStock") {
+        notify.warning(`⚠️ Low Stock: "${updatedItem.itemName}" — ${updatedItem.quantity} ${updatedItem.unitOfMeasure} remaining`);
+        sendLowStockEmail(updatedItem.itemName, updatedItem.quantity, updatedItem.minimumThreshold, updatedItem.location);
+      } else if (delta > 0) {
+        notify.info(`📦 Stock updated: "${updatedItem.itemName}" → ${updatedItem.quantity} ${updatedItem.unitOfMeasure}`);
+      } else {
+        notify.info(`📦 Stock reduced: "${updatedItem.itemName}" → ${updatedItem.quantity} ${updatedItem.unitOfMeasure}`);
+      }
+    }
+    setItems(updated);
   };
 
   const handleDelete = async (id, name) => {
     if (!window.confirm(`Delete "${name}"?`)) return;
     await deleteInventoryItem(id);
+    notify.info(`🗑️ Item "${name}" removed from inventory.`);
     fetchInventory();
   };
 
@@ -68,6 +106,7 @@ export default function InventoryList() {
       shelterId: null,
       location: editForm.location,
     });
+    notify.success(`✅ Item "${editForm.itemName}" updated successfully!`);
     setShowEditModal(false);
     fetchInventory();
   };
