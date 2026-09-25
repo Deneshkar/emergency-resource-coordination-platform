@@ -1,4 +1,3 @@
-// eslint-disable-next-line react-refresh/only-export-components -- Context files intentionally export both a Provider component and a hook
 import { createContext, useContext, useState } from "react";
 
 const NotificationContext = createContext(null);
@@ -33,6 +32,7 @@ export function NotificationProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useNotification() {
   const ctx = useContext(NotificationContext);
   if (!ctx) throw new Error("useNotification must be used inside NotificationProvider");
