@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation, Link } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { AuthProvider } from "./context/AuthContext";
+import { NotificationProvider } from "./context/NotificationContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ToastContainer from "./components/ToastContainer";
 import { Toaster } from "sonner";
 
 import IncidentDashboard from "./pages/IncidentDashboard";
@@ -234,10 +236,13 @@ function AppShell() {
 function App() {
   return (
     <BrowserRouter>
-      <Toaster richColors position="top-right" />
-      <AuthProvider>
-        <AppShell />
-      </AuthProvider>
+      <NotificationProvider>
+        <Toaster richColors position="top-right" />
+        <ToastContainer />
+        <AuthProvider>
+          <AppShell />
+        </AuthProvider>
+      </NotificationProvider>
     </BrowserRouter>
   );
 }
