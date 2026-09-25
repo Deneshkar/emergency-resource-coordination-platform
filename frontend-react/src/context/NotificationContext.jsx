@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useCallback } from "react";
+// eslint-disable-next-line react-refresh/only-export-components -- Context files intentionally export both a Provider component and a hook
+import { createContext, useContext, useState } from "react";
 
 const NotificationContext = createContext(null);
 
@@ -7,16 +8,16 @@ let _idCounter = 0;
 export function NotificationProvider({ children }) {
   const [toasts, setToasts] = useState([]);
 
-  const addToast = useCallback((message, type = "info", duration = 5000) => {
+  function removeToast(id) {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }
+
+  function addToast(message, type = "info", duration = 5000) {
     const id = ++_idCounter;
     setToasts((prev) => [...prev, { id, message, type, duration }]);
-    setTimeout(() => removeToast(id), duration);
+    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), duration);
     return id;
-  }, []);
-
-  const removeToast = useCallback((id) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  }, []);
+  }
 
   const notify = {
     success: (msg, dur) => addToast(msg, "success", dur),

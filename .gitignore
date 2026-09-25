@@ -23,3 +23,13 @@ mobile-flutter/.flutter-plugin-dependencies
 *.log
 backend-tests/bin/
 backend-tests/obj/
+
+# Python
+__pycache__/
+*.py[cod]
+ai-agents/__pycache__/
+
+# Vercel & Vite Build
+.vercel/
+frontend-react/.vercel/
+frontend-react/dist/

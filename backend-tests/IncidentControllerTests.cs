@@ -24,6 +24,7 @@ public class IncidentControllerTests
     private class DummyEmailService : IEmailService
     {
         public Task SendEmailAsync(string to, string subject, string htmlBody) => Task.CompletedTask;
+        public Task SendAlertAsync(string alertType, string subject, string body, string priority = "High") => Task.CompletedTask;
     }
 
     private IncidentController CreateController(AppDbContext context)
