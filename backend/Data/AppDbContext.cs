@@ -57,12 +57,25 @@ public class AppDbContext : DbContext
             .HasForeignKey(t => t.DispatchId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        modelBuilder.Entity<Dispatch>()
+            .HasOne(d => d.AllocationPlan)
+            .WithMany()
+            .HasForeignKey(d => d.AllocationPlanId)
+            .OnDelete(DeleteBehavior.SetNull);
+
         // Volunteer 1 → Many DispatchTasks
         modelBuilder.Entity<DispatchTask>()
             .HasOne(t => t.Volunteer)
             .WithMany()
             .HasForeignKey(t => t.VolunteerId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Resource 1 -> Many DispatchTasks; keep tasks if a resource is removed.
+        modelBuilder.Entity<DispatchTask>()
+            .HasOne(t => t.Resource)
+            .WithMany()
+            .HasForeignKey(t => t.ResourceId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         // Incident 1 → Many IncidentPlans
         modelBuilder.Entity<IncidentPlan>()

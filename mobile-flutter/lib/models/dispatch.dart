@@ -2,7 +2,7 @@ class DispatchTask {
   final int id;
   final int dispatchId;
   final String volunteerId;
-  final String? resourceId;
+  final int? resourceId;
   final String taskType;
   final String status;
   final DateTime? assignedAt;
@@ -22,7 +22,7 @@ class DispatchTask {
       id: json['id'] ?? 0,
       dispatchId: json['dispatchId'] ?? 0,
       volunteerId: json['volunteerId'] ?? '',
-      resourceId: json['resourceId'],
+      resourceId: (json['resourceId'] as num?)?.toInt(),
       taskType: json['taskType'] ?? '',
       status: json['status'] ?? 'Assigned',
       assignedAt: json['assignedAt'] != null ? DateTime.parse(json['assignedAt']) : null,

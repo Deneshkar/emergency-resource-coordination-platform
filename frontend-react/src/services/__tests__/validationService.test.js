@@ -78,21 +78,22 @@ describe("validationService", () => {
     expect(RECOMMENDATIONS).toEqual(["APPROVE", "REVISE", "REJECT"]);
   });
 
-  it("canApprove requires APPROVE/REVISE with at least one check", () => {
-    expect(canApprove({ recommendation: "APPROVE", checks: [{ tool: "t", passed: true }] })).toBe(true);
-    expect(canApprove({ recommendation: "REVISE", checks: [{ tool: "t", passed: false }] })).toBe(true);
+  it("canApprove requires a valid APPROVE result with at least one check", () => {
+    expect(canApprove({ isValid: true, recommendation: "APPROVE", checks: [{ tool: "t", passed: true }] })).toBe(true);
+    expect(canApprove({ isValid: true, recommendation: "REVISE", checks: [{ tool: "t", passed: true }] })).toBe(false);
     // Empty (0-check) results never approve — even with APPROVE verdict
-    expect(canApprove({ recommendation: "APPROVE", checks: [] })).toBe(false);
-    expect(canApprove({ recommendation: "REJECT", checks: [{ tool: "t", passed: false }] })).toBe(false);
+    expect(canApprove({ isValid: true, recommendation: "APPROVE", checks: [] })).toBe(false);
+    expect(canApprove({ isValid: false, recommendation: "APPROVE", checks: [{ tool: "t", passed: true }] })).toBe(false);
+    expect(canApprove({ isValid: false, recommendation: "REJECT", checks: [{ tool: "t", passed: false }] })).toBe(false);
     expect(canApprove(null)).toBe(false);
     expect(canApprove(undefined)).toBe(false);
   });
 
   it("approvalBlockReason explains each blocked state", () => {
     expect(approvalBlockReason(null)).toMatch(/Run the safety check first/);
-    expect(approvalBlockReason({ recommendation: "APPROVE", checks: [] })).toMatch(/Add at least one task/);
-    expect(approvalBlockReason({ recommendation: "REJECT", checks: [{ tool: "t" }] })).toMatch(/REJECT/);
-    expect(approvalBlockReason({ recommendation: "APPROVE", checks: [{ tool: "t" }] })).toBeNull();
+    expect(approvalBlockReason({ isValid: true, recommendation: "APPROVE", checks: [] })).toMatch(/Add at least one task/);
+    expect(approvalBlockReason({ isValid: false, recommendation: "REJECT", checks: [{ tool: "t" }] })).toMatch(/did not return APPROVE/);
+    expect(approvalBlockReason({ isValid: true, recommendation: "APPROVE", checks: [{ tool: "t" }] })).toBeNull();
   });
 
   it("getValidationHistory fetches persisted audits for a dispatch", async () => {
