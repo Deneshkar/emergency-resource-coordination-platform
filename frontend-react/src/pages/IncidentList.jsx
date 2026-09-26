@@ -13,7 +13,7 @@ export default function IncidentList() {
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [showUpdate, setShowUpdate] = useState(null);
-  const [form, setForm] = useState({ title: "", description: "", location: "", priority: "Medium" });
+  const [form, setForm] = useState({ title: "", description: "", location: "", priority: "Medium", reporterContact: "" });
   const [updateForm, setUpdateForm] = useState({ status: "", priority: "" });
 
   const fetchData = async () => {
@@ -32,10 +32,14 @@ export default function IncidentList() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    await createIncident(form);
-    setForm({ title: "", description: "", location: "", priority: "Medium" });
-    setShowCreate(false);
-    fetchData();
+    try {
+      await createIncident(form);
+      setForm({ title: "", description: "", location: "", priority: "Medium", reporterContact: "" });
+      setShowCreate(false);
+      fetchData();
+    } catch (err) {
+      alert("Validation Error: " + err.message);
+    }
   };
 
   const handleUpdate = async (e) => {
@@ -70,7 +74,10 @@ export default function IncidentList() {
           <h1>Incidents</h1>
           <p>Track and manage reported emergencies &mdash; {incidents.length} total</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setShowCreate(true)}>
+        <button className="btn btn-primary" onClick={() => {
+          setForm({ title: "", description: "", location: "", priority: "Medium", reporterContact: "" });
+          setShowCreate(true);
+        }}>
           + Report Incident
         </button>
       </div>
@@ -177,6 +184,9 @@ export default function IncidentList() {
               </select>
             </FormField>
           </FormRow>
+          <FormField label="Reporter Contact / Email" required>
+            <input type="email" className="form-control" placeholder="e.g. user@example.com" value={form.reporterContact} onChange={(e) => setForm({ ...form, reporterContact: e.target.value })} required />
+          </FormField>
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "8px" }}>
             <button type="button" className="btn btn-ghost" onClick={() => setShowCreate(false)}>Cancel</button>
             <button type="submit" className="btn btn-primary">Report Incident</button>
