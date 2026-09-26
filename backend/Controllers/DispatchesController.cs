@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using ERCP.Api.Data;
 using ERCP.Api.Models;
 using ERCP.Api.DTOs;
@@ -49,6 +50,7 @@ public class DispatchesController : ControllerBase
     {
         var dispatches = await _context.Dispatches
             .Include(d => d.Tasks)
+            .Include(d => d.AllocationPlan)
             .AsNoTracking()
             .ToListAsync();
 
@@ -61,6 +63,7 @@ public class DispatchesController : ControllerBase
     {
         var dispatch = await _context.Dispatches
             .Include(d => d.Tasks)
+            .Include(d => d.AllocationPlan)
             .FirstOrDefaultAsync(d => d.Id == id);
 
         if (dispatch == null)
@@ -110,6 +113,24 @@ public class DispatchesController : ControllerBase
             });
         }
 
+        if (dto.Status == "Approved")
+        {
+            var latestAudit = await _context.ValidationAudits
+                .Where(a => a.DispatchId == id)
+                .OrderByDescending(a => a.ValidatedAt)
+                .ThenByDescending(a => a.Id)
+                .FirstOrDefaultAsync();
+
+            if (latestAudit == null || !latestAudit.IsValid || latestAudit.Recommendation != "APPROVE" ||
+                latestAudit.ValidatedAt < dispatch.UpdatedAt)
+            {
+                return BadRequest(new
+                {
+                    message = "Dispatch approval requires a passing safety validation."
+                });
+            }
+        }
+
         dispatch.Status = dto.Status;
         dispatch.UpdatedAt = DateTime.UtcNow;
 
@@ -139,6 +160,11 @@ public class DispatchesController : ControllerBase
             });
         }
 
+        if (dispatch.Status is "Approved" or "Assigned" or "InProgress" or "Completed" or "Rejected")
+        {
+            return Conflict(new { message = "Tasks cannot be changed after dispatch approval." });
+        }
+
         // Check that the volunteer exists
         var volunteerExists = await _context.Volunteers
             .AnyAsync(v => v.Id == dto.VolunteerId);
@@ -148,6 +174,15 @@ public class DispatchesController : ControllerBase
             return BadRequest(new
             {
                 message = "Volunteer does not exist."
+            });
+        }
+
+        if (dto.ResourceId.HasValue &&
+            !await _context.Resources.AnyAsync(r => r.Id == dto.ResourceId.Value))
+        {
+            return BadRequest(new
+            {
+                message = "Resource does not exist."
             });
         }
 
@@ -163,7 +198,6 @@ public class DispatchesController : ControllerBase
 
         _context.DispatchTasks.Add(task);
 
-        dispatch.Status = "Assigned";
         dispatch.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
@@ -175,9 +209,67 @@ public class DispatchesController : ControllerBase
         });
     }
 
+    [HttpPut("{id}/tasks/{taskId}")]
+    public async Task<IActionResult> UpdateTask(
+        int id,
+        int taskId,
+        [FromBody] UpdateDispatchTaskDto dto)
+    {
+        var dispatch = await _context.Dispatches.FirstOrDefaultAsync(d => d.Id == id);
+        if (dispatch == null)
+            return NotFound(new { message = "Dispatch not found." });
+
+        if (dispatch.Status is "Approved" or "Assigned" or "InProgress" or "Completed" or "Rejected")
+            return Conflict(new { message = "Tasks cannot be changed after dispatch approval." });
+
+        var task = await _context.DispatchTasks
+            .FirstOrDefaultAsync(t => t.Id == taskId && t.DispatchId == id);
+        if (task == null)
+            return NotFound(new { message = "Dispatch task not found." });
+
+        if (!await _context.Volunteers.AnyAsync(v => v.Id == dto.VolunteerId))
+            return BadRequest(new { message = "Volunteer does not exist." });
+
+        if (dto.ResourceId.HasValue &&
+            !await _context.Resources.AnyAsync(r => r.Id == dto.ResourceId.Value))
+            return BadRequest(new { message = "Resource does not exist." });
+
+        task.VolunteerId = dto.VolunteerId;
+        task.ResourceId = dto.ResourceId;
+        task.TaskType = dto.TaskType;
+        dispatch.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}/tasks/{taskId}")]
+    public async Task<IActionResult> DeleteTask(int id, int taskId)
+    {
+        var dispatch = await _context.Dispatches.FirstOrDefaultAsync(d => d.Id == id);
+        if (dispatch == null)
+            return NotFound(new { message = "Dispatch not found." });
+
+        if (dispatch.Status is "Approved" or "Assigned" or "InProgress" or "Completed" or "Rejected")
+            return Conflict(new { message = "Tasks cannot be changed after dispatch approval." });
+
+        var task = await _context.DispatchTasks
+            .FirstOrDefaultAsync(t => t.Id == taskId && t.DispatchId == id);
+        if (task == null)
+            return NotFound(new { message = "Dispatch task not found." });
+
+        _context.DispatchTasks.Remove(task);
+        dispatch.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
     // POST: api/Dispatches/5/propose-allocation
     [HttpPost("{id}/propose-allocation")]
-    public async Task<ActionResult> ProposeAllocation(int id)
+    public async Task<ActionResult> ProposeAllocation(
+        int id,
+        [FromBody] ProposeDispatchAllocationDto dto)
     {
         var dispatch = await _context.Dispatches
             .Include(d => d.Tasks)
@@ -191,14 +283,16 @@ public class DispatchesController : ControllerBase
             });
         }
 
-        /*
-         * This is the business-specific operation for
-         * Component 3.
-         *
-         * Later this endpoint will call the
-         * Resource Allocation Agent.
-         */
+        var plan = await _context.IncidentPlans
+            .FirstOrDefaultAsync(p => p.Id == dto.AllocationPlanId && p.IncidentId == dispatch.IncidentId);
+        if (plan == null)
+            return BadRequest(new { message = "Allocation plan does not belong to this dispatch incident." });
 
+        if (dispatch.Status is "Approved" or "Assigned" or "InProgress" or "Completed" or "Rejected")
+            return Conflict(new { message = "Allocation cannot be changed after dispatch approval." });
+
+        dispatch.AllocationPlanId = plan.Id;
+        dispatch.AllocationPlan = plan;
         dispatch.Status = "PendingApproval";
         dispatch.UpdatedAt = DateTime.UtcNow;
 
@@ -208,7 +302,8 @@ public class DispatchesController : ControllerBase
         {
             message = "Resource allocation proposal created.",
             dispatchId = dispatch.Id,
-            status = dispatch.Status
+            status = dispatch.Status,
+            allocationProposal = ToPlanResponse(plan)
         });
     }
 
@@ -232,7 +327,45 @@ public class DispatchesController : ControllerBase
                     t.TaskType,
                     t.Status
                 )
-            ).ToList()
+            ).ToList(),
+            dispatch.AllocationPlan == null ? null : ToPlanResponse(dispatch.AllocationPlan)
         );
+    }
+
+    private static IncidentPlanDto ToPlanResponse(IncidentPlan plan)
+    {
+        return new IncidentPlanDto
+        {
+            Id = plan.Id,
+            IncidentId = plan.IncidentId,
+            PlanTitle = plan.PlanTitle,
+            PlanDescription = plan.PlanDescription,
+            Status = plan.Status,
+            Phase = plan.Phase,
+            ActionSteps = DeserializeList<PlanActionStepDto>(plan.ActionStepsJson),
+            EstimatedResources = DeserializeList<EstimatedResourceDto>(plan.EstimatedResourcesJson),
+            RiskAssessment = plan.RiskAssessment,
+            Reasoning = plan.Reasoning,
+            Risks = DeserializeList<string>(plan.RisksJson),
+            Constraints = DeserializeList<string>(plan.ConstraintsJson),
+            RequiresHumanApproval = plan.RequiresHumanApproval,
+            SuggestedAssignments = DeserializeList<SuggestedAssignmentDto>(plan.SuggestedAssignmentsJson),
+            DispatchPlan = DeserializeList<DispatchPlanStepDto>(plan.DispatchPlanJson),
+            ApprovedBy = plan.ApprovedBy,
+            ApprovedAt = plan.ApprovedAt,
+            CreatedAt = plan.CreatedAt
+        };
+    }
+
+    private static List<T> DeserializeList<T>(string json)
+    {
+        try
+        {
+            return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
+        }
+        catch (JsonException)
+        {
+            return new List<T>();
+        }
     }
 }

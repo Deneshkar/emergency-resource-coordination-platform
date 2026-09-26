@@ -13,7 +13,8 @@ public class DispatchTask
     public Volunteer? Volunteer { get; set; }
 
     // Optional resource/vehicle
-    public Guid? ResourceId { get; set; }
+    public int? ResourceId { get; set; }
+    public Resource? Resource { get; set; }
 
     public string TaskType { get; set; } = string.Empty;
 

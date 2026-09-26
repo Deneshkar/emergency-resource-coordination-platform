@@ -6,6 +6,10 @@ public class Dispatch
 
     public int IncidentId { get; set; }
 
+    public int? AllocationPlanId { get; set; }
+
+    public IncidentPlan? AllocationPlan { get; set; }
+
     public string Status { get; set; } = "Proposed";
 
     public string Priority { get; set; } = "Medium";

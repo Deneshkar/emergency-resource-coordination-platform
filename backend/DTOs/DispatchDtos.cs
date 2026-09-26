@@ -11,16 +11,26 @@ public record UpdateDispatchStatusDto(
     [Required] string Status
 );
 
+public record ProposeDispatchAllocationDto(
+    [Required] int AllocationPlanId
+);
+
+public record UpdateDispatchTaskDto(
+    [Required] Guid VolunteerId,
+    int? ResourceId,
+    [Required] string TaskType
+);
+
 public record CreateDispatchTaskDto(
     [Required] Guid VolunteerId,
-    Guid? ResourceId,
+    int? ResourceId,
     [Required] string TaskType
 );
 
 public record DispatchTaskResponseDto(
     int Id,
     Guid VolunteerId,
-    Guid? ResourceId,
+    int? ResourceId,
     string TaskType,
     string Status
 );
@@ -34,5 +44,6 @@ public record DispatchResponseDto(
     DateTime UpdatedAt,
     DateTime? ApprovedAt,
     string? ApprovedBy,
-    List<DispatchTaskResponseDto> Tasks
+    List<DispatchTaskResponseDto> Tasks,
+    IncidentPlanDto? AllocationProposal = null
 );

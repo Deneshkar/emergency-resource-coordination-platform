@@ -26,3 +26,20 @@ export const createDispatchTask = async (dispatchId, data) => {
   const response = await axios.post(`${API_BASE_URL}/dispatches/${dispatchId}/tasks`, data);
   return response.data;
 };
+
+export const updateDispatchTask = async (dispatchId, taskId, data) => {
+  const response = await axios.put(`${API_BASE_URL}/dispatches/${dispatchId}/tasks/${taskId}`, data);
+  return response.data;
+};
+
+export const deleteDispatchTask = async (dispatchId, taskId) => {
+  const response = await axios.delete(`${API_BASE_URL}/dispatches/${dispatchId}/tasks/${taskId}`);
+  return response.data;
+};
+
+export const proposeAllocation = async (dispatchId, allocationPlanId) => {
+  const response = await axios.post(`${API_BASE_URL}/dispatches/${dispatchId}/propose-allocation`, {
+    allocationPlanId,
+  });
+  return response.data;
+};

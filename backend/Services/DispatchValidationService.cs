@@ -115,21 +115,6 @@ public class DispatchValidationService
                 }
             }
 
-            // R1/R2: linked resource status (ResourceId is Guid? in model; Resources use int PK —
-            // so we only validate when a matching resource convention exists; otherwise warn)
-            // NOTE: DispatchTask.ResourceId is Guid? while Resource.Id is int (schema mismatch
-            // owned by Student 3). We intentionally do NOT hard-fail here; Python agent covers
-            // resource checks deterministically until the schema is unified.
-            if (task.ResourceId.HasValue)
-            {
-                warnings.Add(new ValidationViolationDto(
-                    "W4_RESOURCE_LINK_UNVERIFIED",
-                    $"Task {task.Id}: resource link {task.ResourceId} could not be verified against inventory (DispatchTask.ResourceId is Guid, Resource.Id is int — pending Student 3 schema unification). Manual coordinator check required.",
-                    "WARNING"));
-                checks.Add(new ValidationCheckDto(
-                    "check_resource_stock", true,
-                    $"Task {task.Id}: resource link skipped (schema mismatch), flagged for manual review."));
-            }
         }
 
         // ---- Tool: check_shelter_capacity ----
@@ -178,6 +163,35 @@ public class DispatchValidationService
         }
 
         // ---- Tool: check_resource_stock (inventory) ----
+        foreach (var task in dispatch.Tasks.Where(task => task.ResourceId.HasValue))
+        {
+            var resource = await _context.Resources.FindAsync(task.ResourceId!.Value);
+            if (resource == null)
+            {
+                violations.Add(new ValidationViolationDto(
+                    "R0_RESOURCE_NOT_FOUND",
+                    $"Task {task.Id}: linked resource {task.ResourceId} does not exist.",
+                    "BLOCKER"));
+                checks.Add(new ValidationCheckDto(
+                    "check_resource_stock", false,
+                    $"Task {task.Id}: linked resource {task.ResourceId} is missing."));
+                continue;
+            }
+
+            bool resourceAvailable = resource.Status == "Available";
+            checks.Add(new ValidationCheckDto(
+                "check_resource_stock", resourceAvailable,
+                $"Task {task.Id}: resource {resource.Name} status is {resource.Status}."));
+
+            if (!resourceAvailable)
+            {
+                violations.Add(new ValidationViolationDto(
+                    "R1_RESOURCE_UNAVAILABLE",
+                    $"Task {task.Id}: resource {resource.Name} is {resource.Status}, not Available.",
+                    "BLOCKER"));
+            }
+        }
+
         foreach (var req in request?.InventoryRequests ?? [])
         {
             var item = await _context.InventoryItems.FindAsync(req.InventoryItemId);

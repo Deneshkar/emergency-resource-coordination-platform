@@ -155,6 +155,34 @@ public class DispatchValidationServiceTests
     }
 
     [Fact]
+    public async Task ValidateDispatch_UnavailableLinkedResource_ReturnsReject_WithR1()
+    {
+        var (ctx, dispatch, _) = await SeedDispatchAsync(volunteerAvailable: true);
+        var resource = new Resource
+        {
+            Name = "Test Vehicle",
+            ResourceType = "Vehicle",
+            Status = "Maintenance",
+            Capacity = 4,
+            Location = "Depot",
+        };
+        ctx.Resources.Add(resource);
+        await ctx.SaveChangesAsync();
+
+        var task = await ctx.DispatchTasks.SingleAsync(t => t.DispatchId == dispatch.Id);
+        task.ResourceId = resource.Id;
+        await ctx.SaveChangesAsync();
+
+        var service = new DispatchValidationService(ctx);
+        var result = await service.ValidateDispatchAsync(dispatch.Id, new ValidateDispatchRequestDto());
+
+        Assert.False(result.IsValid);
+        Assert.Equal("REJECT", result.Recommendation);
+        Assert.Contains(result.Violations, v => v.Code == "R1_RESOURCE_UNAVAILABLE");
+        Assert.DoesNotContain(result.Warnings, w => w.Code == "W4_RESOURCE_LINK_UNVERIFIED");
+    }
+
+    [Fact]
     public async Task ValidateDispatch_NoTasks_ReturnsRevise_WithW0()
     {
         var ctx = GetInMemoryContext();

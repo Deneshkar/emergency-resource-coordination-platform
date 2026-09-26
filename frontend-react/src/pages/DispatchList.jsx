@@ -4,10 +4,19 @@ import Modal, { FormField } from "../components/Modal";
 import ValidationPanel from "../components/ValidationPanel";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "sonner";
-import { getDispatches, createDispatch, updateDispatchStatus } from "../services/dispatchService";
+import {
+  getDispatches,
+  createDispatch,
+  updateDispatchStatus,
+  createDispatchTask,
+  updateDispatchTask,
+  deleteDispatchTask,
+  proposeAllocation,
+} from "../services/dispatchService";
 import { getIncidents } from "../services/incidentService";
+import { incidentService } from "../services/incidentService";
 import { getVolunteers } from "../services/volunteerService";
-import { createDispatchTask } from "../services/dispatchService";
+import { getResources } from "../services/resourceService";
 import { validateDispatch, getValidationHistory, canApprove, approvalBlockReason } from "../services/validationService";
 
 export default function DispatchList() {
@@ -16,11 +25,14 @@ export default function DispatchList() {
   const [dispatches, setDispatches] = useState([]);
   const [incidents, setIncidents] = useState([]);
   const [volunteers, setVolunteers] = useState([]);
+  const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [showTask, setShowTask] = useState(null);
+  const [editingTask, setEditingTask] = useState(null);
+  const [allocationLoadingById, setAllocationLoadingById] = useState({});
   const [form, setForm] = useState({ incidentId: "", priority: "Medium" });
-  const [taskForm, setTaskForm] = useState({ volunteerId: "", taskType: "" });
+  const [taskForm, setTaskForm] = useState({ volunteerId: "", resourceId: "", taskType: "" });
   // Student 4 — Validation/Safety gate state per dispatch: { [id]: { result, loading, error } }
   const [validationById, setValidationById] = useState({});
   const [historyById, setHistoryById] = useState({});
@@ -45,14 +57,16 @@ export default function DispatchList() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [d, i, v] = await Promise.all([
+      const [d, i, v, r] = await Promise.all([
         getDispatches().catch(() => []),
         getIncidents().catch(() => []),
         getVolunteers("", null, 1, 100).catch(() => []),
+        getResources().catch(() => []),
       ]);
       setDispatches(d);
       setIncidents(i);
       setVolunteers(v);
+      setResources(r);
     } catch (err) {
       console.error(err);
     } finally {
@@ -88,20 +102,73 @@ export default function DispatchList() {
   const handleCreateTask = async (e) => {
     e.preventDefault();
     try {
-      await createDispatchTask(showTask.id, {
+      const taskData = {
         volunteerId: taskForm.volunteerId,
+        resourceId: taskForm.resourceId ? Number(taskForm.resourceId) : null,
         taskType: taskForm.taskType,
-      });
-      setTaskForm({ volunteerId: "", taskType: "" });
+      };
+      if (editingTask) {
+        await updateDispatchTask(showTask.id, editingTask.id, taskData);
+      } else {
+        await createDispatchTask(showTask.id, taskData);
+      }
+      setValidationById((prev) => ({ ...prev, [showTask.id]: { result: null, loading: false, error: null } }));
+      setTaskForm({ volunteerId: "", resourceId: "", taskType: "" });
       setShowTask(null);
-      toast.success("Task assigned successfully");
+      setEditingTask(null);
+      toast.success(editingTask ? "Task assignment updated" : "Task assigned successfully");
       fetchData();
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to assign task.");
+      toast.error(err.response?.data?.message || err.message || "Failed to save task assignment.");
     }
   };
 
-  const statusFlow = ["Proposed", "PendingApproval", "Approved", "Assigned", "InProgress", "Completed"];
+  const handleRequestAllocation = async (dispatch) => {
+    setAllocationLoadingById((prev) => ({ ...prev, [dispatch.id]: true }));
+    try {
+      const plan = await incidentService.generatePlan(
+        dispatch.incidentId,
+        `Prepare an allocation proposal for dispatch #${dispatch.id} at ${dispatch.priority} priority.`
+      );
+      await proposeAllocation(dispatch.id, plan.id);
+      setValidationById((prev) => ({ ...prev, [dispatch.id]: { result: null, loading: false, error: null } }));
+      toast.success("Allocation proposal generated");
+      fetchData();
+    } catch (err) {
+      toast.error(err.response?.data?.message || err.message || "Failed to request an allocation proposal.");
+    } finally {
+      setAllocationLoadingById((prev) => ({ ...prev, [dispatch.id]: false }));
+    }
+  };
+
+  const handleDeleteTask = async (dispatchId, taskId) => {
+    try {
+      await deleteDispatchTask(dispatchId, taskId);
+      setValidationById((prev) => ({ ...prev, [dispatchId]: { result: null, loading: false, error: null } }));
+      toast.success("Task removed from proposal");
+      fetchData();
+    } catch (err) {
+      toast.error(err.response?.data?.message || err.message || "Failed to remove task.");
+    }
+  };
+
+  const openTaskForm = (dispatch, task = null) => {
+    setShowTask(dispatch);
+    setEditingTask(task);
+    setTaskForm({
+      volunteerId: task?.volunteerId ?? "",
+      resourceId: task?.resourceId == null ? "" : String(task.resourceId),
+      taskType: task?.taskType ?? "",
+    });
+  };
+
+  const closeTaskForm = () => {
+    setShowTask(null);
+    setEditingTask(null);
+    setTaskForm({ volunteerId: "", resourceId: "", taskType: "" });
+  };
+
+  const statusFlow = ["Approved", "Assigned", "InProgress", "Completed"];
 
   const getNextStatus = (current) => {
     const idx = statusFlow.indexOf(current);
@@ -160,13 +227,11 @@ export default function DispatchList() {
           {dispatches.map((d) => {
             const nextStatus = getNextStatus(d.status);
             const inc = incidents.find((i) => i.id === d.incidentId);
-            // Student 4 soft-gate: high-impact move to Approved requires a genuinely
-            // evaluated APPROVE/REVISE (at least one tool check). Empty, REJECT, or
-            // missing results block Approve (Reject stays allowed).
             const validation = validationById[d.id];
-            const needsGate = nextStatus === "Approved";
-            const gateBlocked = needsGate && !canApprove(validation?.result);
+            const gateBlocked = !canApprove(validation?.result);
             const blockReason = approvalBlockReason(validation?.result);
+            const canEditTasks = isCoordinator && ["Proposed", "PendingApproval"].includes(d.status);
+            const proposal = d.allocationProposal;
             return (
               <div
                 key={d.id}
@@ -196,38 +261,57 @@ export default function DispatchList() {
                   </div>
 
                   <div style={{ display: "flex", gap: "6px", alignItems: "center", flexShrink: 0, flexWrap: "wrap" }}>
-                    {isCoordinator && (
+                    {isCoordinator && ["Proposed", "PendingApproval"].includes(d.status) && (
+                      <button
+                        className="btn btn-ghost btn-sm"
+                        onClick={() => handleRequestAllocation(d)}
+                        disabled={allocationLoadingById[d.id]}
+                        title="Generate and attach an allocation proposal to this dispatch"
+                      >
+                        {allocationLoadingById[d.id]
+                          ? "Requesting…"
+                          : proposal ? "↻ Re-run Allocation" : "Request Allocation"}
+                      </button>
+                    )}
+                    {isCoordinator && d.status === "PendingApproval" && (
                       <button
                         className="btn btn-ghost btn-sm"
                         onClick={() => handleValidate(d.id)}
                         disabled={validation?.loading}
                         title="Run the deterministic Validation/Safety Agent before approval"
                       >
-                        {validation?.loading ? "Checking…" : validation?.result ? "🛡️ Re-check" : "🛡️ Run Safety Check"}
+                        {validation?.loading ? "Checking…" : validation?.result ? "Re-run Safety Check" : "Run Safety Check"}
+                      </button>
+                    )}
+                    {isCoordinator && d.status === "PendingApproval" && (
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => handleStatusChange(d.id, "Approved")}
+                        disabled={gateBlocked}
+                        title={gateBlocked ? blockReason : "Approve this allocation proposal"}
+                      >
+                        Approve Proposal
                       </button>
                     )}
                     {nextStatus && (
                       <button
                         className="btn btn-primary btn-sm"
                         onClick={() => handleStatusChange(d.id, nextStatus)}
-                        disabled={isCoordinator && gateBlocked}
-                        title={
-                          isCoordinator && gateBlocked
-                            ? (blockReason ?? `Move to ${nextStatus}`)
-                            : `Move to ${nextStatus}`
-                        }
+                        title={`Move to ${nextStatus}`}
                       >
                         Move to {nextStatus}
                       </button>
                     )}
-                    {d.status !== "Completed" && d.status !== "Rejected" && (
+                    {isCoordinator && d.status !== "Completed" && d.status !== "Rejected" && (
                       <button className="btn btn-ghost btn-sm text-danger" onClick={() => handleStatusChange(d.id, "Rejected")}>
                         Reject
                       </button>
                     )}
-                    <button className="btn btn-ghost btn-sm" onClick={() => setShowTask(d)}>
-                      + Add Task
-                    </button>
+                    {canEditTasks && (
+                      <button className="btn btn-ghost btn-sm" onClick={() => openTaskForm(d)}>
+                        + Assign Task
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -239,6 +323,55 @@ export default function DispatchList() {
                     history={historyById[d.id] ?? []}
                     onRerun={() => handleValidate(d.id)}
                   />
+                )}
+
+                {proposal && (
+                  <section
+                    aria-label="Allocation proposal"
+                    data-testid={`allocation-proposal-${d.id}`}
+                    style={{ marginTop: "14px", paddingTop: "14px", borderTop: "1px solid var(--border-subtle)" }}
+                  >
+                    <div className="card-title" style={{ fontSize: "14px", marginBottom: "4px" }}>
+                      {proposal.planTitle || "Allocation proposal"}
+                    </div>
+                    <div className="text-dim" style={{ fontSize: "12px", marginBottom: "10px" }}>
+                      {proposal.phase} · Generated {new Date(proposal.createdAt).toLocaleString()}
+                    </div>
+                    {proposal.planDescription && <p style={{ fontSize: "13px", marginBottom: "10px" }}>{proposal.planDescription}</p>}
+                    {proposal.dispatchPlan?.length > 0 && (
+                      <div style={{ marginBottom: "10px" }}>
+                        <div className="text-dim" style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", marginBottom: "6px" }}>Proposed actions</div>
+                        {proposal.dispatchPlan.map((step, index) => (
+                          <div key={`${step.action}-${index}`} className="glass-card" style={{ padding: "8px 10px", marginBottom: "5px", fontSize: "12px" }}>
+                            <strong>{step.action}</strong> · {step.resource} · {step.location}
+                            {step.reason && <div className="text-dim" style={{ marginTop: "3px" }}>{step.reason}</div>}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {proposal.suggestedAssignments?.length > 0 && (
+                      <div style={{ marginBottom: "10px" }}>
+                        <div className="text-dim" style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", marginBottom: "6px" }}>Suggested assignments</div>
+                        {proposal.suggestedAssignments.map((assignment, index) => (
+                          <div key={`${assignment.entityName}-${index}`} style={{ fontSize: "12px", marginBottom: "4px" }}>
+                            <strong>{assignment.role}</strong> · {assignment.entityName} <span className="text-dim">{assignment.reason}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {(proposal.constraints?.length > 0 || proposal.risks?.length > 0 || proposal.riskAssessment) && (
+                      <div style={{ fontSize: "12px" }}>
+                        {proposal.riskAssessment && <div><strong>Risk:</strong> {proposal.riskAssessment}</div>}
+                        {proposal.constraints?.map((item, index) => <div key={`constraint-${index}`} className="text-danger">Constraint: {item}</div>)}
+                        {proposal.risks?.map((item, index) => <div key={`risk-${index}`} style={{ color: "var(--amber)" }}>Risk: {item}</div>)}
+                      </div>
+                    )}
+                    {canEditTasks && (
+                      <div className="text-dim" style={{ fontSize: "11px", marginTop: "10px" }}>
+                        Review the proposal, then assign or adjust tasks below before running the safety check.
+                      </div>
+                    )}
+                  </section>
                 )}
 
                 {d.tasks && d.tasks.length > 0 && (
@@ -266,8 +399,21 @@ export default function DispatchList() {
                               <span className="text-dim" style={{ marginLeft: "8px" }}>
                                 {vol ? vol.name : t.volunteerId?.slice(0, 8)}
                               </span>
+                              {t.resourceId != null && (
+                                <span className="text-dim" style={{ marginLeft: "8px" }}>
+                                  · {resources.find((resource) => resource.id === t.resourceId)?.name || `Resource #${t.resourceId}`}
+                                </span>
+                              )}
                             </div>
-                            <StatusBadge status={t.status} size="sm" />
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                              <StatusBadge status={t.status} size="sm" />
+                              {canEditTasks && (
+                                <>
+                                  <button className="btn btn-ghost btn-sm" title="Edit assignment" onClick={() => openTaskForm(d, t)}>Edit</button>
+                                  <button className="btn btn-ghost btn-sm text-danger" title="Remove assignment" onClick={() => handleDeleteTask(d.id, t.id)}>Remove</button>
+                                </>
+                              )}
+                            </div>
                           </div>
                         );
                       })}
@@ -305,7 +451,7 @@ export default function DispatchList() {
         </form>
       </Modal>
 
-      <Modal isOpen={!!showTask} onClose={() => setShowTask(null)} title={`Add Task to Dispatch #${showTask?.id}`} subtitle="Assign a volunteer to this dispatch">
+      <Modal isOpen={!!showTask} onClose={closeTaskForm} title={`${editingTask ? "Edit" : "Assign"} Task${showTask ? ` · Dispatch #${showTask.id}` : ""}`} subtitle="Assign a volunteer and optional resource">
         <form onSubmit={handleCreateTask}>
           <FormField label="Volunteer" required>
             <select className="form-select" value={taskForm.volunteerId} onChange={(e) => setTaskForm({ ...taskForm, volunteerId: e.target.value })} required>
@@ -315,12 +461,20 @@ export default function DispatchList() {
               ))}
             </select>
           </FormField>
+          <FormField label="Resource">
+            <select className="form-select" value={taskForm.resourceId} onChange={(e) => setTaskForm({ ...taskForm, resourceId: e.target.value })}>
+              <option value="">No resource assigned</option>
+              {resources.filter((resource) => resource.status === "Available" || resource.id === Number(taskForm.resourceId)).map((resource) => (
+                <option key={resource.id} value={resource.id}>{resource.name} · {resource.resourceType}</option>
+              ))}
+            </select>
+          </FormField>
           <FormField label="Task Type" required>
             <input className="form-control" placeholder="e.g. Medical Response, Transport" value={taskForm.taskType} onChange={(e) => setTaskForm({ ...taskForm, taskType: e.target.value })} required />
           </FormField>
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "8px" }}>
-            <button type="button" className="btn btn-ghost" onClick={() => setShowTask(null)}>Cancel</button>
-            <button type="submit" className="btn btn-primary">Assign Task</button>
+            <button type="button" className="btn btn-ghost" onClick={closeTaskForm}>Cancel</button>
+            <button type="submit" className="btn btn-primary">{editingTask ? "Save Assignment" : "Assign Task"}</button>
           </div>
         </form>
       </Modal>
