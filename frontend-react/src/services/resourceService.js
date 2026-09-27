@@ -1,54 +1,46 @@
-import axios from "axios";
-
-const API_BASE_URL = `${import.meta.env.VITE_API_URL || "http://localhost:5009"}/api`;
+import { API_BASE, apiGet, apiPost, apiPut, apiDelete } from "./api";
 
 // Resources API
 export const getResources = async (resourceType = "", status = "") => {
   const params = {};
   if (resourceType) params.resourceType = resourceType;
   if (status) params.status = status;
-  const response = await axios.get(`${API_BASE_URL}/Resources`, { params });
-  return response.data;
+  return await apiGet(`${API_BASE}/Resources`, params);
 };
 
 export const createResource = async (data) => {
-  const response = await axios.post(`${API_BASE_URL}/Resources`, data);
-  return response.data;
+  return await apiPost(`${API_BASE}/Resources`, data);
 };
 
 export const updateResource = async (id, data) => {
-  await axios.put(`${API_BASE_URL}/Resources/${id}`, data);
+  await apiPut(`${API_BASE}/Resources/${id}`, data);
 };
 
 export const updateResourceStatus = async (id, status) => {
-  const response = await axios.put(`${API_BASE_URL}/Resources/${id}/status`, { status });
-  return response.data;
+  return await apiPut(`${API_BASE}/Resources/${id}/status`, { status });
 };
 
 // Shelters API
 export const getShelters = async (status = "") => {
   const params = {};
   if (status) params.status = status;
-  const response = await axios.get(`${API_BASE_URL}/Shelters`, { params });
-  return response.data;
+  return await apiGet(`${API_BASE}/Shelters`, params);
 };
 
 export const createShelter = async (data) => {
-  const response = await axios.post(`${API_BASE_URL}/Shelters`, data);
-  return response.data;
+  return await apiPost(`${API_BASE}/Shelters`, data);
 };
 
 export const updateShelter = async (id, data) => {
-  await axios.put(`${API_BASE_URL}/Shelters/${id}`, data);
+  await apiPut(`${API_BASE}/Shelters/${id}`, data);
 };
 
 export const deleteShelter = async (id) => {
-  await axios.delete(`${API_BASE_URL}/Shelters/${id}`);
+  await apiDelete(`${API_BASE}/Shelters/${id}`);
 };
 
 export const updateShelterOccupancy = async (id, currentOccupancy) => {
-  const response = await axios.put(`${API_BASE_URL}/Shelters/${id}/occupancy`, { currentOccupancy });
-  return response.data;
+  return await apiPut(`${API_BASE}/Shelters/${id}/occupancy`, { currentOccupancy });
 };
 
 // Inventory API
@@ -56,34 +48,30 @@ export const getInventory = async (category = "", status = "") => {
   const params = {};
   if (category) params.category = category;
   if (status) params.status = status;
-  const response = await axios.get(`${API_BASE_URL}/Inventory`, { params });
-  return response.data;
+  return await apiGet(`${API_BASE}/Inventory`, params);
 };
 
 export const createInventoryItem = async (data) => {
-  const response = await axios.post(`${API_BASE_URL}/Inventory`, data);
-  return response.data;
+  return await apiPost(`${API_BASE}/Inventory`, data);
 };
 
 export const adjustStock = async (id, quantityAdjustment) => {
-  const response = await axios.put(`${API_BASE_URL}/Inventory/${id}/adjust-stock`, { quantityAdjustment });
-  return response.data;
+  return await apiPut(`${API_BASE}/Inventory/${id}/adjust-stock`, { quantityAdjustment });
 };
 
 export const updateInventoryItem = async (id, data) => {
-  await axios.put(`${API_BASE_URL}/Inventory/${id}`, data);
+  await apiPut(`${API_BASE}/Inventory/${id}`, data);
 };
 
 export const deleteInventoryItem = async (id) => {
-  await axios.delete(`${API_BASE_URL}/Inventory/${id}`);
+  await apiDelete(`${API_BASE}/Inventory/${id}`);
 };
 
 export const deleteResource = async (id) => {
-  await axios.delete(`${API_BASE_URL}/Resources/${id}`);
+  await apiDelete(`${API_BASE}/Resources/${id}`);
 };
 
 // Situation Analysis AI Agent API
 export const assessSituation = async (incidentId) => {
-  const response = await axios.post(`${API_BASE_URL}/SituationAnalysis/assess`, { incidentId });
-  return response.data;
+  return await apiPost(`${API_BASE}/SituationAnalysis/assess`, { incidentId });
 };

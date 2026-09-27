@@ -98,34 +98,34 @@ class CoordinatorPlannerAgent:
 
         # Reason & Plan (Agentic Step 2)
         reasoning_log = f"1. Observed {priority} priority {category} incident with {affected_count} affected.\n"
-        
+
         if len(resources) == 0:
             reasoning_log += "2. Gathered real data: No available resources found.\n"
         else:
             reasoning_log += f"2. Gathered real data: {len(resources)} resources available.\n"
-            
+
         if len(volunteers) == 0:
             reasoning_log += "3. Gathered real data: No available volunteers found.\n"
         else:
             reasoning_log += f"3. Gathered real data: {len(volunteers)} volunteers available.\n"
-        
+
         constraints = []
         risks = []
-        
+
         if priority in ["High", "Critical"]:
             risks.append("High risk of escalation. Rapid deployment required.")
         if affected_count > 20:
             risks.append("Mass casualty potential. Large-scale evacuation may be necessary.")
-            
+
         needed_vehicles = 2 if priority in ["High", "Critical"] else 1
         available_vehicles = [r for r in resources if r.get('resourceType', r.get('ResourceType')) == 'Vehicle']
-        
+
         if len(available_vehicles) < needed_vehicles:
             constraints.append(f"Insufficient vehicles. Need {needed_vehicles}, but only {len(available_vehicles)} available.")
             reasoning_log += f"4. Identified constraint: Lack of required vehicles.\n"
         else:
             reasoning_log += f"4. Sufficient vehicles available in inventory.\n"
-            
+
         needed_vols = 5 if affected_count > 10 else 2
         if len(volunteers) < needed_vols:
             constraints.append(f"Insufficient volunteers. Need {needed_vols}, but only {len(volunteers)} available.")
@@ -151,7 +151,7 @@ class CoordinatorPlannerAgent:
                 "Location": location,
                 "Reason": "Primary response unit"
             })
-            
+
         action_steps = [
             {
                 "step_number": 1,
@@ -217,10 +217,15 @@ class CoordinatorPlannerAgent:
         priority = incident_data.get("priority", "Medium")
         affected = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
         risk_level, escalation_warning = self._evaluate_threat(category, priority, affected)
+
+        recommended = "Critical" if "CRITICAL" in risk_level else ("High" if "MODERATE" in risk_level else "Medium")
+
         return {
             "incident_id": incident_data.get("incident_id", incident_data.get("incidentId", 0)),
-            "risk_level": risk_level,
-            "escalation_warning": escalation_warning,
+            "riskLevel": risk_level,
+            "recommendedPriority": recommended,
+            "reason": escalation_warning,
+            "immediateActionRequired": ("CRITICAL" in risk_level or priority.upper() == "CRITICAL"),
             "status": "Generated",
         }
 
@@ -228,9 +233,17 @@ class CoordinatorPlannerAgent:
         title = incident_data.get("title", "Emergency Incident")
         category = incident_data.get("category", "General Emergency")
         priority = incident_data.get("priority", "Medium")
+        affected = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
+        risk_level, _ = self._evaluate_threat(category, priority, affected)
         return {
             "incident_id": incident_data.get("incident_id", incident_data.get("incidentId", 0)),
             "summary": f"{priority} priority {category} incident '{title}' at {incident_data.get('location', 'Unknown Location')}.",
+            "mainThreat": risk_level,
+            "keyFacts": [
+                f"Location: {incident_data.get('location', 'Unknown')}",
+                f"Affected Individuals: {affected}",
+                f"Reported Priority: {priority}"
+            ],
             "status": "Generated",
         }
 
@@ -238,16 +251,56 @@ class CoordinatorPlannerAgent:
         category = incident_data.get("category", "General Emergency")
         priority = incident_data.get("priority", "Medium")
         affected = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
+
+        resources_list = self._estimate_resources(category, priority, affected)
+
+        recommended_resources = []
+        for r in resources_list:
+            recommended_resources.append({
+                "resourceType": r["resource_type"],
+                "quantity": r["quantity"],
+                "reason": r["description"]
+            })
+
+        recommended_vols = [{
+            "count": max(5, affected // 3),
+            "role": f"Field Support - {category}",
+            "reason": "Provide on-ground assistance and crowd control."
+        }]
+
+        shelter = None
+        if affected > 10 or priority.upper() in ["HIGH", "CRITICAL"]:
+            shelter = {
+                "name": "Central Emergency Shelter",
+                "reason": f"Required for {affected} displaced individuals."
+            }
+
         return {
             "incident_id": incident_data.get("incident_id", incident_data.get("incidentId", 0)),
-            "recommended_resources": self._estimate_resources(category, priority, affected),
+            "recommendedResources": recommended_resources,
+            "recommendedVolunteers": recommended_vols,
+            "recommendedShelter": shelter,
             "status": "Generated",
         }
 
-    def check_duplicates(self, incident_data):
+    def check_duplicates(self, input_data):
+        incident_data = input_data.get("incident", {})
+        other_incidents = input_data.get("other_incidents", [])
+
+        duplicates = []
+        for other in other_incidents:
+            if other.get("category") == incident_data.get("category"):
+                duplicates.append({
+                    "incidentId": other.get("id", 0),
+                    "similarityReason": f"Same category ({other.get('category')}) reported recently."
+                })
+
+        is_dup = len(duplicates) > 0
+
         return {
-            "incident_id": incident_data.get("incident_id", incident_data.get("incidentId", incident_data.get("id", 0))),
-            "duplicates": [],
+            "incident_id": incident_data.get("id", 0),
+            "isPotentialDuplicate": is_dup,
+            "similarIncidents": duplicates,
             "status": "Generated",
         }
 
@@ -281,7 +334,7 @@ class CoordinatorPlannerAgent:
 
     def _generate_action_steps(self, category, priority, affected_count, location):
         steps = []
-        
+
         # Step 1: Staging Command
         steps.append({
             "step_number": 1,
@@ -436,7 +489,7 @@ def main():
         }
 
     agent = CoordinatorPlannerAgent()
-    
+
     if args.task == "risk":
         result = agent.generate_risk_assessment(incident_data)
     elif args.task == "summary":

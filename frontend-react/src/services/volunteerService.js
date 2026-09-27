@@ -1,71 +1,58 @@
-import axios from "axios";
-
-const API_BASE_URL = `${import.meta.env.VITE_API_URL || "http://localhost:5009"}/api`;
+import { API_BASE, apiGet, apiPost, apiPut, apiDelete } from "./api";
 
 export const getVolunteers = async (search = "", isAvailable = null, page = 1, pageSize = 10) => {
   const params = { search, page, pageSize };
   if (isAvailable !== null) params.isAvailable = isAvailable;
-
-  const response = await axios.get(`${API_BASE_URL}/Volunteers`, { params });
-  return response.data;
+  return await apiGet(`${API_BASE}/Volunteers`, params);
 };
 
 export const updateAvailability = async (id, isAvailable) => {
-  await axios.put(`${API_BASE_URL}/Volunteers/${id}/availability`, { isAvailable });
+  await apiPut(`${API_BASE}/Volunteers/${id}/availability`, { isAvailable });
 };
 
 export const getVolunteerShifts = async (id) => {
-  const response = await axios.get(`${API_BASE_URL}/Volunteers/${id}/shifts`);
-  return response.data;
+  return await apiGet(`${API_BASE}/Volunteers/${id}/shifts`);
 };
 
-// Student 4 — assign a shift to a volunteer (Coordinator/Admin only, 403 otherwise).
-// Backend: POST /api/Volunteers/{id}/shifts { startTime, endTime, status }
 export const createShift = async (id, { startTime, endTime, status }) => {
-  const response = await axios.post(`${API_BASE_URL}/Volunteers/${id}/shifts`, {
+  return await apiPost(`${API_BASE}/Volunteers/${id}/shifts`, {
     startTime,
     endTime,
     status,
   });
-  return response.data;
 };
 
 export const createVolunteer = async (volunteerData) => {
-  const response = await axios.post(`${API_BASE_URL}/Volunteers`, volunteerData);
-  return response.data;
+  return await apiPost(`${API_BASE}/Volunteers`, volunteerData);
 };
 
 export const deleteAllVolunteers = async () => {
-  await axios.delete(`${API_BASE_URL}/Volunteers`);
+  await apiDelete(`${API_BASE}/Volunteers`);
 };
 
 export const deleteVolunteer = async (id) => {
-  await axios.delete(`${API_BASE_URL}/Volunteers/${id}`);
+  await apiDelete(`${API_BASE}/Volunteers/${id}`);
 };
 
 export const getVolunteerById = async (id) => {
-  const response = await axios.get(`${API_BASE_URL}/Volunteers/${id}`);
-  return response.data;
+  return await apiGet(`${API_BASE}/Volunteers/${id}`);
 };
 
-// Student 4 — edit profile (Coordinator/Admin any, Volunteer own only, 403 otherwise).
 export const updateVolunteer = async (id, { name, phone, skills }) => {
-  const response = await axios.put(`${API_BASE_URL}/Volunteers/${id}`, {
+  return await apiPut(`${API_BASE}/Volunteers/${id}`, {
     name,
     phone,
     skills,
   });
-  return response.data;
 };
 
 export const updateShift = async (volunteerId, shiftId, { startTime, endTime, status }) => {
-  const response = await axios.put(
-    `${API_BASE_URL}/Volunteers/${volunteerId}/shifts/${shiftId}`,
+  return await apiPut(
+    `${API_BASE}/Volunteers/${volunteerId}/shifts/${shiftId}`,
     { startTime, endTime, status }
   );
-  return response.data;
 };
 
 export const deleteShift = async (volunteerId, shiftId) => {
-  await axios.delete(`${API_BASE_URL}/Volunteers/${volunteerId}/shifts/${shiftId}`);
+  await apiDelete(`${API_BASE}/Volunteers/${volunteerId}/shifts/${shiftId}`);
 };
