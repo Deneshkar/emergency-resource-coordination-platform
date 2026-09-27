@@ -20,82 +20,91 @@ public class NotificationsController : ControllerBase
     /// <summary>Send an alert email notification</summary>
     [HttpPost("email")]
     [Authorize]
-    public async Task<IActionResult> SendEmailAlert([FromBody] EmailAlertRequest request)
+    public IActionResult SendEmailAlert([FromBody] EmailAlertRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.AlertType) || string.IsNullOrWhiteSpace(request.Subject))
             return BadRequest(new { message = "alertType and subject are required." });
 
-        try
+        _ = Task.Run(async () =>
         {
-            await _emailService.SendAlertAsync(
-                request.AlertType,
-                request.Subject,
-                request.Body ?? "",
-                request.Priority ?? "High"
-            );
-            return Ok(new { success = true, message = "Email sent successfully." });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to send alert email");
-            return StatusCode(500, new { success = false, message = "Failed to send email. Check SMTP configuration." });
-        }
+            try
+            {
+                await _emailService.SendAlertAsync(
+                    request.AlertType,
+                    request.Subject,
+                    request.Body ?? "",
+                    request.Priority ?? "High"
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "[Notifications] Background email alert failed");
+            }
+        });
+
+        return Ok(new { success = true, queued = true, message = "Email notification queued." });
     }
 
     /// <summary>Send low stock inventory alert</summary>
     [HttpPost("inventory/low-stock")]
     [Authorize]
-    public async Task<IActionResult> SendLowStockAlert([FromBody] InventoryAlertRequest request)
+    public IActionResult SendLowStockAlert([FromBody] InventoryAlertRequest request)
     {
-        try
+        _ = Task.Run(async () =>
         {
-            await _emailService.SendAlertAsync(
-                "⚠️ Low Stock Alert",
-                $"[ERCP] Low Stock: {request.ItemName}",
-                $"ALERT: Inventory item \"{request.ItemName}\" is running low.\n\n" +
-                $"Current Stock : {request.Quantity} {request.Unit}\n" +
-                $"Min Threshold : {request.MinimumThreshold} {request.Unit}\n" +
-                $"Location      : {request.Location ?? "N/A"}\n\n" +
-                $"Immediate restocking is recommended.",
-                "High"
-            );
-            return Ok(new { success = true });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to send low stock email");
-            return StatusCode(500, new { success = false, message = ex.Message });
-        }
+            try
+            {
+                await _emailService.SendAlertAsync(
+                    "⚠️ Low Stock Alert",
+                    $"[ERCP] Low Stock: {request.ItemName}",
+                    $"ALERT: Inventory item \"{request.ItemName}\" is running low.\n\n" +
+                    $"Current Stock : {request.Quantity} {request.Unit}\n" +
+                    $"Min Threshold : {request.MinimumThreshold} {request.Unit}\n" +
+                    $"Location      : {request.Location ?? "N/A"}\n\n" +
+                    $"Immediate restocking is recommended.",
+                    "High"
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "[Notifications] Low stock email failed");
+            }
+        });
+
+        return Ok(new { success = true, queued = true });
     }
 
     /// <summary>Send out-of-stock critical alert</summary>
     [HttpPost("inventory/out-of-stock")]
     [Authorize]
-    public async Task<IActionResult> SendOutOfStockAlert([FromBody] InventoryAlertRequest request)
+    public IActionResult SendOutOfStockAlert([FromBody] InventoryAlertRequest request)
     {
-        try
+        _ = Task.Run(async () =>
         {
-            await _emailService.SendAlertAsync(
-                "🚨 Out of Stock — CRITICAL",
-                $"[ERCP] CRITICAL: {request.ItemName} is OUT OF STOCK",
-                $"CRITICAL ALERT: Inventory item \"{request.ItemName}\" has reached ZERO stock.\n\n" +
-                $"Location : {request.Location ?? "N/A"}\n\n" +
-                $"Immediate action required! Please restock urgently.",
-                "Critical"
-            );
-            return Ok(new { success = true });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to send out-of-stock email");
-            return StatusCode(500, new { success = false, message = ex.Message });
-        }
+            try
+            {
+                await _emailService.SendAlertAsync(
+                    "🚨 Out of Stock — CRITICAL",
+                    $"[ERCP] CRITICAL: {request.ItemName} is OUT OF STOCK",
+                    $"CRITICAL ALERT: Inventory item \"{request.ItemName}\" has reached ZERO stock.\n\n" +
+                    $"Location : {request.Location ?? "N/A"}\n\n" +
+                    $"Immediate action required! Please restock urgently.",
+                    "Critical"
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "[Notifications] Out of stock email failed");
+            }
+        });
+
+        return Ok(new { success = true, queued = true });
     }
 
     /// <summary>Send resource status change alert</summary>
     [HttpPost("resource/status")]
     [Authorize]
-    public async Task<IActionResult> SendResourceStatusAlert([FromBody] ResourceAlertRequest request)
+    public IActionResult SendResourceStatusAlert([FromBody] ResourceAlertRequest request)
     {
         var (alertType, subject, body, priority) = request.NewStatus switch
         {
@@ -130,16 +139,19 @@ public class NotificationsController : ControllerBase
             )
         };
 
-        try
+        _ = Task.Run(async () =>
         {
-            await _emailService.SendAlertAsync(alertType, subject, body, priority);
-            return Ok(new { success = true });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to send resource status email");
-            return StatusCode(500, new { success = false, message = ex.Message });
-        }
+            try
+            {
+                await _emailService.SendAlertAsync(alertType, subject, body, priority);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "[Notifications] Resource status email failed");
+            }
+        });
+
+        return Ok(new { success = true, queued = true });
     }
 }
 
