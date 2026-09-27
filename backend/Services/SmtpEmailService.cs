@@ -50,7 +50,18 @@ public class SmtpEmailService : IEmailService
         smtp.Timeout = 10000;
         try
         {
-            await smtp.ConnectAsync(host, port, SecureSocketOptions.StartTls);
+            var options = port == 465 ? SecureSocketOptions.SslOnConnect : SecureSocketOptions.Auto;
+            try
+            {
+                await smtp.ConnectAsync(host, port, options);
+            }
+            catch (Exception) when (port != 465)
+            {
+                // Fallback to SSL on 465 if 587 is blocked by cloud provider
+                _logger.LogWarning("[EmailService] Connect on port {Port} failed, retrying on 465 SSL...", port);
+                await smtp.ConnectAsync(host, 465, SecureSocketOptions.SslOnConnect);
+            }
+
             await smtp.AuthenticateAsync(user, pass);
             await smtp.SendAsync(message);
             await smtp.DisconnectAsync(true);
