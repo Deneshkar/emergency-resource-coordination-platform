@@ -7,7 +7,10 @@ import * as authContext from "../../context/AuthContext";
 
 vi.mock("../../services/volunteerService", () => ({
   getVolunteerShifts: vi.fn(),
+  getVolunteerTasks: vi.fn(),
   createShift: vi.fn(),
+  updateShift: vi.fn(),
+  deleteShift: vi.fn(),
 }));
 
 const VOLUNTEER_ID = "604bd209-0a4a-40f1-9921-56f37bb98655";
@@ -45,11 +48,63 @@ describe("VolunteerDetail (Student 4 shift tracking)", () => {
   it("shows the empty state when the volunteer has no shifts", async () => {
     mockCoordinator();
     volunteerService.getVolunteerShifts.mockResolvedValue([]);
+    volunteerService.getVolunteerTasks.mockResolvedValue([]);
 
     renderPage();
 
     await waitFor(() => expect(screen.getByText("No shifts recorded")).toBeInTheDocument());
     expect(volunteerService.getVolunteerShifts).toHaveBeenCalledWith(VOLUNTEER_ID);
+  });
+
+  it("renders assigned tasks with incident links when tasks exist", async () => {
+    mockCoordinator();
+    volunteerService.getVolunteerShifts.mockResolvedValue([]);
+    volunteerService.getVolunteerTasks.mockResolvedValue([
+      {
+        taskId: 22,
+        dispatchId: 5,
+        incidentId: 12,
+        incidentTitle: "Warehouse fire",
+        dispatchStatus: "PendingApproval",
+        dispatchPriority: "High",
+        taskType: "Medical response",
+        taskStatus: "Assigned",
+        resourceId: 3,
+        resourceName: "Ambulance 1",
+        assignedAt: "2026-09-26T09:00:00Z",
+      },
+    ]);
+
+    renderPage();
+
+    await waitFor(() => expect(volunteerService.getVolunteerTasks).toHaveBeenCalledWith(VOLUNTEER_ID));
+    expect(screen.getByText("Warehouse fire")).toBeInTheDocument();
+    expect(screen.getByText("Medical response")).toBeInTheDocument();
+    expect(screen.getByText("Ambulance 1")).toBeInTheDocument();
+    expect(screen.queryByText("No tasks assigned")).not.toBeInTheDocument();
+  });
+
+  it("shows the tasks empty state when the volunteer has no tasks", async () => {
+    mockCoordinator();
+    volunteerService.getVolunteerShifts.mockResolvedValue([]);
+    volunteerService.getVolunteerTasks.mockResolvedValue([]);
+
+    renderPage();
+
+    await waitFor(() => expect(screen.getByText("No tasks assigned")).toBeInTheDocument());
+  });
+
+  it("surfaces a tasks error without hiding shift history", async () => {
+    mockCoordinator();
+    volunteerService.getVolunteerShifts.mockResolvedValue([
+      { id: 1, startTime: "2026-09-20T08:00:00Z", endTime: "2026-09-20T16:00:00Z", status: "Scheduled" },
+    ]);
+    volunteerService.getVolunteerTasks.mockRejectedValue(new Error("boom"));
+
+    renderPage();
+
+    await waitFor(() => expect(screen.getByText("Failed to load assigned tasks.")).toBeInTheDocument());
+    expect(screen.getByText("#1")).toBeInTheDocument();
   });
 
   it("renders shift rows when shifts exist", async () => {
