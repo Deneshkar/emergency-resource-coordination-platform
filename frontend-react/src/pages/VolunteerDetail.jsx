@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getVolunteerShifts, createShift, updateShift, deleteShift } from "../services/volunteerService";
+import { getVolunteerShifts, getVolunteerTasks, createShift, updateShift, deleteShift } from "../services/volunteerService";
 import { useAuth } from "../context/AuthContext";
 import Modal, { FormField } from "../components/Modal";
 import StatusBadge from "../components/StatusBadge";
@@ -14,6 +14,9 @@ function VolunteerDetail() {
   const [shifts, setShifts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [tasksLoading, setTasksLoading] = useState(true);
+  const [tasksError, setTasksError] = useState(null);
 
   // Student 4 — Assign Shift modal state (Coordinator/Admin only)
   const [showAssign, setShowAssign] = useState(false);
@@ -23,9 +26,11 @@ function VolunteerDetail() {
 
   const canEditShifts = isCoordinator || hasRole(["Volunteer"]);
 
-  const fetchShifts = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
+    setTasksLoading(true);
+    setTasksError(null);
     try {
       const data = await getVolunteerShifts(id);
       setShifts(data);
@@ -34,11 +39,22 @@ function VolunteerDetail() {
     } finally {
       setLoading(false);
     }
+    try {
+      const taskData = await getVolunteerTasks(id);
+      setTasks(Array.isArray(taskData) ? taskData : []);
+    } catch {
+      setTasksError("Failed to load assigned tasks.");
+    } finally {
+      setTasksLoading(false);
+    }
   }, [id]);
 
   useEffect(() => {
-    fetchShifts();
-  }, [fetchShifts]);
+    fetchData();
+  }, [fetchData]);
+
+  // Kept for existing callers/tests that refresh shifts after a mutation.
+  const fetchShifts = fetchData;
 
   const handleAssignShift = async (e) => {
     e.preventDefault();
@@ -104,7 +120,7 @@ function VolunteerDetail() {
 
       <div className="page-header">
         <div className="page-header-left">
-          <h1>Volunteer Shift History</h1>
+          <h1>Volunteer Details</h1>
           <p style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--text-dim)" }}>
             ID: {id}
           </p>
@@ -114,6 +130,73 @@ function VolunteerDetail() {
             + Assign Shift
           </button>
         )}
+      </div>
+
+      <div className="page-header" style={{ marginTop: "8px" }}>
+        <div className="page-header-left">
+          <h1 style={{ fontSize: "20px" }}>Assigned Tasks ({tasksLoading ? "…" : tasks.length})</h1>
+          <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+            Dispatch work orders assigned to this volunteer
+          </p>
+        </div>
+      </div>
+
+      {tasksLoading ? (
+        <div className="loading-spinner">Loading assigned tasks...</div>
+      ) : tasksError ? (
+        <div className="card" style={{ color: "var(--red)", textAlign: "center", padding: "40px" }}>{tasksError}</div>
+      ) : tasks.length === 0 ? (
+        <div className="card">
+          <div className="empty-state">
+            <div className="empty-state-icon">🧭</div>
+            <div className="empty-state-text">No tasks assigned</div>
+            <div className="empty-state-sub">Assign one from Dispatches → + Assign Task</div>
+          </div>
+        </div>
+      ) : (
+        <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+          <div style={{ overflowX: "auto" }}>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Dispatch</th>
+                  <th>Incident</th>
+                  <th>Task</th>
+                  <th>Resource</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tasks.map((t) => (
+                  <tr key={t.taskId}>
+                    <td style={{ fontFamily: "var(--font-mono)", fontSize: "12px" }}>
+                      #{t.dispatchId} · {t.dispatchStatus}
+                    </td>
+                    <td>
+                      <Link to={`/incidents/${t.incidentId}`} style={{ fontWeight: "600", color: "var(--text-primary)" }}>
+                        {t.incidentTitle}
+                      </Link>
+                    </td>
+                    <td>{t.taskType}</td>
+                    <td style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                      {t.resourceName || "—"}
+                    </td>
+                    <td><StatusBadge status={t.taskStatus} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      <div className="page-header" style={{ marginTop: "24px" }}>
+        <div className="page-header-left">
+          <h1 style={{ fontSize: "20px" }}>Shift History</h1>
+          <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+            Duty roster for this volunteer
+          </p>
+        </div>
       </div>
 
       {loading ? (

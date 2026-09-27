@@ -14,6 +14,10 @@ export const getVolunteerShifts = async (id) => {
   return await apiGet(`${API_BASE}/Volunteers/${id}/shifts`);
 };
 
+export const getVolunteerTasks = async (id) => {
+  return await apiGet(`${API_BASE}/Volunteers/${id}/tasks`);
+};
+
 export const createShift = async (id, { startTime, endTime, status }) => {
   return await apiPost(`${API_BASE}/Volunteers/${id}/shifts`, {
     startTime,

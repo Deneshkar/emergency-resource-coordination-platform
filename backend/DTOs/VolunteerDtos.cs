@@ -56,3 +56,18 @@ public class ShiftResponseDto
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
+
+public class VolunteerTaskDto
+{
+    public int TaskId { get; set; }
+    public int DispatchId { get; set; }
+    public int IncidentId { get; set; }
+    public string IncidentTitle { get; set; } = string.Empty;
+    public string DispatchStatus { get; set; } = string.Empty;
+    public string DispatchPriority { get; set; } = string.Empty;
+    public string TaskType { get; set; } = string.Empty;
+    public string TaskStatus { get; set; } = string.Empty;
+    public int? ResourceId { get; set; }
+    public string? ResourceName { get; set; }
+    public DateTime? AssignedAt { get; set; }
+}

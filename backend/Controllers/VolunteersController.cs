@@ -190,6 +190,39 @@ public class VolunteersController : ControllerBase
         return Ok(shifts);
     }
 
+    // GET /api/volunteers/{id}/tasks — dispatch assignments for this volunteer (read-only)
+    [HttpGet("{id}/tasks")]
+    public async Task<ActionResult<IEnumerable<VolunteerTaskDto>>> GetTasks(Guid id)
+    {
+        var exists = await _context.Volunteers.AnyAsync(v => v.Id == id);
+        if (!exists) return NotFound();
+
+        var tasks = await (
+            from t in _context.DispatchTasks.AsNoTracking()
+            join d in _context.Dispatches.AsNoTracking() on t.DispatchId equals d.Id
+            join i in _context.Incidents.AsNoTracking() on d.IncidentId equals i.Id
+            join r in _context.Resources.AsNoTracking() on t.ResourceId equals r.Id into rs
+            from r in rs.DefaultIfEmpty()
+            where t.VolunteerId == id
+            orderby t.AssignedAt descending
+            select new VolunteerTaskDto
+            {
+                TaskId = t.Id,
+                DispatchId = d.Id,
+                IncidentId = i.Id,
+                IncidentTitle = i.Title,
+                DispatchStatus = d.Status,
+                DispatchPriority = d.Priority,
+                TaskType = t.TaskType,
+                TaskStatus = t.Status,
+                ResourceId = t.ResourceId,
+                ResourceName = r != null ? r.Name : null,
+                AssignedAt = t.AssignedAt
+            }).ToListAsync();
+
+        return Ok(tasks);
+    }
+
     // POST /api/volunteers/{id}/shifts
     [HttpPost("{id}/shifts")]
     [Authorize(Roles = "Coordinator,Admin")]
