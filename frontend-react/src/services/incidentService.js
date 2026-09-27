@@ -44,7 +44,14 @@ export const incidentService = {
       method: "POST",
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error("Failed to report incident");
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => null);
+      let msg = errBody?.message || errBody?.title;
+      if (errBody?.errors) {
+        msg = Object.values(errBody.errors).flat().join(" ");
+      }
+      throw new Error(msg || `Failed to report incident (HTTP ${res.status})`);
+    }
     return res.json();
   },
 

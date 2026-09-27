@@ -4,16 +4,25 @@ import StatusBadge from "../components/StatusBadge";
 import Modal, { FormField, FormRow } from "../components/Modal";
 import { getIncidents, createIncident, updateIncident, deleteIncident } from "../services/incidentService";
 import { useAuth } from "../context/AuthContext";
+import { useNotification } from "../context/NotificationContext";
 
 export default function IncidentList() {
-  const { hasRole } = useAuth();
+  const { user, hasRole } = useAuth();
+  const { notify } = useNotification();
   const canManage = hasRole(["Coordinator", "Admin"]);
 
   const [incidents, setIncidents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [showUpdate, setShowUpdate] = useState(null);
-  const [form, setForm] = useState({ title: "", description: "", location: "", priority: "Medium", reporterContact: "" });
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    location: "",
+    category: "Fire",
+    priority: "High",
+    reporterContact: "",
+  });
   const [updateForm, setUpdateForm] = useState({ status: "", priority: "" });
 
   const fetchData = async () => {
@@ -23,6 +32,7 @@ export default function IncidentList() {
       setIncidents(data);
     } catch (err) {
       console.error(err);
+      notify.error("Failed to load incidents: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -32,13 +42,27 @@ export default function IncidentList() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
+    if (form.title.trim().length < 5 || form.title.trim().split(/\s+/).length < 2) {
+      notify.warning("Please provide a descriptive title with at least two words (min 5 chars).");
+      return;
+    }
+    if (form.location.trim().length < 5) {
+      notify.warning("Please provide a specific location or address (min 5 chars).");
+      return;
+    }
+    if (form.description.trim().length < 20) {
+      notify.warning(`Please add more detail in description (${form.description.trim().length}/20 min characters).`);
+      return;
+    }
+
     try {
       await createIncident(form);
-      setForm({ title: "", description: "", location: "", priority: "Medium", reporterContact: "" });
+      notify.success("Incident reported successfully!");
+      setForm({ title: "", description: "", location: "", category: "Fire", priority: "High", reporterContact: user?.email || "" });
       setShowCreate(false);
       fetchData();
     } catch (err) {
-      alert("Validation Error: " + err.message);
+      notify.error(err.message, 8000);
     }
   };
 
@@ -75,7 +99,7 @@ export default function IncidentList() {
           <p>Track and manage reported emergencies &mdash; {incidents.length} total</p>
         </div>
         <button className="btn btn-primary" onClick={() => {
-          setForm({ title: "", description: "", location: "", priority: "Medium", reporterContact: "" });
+          setForm({ title: "", description: "", location: "", category: "Fire", priority: "High", reporterContact: user?.email || "" });
           setShowCreate(true);
         }}>
           + Report Incident
@@ -163,33 +187,96 @@ export default function IncidentList() {
       </div>
 
       {/* Create Modal */}
-      <Modal isOpen={showCreate} onClose={() => setShowCreate(false)} title="Report New Incident" subtitle="Log a new emergency incident into the system" width="560px">
+      <Modal isOpen={showCreate} onClose={() => setShowCreate(false)} title="Report New Incident" subtitle="Log a new emergency incident into the system" width="580px">
         <form onSubmit={handleCreate}>
-          <FormField label="Title" required>
-            <input className="form-control" placeholder="e.g. Flash Flood in District 7" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+          <FormField label="Title" required hint="At least two descriptive words (min 5 chars)">
+            <input
+              className="form-control"
+              placeholder="e.g. Flash Flood in District 7"
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
+              required
+              minLength={5}
+            />
           </FormField>
-          <FormField label="Description">
-            <textarea className="form-control" rows={4} placeholder="Details about the incident, visible hazards, people affected…" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-          </FormField>
+
           <FormRow>
-            <FormField label="Location">
-              <input className="form-control" placeholder="e.g. Colombo, Sri Lanka" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+            <FormField label="Category" required>
+              <select
+                className="form-select"
+                value={form.category}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
+              >
+                <option value="Fire">🔥 Fire / Explosion</option>
+                <option value="Flood">🌊 Flood / Water</option>
+                <option value="Medical">🚑 Medical Emergency</option>
+                <option value="Earthquake">🏚️ Earthquake / Structural</option>
+                <option value="Infrastructure">⚡ Infrastructure / Power</option>
+                <option value="Chemical">☣️ Chemical / HazMat</option>
+                <option value="General Emergency">🚨 General Emergency</option>
+              </select>
             </FormField>
-            <FormField label="Priority">
-              <select className="form-select" value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })}>
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-                <option value="Critical">Critical</option>
+
+            <FormField label="Priority" required>
+              <select
+                className="form-select"
+                value={form.priority}
+                onChange={(e) => setForm({ ...form, priority: e.target.value })}
+              >
+                <option value="Critical">🔴 Critical (Life Danger)</option>
+                <option value="High">🟠 High (Severe Threat)</option>
+                <option value="Medium">🟡 Medium (Moderate Risk)</option>
+                <option value="Low">🟢 Low (Monitoring)</option>
               </select>
             </FormField>
           </FormRow>
-          <FormField label="Reporter Contact / Email" required>
-            <input type="email" className="form-control" placeholder="e.g. user@example.com" value={form.reporterContact} onChange={(e) => setForm({ ...form, reporterContact: e.target.value })} required />
+
+          <FormField label="Location / Address" required hint="Specific street, area or district (min 5 chars)">
+            <input
+              className="form-control"
+              placeholder="e.g. Main Street, Colombo 07"
+              value={form.location}
+              onChange={(e) => setForm({ ...form, location: e.target.value })}
+              required
+              minLength={5}
+            />
           </FormField>
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "8px" }}>
-            <button type="button" className="btn btn-ghost" onClick={() => setShowCreate(false)}>Cancel</button>
-            <button type="submit" className="btn btn-primary">Report Incident</button>
+
+          <FormField
+            label="Description"
+            required
+            hint={`Add situational details (${form.description.trim().length}/20 min chars)`}
+          >
+            <textarea
+              className="form-control"
+              rows={4}
+              placeholder="Describe hazards, casualties, trapped civilians, road blockage, or immediate assistance needed (min 20 characters)..."
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              required
+              minLength={20}
+            />
+          </FormField>
+
+          <FormField label="Reporter Contact / Email" required>
+            <input
+              type="email"
+              className="form-control"
+              placeholder="e.g. coordinator@ercp.org"
+              value={form.reporterContact}
+              onChange={(e) => setForm({ ...form, reporterContact: e.target.value })}
+              required
+            />
+          </FormField>
+
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px" }}>
+            <Link to="/report-incident" style={{ fontSize: "12px", color: "var(--cyan)", textDecoration: "none" }}>
+              Need map or wizard? Open Full Report Page →
+            </Link>
+            <div style={{ display: "flex", gap: "8px" }}>
+              <button type="button" className="btn btn-ghost" onClick={() => setShowCreate(false)}>Cancel</button>
+              <button type="submit" className="btn btn-primary">Report Incident</button>
+            </div>
           </div>
         </form>
       </Modal>
