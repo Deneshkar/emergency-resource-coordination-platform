@@ -70,8 +70,8 @@ public class VolunteerEditTests
         });
 
         var ok = Assert.IsType<OkObjectResult>(res.Result);
-        var updated = Assert.IsType<Shift>(ok.Value);
-        Assert.Equal(ShiftStatus.Active, updated.Status);
+        var updated = Assert.IsType<ShiftResponseDto>(ok.Value);
+        Assert.Equal(ShiftStatus.Active.ToString(), updated.Status);
     }
 
     [Fact]

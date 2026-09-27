@@ -45,3 +45,14 @@ public class VolunteerResponseDto
     public double Rating { get; set; }
     public DateTime CreatedAt { get; set; }
 }
+
+public class ShiftResponseDto
+{
+    public Guid Id { get; set; }
+    public Guid VolunteerId { get; set; }
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
+    public string Status { get; set; } = "Scheduled";
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+}

@@ -357,13 +357,14 @@ public class DispatchesController : ControllerBase
         };
     }
 
-    private static List<T> DeserializeList<T>(string json)
+    private static List<T> DeserializeList<T>(string? json)
     {
+        if (string.IsNullOrWhiteSpace(json)) return new List<T>();
         try
         {
             return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
         }
-        catch (JsonException)
+        catch (Exception)
         {
             return new List<T>();
         }

@@ -273,12 +273,14 @@ export default function DispatchList() {
                           : proposal ? "↻ Re-run Allocation" : "Request Allocation"}
                       </button>
                     )}
-                    {isCoordinator && d.status === "PendingApproval" && (
+                    {isCoordinator && (
                       <button
                         className="btn btn-ghost btn-sm"
                         onClick={() => handleValidate(d.id)}
                         disabled={validation?.loading}
-                        title="Run the deterministic Validation/Safety Agent before approval"
+                        title={d.status === "PendingApproval"
+                          ? "Run the deterministic Validation/Safety Agent before approval"
+                          : "Re-run the Validation/Safety Agent as an advisory check (tasks are locked after approval)"}
                       >
                         {validation?.loading ? "Checking…" : validation?.result ? "Re-run Safety Check" : "Run Safety Check"}
                       </button>

@@ -152,4 +152,20 @@ describe("DispatchList coordinator workflow", () => {
     await screen.findByTestId("validation-REVISE");
     expect(screen.getByRole("button", { name: "Approve Proposal" })).toBeDisabled();
   });
+
+  it("shows the safety check on post-approval dispatches without an approve button", async () => {
+    dispatchService.getDispatches.mockResolvedValue([pendingDispatch({ status: "Assigned", allocationProposal: null })]);
+    validationService.validateDispatch.mockResolvedValue({
+      isValid: false,
+      recommendation: "REJECT",
+      checks: [{ tool: "check_volunteer_availability", passed: false, detail: "Unavailable" }],
+      violations: [{ code: "V1_VOLUNTEER_UNAVAILABLE", message: "Off-duty", severity: "BLOCKER" }],
+      warnings: [],
+    });
+    renderPage();
+
+    fireEvent.click(await screen.findByRole("button", { name: "Run Safety Check" }));
+    await screen.findByTestId("validation-REJECT");
+    expect(screen.queryByRole("button", { name: "Approve Proposal" })).toBeNull();
+  });
 });
