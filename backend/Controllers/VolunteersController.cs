@@ -111,12 +111,16 @@ public class VolunteersController : ControllerBase
         var query = _context.Volunteers.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(search))
-            query = query.Where(v => v.Name.Contains(search) || v.Skills.Contains(search));
+        {
+            var term = search.Trim().ToLower();
+            query = query.Where(v => v.Name.ToLower().Contains(term) || v.Skills.ToLower().Contains(term));
+        }
 
         if (isAvailable.HasValue)
             query = query.Where(v => v.IsAvailable == isAvailable.Value);
 
         var volunteers = await query
+            .OrderBy(v => v.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Select(v => ToResponseDto(v))
@@ -171,14 +175,16 @@ public class VolunteersController : ControllerBase
 
     // GET /api/volunteers/{id}/shifts
     [HttpGet("{id}/shifts")]
-    public async Task<ActionResult<IEnumerable<Shift>>> GetShifts(Guid id)
+    public async Task<ActionResult<IEnumerable<ShiftResponseDto>>> GetShifts(Guid id)
     {
         var exists = await _context.Volunteers.AnyAsync(v => v.Id == id);
         if (!exists) return NotFound();
 
         var shifts = await _context.Shifts
+            .AsNoTracking()
             .Where(s => s.VolunteerId == id)
             .OrderByDescending(s => s.StartTime)
+            .Select(s => ToShiftDto(s))
             .ToListAsync();
 
         return Ok(shifts);
@@ -187,7 +193,7 @@ public class VolunteersController : ControllerBase
     // POST /api/volunteers/{id}/shifts
     [HttpPost("{id}/shifts")]
     [Authorize(Roles = "Coordinator,Admin")]
-    public async Task<ActionResult<Shift>> CreateShift(Guid id, [FromBody] CreateShiftDto dto)
+    public async Task<ActionResult<ShiftResponseDto>> CreateShift(Guid id, [FromBody] CreateShiftDto dto)
     {
         var exists = await _context.Volunteers.AnyAsync(v => v.Id == id);
         if (!exists) return NotFound();
@@ -209,12 +215,12 @@ public class VolunteersController : ControllerBase
         _context.Shifts.Add(shift);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetShifts), new { id }, shift);
+        return CreatedAtAction(nameof(GetShifts), new { id }, ToShiftDto(shift));
     }
 
     // PUT /api/volunteers/{id}/shifts/{shiftId} — Coordinator/Admin any, Volunteer own record only
     [HttpPut("{id:guid}/shifts/{shiftId:guid}")]
-    public async Task<ActionResult<Shift>> UpdateShift(Guid id, Guid shiftId, [FromBody] UpdateShiftDto dto)
+    public async Task<ActionResult<ShiftResponseDto>> UpdateShift(Guid id, Guid shiftId, [FromBody] UpdateShiftDto dto)
     {
         var volunteer = await _context.Volunteers.FindAsync(id);
         if (volunteer == null) return NotFound();
@@ -238,7 +244,7 @@ public class VolunteersController : ControllerBase
         shift.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
-        return Ok(shift);
+        return Ok(ToShiftDto(shift));
     }
 
     // DELETE /api/volunteers/{id}/shifts/{shiftId} — Coordinator/Admin any, Volunteer own record only
@@ -265,8 +271,19 @@ public class VolunteersController : ControllerBase
     [HttpGet("available")]
     public async Task<ActionResult<IEnumerable<VolunteerResponseDto>>> GetAvailableBySkill([FromQuery] string skill)
     {
+        if (string.IsNullOrWhiteSpace(skill))
+        {
+            var allAvailable = await _context.Volunteers
+                .Where(v => v.IsAvailable)
+                .Select(v => ToResponseDto(v))
+                .ToListAsync();
+
+            return Ok(allAvailable);
+        }
+
+        var term = skill.Trim().ToLower();
         var volunteers = await _context.Volunteers
-            .Where(v => v.IsAvailable && v.Skills.Contains(skill))
+            .Where(v => v.IsAvailable && v.Skills.ToLower().Contains(term))
             .Select(v => ToResponseDto(v))
             .ToListAsync();
 
@@ -300,5 +317,16 @@ public class VolunteersController : ControllerBase
         IsAvailable = v.IsAvailable,
         Rating = v.Rating,
         CreatedAt = v.CreatedAt
+    };
+
+    private static ShiftResponseDto ToShiftDto(Shift s) => new()
+    {
+        Id = s.Id,
+        VolunteerId = s.VolunteerId,
+        StartTime = s.StartTime,
+        EndTime = s.EndTime,
+        Status = s.Status.ToString(),
+        CreatedAt = s.CreatedAt,
+        UpdatedAt = s.UpdatedAt
     };
 }

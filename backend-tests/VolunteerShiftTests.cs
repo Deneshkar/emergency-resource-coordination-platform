@@ -49,9 +49,9 @@ public class VolunteerShiftTests
             volunteer.Id, new CreateShiftDto { StartTime = start, EndTime = end, Status = "Scheduled" });
 
         var created = Assert.IsType<Microsoft.AspNetCore.Mvc.CreatedAtActionResult>(result.Result);
-        var shift = Assert.IsType<Shift>(created.Value);
+        var shift = Assert.IsType<ShiftResponseDto>(created.Value);
         Assert.Equal(volunteer.Id, shift.VolunteerId);
-        Assert.Equal(ShiftStatus.Scheduled, shift.Status);
+        Assert.Equal(ShiftStatus.Scheduled.ToString(), shift.Status);
         Assert.Equal(1, await ctx.Shifts.CountAsync());
     }
 
