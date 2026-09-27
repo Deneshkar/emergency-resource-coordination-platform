@@ -47,6 +47,7 @@ public class SmtpEmailService : IEmailService
         message.Body = builder.ToMessageBody();
 
         using var smtp = new SmtpClient();
+        smtp.Timeout = 10000;
         try
         {
             await smtp.ConnectAsync(host, port, SecureSocketOptions.StartTls);
