@@ -9,6 +9,8 @@ using Microsoft.OpenApi.Models;
 using ERCP.Api.Data;
 using ERCP.Api.Services;
 using ERCP.Api.Models;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql;
 
 // Load local .env (repo root + backend dir) into process env so
@@ -203,7 +205,18 @@ using (var scope = app.Services.CreateScope())
     var planner = scope.ServiceProvider.GetRequiredService<IncidentPlannerService>();
     try
     {
-        context.Database.EnsureCreated();
+        if (context.Database.IsRelational())
+        {
+            var creator = context.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
+            if (creator != null)
+            {
+                try { creator.CreateTables(); } catch { }
+            }
+        }
+        else
+        {
+            context.Database.EnsureCreated();
+        }
 
         if (context.Database.IsRelational())
         {
