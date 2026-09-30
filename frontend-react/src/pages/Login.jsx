@@ -3,7 +3,7 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
-  const { login, demoLogin, googleLogin } = useAuth();
+  const { login, demoLogin, googleLogin, githubLogin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -13,11 +13,48 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [demoRoleLoading, setDemoRoleLoading] = useState(null);
   const [googleReady, setGoogleReady] = useState(false);
+  const [githubLoading, setGithubLoading] = useState(false);
 
   const googleBtnRef = useRef(null);
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "592887901751-0iuldqhhkfs9cq5g5r2tana3urtgs9s5.apps.googleusercontent.com";
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "592887901751-0iuldqhhkfs9cq5g5r2tana3urtgs9s5.apps.googleusercontent.com";
+  const githubClientId = import.meta.env.VITE_GITHUB_CLIENT_ID || "Ov23liWTjFyFPOxBL4Xe";
 
   const from = location.state?.from?.pathname || "/incidents";
+
+  // Handle GitHub OAuth Redirect Callback (?code=...)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    if (code) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      setGithubLoading(true);
+      setLoading(true);
+      setError("");
+
+      const redirectUri = window.location.origin + "/login";
+      githubLogin(code, redirectUri)
+        .then(() => {
+          navigate(from, { replace: true });
+        })
+        .catch((err) => {
+          console.error("GitHub sign-in error:", err);
+          setError(err.message || "Failed to sign in with GitHub.");
+        })
+        .finally(() => {
+          setGithubLoading(false);
+          setLoading(false);
+        });
+    }
+  }, [githubLogin, navigate, from]);
+
+  const handleGithubLogin = () => {
+    setError("");
+    setGithubLoading(true);
+    const redirectUri = window.location.origin + "/login";
+    const scope = "read:user user:email";
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}`;
+    window.location.href = authUrl;
+  };
 
   const handleGoogleCredentialResponse = useCallback(async (response) => {
     if (!response || !response.credential) {
@@ -63,7 +100,7 @@ export default function Login() {
       if (window.google?.accounts?.id && googleBtnRef.current) {
         try {
           window.google.accounts.id.initialize({
-            client_id: clientId,
+            client_id: googleClientId,
             callback: handleGoogleCredentialResponse,
           });
 
@@ -93,7 +130,7 @@ export default function Login() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [clientId, handleGoogleCredentialResponse]);
+  }, [googleClientId, handleGoogleCredentialResponse]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -220,18 +257,51 @@ export default function Login() {
           </div>
         </div>
 
-        {/* Google Sign-In Section */}
+        {/* Social Sign-In Section (Google & GitHub) */}
         <div className="auth-divider">
-          <span>OR CONTINUE WITH GOOGLE</span>
+          <span>OR CONTINUE WITH SOCIAL</span>
         </div>
 
-        <div className="google-signin-wrapper" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", margin: "1rem 0" }}>
-          <div ref={googleBtnRef} style={{ minHeight: "44px", display: "flex", justifyContent: "center" }} />
+        <div className="social-auth-container" style={{ display: "flex", flexDirection: "column", gap: "0.75rem", alignItems: "center", justifyContent: "center", margin: "1.25rem 0" }}>
+          {/* Google One-Tap / Standard Button */}
+          <div ref={googleBtnRef} style={{ minHeight: "44px", display: "flex", justifyContent: "center", width: "100%", maxWidth: "320px" }} />
           {!googleReady && (
-            <div style={{ fontSize: "0.8rem", color: "var(--text-dim, #64748b)", marginTop: "0.35rem" }}>
+            <div style={{ fontSize: "0.75rem", color: "var(--text-dim, #64748b)" }}>
               Initializing Google Sign-In...
             </div>
           )}
+
+          {/* GitHub OAuth Button */}
+          <button
+            type="button"
+            className="github-auth-btn"
+            onClick={handleGithubLogin}
+            disabled={loading || githubLoading || Boolean(demoRoleLoading)}
+            style={{
+              width: "100%",
+              maxWidth: "320px",
+              height: "44px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "10px",
+              backgroundColor: "#24292e",
+              color: "#ffffff",
+              border: "1px solid rgba(255, 255, 255, 0.18)",
+              borderRadius: "4px",
+              fontSize: "14px",
+              fontWeight: 500,
+              fontFamily: "Inter, sans-serif",
+              cursor: (loading || githubLoading) ? "not-allowed" : "pointer",
+              transition: "all 0.2s ease",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)"
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+            </svg>
+            <span>{githubLoading ? "Connecting to GitHub..." : "Continue with GitHub"}</span>
+          </button>
         </div>
 
         <div className="auth-divider">

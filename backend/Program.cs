@@ -63,6 +63,7 @@ builder.Services.AddControllers().AddJsonOptions(o =>
     // Shift endpoints now return DTOs, so this should rarely trigger.
     o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<IncidentPlannerService>();
 builder.Services.AddScoped<SituationAnalysisService>();
 builder.Services.AddScoped<DispatchValidationService>();

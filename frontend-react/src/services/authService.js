@@ -25,6 +25,14 @@ export const authService = {
     return data;
   },
 
+  async githubLogin(code, redirectUri) {
+    const data = await apiPost("/auth/github", { code, redirectUri });
+    if (data && data.token) {
+      setStoredAuth(data.token, data.user);
+    }
+    return data;
+  },
+
   async getProfile() {
     return apiGet("/auth/me");
   },

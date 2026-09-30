@@ -97,3 +97,11 @@ public class GoogleLoginRequestDto
 
     public string? IdToken { get; set; }
 }
+
+public class GithubLoginRequestDto
+{
+    [Required]
+    public string Code { get; set; } = string.Empty;
+
+    public string? RedirectUri { get; set; }
+}

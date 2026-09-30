@@ -175,4 +175,29 @@ public class AuthController : ControllerBase
         var result = await _authService.GoogleLoginAsync(request);
         return Ok(result);
     }
+
+    /// <summary>
+    /// Authenticate or register a user via GitHub OAuth (Sign-in with GitHub).
+    /// </summary>
+    [HttpPost("github")]
+    [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<AuthResponseDto>> GithubLogin([FromBody] GithubLoginRequestDto request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var result = await _authService.GithubLoginAsync(request);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "GitHub login failed.");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }
