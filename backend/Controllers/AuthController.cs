@@ -158,4 +158,21 @@ public class AuthController : ControllerBase
 
         return Ok(new { message });
     }
+
+    /// <summary>
+    /// Authenticate or register a user via Google OAuth (Sign-in with Google).
+    /// </summary>
+    [HttpPost("google")]
+    [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<AuthResponseDto>> GoogleLogin([FromBody] GoogleLoginRequestDto request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var result = await _authService.GoogleLoginAsync(request);
+        return Ok(result);
+    }
 }

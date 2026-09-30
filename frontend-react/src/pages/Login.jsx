@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
-  const { login, demoLogin } = useAuth();
+  const { login, demoLogin, googleLogin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -12,8 +12,88 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [demoRoleLoading, setDemoRoleLoading] = useState(null);
+  const [googleReady, setGoogleReady] = useState(false);
+
+  const googleBtnRef = useRef(null);
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "592887901751-0iuldqhhkfs9cq5g5r2tana3urtgs9s5.apps.googleusercontent.com";
 
   const from = location.state?.from?.pathname || "/incidents";
+
+  const handleGoogleCredentialResponse = useCallback(async (response) => {
+    if (!response || !response.credential) {
+      setError("No Google credential received. Please try again.");
+      return;
+    }
+    setError("");
+    setLoading(true);
+    try {
+      // Decode JWT payload safely
+      const base64Url = response.credential.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+      const payload = JSON.parse(jsonPayload);
+
+      await googleLogin({
+        idToken: response.credential,
+        email: payload.email,
+        name: payload.name || payload.email.split("@")[0],
+      });
+
+      navigate(from, { replace: true });
+    } catch (err) {
+      console.error("Google login failed:", err);
+      setError(err.message || "Failed to sign in with Google.");
+    } finally {
+      setLoading(false);
+    }
+  }, [googleLogin, navigate, from]);
+
+  useEffect(() => {
+    let interval = null;
+    let attempts = 0;
+    const maxAttempts = 20;
+
+    const setupGoogle = () => {
+      attempts++;
+      if (window.google?.accounts?.id && googleBtnRef.current) {
+        try {
+          window.google.accounts.id.initialize({
+            client_id: clientId,
+            callback: handleGoogleCredentialResponse,
+          });
+
+          window.google.accounts.id.renderButton(googleBtnRef.current, {
+            theme: "outline",
+            size: "large",
+            text: "signin_with",
+            shape: "rectangular",
+            logo_alignment: "left",
+            width: 320,
+          });
+          setGoogleReady(true);
+          if (interval) clearInterval(interval);
+        } catch (e) {
+          console.warn("Failed to render Google button:", e);
+        }
+      } else if (attempts >= maxAttempts) {
+        if (interval) clearInterval(interval);
+      }
+    };
+
+    setupGoogle();
+    if (!window.google?.accounts?.id || !googleBtnRef.current) {
+      interval = setInterval(setupGoogle, 300);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [clientId, handleGoogleCredentialResponse]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -138,6 +218,20 @@ export default function Login() {
               {demoRoleLoading === "Admin" && <span className="btn-spinner" />}
             </button>
           </div>
+        </div>
+
+        {/* Google Sign-In Section */}
+        <div className="auth-divider">
+          <span>OR CONTINUE WITH GOOGLE</span>
+        </div>
+
+        <div className="google-signin-wrapper" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", margin: "1rem 0" }}>
+          <div ref={googleBtnRef} style={{ minHeight: "44px", display: "flex", justifyContent: "center" }} />
+          {!googleReady && (
+            <div style={{ fontSize: "0.8rem", color: "var(--text-dim, #64748b)", marginTop: "0.35rem" }}>
+              Initializing Google Sign-In...
+            </div>
+          )}
         </div>
 
         <div className="auth-divider">

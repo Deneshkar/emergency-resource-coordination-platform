@@ -242,6 +242,39 @@ public class AuthService : IAuthService
         return (true, "Password successfully reset.");
     }
 
+    public async Task<AuthResponseDto> GoogleLoginAsync(GoogleLoginRequestDto request)
+    {
+        var normalizedEmail = request.Email.Trim().ToLowerInvariant();
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
+        if (user == null)
+        {
+            user = new User
+            {
+                FullName = string.IsNullOrWhiteSpace(request.Name) ? normalizedEmail.Split('@')[0] : request.Name.Trim(),
+                Email = normalizedEmail,
+                Role = "Citizen",
+                PhoneNumber = "",
+                Skills = "Google Authenticated",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+            user.PasswordHash = _passwordHasher.HashPassword(user, Guid.NewGuid().ToString("N"));
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("New user created via Google Sign-In: {Email}", user.Email);
+        }
+
+        var token = GenerateJwtToken(user);
+        var expiresAt = DateTime.UtcNow.AddHours(8);
+
+        return new AuthResponseDto
+        {
+            Token = token,
+            ExpiresAt = expiresAt,
+            User = MapToSummaryDto(user)
+        };
+    }
+
     private static UserSummaryDto MapToSummaryDto(User user) => new()
     {
         Id = user.Id,
