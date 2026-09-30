@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation, Link } from "react
 import { useState, useEffect, useCallback } from "react";
 import { AuthProvider } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
+import { LanguageProvider } from "./context/LanguageContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ToastContainer from "./components/ToastContainer";
 import { Toaster } from "sonner";
@@ -236,13 +237,15 @@ function AppShell() {
 function App() {
   return (
     <BrowserRouter>
-      <NotificationProvider>
-        <Toaster richColors position="top-right" />
-        <ToastContainer />
-        <AuthProvider>
-          <AppShell />
-        </AuthProvider>
-      </NotificationProvider>
+      <LanguageProvider>
+        <NotificationProvider>
+          <Toaster richColors position="top-right" />
+          <ToastContainer />
+          <AuthProvider>
+            <AppShell />
+          </AuthProvider>
+        </NotificationProvider>
+      </LanguageProvider>
     </BrowserRouter>
   );
 }
