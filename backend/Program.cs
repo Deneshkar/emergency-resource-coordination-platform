@@ -48,6 +48,12 @@ LoadDotEnv();
 
 var builder = WebApplication.CreateBuilder(args);
 
+var portEnv = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(portEnv))
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{portEnv}");
+}
+
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(o =>
 {
@@ -141,8 +147,8 @@ static string? ConvertDatabaseUrl(string? databaseUrl)
         var host = uri.Host;
         var port = uri.Port > 0 ? uri.Port : 5432;
         var database = uri.AbsolutePath.TrimStart('/');
-        var username = userInfo[0];
-        var password = userInfo.Length > 1 ? userInfo[1] : "";
+        var username = Uri.UnescapeDataString(userInfo[0]);
+        var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
         return $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
     }
     catch { return null; }
@@ -502,7 +508,8 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
-// Health check endpoint for Railway
+// Health check endpoint for cloud platforms
+app.MapGet("/", () => Results.Ok(new { status = "healthy", service = "ERCP.Api", timestamp = DateTime.UtcNow }));
 app.MapGet("/api/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 
 // Railway handles SSL at the edge — no HTTPS redirect needed
