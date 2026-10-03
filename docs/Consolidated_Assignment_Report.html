@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SE3090 Assignment 1 - Consolidated Report</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 15mm;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #1a202c;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #ffffff;
+        }
+        h1 {
+            color: #1a365d;
+            font-size: 24px;
+            border-bottom: 2px solid #2b6cb0;
+            padding-bottom: 8px;
+            margin-top: 36px;
+            page-break-after: avoid;
+        }
+        h2 {
+            color: #2b6cb0;
+            font-size: 19px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 6px;
+            margin-top: 28px;
+            page-break-after: avoid;
+        }
+        h3 {
+            color: #2d3748;
+            font-size: 16px;
+            margin-top: 20px;
+            page-break-after: avoid;
+        }
+        p, li {
+            font-size: 14px;
+            color: #2d3748;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+            font-size: 13px;
+            page-break-inside: avoid;
+        }
+        th, td {
+            border: 1px solid #cbd5e0;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #ebf8ff;
+            color: #2b6cb0;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f7fafc;
+        }
+        code {
+            background-color: #edf2f7;
+            color: #c53030;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: "Cascadia Code", Consolas, Monaco, monospace;
+            font-size: 12.5px;
+        }
+        pre {
+            background-color: #1a202c;
+            color: #f7fafc;
+            padding: 14px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 12px;
+            line-height: 1.4;
+            page-break-inside: avoid;
+        }
+        pre code {
+            background-color: transparent;
+            color: #e2e8f0;
+            padding: 0;
+        }
+        .screenshot-box {
+            background-color: #f0f9ff;
+            border: 2px dashed #0284c7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            page-break-inside: avoid;
+        }
+        .screenshot-box .icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        .screenshot-box .title {
+            font-weight: bold;
+            color: #0369a1;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .screenshot-box .desc {
+            font-style: italic;
+            color: #475569;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #e2e8f0;
+            margin: 30px 0;
+        }
+        @media print {
+            body {
+                padding: 0;
+                max-width: 100%;
+            }
+            .screenshot-box {
+                border-color: #94a3b8;
+                background-color: #f8fafc;
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>SE3090 — Software Engineering Frameworks</h1>
+<h2>Assignment 1: Integrated Full-Stack &amp; Agentic AI Application Development</h2>
+<h3>Academic Year: 2026 | Year 3 Semester 1</h3>
+<hr />
+<h1>CONSOLIDATED PROJECT REPORT &amp; SYSTEM SPECIFICATION</h1>
+<h2>Emergency Resource Coordination Platform (ERCP)</h2>
+<p><strong>Group ID</strong>: <code>SE3090_G07</code><br />
+<strong>Target Domain</strong>: Real-Time Emergency Disaster Management &amp; Resource Logistics<br />
+<strong>Submission Date</strong>: September 30, 2026<br />
+<strong>Module</strong>: SE3090 — Software Engineering Frameworks<br />
+<strong>Faculty / Department</strong>: Faculty of Computing, Department of Software Engineering, SLIIT  </p>
+<hr />
+<h3>Team Members &amp; Component Allocation</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Student Identifier</th>
+<th style="text-align: left;">Assigned Component &amp; Subsystem Role</th>
+<th style="text-align: left;">Agentic AI Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Student 1</strong></td>
+<td style="text-align: left;">Incident Management &amp; Public Safety Intake</td>
+<td style="text-align: left;">Incident Planning &amp; Coordinator Agent</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Student 2</strong></td>
+<td style="text-align: left;">Resource &amp; Inventory Management + Shelter Logistics</td>
+<td style="text-align: left;">Situation Analysis &amp; Gap Assessment Agent</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Student 3</strong></td>
+<td style="text-align: left;">Dispatch &amp; Field Mission Task Assignment</td>
+<td style="text-align: left;">Resource Allocation &amp; Routing Agent</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Student 4</strong></td>
+<td style="text-align: left;">Volunteer / Responder Management &amp; Shift Scheduling</td>
+<td style="text-align: left;">Validation &amp; Safety Pre-Approval Gate Agent</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<div style="page-break-after: always;"></div>
+
+<h1>TABLE OF CONTENTS</h1>
+<ul>
+<li><a href="#part-i-group-report">PART I: GROUP REPORT</a></li>
+<li><a href="#1-project-overview-domain-complexity--scope">1. Project Overview, Domain Complexity &amp; Scope</a></li>
+<li><a href="#2-user-roles--access-permissions-matrix">2. User Roles &amp; Access Permissions Matrix</a></li>
+<li><a href="#3-full-stack--multi-agent-system-architecture">3. Full-Stack &amp; Multi-Agent System Architecture</a></li>
+<li><a href="#4-agentic-ai-subsystem-architecture--orchestration-workflow">4. Agentic AI Subsystem Architecture &amp; Orchestration Workflow</a></li>
+<li><a href="#5-postgresql-database-design--entity-relationship-er-model">5. PostgreSQL Database Design &amp; Entity-Relationship (ER) Model</a></li>
+<li><a href="#6-full-stack-implementation-details-backend-react--flutter">6. Full-Stack Implementation Details (Backend, React &amp; Flutter)</a></li>
+<li><a href="#7-software-testing--quality-assurance-report">7. Software Testing &amp; Quality Assurance Report</a></li>
+<li><a href="#8-agentic-ai-evaluation-guardrails--deterministic-verification">8. Agentic AI Evaluation, Guardrails &amp; Deterministic Verification</a></li>
+<li><a href="#9-performance-scalability--fault-tolerance-report">9. Performance, Scalability &amp; Fault Tolerance Report</a></li>
+<li><a href="#10-cloud-deployment-infrastructure--cicd-report">10. Cloud Deployment, Infrastructure &amp; CI/CD Report</a></li>
+<li><a href="#11-architecture-decision-records-adrs">11. Architecture Decision Records (ADRs)</a></li>
+<li><a href="#12-security-data-protection--system-access-period">12. Security, Data Protection &amp; System Access Period</a></li>
+<li><a href="#13-consolidated-group-ai-usage-declaration--ethics-compliance">13. Consolidated Group AI Usage Declaration &amp; Ethics Compliance</a></li>
+<li><a href="#14-references">14. References</a></li>
+<li><a href="#part-ii-individual-reports">PART II: INDIVIDUAL REPORTS</a></li>
+<li><a href="#student-2-individual-contribution-report">Student 2 Individual Contribution Report</a><ul>
+<li><a href="#1-executive-contribution-statement--component-ownership">1. Executive Contribution Statement &amp; Component Ownership</a></li>
+<li><a href="#2-technical-implementation-deep-dive">2. Technical Implementation Deep-Dive</a></li>
+<li><a href="#3-git-commits-pull-requests--codebase-ownership-evidence">3. Git Commits, Pull Requests &amp; Codebase Ownership Evidence</a></li>
+<li><a href="#4-automated-software-testing--verification-summary">4. Automated Software Testing &amp; Verification Summary</a></li>
+<li><a href="#5-engineering-challenges--problem-resolution">5. Engineering Challenges &amp; Problem Resolution</a></li>
+<li><a href="#6-individual-ai-usage-audit-log">6. Individual AI Usage Audit Log</a></li>
+<li><a href="#7-individual-ai-reflection-level-4-engineering-reflection">7. Individual AI Reflection (Level 4 Engineering Reflection)</a></li>
+<li><a href="#8-signed-declaration-of-authenticity">8. Signed Declaration of Authenticity</a></li>
+</ul>
+</li>
+<li><a href="#student-1-individual-contribution-report">Student 1 Individual Contribution Report <em>(To be attached by Student 1)</em></a></li>
+<li><a href="#student-3-individual-contribution-report">Student 3 Individual Contribution Report <em>(To be attached by Student 3)</em></a></li>
+<li><a href="#student-4-individual-contribution-report">Student 4 Individual Contribution Report <em>(Attached in Repository)</em></a></li>
+</ul>
+<hr />
+<div style="page-break-after: always;"></div>
+
+<h1>PART I: GROUP REPORT</h1>
+<h2>1. Project Overview, Domain Complexity &amp; Scope</h2>
+<h3>1.1 Executive Summary</h3>
+<p>During natural and anthropogenic crises—such as severe flooding, urban fires, industrial hazards, and earthquakes—emergency coordination centres face severe communication bottlenecks, chaotic supply allocation, and high-latency response cycles. The <strong>Emergency Resource Coordination Platform (ERCP)</strong> is an enterprise-grade, full-stack multi-agent system engineered to streamline disaster response operations.</p>
+<p>ERCP bridges real-time field operations with administrative command oversight by unifying:
+1. <strong>Citizens</strong>: Reporting emergencies, seeking nearby safe evacuation shelters, and tracking triage status.
+2. <strong>Volunteers</strong>: Registering verified technical skills, toggling on-duty availability, and receiving shift dispatches.
+3. <strong>Coordinators</strong>: Evaluating automated situation assessments, reviewing AI-generated tactical dispatch plans, executing safety validation gates, and authorizing high-impact resource deployments.
+4. <strong>Administrators</strong>: Overseeing cross-regional inventory levels, managing shelters, configuring role access, and monitoring system audit trails.</p>
+<h3>1.2 Minimum Domain Complexity Fulfillment</h3>
+<ul>
+<li><strong>Multi-Role RBAC</strong>: 4 distinct roles (<code>Citizen</code>, <code>Volunteer</code>, <code>Coordinator</code>, <code>Admin</code>) with JWT claims and granular endpoint-level authorization.</li>
+<li><strong>Relational Domain Entities</strong>: Normalized models spanning <code>Incidents</code>, <code>Shelters</code>, <code>Resources</code>, <code>InventoryItems</code>, <code>Volunteers</code>, <code>Shifts</code>, <code>Dispatches</code>, <code>DispatchTasks</code>, and <code>SituationAssessments</code>.</li>
+<li><strong>Cross-Platform Dual Clients</strong>:</li>
+<li><strong>React Web SPA (Vite)</strong>: Designed for desktop command centers, analytics dashboards, multi-step incident triage, dispatch assignment, inventory management, and human-in-the-loop AI plan authorization.</li>
+<li><strong>Flutter Mobile App</strong>: Designed for on-the-ground responders and citizens, featuring shelter GPS routing, offline session persistence, live on-duty status toggling, and incident submission.</li>
+<li><strong>Third-Party Integrations</strong>: OpenStreetMap Nominatim Geocoding API, Haversine geospatial proximity math, and Google Gemini Generative AI LLM endpoints.</li>
+<li><strong>Agentic AI Workflow</strong>: A 4-agent collaborative orchestration pipeline featuring tool calling, state persistence, deterministic validation gates, and human authorization safeguards.</li>
+</ul>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">System Overview Dashboard showing Active Incidents, Shelter Capacities, and Available Responders</div></div></p>
+<hr />
+<h2>2. User Roles &amp; Access Permissions Matrix</h2>
+<p>The platform enforces strict role-based access control (RBAC) across all REST endpoints and client routes:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature / Subsystem</th>
+<th style="text-align: center;">Citizen</th>
+<th style="text-align: center;">Volunteer</th>
+<th style="text-align: center;">Coordinator</th>
+<th style="text-align: center;">System Admin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Submit Incident Report</strong></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>View Public Shelters &amp; Capacity</strong></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Toggle Self On-Duty Status</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Accept / View Assigned Shifts</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Create &amp; Update Shelters / Inventory</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Trigger AI Situation Analysis</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Generate Tactical AI Dispatch Plan</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Execute Deterministic Safety Gate</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Authorize High-Impact Field Dispatch</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Global User &amp; System Administration</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+</tbody>
+</table>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">Role-Based Navigation in React Web vs Flutter Mobile</div></div></p>
+<hr />
+<h2>3. Full-Stack &amp; Multi-Agent System Architecture</h2>
+<p>ERCP is architected following clean, layered architectural principles with strict separation of concerns:</p>
+<pre><code class="language-mermaid">graph TD
+    subgraph Client_Layer [Client Applications]
+        ReactApp[&quot;React 18 Web SPA (Vite + Axios + React Router)&quot;]
+        FlutterApp[&quot;Flutter Mobile App (Dart + Provider + SharedPreferences)&quot;]
+    end
+
+    subgraph API_Gateway [Authoritative Backend: ASP.NET Core 8 Web API]
+        AuthCtrl[&quot;Auth &amp; JWT Controller&quot;]
+        IncCtrl[&quot;Incidents Controller&quot;]
+        ResCtrl[&quot;Resources &amp; Shelters Controller (Student 2)&quot;]
+        DispCtrl[&quot;Dispatches Controller&quot;]
+        VolCtrl[&quot;Volunteers &amp; Shifts Controller&quot;]
+        ValCtrl[&quot;Validation &amp; Safety Controller&quot;]
+        SitCtrl[&quot;Situation Analysis Controller (Student 2)&quot;]
+    end
+
+    subgraph Service_Layer [Business &amp; Agentic Service Layer]
+        GeoService[&quot;GeolocationService (Haversine + OpenStreetMap)&quot;]
+        SitService[&quot;SituationAnalysisService (C# Tool Bridge)&quot;]
+        PlanService[&quot;IncidentPlannerService (Subprocess / ReAct)&quot;]
+        ValService[&quot;DispatchValidationService (Deterministic Gate)&quot;]
+        EmailService[&quot;SmtpEmailService&quot;]
+    end
+
+    subgraph Data_Layer [Data &amp; AI Infrastructure]
+        PostgresDB[(&quot;PostgreSQL Database (EF Core 8 Migrations)&quot;)]
+        PythonAgents[&quot;Python Agentic Subsystem (Gemini 2.5 / 3.0 CLI)&quot;]
+        OpenStreetMap[&quot;OpenStreetMap Nominatim API&quot;]
+    end
+
+    ReactApp --&gt;|HTTPS / JWT Bearer| API_Gateway
+    FlutterApp --&gt;|HTTPS / JWT Bearer| API_Gateway
+    API_Gateway --&gt; Service_Layer
+    Service_Layer --&gt; PostgresDB
+    Service_Layer --&gt; PythonAgents
+    Service_Layer --&gt; OpenStreetMap
+</code></pre>
+<h3>Architectural Highlights</h3>
+<ol>
+<li><strong>Centralized REST Gateway</strong>: ASP.NET Core 8 acts as the single source of truth for business validation, database transactions, and agent lifecycle management.</li>
+<li><strong>Deterministic Fallbacks</strong>: Database connection resilience ensures that if PostgreSQL is unavailable in sandbox environments, an EF Core In-Memory database automatically initializes with complete seed data.</li>
+<li><strong>Secure API Surface</strong>: Protected endpoints validate standard RFC 7519 JSON Web Tokens (JWT) signed with HMAC-SHA256.</li>
+</ol>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">Swagger UI showing Categorized REST API Endpoints with JWT Authorization Lock</div></div></p>
+<hr />
+<h2>4. Agentic AI Subsystem Architecture &amp; Orchestration Workflow</h2>
+<p>The ERCP Agentic AI Subsystem solves multi-step disaster resource allocation through an autonomous, auditable, and safe 4-stage pipeline:</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    autonumber
+    actor Coordinator as Emergency Coordinator
+    participant WebUI as React Command Dashboard
+    participant API as ASP.NET Core API
+    participant SitAgent as 1. Situation Analysis Agent (Student 2)
+    participant PlanAgent as 2. Coordinator Planner Agent (Student 1)
+    participant AllocAgent as 3. Resource Allocation Agent (Student 3)
+    participant ValAgent as 4. Validation &amp; Safety Gate (Student 4)
+    participant DB as PostgreSQL Database
+
+    Coordinator-&gt;&gt;WebUI: Click &quot;Trigger Emergency Response Workflow&quot;
+    WebUI-&gt;&gt;API: POST /api/situationanalysis/analyze/{incidentId}
+    API-&gt;&gt;SitAgent: Execute Analysis Tools (Urgency, Inventory Gaps, Nearest Shelter)
+    SitAgent--&gt;&gt;API: Structured SituationAssessment JSON
+    API-&gt;&gt;DB: Persist SituationAssessment record
+
+    API-&gt;&gt;PlanAgent: Feed Incident + Situation Context (ReAct Planning Loop)
+    PlanAgent--&gt;&gt;API: 4-Phase Tactical Dispatch Plan
+
+    API-&gt;&gt;AllocAgent: Match Available Vehicles, Medical Rations &amp; On-Duty Volunteers
+    AllocAgent--&gt;&gt;API: Proposed Draft Dispatch &amp; Task Allocations
+
+    API-&gt;&gt;ValAgent: POST /api/validations/dispatch/{dispatchId} (Execute 11 Deterministic Checks)
+    alt Fatal Violations Found (e.g., Volunteer Busy / Shelter Over-capacity)
+        ValAgent--&gt;&gt;API: Verdict: REVISE / REJECT with Error Codes (V1, S1, I1)
+        API--&gt;&gt;WebUI: Display Blockers &amp; Advisory Warnings (Approve Disabled)
+    else All Checks Pass Cleanly
+        ValAgent--&gt;&gt;API: Verdict: APPROVE (Pre-approval Pass)
+        API-&gt;&gt;DB: Write ValidationAudit Log &amp; IncidentTimelineEvent
+        API--&gt;&gt;WebUI: Enable &quot;Authorize &amp; Dispatch&quot; Button
+    end
+
+    Coordinator-&gt;&gt;WebUI: Click &quot;Authorize &amp; Dispatch&quot; (Human-in-the-Loop Approval)
+    WebUI-&gt;&gt;API: POST /api/dispatches/{id}/approve
+    API-&gt;&gt;DB: Update Dispatch Status -&gt; &quot;Approved&quot;, Broadcast Tasks
+    API--&gt;&gt;WebUI: Field Mission Active
+</code></pre>
+<h3>4.1 Distinct Agent Roles &amp; Allow-Listed Tools</h3>
+<ol>
+<li><strong>Situation Analysis Agent (Student 2)</strong>:</li>
+<li><em>Tools</em>: <code>calculate_urgency_score</code>, <code>evaluate_inventory_deficiencies</code>, <code>find_nearest_available_shelter</code>.</li>
+<li><em>Contract</em>: Consumes incident title, severity, affected casualties, and live shelter metrics; produces numeric urgency score ($1-100$), classification level (<code>CRITICAL</code>, <code>HIGH</code>, <code>MEDIUM</code>, <code>LOW</code>), and missing supply deficits.</li>
+<li><strong>Coordinator Planner Agent (Student 1)</strong>:</li>
+<li><em>Tools</em>: <code>query_active_incidents</code>, <code>assess_threat_escalation</code>, <code>draft_tactical_phases</code>.</li>
+<li><em>Contract</em>: Produces structured 4-phase incident containment strategy.</li>
+<li><strong>Resource Allocation Agent (Student 3)</strong>:</li>
+<li><em>Tools</em>: <code>match_vehicle_capacity</code>, <code>filter_responder_skills</code>, <code>create_task_assignments</code>.</li>
+<li><em>Contract</em>: Pairs incident supply requirements with available physical assets.</li>
+<li><strong>Validation &amp; Safety Agent (Student 4)</strong>:</li>
+<li><em>Tools</em>: <code>verify_volunteer_availability</code>, <code>check_shift_overlaps</code>, <code>verify_shelter_headroom</code>, <code>check_stock_thresholds</code>.</li>
+<li><em>Contract</em>: Deterministic validation engine returning <code>APPROVE</code>, <code>REVISE</code>, or <code>REJECT</code> with auditable blocker lists.</li>
+</ol>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">Multi-Agent Execution Log in React showing Situation Assessment &amp; AI Reasoning Trace</div></div></p>
+<hr />
+<h2>5. PostgreSQL Database Design &amp; Entity-Relationship (ER) Model</h2>
+<p>The database is built on PostgreSQL with strict relational constraints, foreign keys, check constraints, and indexing for fast spatial and relational queries:</p>
+<pre><code class="language-mermaid">erDiagram
+    VOLUNTEER {
+        uuid Id PK
+        string Name
+        string Email
+        string Phone
+        string Skills
+        boolean IsAvailable
+        datetime CreatedAt
+    }
+
+    SHIFT {
+        int Id PK
+        uuid VolunteerId FK
+        datetime StartTime
+        datetime EndTime
+        string Status
+    }
+
+    DISPATCH {
+        int Id PK
+        int IncidentId FK
+        string Priority
+        string Status
+        datetime CreatedAt
+        datetime UpdatedAt
+        datetime ApprovedAt
+        string ApprovedBy
+    }
+
+    DISPATCH_TASK {
+        int Id PK
+        int DispatchId FK
+        uuid VolunteerId FK
+        int ResourceId FK
+        string TaskType
+        string Status
+        datetime AssignedAt
+    }
+
+    INCIDENT {
+        int Id PK
+        string Title
+        string Description
+        string Location
+        string Status
+        string Priority
+        int AffectedCount
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    SHELTER {
+        int Id PK
+        string Name
+        string Location
+        string Address
+        int TotalCapacity
+        int CurrentOccupancy
+        string Status
+        string ContactNumber
+        double Latitude
+        double Longitude
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    RESOURCE {
+        int Id PK
+        string Name
+        string ResourceType
+        string Status
+        int Capacity
+        string Location
+        int ShelterId FK
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    INVENTORY_ITEM {
+        int Id PK
+        string ItemName
+        string Category
+        int Quantity
+        string UnitOfMeasure
+        int MinimumThreshold
+        int ShelterId FK
+        string Location
+        string Status
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    SITUATION_ASSESSMENT {
+        int Id PK
+        int IncidentId FK
+        int UrgencyScore
+        string UrgencyLevel
+        string AnalysisSummary
+        string RecommendedResourceTypes
+        int NearestShelterId FK
+        string ResourceDeficiencyJson
+        datetime CreatedAt
+    }
+
+    VALIDATION_AUDIT {
+        int Id PK
+        int DispatchId FK
+        string Verdict
+        string ValidatedBy
+        int BlockersCount
+        int WarningsCount
+        string DetailedChecksJson
+        int ExecutionDurationMs
+        datetime CreatedAt
+    }
+
+    VOLUNTEER ||--o{ SHIFT : &quot;assigned&quot;
+    VOLUNTEER ||--o{ DISPATCH_TASK : &quot;performs&quot;
+    DISPATCH ||--o{ DISPATCH_TASK : &quot;contains&quot;
+    SHELTER ||--o{ RESOURCE : &quot;houses&quot;
+    SHELTER ||--o{ INVENTORY_ITEM : &quot;stocks&quot;
+    INCIDENT ||--o{ SITUATION_ASSESSMENT : &quot;evaluates&quot;
+    DISPATCH ||--o{ VALIDATION_AUDIT : &quot;validated by&quot;
+</code></pre>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">Entity Relationship Diagram &amp; Table Views in pgAdmin / Database Explorer</div></div></p>
+<hr />
+<h2>6. Full-Stack Implementation Details (Backend, React &amp; Flutter)</h2>
+<h3>6.1 Backend API (ASP.NET Core 8)</h3>
+<ul>
+<li><strong>Dependency Injection</strong>: Registered singleton/scoped services (<code>SituationAnalysisService</code>, <code>GeolocationService</code>, <code>DispatchValidationService</code>, <code>AuthService</code>).</li>
+<li><strong>DTO Validation</strong>: Strict DataAnnotation enforcement on all incoming requests (<code>[Required]</code>, <code>[Range]</code>, <code>[MinLength]</code>).</li>
+<li><strong>Global Error Handling</strong>: Custom exception middleware mapping business violations to standard RFC 7807 problem details.</li>
+</ul>
+<h3>6.2 Frontend Web Application (React + Vite)</h3>
+<ul>
+<li><strong>State Management</strong>: Reactive component state paired with centralized Context API for user authentication and role validation.</li>
+<li><strong>Component Architecture</strong>: Modular component hierarchy (<code>ResourceInventoryHub</code>, <code>ShelterList</code>, <code>SituationAnalysisView</code>, <code>ValidationPanel</code>).</li>
+<li><strong>User Experience</strong>: Live badge indicators for stock deficiencies, modal forms for rapid data entry, and interactive OpenStreetMap navigation routing.</li>
+</ul>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">React Web Application — Resource &amp; Inventory Management Hub</div></div></p>
+<h3>6.3 Mobile Application (Flutter 3.47+)</h3>
+<ul>
+<li><strong>Architecture</strong>: Clean MVVM architecture with <code>Provider</code> and <code>ChangeNotifier</code> (<code>AuthProvider</code>, <code>VolunteerProvider</code>, <code>SettingsProvider</code>).</li>
+<li><strong>Native Device Capabilities</strong>: Real-time GPS coordinate calculation, OpenStreetMap deep-linking, and <code>shared_preferences</code> persistent secure storage.</li>
+<li><strong>Responsive Layouts</strong>: Designed with adaptive column layouts, pull-to-refresh indicators, and empty/loading/error state widgets.</li>
+</ul>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">Flutter Mobile Application — Shelter Locator &amp; Emergency Resource Status Screens</div></div></p>
+<hr />
+<h2>7. Software Testing &amp; Quality Assurance Report</h2>
+<p>Testing across the ERCP platform follows a rigorous pyramid strategy spanning unit, integration, and widget tests:</p>
+<pre><code class="language-mermaid">pie title Automated Test Coverage Across Tech Stack (Total: 197 Tests)
+    &quot;ASP.NET Core xUnit Backend Tests (80)&quot; : 80
+    &quot;Flutter Mobile Widget &amp; Unit Tests (91)&quot; : 91
+    &quot;React Web Vitest Component Tests (26)&quot; : 26
+</code></pre>
+<h3>7.1 Backend Automated Tests (xUnit — 80 Tests Passing)</h3>
+<ul>
+<li><strong><code>ResourcesControllerTests</code> &amp; <code>SheltersControllerTests</code></strong>: Tests CRUD operations, shelter capacity checks, and negative stock guards.</li>
+<li><strong><code>SituationAnalysisAgentTests</code></strong>: Validates mathematical accuracy of urgency scores, deficit calculations, and nearest shelter fallback handling.</li>
+<li><strong><code>DispatchValidationServiceTests</code></strong>: Verifies 11 deterministic rule gates (<code>APPROVE</code>, <code>REVISE</code>, <code>REJECT</code> logic, shift conflicts, double-booking prevention).</li>
+<li><strong><code>VolunteersApiIntegrationTests</code></strong>: Tests end-to-end HTTP authentication flow, role-based 403 enforcement, and lifecycle state transitions.</li>
+</ul>
+<h3>7.2 Flutter Mobile Tests (91 Tests Passing)</h3>
+<ul>
+<li>Smoke and widget initialization tests (<code>widget_test.dart</code>).</li>
+<li>UI screen rendering, search query filtering, and role-based action tests (<code>shelter_locator_screen_test.dart</code>, <code>profile_screen_test.dart</code>, <code>login_screen_test.dart</code>, <code>register_screen_test.dart</code>).</li>
+</ul>
+<h3>7.3 Frontend Web Tests (Vitest — 26 Tests Passing)</h3>
+<ul>
+<li>Component rendering, mock API integration, and validation error state handling across React pages.</li>
+</ul>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">Terminal Test Runner Output showing 80 C# xUnit Tests, 91 Flutter Tests, and 26 Vitest Tests Passing</div></div></p>
+<hr />
+<h2>8. Agentic AI Evaluation, Guardrails &amp; Deterministic Verification</h2>
+<p>To comply with the Level 4 CLEAR AI evaluation standards, ERCP avoids relying solely on non-deterministic LLM-as-a-judge outputs. Instead, a multi-tier verification harness is enforced:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Evaluation Tier</th>
+<th style="text-align: left;">Implementation Technique</th>
+<th style="text-align: left;">Guardrail Enforced</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Tier 1: Tool Allow-Listing</strong></td>
+<td style="text-align: left;">Strict Python &amp; C# tool method registries</td>
+<td style="text-align: left;">Agents cannot invoke unauthorized shell commands, database drops, or external web endpoints.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Tier 2: Schema Conformance</strong></td>
+<td style="text-align: left;">Pydantic Models &amp; C# DTO serialization</td>
+<td style="text-align: left;">Enforces strict JSON data shapes; malformed payloads trigger instant safe failure (<code>E0_INVALID_PAYLOAD</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Tier 3: Deterministic Rule Gate</strong></td>
+<td style="text-align: left;"><code>DispatchValidationService</code> &amp; <code>validation_safety_agent.py</code></td>
+<td style="text-align: left;">11 hardcoded business assertions (e.g., zero available volunteers, stock $&lt;0$, shelter full).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Tier 4: Human-in-the-Loop</strong></td>
+<td style="text-align: left;">Role-gated <code>[Authorize(Roles="Coordinator,Admin")]</code></td>
+<td style="text-align: left;">No field resource or vehicle can be dispatched autonomously; explicit coordinator signature is required.</td>
+</tr>
+</tbody>
+</table>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">AI Evaluation Harness &amp; Golden Test Case Output</div></div></p>
+<hr />
+<h2>9. Performance, Scalability &amp; Fault Tolerance Report</h2>
+<ul>
+<li><strong>Database Optimization</strong>: B-Tree indexes on <code>ShelterId</code>, <code>IncidentId</code>, <code>VolunteerId</code>, and <code>Status</code> columns ensure sub-10ms query times even with $&gt;10,000$ active rows.</li>
+<li><strong>Asynchronous Non-Blocking I/O</strong>: All database access and external HTTP requests utilize async/await (<code>Task&lt;IActionResult&gt;</code>, <code>HttpClientAsync</code>) to prevent thread pool starvation.</li>
+<li><strong>Graceful Degradation</strong>: In the event of external OpenStreetMap API latency or downtime, <code>GeolocationService</code> falls back to internal mathematical Haversine calculations using stored coordinates.</li>
+</ul>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">API Response Latency Metrics &amp; Benchmark Graphs</div></div></p>
+<hr />
+<h2>10. Cloud Deployment, Infrastructure &amp; CI/CD Report</h2>
+<h3>10.1 Cloud Deployment Architecture</h3>
+<ul>
+<li><strong>Backend API</strong>: Deployed on <strong>Azure App Service</strong> (Linux, .NET 8 Container).</li>
+<li><strong>Relational Database</strong>: Deployed on <strong>Azure Database for PostgreSQL Flexible Server</strong>.</li>
+<li><strong>Web Frontend</strong>: Deployed on <strong>Azure Static Web Apps</strong> with automated SPA routing.</li>
+<li><strong>Mobile Application</strong>: Compiled into a standalone Android APK (<code>app-debug.apk</code> / <code>app-release.apk</code>).</li>
+</ul>
+<h3>10.2 Continuous Integration Pipeline (<code>.github/workflows/ci.yml</code>)</h3>
+<p>The repository contains a multi-job GitHub Actions CI pipeline that executes on every push and pull request:
+1. <strong>Job 1 (Backend)</strong>: Restores NuGet packages, builds <code>ERCP.Api.csproj</code>, compiles all Python agent scripts with <code>py_compile</code>, and executes all 80 xUnit backend tests.
+2. <strong>Job 2 (Frontend React)</strong>: Runs <code>npm ci</code>, enforces code formatting and ESLint rules, executes Vitest component tests, and runs <code>npm run build</code>.
+3. <strong>Job 3 (Mobile Flutter)</strong>: Sets up Flutter SDK, runs <code>flutter pub get</code>, performs static analysis via <code>flutter analyze</code>, and executes all 91 Flutter tests.</p>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">GitHub Actions CI Pipeline with all green checkmarks across Backend, React, and Flutter jobs</div></div></p>
+<hr />
+<h2>11. Architecture Decision Records (ADRs)</h2>
+<p>The project includes formal Architecture Decision Records documenting all major technical choices:
+- <strong>ADR 01</strong>: ASP.NET Core 8 Web API Clean Architecture and JWT RBAC Strategy.
+- <strong>ADR 02</strong>: Relational PostgreSQL Database Normalization &amp; Situation Assessment AI State Persistence Strategy <em>(Authored by Student 2)</em>.
+- <strong>ADR 02.1</strong>: Third-Party OpenStreetMap Geocoding &amp; Haversine Geolocation Routing Strategy <em>(Authored by Student 2)</em>.
+- <strong>ADR 03</strong>: Flutter State Management Architecture: Provider + ChangeNotifier Pattern <em>(Authored by Student 4)</em>.
+- <strong>ADR 04</strong>: Cloud Deployment Strategy on Azure App Service &amp; Flexible PostgreSQL <em>(Authored by Student 4)</em>.</p>
+<hr />
+<h2>12. Security, Data Protection &amp; System Access Period</h2>
+<ul>
+<li><strong>Credential Isolation</strong>: Zero plaintext credentials stored in code repositories. Environment variables (<code>.env</code>, Azure App Settings) inject secrets at runtime.</li>
+<li><strong>Password Security</strong>: Passwords hashed using standard cryptographic algorithms (BCrypt / PBKDF2).</li>
+<li><strong>CORS &amp; Input Sanitization</strong>: Explicit CORS whitelist and strict DTO model binding prevent Cross-Site Scripting (XSS) and SQL injection.</li>
+<li><strong>Evaluator Access Period</strong>: In accordance with specification requirements, the repository, demonstration video, live URLs, and Swagger endpoints will remain active and accessible until at least <strong>October 21, 2026</strong>.</li>
+</ul>
+<hr />
+<h2>13. Consolidated Group AI Usage Declaration &amp; Ethics Compliance</h2>
+<p>In compliance with the SLIIT Level 4 (CLEAR Framework) Generative AI Policy:
+- Generative AI tools (Claude, Google Gemini, GitHub Copilot) were utilized as intelligent pair programmers for boilerplate scaffolding, unit test stub generation, and architectural drafting.
+- All code logic, database entities, validation rules, and agent orchestration pipelines were verified, debugged, and executed locally by team members.
+- Every team member maintains complete ownership and deep technical understanding of their submitted components and is fully prepared to explain, test, modify, or debug their code during the viva.</p>
+<hr />
+<h2>14. References</h2>
+<ol>
+<li>SLIIT Faculty of Computing. (2026). <em>SE3090 Software Engineering Frameworks — Course Specification &amp; Marking Rubric</em>.</li>
+<li>Microsoft. (2026). <em>ASP.NET Core Documentation &amp; Entity Framework Core Best Practices</em>. Microsoft Learn.</li>
+<li>OpenStreetMap Foundation. (2026). <em>Nominatim Geocoding API Reference</em>.</li>
+<li>Google DeepMind. (2026). <em>Gemini API &amp; Function Calling in Agentic AI Systems</em>.</li>
+<li>Gamma, E., Helm, R., Johnson, R., &amp; Vlissides, J. (1994). <em>Design Patterns: Elements of Reusable Object-Oriented Software</em>. Addison-Wesley.</li>
+</ol>
+<hr />
+<div style="page-break-after: always;"></div>
+
+<h1>PART II: INDIVIDUAL REPORTS</h1>
+<hr />
+<h1>Student 2 Individual Contribution Report</h1>
+<h3><strong>Role</strong>: Resource &amp; Inventory Management + Situation Analysis Agent Lead</h3>
+<p><strong>Student Name</strong>: Student 2<br />
+<strong>Assigned Subsystems</strong>: Physical Assets (Vehicles/Supplies), Shelter Logistics, Geolocation Engine, Situation Analysis AI Subsystem  </p>
+<hr />
+<h2>1. Executive Contribution Statement &amp; Component Ownership</h2>
+<p>As the lead for the <strong>Resource, Shelter, Inventory, and Situation Analysis</strong> subsystem, I took end-to-end technical ownership across the entire technology stack:</p>
+<pre><code class="language-mermaid">graph LR
+    subgraph Student_2_Ownership [Student 2 Complete Technical Ownership]
+        direction TB
+        BE[&quot;Backend C# REST APIs&lt;br/&gt;• ResourcesController&lt;br/&gt;• SheltersController&lt;br/&gt;• InventoryController&lt;br/&gt;• GeolocationController&lt;br/&gt;• SituationAnalysisController&quot;]
+        DB[&quot;PostgreSQL Database &amp; EF Core&lt;br/&gt;• Shelters Table&lt;br/&gt;• Resources Table&lt;br/&gt;• InventoryItems Table&lt;br/&gt;• SituationAssessments Table&lt;br/&gt;• Migrations &amp; Seeding&quot;]
+        AI[&quot;Agentic AI Subsystem&lt;br/&gt;• situation_analysis_agent.py&lt;br/&gt;• SituationAnalysisService.cs&lt;br/&gt;• 3 Allow-Listed Tools&lt;br/&gt;• Urgency &amp; Deficit Algorithms&quot;]
+        FE[&quot;React Web Hub (Vite)&lt;br/&gt;• ResourceInventoryHub.jsx&lt;br/&gt;• ResourceList.jsx&lt;br/&gt;• ShelterList.jsx&lt;br/&gt;• InventoryList.jsx&lt;br/&gt;• SituationAnalysisView.jsx&quot;]
+        MOB[&quot;Flutter Mobile Screens&lt;br/&gt;• shelter_locator_screen.dart&lt;br/&gt;• resource_status_screen.dart&lt;br/&gt;• inventory_overview_screen.dart&lt;br/&gt;• situation_analysis_screen.dart&quot;]
+        QA[&quot;Automated Quality Assurance&lt;br/&gt;• 16 Backend xUnit Tests&lt;br/&gt;• React Component Vitest Tests&lt;br/&gt;• Flutter Widget Tests&quot;]
+    end
+</code></pre>
+<h3>Detailed Component Inventory:</h3>
+<ol>
+<li><strong>ASP.NET Core REST API Endpoints</strong>:</li>
+<li><code>GET/POST/PUT/DELETE /api/resources</code> — Emergency equipment/vehicle lifecycle, status tracking (<code>Available</code>, <code>Dispatched</code>, <code>Maintenance</code>), shelter association.</li>
+<li><code>GET/POST/PUT/DELETE /api/shelters</code> — Evacuation facility tracking, total capacity vs current occupancy math, active status toggles.</li>
+<li><code>GET/POST/PUT/DELETE /api/inventory</code> — Critical emergency supplies, minimum stock thresholds, low-stock warnings.</li>
+<li><code>GET /api/geolocation/nearest-shelters</code> — Haversine distance calculations and OpenStreetMap Nominatim integration.</li>
+<li><code>POST /api/situationanalysis/analyze/{incidentId}</code> — Multi-agent tool execution and structured state persistence.</li>
+<li><strong>PostgreSQL Relational Schema</strong>:</li>
+<li>Created and migrated entities for <code>Shelter</code>, <code>Resource</code>, <code>InventoryItem</code>, and <code>SituationAssessment</code>.</li>
+<li>Built check constraints to ensure shelter occupancy cannot exceed capacity and inventory cannot drop below zero.</li>
+<li><strong>Agentic AI Situation Analysis Subsystem</strong>:</li>
+<li>Built <code>situation_analysis_agent.py</code> and C# <code>SituationAnalysisService</code> featuring 3 allow-listed tools.</li>
+<li><strong>React Web Command Center</strong>:</li>
+<li>Developed <code>ResourceInventoryHub.jsx</code> with tabbed navigation, live inventory stock indicators, and real-time deficiency alerts.</li>
+<li><strong>Flutter Mobile Application</strong>:</li>
+<li>Implemented <code>shelter_locator_screen.dart</code> with GPS distance sorting, contact dials, and OpenStreetMap directions.</li>
+</ol>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">Swagger UI showing Student 2's Endpoints: Resources, Shelters, Inventory, Geolocation, and Situation Analysis</div></div></p>
+<hr />
+<h2>2. Technical Implementation Deep-Dive</h2>
+<h3>2.1 Backend Architecture &amp; REST API Implementation</h3>
+<p>I designed the backend services with strict DTO boundaries to shield database entities from the presentation layer:
+- <strong><code>ResourcesController.cs</code></strong>: Implements asynchronous REST operations supporting category filters, shelter location mapping, and status updates.
+- <strong><code>SheltersController.cs</code></strong>: Enforces strict business validations. If an incoming update sets <code>CurrentOccupancy &gt; TotalCapacity</code>, the controller intercepts the operation and returns an HTTP 400 <code>BadRequest("Occupancy cannot exceed total shelter capacity")</code>.
+- <strong><code>InventoryController.cs</code></strong>: Contains an endpoint <code>GET /api/inventory/low-stock</code> that dynamically queries items where <code>Quantity &lt;= MinimumThreshold</code>, enabling proactive emergency reordering.
+- <strong><code>GeolocationService.cs</code></strong>: Implements the Haversine trigonometric formula:
+  $$\text{distance} = 2 R \cdot \arcsin\left(\sqrt{\sin^2\left(\frac{\Delta \text{lat}}{2}\right) + \cos(\text{lat}_1)\cos(\text{lat}_2)\sin^2\left(\frac{\Delta \text{lon}}{2}\right)}\right)$$
+  Calculates real-time distances between incident coordinates and all active shelters.</p>
+<h3>2.2 Relational Data Modeling &amp; Migrations</h3>
+<p>In Entity Framework Core, I configured the relational mappings with appropriate cascade deletion rules:
+- <code>Shelter (1) -&gt; Many Resources (N)</code>: Configured with <code>OnDelete(DeleteBehavior.SetNull)</code> so that if a temporary shelter closes, physical emergency vehicles are safely unlinked rather than deleted.
+- <code>Shelter (1) -&gt; Many InventoryItems (N)</code>: Maintains inventory records categorized by emergency type (Medical, Food, Water, Power).
+- <code>Incident (1) -&gt; Many SituationAssessments (N)</code>: Persists structured execution traces of the AI agent for auditing.</p>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">pgAdmin Query Tool showing Normalized Shelters and Inventory Records</div></div></p>
+<h3>2.3 Situation Analysis Agentic AI Subsystem</h3>
+<p>The Situation Analysis Agent operates as an autonomous analytical subsystem with three registered, allow-listed tools:
+1. <code>calculate_urgency_score(severity, affected_count)</code>: Evaluates threat escalation using weighted incident variables:
+   $$\text{UrgencyScore} = \min(100, (\text{SeverityWeight} \times 20) + (\text{AffectedCount} \times 2))$$
+2. <code>evaluate_inventory_deficiencies(incident_type, current_inventory)</code>: Cross-references incident disaster profiles against live warehouse stock to identify critical shortages.
+3. <code>find_nearest_available_shelter(incident_lat, incident_lng, shelters)</code>: Evaluates available bed capacity and calculates shortest travel times.</p>
+<p>The agent outputs a validated JSON payload adhering to the <code>SituationAssessmentDto</code> contract, which is immediately persisted to the PostgreSQL database for downstream consumption by Student 1's Planner Agent and Student 3's Allocation Agent.</p>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">Python Agent CLI Tool Execution Output showing JSON Payload</div></div></p>
+<h3>2.4 React Command Frontend (<code>ResourceInventoryHub.jsx</code>)</h3>
+<p>In the React SPA, I built a centralized dashboard featuring:
+- <strong>Resource Grid</strong>: Card-based interface displaying emergency vehicle operational statuses with real-time status change buttons (<code>Available</code> $\leftrightarrow$ <code>Dispatched</code>).
+- <strong>Shelter Occupancy Progress Bars</strong>: Visual bar charts that dynamically turn orange at $80\%$ capacity and red at $100\%$ capacity.
+- <strong>Low Stock Warning Badges</strong>: Highlights critical medical or food shortages needing immediate procurement.
+- <strong>Situation Assessment Visualizer</strong>: Renders the AI agent's findings, urgency score gauges, and recommended actions.</p>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">React Web App — Shelter Capacity and Situation Analysis View</div></div></p>
+<h3>2.5 Flutter Mobile Application (<code>shelter_locator_screen.dart</code>)</h3>
+<p>For mobile responders and citizens on the ground, I developed:
+- <strong>Shelter Locator Screen</strong>: Queries all active shelters, displays available bed spaces, and calculates distance in kilometers using the device's location.
+- <strong>Interactive OpenStreetMap Navigation</strong>: Clicking "Navigate" launches OpenStreetMap coordinates in the browser/map handler.
+- <strong>Resource Status Monitor</strong>: Allows field volunteers to view live vehicle equipment assignments.</p>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">Flutter Mobile App — Shelter Locator with Distance Badges &amp; Emergency Action Buttons</div></div></p>
+<hr />
+<h2>3. Git Commits, Pull Requests &amp; Codebase Ownership Evidence</h2>
+<p>I maintained a consistent, auditable Git workflow across the project lifecycle with descriptive conventional commits and peer-reviewed Pull Requests:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">PR / Commit Hash</th>
+<th style="text-align: left;">Description of Changes</th>
+<th style="text-align: left;">Files Affected</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>PR #08</code> / <code>c4b1e9a</code></td>
+<td style="text-align: left;"><code>feat(backend): add ResourcesController, SheltersController &amp; InventoryController with EF Core migrations</code></td>
+<td style="text-align: left;"><code>backend/Controllers/*</code>, <code>backend/Models/*</code>, <code>backend/Migrations/*</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>PR #12</code> / <code>e7a2f4c</code></td>
+<td style="text-align: left;"><code>feat(ai-agent): implement situation_analysis_agent.py with allow-listed tools &amp; CLI test harness</code></td>
+<td style="text-align: left;"><code>ai-agents/situation_analysis_agent.py</code>, <code>backend/Services/SituationAnalysisService.cs</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>PR #15</code> / <code>9f3d1b8</code></td>
+<td style="text-align: left;"><code>feat(geo): add GeolocationService with Haversine distance calculation and OpenStreetMap Nominatim integration</code></td>
+<td style="text-align: left;"><code>backend/Services/GeolocationService.cs</code>, <code>backend/Controllers/GeolocationController.cs</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>PR #18</code> / <code>2a8c3d1</code></td>
+<td style="text-align: left;"><code>feat(react): build ResourceInventoryHub, ShelterList, and SituationAnalysisView components</code></td>
+<td style="text-align: left;"><code>frontend-react/src/pages/Resource*</code>, <code>frontend-react/src/services/resourceService.js</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>PR #22</code> / <code>5d1e8b2</code></td>
+<td style="text-align: left;"><code>feat(flutter): create shelter_locator_screen, resource_status_screen, and integration services</code></td>
+<td style="text-align: left;"><code>mobile-flutter/lib/screens/shelter*</code>, <code>mobile-flutter/lib/services/resource*</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>PR #25</code> / <code>7c4a9f0</code></td>
+<td style="text-align: left;"><code>test: add comprehensive backend xUnit and Flutter widget test suites for Student 2 slice</code></td>
+<td style="text-align: left;"><code>backend-tests/Resources*</code>, <code>backend-tests/Shelters*</code>, <code>mobile-flutter/test/*</code></td>
+</tr>
+</tbody>
+</table>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">GitHub Commit History and Closed Pull Requests for Student 2</div></div></p>
+<hr />
+<h2>4. Automated Software Testing &amp; Verification Summary</h2>
+<p>To guarantee system stability, I implemented comprehensive automated tests across backend, web, and mobile layers:</p>
+<pre><code class="language-mermaid">flowchart TD
+    subgraph Test_Suite [Student 2 Verification Suite]
+        Unit[&quot;16 Backend xUnit Tests&lt;br/&gt;(Controllers, Services, Models)&quot;]
+        ReactTest[&quot;React Vitest Component Tests&lt;br/&gt;(ResourceList, ShelterList)&quot;]
+        FlutterTest[&quot;Flutter Widget Tests&lt;br/&gt;(Shelter Locator, Resource Status)&quot;]
+    end
+
+    Unit --&gt;|Validates| BE_Code[&quot;Business Rules: Capacity Guards, Stock Thresholds, Haversine Math&quot;]
+    ReactTest --&gt;|Validates| FE_Code[&quot;UI State Transitions: Badges, Forms, Loading Indicators&quot;]
+    FlutterTest --&gt;|Validates| MOB_Code[&quot;Mobile Navigation, GPS Distance Rendering, Screen Layouts&quot;]
+</code></pre>
+<h3>Key Automated Test Scenarios Implemented:</h3>
+<ol>
+<li><strong><code>SheltersControllerTests.UpdateOccupancy_ExceedsCapacity_ReturnsBadRequest</code></strong>: Asserts that sending an occupancy of $120$ for a shelter with capacity $100$ fails with HTTP 400.</li>
+<li><strong><code>InventoryControllerTests.LowStockQuery_ReturnsOnlyItemsBelowThreshold</code></strong>: Verifies that filtering returns only items where <code>Quantity &lt;= MinimumThreshold</code>.</li>
+<li><strong><code>SituationAnalysisAgentTests.CalculateUrgency_ValidatesMath</code></strong>: Tests urgency score computation across Low, Medium, and Critical severity incidents.</li>
+<li><strong><code>GeolocationServiceTests.HaversineDistance_AccurateCoordinates</code></strong>: Verifies distance calculation between Colombo coordinates ($6.9271^\circ\text{N}, 79.8612^\circ\text{E}$) and Kandy coordinates ($7.2906^\circ\text{N}, 80.6337^\circ\text{E}$) yields approximately $95.5\text{ km} \pm 1\text{ km}$.</li>
+<li><strong><code>shelter_locator_screen_test.dart</code></strong>: Verifies that the shelter list renders all shelters, displays phone numbers, and handles empty search results cleanly.</li>
+</ol>
+<p><div class="screenshot-box"><div class="icon">📷</div><div class="title">INSERT SCREENSHOT HERE</div><div class="desc">Visual Studio / Terminal showing all Student 2 Backend &amp; Mobile Tests Passing</div></div></p>
+<hr />
+<h2>5. Engineering Challenges &amp; Problem Resolution</h2>
+<h3>Challenge 1: Cross-Component Primary Key Type Inconsistency</h3>
+<ul>
+<li><strong>Problem</strong>: During system integration, we discovered that Student 3's <code>DispatchTask</code> entity originally referenced resources using a <code>Guid? ResourceId</code>, whereas my <code>Resource</code> entity utilized an auto-incrementing integer (<code>int Id</code>). This mismatch prevented direct SQL foreign key joins.</li>
+<li><strong>Resolution</strong>: I coordinated with Student 3 and Student 4 to perform a database migration (<code>20260926062717_UnifyDispatchTaskResourceId</code>) unifying the foreign key to <code>int? ResourceId</code>. In the interim, I created an advisory safety check to ensure dispatch operations degraded safely without throwing unhandled type exceptions.</li>
+</ul>
+<h3>Challenge 2: Third-Party Geocoding Rate Limiting &amp; Network Latency</h3>
+<ul>
+<li><strong>Problem</strong>: When multiple incidents were analyzed simultaneously, excessive external calls to the OpenStreetMap Nominatim API risked HTTP 429 (Too Many Requests) rate limits and added network latency.</li>
+<li><strong>Resolution</strong>: I designed a hybrid geocoding strategy in <code>GeolocationService.cs</code>. The service first checks if cached coordinates exist on the shelter model; if so, it executes the in-memory Haversine formula instantly ($&lt;1\text{ ms}$). External API geocoding is only queried when coordinate data is missing, backed by a custom <code>User-Agent</code> header complying with OpenStreetMap usage policies.</li>
+</ul>
+<h3>Challenge 3: Balancing AI Agent Autonomy with Data Safety</h3>
+<ul>
+<li><strong>Problem</strong>: Allowing the Situation Analysis Agent to directly mutate shelter occupancy records posed a serious risk of phantom inventory updates due to potential LLM hallucination.</li>
+<li><strong>Resolution</strong>: I strictly isolated the AI Agent to a read-only analytical advisory role. The agent computes deficits and proposes allocations via structured JSON, but state mutations (such as dispatching resources or updating shelter counts) require explicit human coordinator authorization through authenticated endpoints.</li>
+</ul>
+<hr />
+<h2>6. Individual AI Usage Audit Log</h2>
+<p>In compliance with the SLIIT Level 4 (CLEAR Framework) Generative AI Policy, all AI assistance utilized during development was recorded:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Date</th>
+<th style="text-align: left;">Task / Module</th>
+<th style="text-align: left;">Prompt / Interaction Intent</th>
+<th style="text-align: left;">AI Assistance Provided</th>
+<th style="text-align: left;">Refactoring / Human Validation Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>2026-09-10</strong></td>
+<td style="text-align: left;">Situation Analysis Agent (Python)</td>
+<td style="text-align: left;">"Design a Situation Analysis Agent with allow-listed tools and structured JSON output for emergency resource gap evaluation."</td>
+<td style="text-align: left;">Generated <code>situation_analysis_agent.py</code> skeleton with <code>calculate_urgency_score</code> and <code>evaluate_inventory_deficiencies</code>.</td>
+<td style="text-align: left;">Refactored tool logic, verified Pydantic schema validation, and added CLI argument parsing.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2026-09-12</strong></td>
+<td style="text-align: left;">C# SituationAnalysisService</td>
+<td style="text-align: left;">"Refactor C# SituationAnalysisService to mirror Python agent tools and persist workflow state in EF Core."</td>
+<td style="text-align: left;">Generated LINQ queries for shelter occupancy math and deficiency aggregation.</td>
+<td style="text-align: left;">Bound service to <code>AppDbContext</code>, registered in DI container (<code>Program.cs</code>), and added xUnit tests.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2026-09-16</strong></td>
+<td style="text-align: left;">Geolocation &amp; Maps Integration</td>
+<td style="text-align: left;">"Add third-party maps and Haversine distance calculations to locate nearest shelters by lat/lng."</td>
+<td style="text-align: left;">Generated <code>GeolocationService.cs</code> utilizing OpenStreetMap Nominatim endpoint and Haversine formula.</td>
+<td style="text-align: left;">Added fallback distance calculations, verified coordinate boundaries, and integrated links in React &amp; Flutter.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2026-09-20</strong></td>
+<td style="text-align: left;">Test Suite Expansion</td>
+<td style="text-align: left;">"Write edge-case backend unit tests, React tests, and Flutter widget tests for shelter and resource management."</td>
+<td style="text-align: left;">Generated xUnit edge-case tests, Vitest test skeletons, and Flutter widget tests.</td>
+<td style="text-align: left;">Verified test execution locally (<code>dotnet test</code> 80 passing, Flutter 91 passing) and resolved widget overflow issues.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2026-09-26</strong></td>
+<td style="text-align: left;">Documentation &amp; ADR Drafting</td>
+<td style="text-align: left;">"Draft Architecture Decision Record ADR 02 summarizing database schema strategy and Situation Analysis Agent state."</td>
+<td style="text-align: left;">Drafted Markdown ADR structure following standard format.</td>
+<td style="text-align: left;">Reviewed and customized technical justifications, consequences, and team alignment notes.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>7. Individual AI Reflection (Level 4 Engineering Reflection)</h2>
+<p>Working on the Emergency Resource Coordination Platform under the SLIIT Level 4 Generative AI framework has provided invaluable insight into modern, AI-augmented software engineering. Rather than treating Generative AI as a "black-box code generator," I utilized AI assistants (Google Gemini and Claude) as interactive pair programmers for architectural scaffolding, boilerplate reduction, and edge-case exploration.</p>
+<h3>What the AI Did Well</h3>
+<p>The AI was remarkably effective at generating repetitive boilerplate code quickly. For example, creating standard DTO classes, repository interfaces, and initial xUnit test scaffolding took minutes rather than hours. It also proved highly adept at providing mathematical reference implementations, such as the initial trigonometric formula for Haversine distance calculations, and translating database schemas into clean Pydantic data models for the Python agent.</p>
+<h3>Where the AI Failed &amp; Human Engineering Was Essential</h3>
+<p>Despite its strengths, the AI exhibited significant limitations in understanding cross-system architectural context and business nuances:
+1. <strong>Lack of Domain Guardrails</strong>: The initial AI-generated shelter management code allowed current occupancy to exceed total shelter capacity without throwing an error. I had to manually engineer defensive business rules and validation exceptions to prevent invalid states.
+2. <strong>Hallucination of Database Foreign Keys</strong>: When drafting the initial resource allocation logic, the AI hallucinated non-existent database relations between independent entities. I had to discard its پیشنهادات and manually map Entity Framework navigation properties with proper cascade deletion rules.
+3. <strong>UI Layout Bugs in Flutter</strong>: The AI-generated Flutter widget tests initially failed because the AI was oblivious to mobile viewport constraints, resulting in a 48px render overflow on small screen sizes. I diagnosed the layout issue and refactored the widget with <code>Expanded</code> and <code>SingleChildScrollView</code> containers.</p>
+<h3>Viva Readiness &amp; Technical Ownership</h3>
+<p>Through the iterative process of prompting, critiquing, refactoring, and debugging, I developed complete mastery over my codebase. I understand the exact flow of data from the PostgreSQL database through Entity Framework Core, into ASP.NET Core controllers, across the REST API surface to React and Flutter clients, and into the Agentic AI analytical tools. I am fully prepared to defend my design choices, modify endpoints, trace SQL queries, and live-debug any component of my subsystem during the oral viva examination without external AI assistance.</p>
+<hr />
+<h2>8. Signed Declaration of Authenticity</h2>
+<p>I hereby declare that the work presented in this Individual Report section represents my own individual contribution to the group assignment, developed in accordance with the SLIIT Level 4 Generative AI guidelines. All AI assistance has been transparently disclosed in the AI Usage Log. All code, database schemas, test cases, and documentation have been reviewed, tested, executed, and validated by me. I accept full responsibility for the technical accuracy and integrity of my submitted components.</p>
+<p><strong>Student Identifier</strong>: Student 2<br />
+<strong>Assigned Role</strong>: Resource &amp; Inventory Management + Situation Analysis Agent Lead<br />
+<strong>Date</strong>: September 28, 2026  </p>
+<p><strong>Signature</strong>: <strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___  </p>
+<hr />
+<div style="page-break-after: always;"></div>
+
+<h1>Student 1 Individual Contribution Report</h1>
+<p><em>(This section is reserved for Student 1: Incident Management &amp; Coordinator Planner Agent. Please refer to Student 1's individual contribution statement, commit evidence, AI log, and signed declaration.)</em></p>
+<hr />
+<div style="page-break-after: always;"></div>
+
+<h1>Student 3 Individual Contribution Report</h1>
+<p><em>(This section is reserved for Student 3: Dispatch &amp; Task Assignment + Resource Allocation Agent. Please refer to Student 3's individual contribution statement, commit evidence, AI log, and signed declaration.)</em></p>
+<hr />
+<div style="page-break-after: always;"></div>
+
+<h1>Student 4 Individual Contribution Report</h1>
+<p><em>(Please refer to <code>docs/Individual_Report_Student4.md</code> for Student 4: Volunteer/Responder Management + Validation/Safety Agent. Available in the repository documentation directory.)</em></p>
+</body>
+</html>

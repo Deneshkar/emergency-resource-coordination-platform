@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { useLanguage } from "../context/LanguageContext";
 import "./Settings.css";
 
 const DISPLAY_MODES = [
@@ -14,6 +15,8 @@ const DISPLAY_MODES = [
 ];
 
 export default function Settings() {
+  const { language, setLanguage, languages, t } = useLanguage();
+
   const [currentTheme, setCurrentTheme] = useState(
     localStorage.getItem("ercp_theme") || "dark"
   );
@@ -26,12 +29,33 @@ export default function Settings() {
     localStorage.setItem("ercp_theme", currentTheme);
   }, [currentTheme]);
 
+  const handleLanguageChange = (code) => {
+    if (code === language) return;
+    setLanguage(code);
+    const selectedLang = languages.find((l) => l.code === code);
+    toast.success(
+      code === "ta"
+        ? "மொழி மாற்றப்பட்டது"
+        : code === "si"
+        ? "භාෂාව වෙනස් කරන ලදී"
+        : "Language Updated",
+      {
+        description:
+          code === "ta"
+            ? `இடைமுக மொழி ${selectedLang?.nativeName}க்கு மாற்றப்பட்டது.`
+            : code === "si"
+            ? `පද්ධති භාෂාව ${selectedLang?.nativeName} බවට පත් කරන ලදී.`
+            : `Interface language switched to ${selectedLang?.name}.`,
+      }
+    );
+  };
+
   const handleNotificationToggle = (e) => {
     const isChecked = e.target.checked;
     setNotifications(isChecked);
     if (isChecked) {
-      toast.success("System notifications enabled", {
-        description: "You will now receive critical alerts and AI updates."
+      toast.success(t("notif_enabled_toast"), {
+        description: t("notif_enabled_toast_desc"),
       });
     }
   };
@@ -44,18 +68,52 @@ export default function Settings() {
     <div className="incident-hub-container settings-page">
       <div className="command-header">
         <div>
-          <div className="subtitle-tag">PREFERENCES</div>
-          <h1 className="header-title">System Settings</h1>
-          <p className="header-desc">Customize your interface and notification preferences.</p>
+          <div className="subtitle-tag">{t("preferences")}</div>
+          <h1 className="header-title">{t("system_settings")}</h1>
+          <p className="header-desc">{t("settings_desc")}</p>
         </div>
       </div>
 
       <div className="settings-grid">
+        {/* Language Selection Card */}
         <div className="stat-card">
           <div className="settings-section">
-            <h3 style={{ marginBottom: "1rem", color: "var(--text-primary)" }}>Display Modes</h3>
-            <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", fontSize: "0.9rem" }}>
-              Choose a global display mode for the application interface.
+            <h3 style={{ marginBottom: "0.5rem", color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "8px" }}>
+              <span>🌐</span> {t("language_title")}
+            </h3>
+            <p style={{ color: "var(--text-muted)", marginBottom: "1.25rem", fontSize: "0.9rem" }}>
+              {t("language_desc")}
+            </p>
+            <div className="lang-options">
+              {languages.map((lang) => {
+                const isActive = language === lang.code;
+                return (
+                  <button
+                    key={lang.code}
+                    className={`lang-btn ${isActive ? "active" : ""}`}
+                    onClick={() => handleLanguageChange(lang.code)}
+                    type="button"
+                    title={`Switch to ${lang.nativeName} (${lang.name})`}
+                  >
+                    <div className="lang-header">
+                      <span className="lang-flag">{lang.flag}</span>
+                      <span className="lang-native">{lang.nativeName}</span>
+                      {isActive && <span className="lang-badge">Active</span>}
+                    </div>
+                    <span className="lang-name">{lang.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Display Modes Card */}
+        <div className="stat-card">
+          <div className="settings-section">
+            <h3 style={{ marginBottom: "0.5rem", color: "var(--text-primary)" }}>{t("display_modes")}</h3>
+            <p style={{ color: "var(--text-muted)", marginBottom: "1.25rem", fontSize: "0.9rem" }}>
+              {t("display_modes_desc")}
             </p>
             <div className="theme-options">
               {DISPLAY_MODES.map((mode) => (
@@ -65,6 +123,7 @@ export default function Settings() {
                   onClick={() => setCurrentTheme(mode.value)}
                   style={{ "--theme-color": mode.hex }}
                   title={mode.name}
+                  type="button"
                 >
                   <span className="theme-name">{mode.icon} {mode.name}</span>
                 </button>
@@ -73,15 +132,16 @@ export default function Settings() {
           </div>
         </div>
 
+        {/* Notifications Card */}
         <div className="stat-card">
           <div className="settings-section">
-            <h3 style={{ marginBottom: "1rem", color: "var(--text-primary)" }}>Notifications</h3>
-            <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", fontSize: "0.9rem" }}>
-              Enable or disable system push notifications and alerts.
+            <h3 style={{ marginBottom: "0.5rem", color: "var(--text-primary)" }}>{t("notifications")}</h3>
+            <p style={{ color: "var(--text-muted)", marginBottom: "1.25rem", fontSize: "0.9rem" }}>
+              {t("notifications_desc")}
             </p>
             <div className="toggle-wrapper">
               <label className="toggle-label">
-                <span style={{ fontWeight: 500, color: "var(--text-primary)" }}>System Notifications</span>
+                <span style={{ fontWeight: 500, color: "var(--text-primary)" }}>{t("system_notifications")}</span>
                 <div className={`toggle-switch ${notifications ? "on" : "off"}`}>
                   <input
                     type="checkbox"
@@ -93,7 +153,7 @@ export default function Settings() {
                 </div>
               </label>
               <p style={{ fontSize: "0.8rem", color: "var(--text-dim)", marginTop: "0.5rem" }}>
-                {notifications ? "Notifications are currently enabled." : "Notifications are currently disabled."}
+                {notifications ? t("notifications_enabled_desc") : t("notifications_disabled_desc")}
               </p>
             </div>
           </div>

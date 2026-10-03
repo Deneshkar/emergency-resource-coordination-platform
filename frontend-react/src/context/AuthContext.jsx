@@ -90,6 +90,30 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  const googleLogin = useCallback(async (googleData) => {
+    setIsLoading(true);
+    try {
+      const res = await authService.googleLogin(googleData);
+      setToken(res.token);
+      setUser(res.user);
+      return res;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const githubLogin = useCallback(async (code, redirectUri) => {
+    setIsLoading(true);
+    try {
+      const res = await authService.githubLogin(code, redirectUri);
+      setToken(res.token);
+      setUser(res.user);
+      return res;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   const logout = useCallback(() => {
     authService.logout();
     setToken(null);
@@ -108,6 +132,8 @@ export function AuthProvider({ children }) {
     login,
     demoLogin,
     register,
+    googleLogin,
+    githubLogin,
     logout,
     hasRole: (allowedRoles) => {
       if (!allowedRoles || allowedRoles.length === 0) return true;

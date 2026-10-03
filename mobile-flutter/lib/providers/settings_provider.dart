@@ -4,14 +4,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SettingsProvider with ChangeNotifier {
   String _themeMode = 'dark';
   bool _notificationsEnabled = true;
+  String _language = 'en';
 
   String get themeMode => _themeMode;
   bool get notificationsEnabled => _notificationsEnabled;
+  String get language => _language;
 
   Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     _themeMode = prefs.getString('ercp_theme') ?? 'dark';
     _notificationsEnabled = prefs.getBool('ercp_notifications') ?? true;
+    _language = prefs.getString('ercp_language') ?? 'en';
     notifyListeners();
   }
 
@@ -19,6 +22,13 @@ class SettingsProvider with ChangeNotifier {
     _themeMode = mode;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('ercp_theme', mode);
+    notifyListeners();
+  }
+
+  Future<void> setLanguage(String lang) async {
+    _language = lang;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('ercp_language', lang);
     notifyListeners();
   }
 

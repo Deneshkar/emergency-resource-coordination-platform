@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation, Link } from "react
 import { useState, useEffect, useCallback } from "react";
 import { AuthProvider } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
+import { LanguageProvider } from "./context/LanguageContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ToastContainer from "./components/ToastContainer";
 import { Toaster } from "sonner";
@@ -64,7 +65,11 @@ function AuthLayout({ children }) {
 
 function AppShell() {
   const location = useLocation();
-  const isAuthPage = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/forgot-password";
+  const isAuthPage =
+    location.pathname === "/login" ||
+    location.pathname === "/register" ||
+    location.pathname === "/forgot-password" ||
+    location.pathname === "/auth/github/callback";
 
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -103,6 +108,7 @@ function AppShell() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/auth/github/callback" element={<Login />} />
         </Routes>
       </AuthLayout>
     );
@@ -236,13 +242,15 @@ function AppShell() {
 function App() {
   return (
     <BrowserRouter>
-      <NotificationProvider>
-        <Toaster richColors position="top-right" />
-        <ToastContainer />
-        <AuthProvider>
-          <AppShell />
-        </AuthProvider>
-      </NotificationProvider>
+      <LanguageProvider>
+        <NotificationProvider>
+          <Toaster richColors position="top-right" />
+          <ToastContainer />
+          <AuthProvider>
+            <AppShell />
+          </AuthProvider>
+        </NotificationProvider>
+      </LanguageProvider>
     </BrowserRouter>
   );
 }

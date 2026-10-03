@@ -1,33 +1,36 @@
 import { useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
 import UserProfileModal from "./UserProfileModal";
 
 const TITLES = [
-  { match: "/incidents/new", crumb: "Operations", title: "Report Incident" },
-  { match: "/incidents/", crumb: "Operations", title: "Incident Details" },
-  { match: "/incidents", crumb: "Operations", title: "Incident Intelligence Hub" },
-  { match: "/dashboard", crumb: "Overview", title: "Command Dashboard" },
-  { match: "/incident-list", crumb: "Operations", title: "Incident List" },
-  { match: "/dispatches", crumb: "Operations", title: "Dispatches" },
-  { match: "/volunteers/new", crumb: "Resources", title: "Add Volunteer" },
-  { match: "/volunteers/", crumb: "Resources", title: "Volunteer Profile" },
-  { match: "/volunteers", crumb: "Resources", title: "Volunteers" },
-  { match: "/inventory-hub", crumb: "Resources", title: "Resource & Inventory Hub" },
-  { match: "/resources", crumb: "Resources", title: "Resources" },
-  { match: "/shelters", crumb: "Resources", title: "Shelters" },
-  { match: "/inventory", crumb: "Resources", title: "Inventory" },
-  { match: "/situation-analysis", crumb: "Intelligence", title: "Situation Analysis" },
-  { match: "/citizen", crumb: "Intelligence", title: "Citizen View" },
-  { match: "/login", crumb: "Security", title: "Operator Authentication" },
-  { match: "/register", crumb: "Security", title: "Registration" },
+  { match: "/incidents/new", crumbKey: "operations", defaultCrumb: "Operations", titleKey: "report_incident", defaultTitle: "Report Incident" },
+  { match: "/incidents/", crumbKey: "operations", defaultCrumb: "Operations", titleKey: "incident_details", defaultTitle: "Incident Details" },
+  { match: "/incidents", crumbKey: "operations", defaultCrumb: "Operations", titleKey: "incident_intel_hub", defaultTitle: "Incident Intelligence Hub" },
+  { match: "/dashboard", crumbKey: "overview", defaultCrumb: "Overview", titleKey: "command_dashboard", defaultTitle: "Command Dashboard" },
+  { match: "/incident-list", crumbKey: "operations", defaultCrumb: "Operations", titleKey: "incident_list", defaultTitle: "Incident List" },
+  { match: "/dispatches", crumbKey: "operations", defaultCrumb: "Operations", titleKey: "dispatches", defaultTitle: "Dispatches" },
+  { match: "/volunteers/new", crumbKey: "resources", defaultCrumb: "Resources", titleKey: "add_volunteer", defaultTitle: "Add Volunteer" },
+  { match: "/volunteers/", crumbKey: "resources", defaultCrumb: "Resources", titleKey: "volunteer_profile", defaultTitle: "Volunteer Profile" },
+  { match: "/volunteers", crumbKey: "resources", defaultCrumb: "Resources", titleKey: "volunteers", defaultTitle: "Volunteers" },
+  { match: "/inventory-hub", crumbKey: "resources", defaultCrumb: "Resources", titleKey: "resource_inventory_hub", defaultTitle: "Resource & Inventory Hub" },
+  { match: "/resources", crumbKey: "resources", defaultCrumb: "Resources", titleKey: "resources", defaultTitle: "Resources" },
+  { match: "/shelters", crumbKey: "resources", defaultCrumb: "Resources", titleKey: "shelters", defaultTitle: "Shelters" },
+  { match: "/inventory", crumbKey: "resources", defaultCrumb: "Resources", titleKey: "inventory", defaultTitle: "Inventory" },
+  { match: "/situation-analysis", crumbKey: "intelligence", defaultCrumb: "Intelligence", titleKey: "situation_analysis", defaultTitle: "Situation Analysis" },
+  { match: "/citizen", crumbKey: "intelligence", defaultCrumb: "Intelligence", titleKey: "citizen_view", defaultTitle: "Citizen View" },
+  { match: "/settings", crumbKey: "preferences", defaultCrumb: "Preferences", titleKey: "system_settings", defaultTitle: "System Settings" },
+  { match: "/profile", crumbKey: "overview", defaultCrumb: "Overview", titleKey: "my_profile", defaultTitle: "My Profile" },
+  { match: "/login", crumbKey: "preferences", defaultCrumb: "Security", titleKey: "operator_auth", defaultTitle: "Operator Authentication" },
+  { match: "/register", crumbKey: "preferences", defaultCrumb: "Security", titleKey: "registration", defaultTitle: "Registration" },
 ];
 
-function resolveTitle(pathname) {
+function resolveTitleConfig(pathname) {
   const hit = TITLES.filter((t) => pathname.startsWith(t.match)).sort(
     (a, b) => b.match.length - a.match.length
   )[0];
-  return hit ?? { crumb: "Overview", title: "Command Center" };
+  return hit ?? { crumbKey: "overview", defaultCrumb: "Overview", titleKey: "command_center", defaultTitle: "Command Center" };
 }
 
 const ROLE_COLORS = {
@@ -40,8 +43,11 @@ const ROLE_COLORS = {
 export default function Topbar({ onMenu, onToggle, collapsed }) {
   const { pathname } = useLocation();
   const { user, isAuthenticated, demoLogin, logout } = useAuth();
+  const { language, setLanguage, languages, t } = useLanguage();
   const navigate = useNavigate();
-  const { crumb, title } = resolveTitle(pathname);
+  const titleConfig = resolveTitleConfig(pathname);
+  const crumb = t(titleConfig.crumbKey, titleConfig.defaultCrumb);
+  const title = t(titleConfig.titleKey, titleConfig.defaultTitle);
   const [showProfileModal, setShowProfileModal] = useState(false);
 
   const activeRole = user?.role || "Guest";
@@ -93,11 +99,39 @@ export default function Topbar({ onMenu, onToggle, collapsed }) {
 
       <div className="topbar-spacer" />
 
+      {/* Language Quick-Switcher Dropdown in Topbar */}
+      <div
+        className="role-badge-picker"
+        title="Quick Language Switcher"
+        style={{
+          background: "rgba(56, 189, 248, 0.08)",
+          borderColor: "rgba(56, 189, 248, 0.25)",
+          display: "flex",
+          alignItems: "center",
+          gap: "4px"
+        }}
+      >
+        <span className="role-label" style={{ color: "#38bdf8", fontSize: "13px" }}>🌐</span>
+        <select
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+          className="role-select"
+          aria-label="Switch interface language"
+          style={{ minWidth: "75px", cursor: "pointer", fontWeight: 600 }}
+        >
+          {languages.map((lang) => (
+            <option key={lang.code} value={lang.code}>
+              {lang.nativeName} ({lang.code.toUpperCase()})
+            </option>
+          ))}
+        </select>
+      </div>
+
       {isAuthenticated ? (
         <div className="topbar-auth-section" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           {/* Quick Demo Role Switcher for Viva Examiners */}
           <div className="role-badge-picker" title="Switch demo role instantly">
-            <span className="role-label">Active Role</span>
+            <span className="role-label">{t("active_role", "Active Role")}</span>
             <select
               value={activeRole}
               onChange={handleRoleChange}
@@ -149,14 +183,16 @@ export default function Topbar({ onMenu, onToggle, collapsed }) {
             <span className="profile-text" style={{ fontWeight: 600, color: colors.text }}>
               {user?.fullName ? user.fullName.split(" ")[0] : activeRole}
             </span>
-            <span style={{ fontSize: "11px", color: "var(--text-muted)", marginLeft: "2px" }}>👤 Profile</span>
+            <span style={{ fontSize: "11px", color: "var(--text-muted)", marginLeft: "2px" }}>
+              👤 {t("profile", "Profile")}
+            </span>
           </button>
 
           {/* Logout Button */}
           <button
             onClick={handleLogout}
             className="topbar-icon-btn"
-            title="Sign out of platform"
+            title={t("sign_out", "Sign out of platform")}
             style={{ color: "#ef4444" }}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -169,17 +205,17 @@ export default function Topbar({ onMenu, onToggle, collapsed }) {
       ) : (
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
           <Link to="/login" className="btn btn-primary" style={{ padding: "6px 14px", fontSize: "13px" }}>
-            Sign In
+            {t("sign_in", "Sign In")}
           </Link>
           <Link to="/register" className="btn btn-secondary" style={{ padding: "6px 14px", fontSize: "13px" }}>
-            Register
+            {t("register", "Register")}
           </Link>
         </div>
       )}
 
       <div className="topbar-status" title="Platform online & connected to ASP.NET Core API">
         <span className="status-dot" />
-        <span className="status-text">Operational</span>
+        <span className="status-text">{t("operational", "Operational")}</span>
       </div>
 
       {/* Account Profile Modal */}

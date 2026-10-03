@@ -86,3 +86,22 @@ public class ResetPasswordRequestDto
     [MinLength(6)]
     public string NewPassword { get; set; } = string.Empty;
 }
+
+public class GoogleLoginRequestDto
+{
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = string.Empty;
+
+    public string? Name { get; set; }
+
+    public string? IdToken { get; set; }
+}
+
+public class GithubLoginRequestDto
+{
+    [Required]
+    public string Code { get; set; } = string.Empty;
+
+    public string? RedirectUri { get; set; }
+}

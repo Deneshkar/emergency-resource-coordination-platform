@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
 
 const Icon = ({ d }) => (
   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -24,27 +25,28 @@ const ICONS = {
 };
 
 const NAV = [
-  { section: "Overview" },
-  { to: "/dashboard", label: "Dashboard", icon: ICONS.dashboard },
-  { to: "/incidents", label: "Incident Hub", icon: ICONS.incident, badgeKey: "active" },
-  { section: "Operations" },
-  { to: "/incident-list", label: "All Incidents", icon: ICONS.list, roles: ["Coordinator", "Admin"] },
-  { to: "/dispatches", label: "Dispatches", icon: ICONS.dispatch, roles: ["Coordinator", "Admin", "Volunteer"] },
-  { section: "Resources" },
-  { to: "/volunteers", label: "Volunteers", icon: ICONS.volunteers, roles: ["Coordinator", "Admin", "Volunteer"] },
-  { to: "/inventory-hub", label: "Resources & Inventory", icon: ICONS.resources, roles: ["Coordinator", "Admin"] },
-  { to: "/shelters", label: "Shelters", icon: ICONS.shelter },
-  { to: "/inventory", label: "Inventory", icon: ICONS.inventory, roles: ["Coordinator", "Admin"] },
-  { section: "Intelligence" },
-  { to: "/situation-analysis", label: "AI Analysis", icon: ICONS.ai, roles: ["Coordinator", "Admin"] },
-  { to: "/citizen", label: "Citizen View", icon: ICONS.citizen },
-  { section: "Preferences" },
-  { to: "/settings", label: "Settings", icon: ICONS.settings },
+  { sectionKey: "overview", defaultSection: "Overview" },
+  { to: "/dashboard", labelKey: "dashboard", defaultLabel: "Dashboard", icon: ICONS.dashboard },
+  { to: "/incidents", labelKey: "incident_hub", defaultLabel: "Incident Hub", icon: ICONS.incident, badgeKey: "active" },
+  { sectionKey: "operations", defaultSection: "Operations" },
+  { to: "/incident-list", labelKey: "all_incidents", defaultLabel: "All Incidents", icon: ICONS.list, roles: ["Coordinator", "Admin"] },
+  { to: "/dispatches", labelKey: "dispatches", defaultLabel: "Dispatches", icon: ICONS.dispatch, roles: ["Coordinator", "Admin", "Volunteer"] },
+  { sectionKey: "resources", defaultSection: "Resources" },
+  { to: "/volunteers", labelKey: "volunteers", defaultLabel: "Volunteers", icon: ICONS.volunteers, roles: ["Coordinator", "Admin", "Volunteer"] },
+  { to: "/inventory-hub", labelKey: "resources_inventory", defaultLabel: "Resources & Inventory", icon: ICONS.resources, roles: ["Coordinator", "Admin"] },
+  { to: "/shelters", labelKey: "shelters", defaultLabel: "Shelters", icon: ICONS.shelter },
+  { to: "/inventory", labelKey: "inventory", defaultLabel: "Inventory", icon: ICONS.inventory, roles: ["Coordinator", "Admin"] },
+  { sectionKey: "intelligence", defaultSection: "Intelligence" },
+  { to: "/situation-analysis", labelKey: "ai_analysis", defaultLabel: "AI Analysis", icon: ICONS.ai, roles: ["Coordinator", "Admin"] },
+  { to: "/citizen", labelKey: "citizen_view", defaultLabel: "Citizen View", icon: ICONS.citizen },
+  { sectionKey: "preferences", defaultSection: "Preferences" },
+  { to: "/settings", labelKey: "settings", defaultLabel: "Settings", icon: ICONS.settings },
 ];
 
 export default function Sidebar({ collapsed, onToggle, mobileOpen, onClose, activeCount }) {
   const location = useLocation();
   const { user, isAuthenticated } = useAuth();
+  const { t } = useLanguage();
   const showText = !collapsed || mobileOpen;
   const userRole = user?.role;
 
@@ -63,7 +65,7 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onClose, acti
 
   // Filter navigation items by active user role
   const visibleNav = NAV.filter((item) => {
-    if (item.section) return true;
+    if (item.sectionKey) return true;
     if (!item.roles) return true;
     if (!isAuthenticated) return false;
     return item.roles.includes(userRole);
@@ -101,31 +103,33 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onClose, acti
         </div>
 
         <div className="sidebar-cta">
-          <NavLink to="/incidents/new" className="sidebar-cta-btn" title="Report a new emergency incident">
+          <NavLink to="/incidents/new" className="sidebar-cta-btn" title={t("report_incident", "Report Incident")}>
             <span aria-hidden="true">＋</span>
-            {showText && <span className="cta-text">Report Incident</span>}
+            {showText && <span className="cta-text">{t("report_incident", "Report Incident")}</span>}
           </NavLink>
         </div>
 
         <nav className="sidebar-nav">
           {visibleNav.map((item, i) => {
-            if (item.section) {
+            if (item.sectionKey) {
+              const label = t(item.sectionKey, item.defaultSection);
               return showText ? (
-                <div key={`s-${i}`} className="sidebar-section-label">{item.section}</div>
+                <div key={`s-${i}`} className="sidebar-section-label">{label}</div>
               ) : (
                 <div key={`s-${i}`} className="sidebar-section-divider" />
               );
             }
+            const label = t(item.labelKey, item.defaultLabel);
             return (
               <NavLink
                 key={item.to}
                 to={item.to}
                 end={item.to === "/dashboard"}
                 className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}
-                title={collapsed && !mobileOpen ? item.label : undefined}
+                title={collapsed && !mobileOpen ? label : undefined}
               >
                 <span className="sidebar-link-icon">{item.icon}</span>
-                {showText && <span className="sidebar-link-text">{item.label}</span>}
+                {showText && <span className="sidebar-link-text">{label}</span>}
                 {showText && item.badgeKey === "active" && activeCount > 0 && (
                   <span className="sidebar-count-badge" title={`${activeCount} active incidents`}>
                     {activeCount}
@@ -140,10 +144,10 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onClose, acti
               to="/profile"
               className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}
               style={{ marginTop: "0.5rem" }}
-              title="My Account Profile"
+              title={t("my_profile", "My Profile")}
             >
               <span className="sidebar-link-icon">👤</span>
-              {showText && <span className="sidebar-link-text">My Profile</span>}
+              {showText && <span className="sidebar-link-text">{t("my_profile", "My Profile")}</span>}
             </NavLink>
           )}
 
@@ -154,7 +158,7 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onClose, acti
               style={{ marginTop: "1rem", color: "var(--accent)" }}
             >
               <span className="sidebar-link-icon">{ICONS.login}</span>
-              {showText && <span className="sidebar-link-text">Operator Login</span>}
+              {showText && <span className="sidebar-link-text">{t("operator_login", "Operator Login")}</span>}
             </NavLink>
           )}
         </nav>
@@ -163,7 +167,7 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onClose, acti
           <div className="sidebar-footer">
             <div className="sidebar-status">
               <span className="status-dot" />
-              <span>{isAuthenticated ? `${userRole} Session` : "Public Access"}</span>
+              <span>{isAuthenticated ? `${userRole} ${t("session", "Session")}` : t("public_access", "Public Access")}</span>
             </div>
             <div className="sidebar-version">ERCP v1.0.0</div>
           </div>

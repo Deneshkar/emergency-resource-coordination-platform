@@ -35,3 +35,6 @@ ai-agents/__pycache__/
 .vercel/
 frontend-react/.vercel/
 frontend-react/dist/
+
+# Office Temp Files
+~$*

@@ -9,6 +9,8 @@ using Microsoft.OpenApi.Models;
 using ERCP.Api.Data;
 using ERCP.Api.Services;
 using ERCP.Api.Models;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql;
 
 // Load local .env (repo root + backend dir) into process env so
@@ -48,6 +50,12 @@ LoadDotEnv();
 
 var builder = WebApplication.CreateBuilder(args);
 
+var portEnv = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(portEnv))
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{portEnv}");
+}
+
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(o =>
 {
@@ -55,6 +63,7 @@ builder.Services.AddControllers().AddJsonOptions(o =>
     // Shift endpoints now return DTOs, so this should rarely trigger.
     o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<IncidentPlannerService>();
 builder.Services.AddScoped<SituationAnalysisService>();
 builder.Services.AddScoped<DispatchValidationService>();
@@ -141,8 +150,8 @@ static string? ConvertDatabaseUrl(string? databaseUrl)
         var host = uri.Host;
         var port = uri.Port > 0 ? uri.Port : 5432;
         var database = uri.AbsolutePath.TrimStart('/');
-        var username = userInfo[0];
-        var password = userInfo.Length > 1 ? userInfo[1] : "";
+        var username = Uri.UnescapeDataString(userInfo[0]);
+        var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
         return $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
     }
     catch { return null; }
@@ -197,7 +206,18 @@ using (var scope = app.Services.CreateScope())
     var planner = scope.ServiceProvider.GetRequiredService<IncidentPlannerService>();
     try
     {
-        context.Database.EnsureCreated();
+        if (context.Database.IsRelational())
+        {
+            var creator = context.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
+            if (creator != null)
+            {
+                try { creator.CreateTables(); } catch { }
+            }
+        }
+        else
+        {
+            context.Database.EnsureCreated();
+        }
 
         if (context.Database.IsRelational())
         {
@@ -486,6 +506,314 @@ using (var scope = app.Services.CreateScope())
             context.Volunteers.Add(responder);
             context.SaveChanges();
         }
+
+        // Student 2 Component Seeding: Shelters, Resources, InventoryItems, SituationAssessments
+        if (!context.Shelters.Any())
+        {
+            var shelter1 = new Shelter
+            {
+                Name = "Central Colombo Evacuation Center",
+                Location = "Colombo 07",
+                Address = "Independence Avenue, Colombo 07",
+                TotalCapacity = 350,
+                CurrentOccupancy = 120,
+                Status = "Active",
+                ContactNumber = "+94-11-2691111",
+                Latitude = 6.9044,
+                Longitude = 79.8690,
+                CreatedAt = DateTime.UtcNow.AddDays(-5),
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            var shelter2 = new Shelter
+            {
+                Name = "Riverside Community High School",
+                Location = "Sector 7, Riverside",
+                Address = "45 River Road, Kaduwela",
+                TotalCapacity = 200,
+                CurrentOccupancy = 185,
+                Status = "Active",
+                ContactNumber = "+94-11-2578900",
+                Latitude = 6.9319,
+                Longitude = 79.9836,
+                CreatedAt = DateTime.UtcNow.AddDays(-3),
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            var shelter3 = new Shelter
+            {
+                Name = "Metro North Municipal Shelter",
+                Location = "North District",
+                Address = "128 Negombo Road, Peliyagoda",
+                TotalCapacity = 500,
+                CurrentOccupancy = 500,
+                Status = "Full",
+                ContactNumber = "+94-11-2912345",
+                Latitude = 6.9682,
+                Longitude = 79.8887,
+                CreatedAt = DateTime.UtcNow.AddDays(-7),
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            var shelter4 = new Shelter
+            {
+                Name = "Kandy Municipal Indoor Stadium",
+                Location = "Kandy Central",
+                Address = "William Gopallawa Mawatha, Kandy",
+                TotalCapacity = 400,
+                CurrentOccupancy = 60,
+                Status = "Active",
+                ContactNumber = "+94-81-2223344",
+                Latitude = 7.2906,
+                Longitude = 80.6337,
+                CreatedAt = DateTime.UtcNow.AddDays(-4),
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            var shelter5 = new Shelter
+            {
+                Name = "Galle Fort Emergency Relief Shelter",
+                Location = "Galle Fort",
+                Address = "Church Street, Galle",
+                TotalCapacity = 150,
+                CurrentOccupancy = 0,
+                Status = "Inactive",
+                ContactNumber = "+94-91-2234567",
+                Latitude = 6.0329,
+                Longitude = 80.2168,
+                CreatedAt = DateTime.UtcNow.AddDays(-10),
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            context.Shelters.AddRange(shelter1, shelter2, shelter3, shelter4, shelter5);
+            context.SaveChanges();
+
+            // Resources for Student 2
+            if (!context.Resources.Any())
+            {
+                context.Resources.AddRange(
+                    new Resource
+                    {
+                        Name = "Rapid Response Ambulance Alpha",
+                        ResourceType = "Vehicle",
+                        Status = "Available",
+                        Capacity = 4,
+                        Location = "Central Colombo Station",
+                        ShelterId = shelter1.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-5),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new Resource
+                    {
+                        Name = "Heavy Duty Flood Rescue Boat B-1",
+                        ResourceType = "Vehicle",
+                        Status = "Dispatched",
+                        Capacity = 8,
+                        Location = "Riverside Sector 7",
+                        ShelterId = shelter2.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-3),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new Resource
+                    {
+                        Name = "Mobile Trauma Surgical Unit",
+                        ResourceType = "MedicalEquipment",
+                        Status = "Available",
+                        Capacity = 6,
+                        Location = "Colombo 07 Center",
+                        ShelterId = shelter1.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-5),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new Resource
+                    {
+                        Name = "Emergency Backup Generator 75kVA",
+                        ResourceType = "Generator",
+                        Status = "Available",
+                        Capacity = 1,
+                        Location = "Metro North Municipal",
+                        ShelterId = shelter3.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-7),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new Resource
+                    {
+                        Name = "High-Capacity Water Purification Pump",
+                        ResourceType = "WaterSupply",
+                        Status = "Available",
+                        Capacity = 1000,
+                        Location = "Riverside Center",
+                        ShelterId = shelter2.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-3),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new Resource
+                    {
+                        Name = "Heavy Extrication Fire Tender 4x4",
+                        ResourceType = "Vehicle",
+                        Status = "Maintenance",
+                        Capacity = 5,
+                        Location = "Central Fire Depot",
+                        ShelterId = shelter1.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-5),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new Resource
+                    {
+                        Name = "Search & Rescue Quadcopter Drone Kit",
+                        ResourceType = "Equipment",
+                        Status = "Available",
+                        Capacity = 2,
+                        Location = "Kandy Command Post",
+                        ShelterId = shelter4.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-4),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new Resource
+                    {
+                        Name = "Field Hospital Inflatable Tent Complex",
+                        ResourceType = "ShelterSupply",
+                        Status = "Reserved",
+                        Capacity = 50,
+                        Location = "Galle Fort Logistics",
+                        ShelterId = shelter5.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-10),
+                        UpdatedAt = DateTime.UtcNow
+                    }
+                );
+                context.SaveChanges();
+            }
+
+            // InventoryItems for Student 2
+            if (!context.InventoryItems.Any())
+            {
+                context.InventoryItems.AddRange(
+                    new InventoryItem
+                    {
+                        ItemName = "Emergency Medical Trauma Packs",
+                        Category = "Medical",
+                        Quantity = 85,
+                        UnitOfMeasure = "Kits",
+                        MinimumThreshold = 20,
+                        Status = "InStock",
+                        Location = "Bay A-1",
+                        ShelterId = shelter1.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-5),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new InventoryItem
+                    {
+                        ItemName = "Purified Drinking Water 20L Bottles",
+                        Category = "Water",
+                        Quantity = 150,
+                        UnitOfMeasure = "Bottles",
+                        MinimumThreshold = 50,
+                        Status = "InStock",
+                        Location = "Water Storage 1",
+                        ShelterId = shelter2.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-3),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new InventoryItem
+                    {
+                        ItemName = "Ready-to-Eat Emergency Food Rations",
+                        Category = "Food",
+                        Quantity = 320,
+                        UnitOfMeasure = "Meals",
+                        MinimumThreshold = 100,
+                        Status = "InStock",
+                        Location = "Pantry Dry Store",
+                        ShelterId = shelter1.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-5),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new InventoryItem
+                    {
+                        ItemName = "Emergency Thermal Blankets",
+                        Category = "ShelterSupplies",
+                        Quantity = 15,
+                        UnitOfMeasure = "Pieces",
+                        MinimumThreshold = 30,
+                        Status = "LowStock",
+                        Location = "Bedding Rack 3",
+                        ShelterId = shelter3.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-7),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new InventoryItem
+                    {
+                        ItemName = "Portable VHF Emergency Radios",
+                        Category = "Power",
+                        Quantity = 4,
+                        UnitOfMeasure = "Units",
+                        MinimumThreshold = 10,
+                        Status = "LowStock",
+                        Location = "Comms Locker",
+                        ShelterId = shelter2.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-3),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new InventoryItem
+                    {
+                        ItemName = "Sterile Surgical Bandages & Gauze",
+                        Category = "Medical",
+                        Quantity = 0,
+                        UnitOfMeasure = "Boxes",
+                        MinimumThreshold = 15,
+                        Status = "OutOfStock",
+                        Location = "Med Cabinet 4",
+                        ShelterId = shelter4.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-4),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new InventoryItem
+                    {
+                        ItemName = "Heavy Duty Industrial Tarpaulins",
+                        Category = "ShelterSupplies",
+                        Quantity = 45,
+                        UnitOfMeasure = "Rolls",
+                        MinimumThreshold = 15,
+                        Status = "InStock",
+                        Location = "Hardware Shed",
+                        ShelterId = shelter1.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-5),
+                        UpdatedAt = DateTime.UtcNow
+                    },
+                    new InventoryItem
+                    {
+                        ItemName = "Diesel Fuel Jerry Cans (20L)",
+                        Category = "Power",
+                        Quantity = 8,
+                        UnitOfMeasure = "Cans",
+                        MinimumThreshold = 12,
+                        Status = "LowStock",
+                        Location = "Fuel Storage Depot",
+                        ShelterId = shelter2.Id,
+                        CreatedAt = DateTime.UtcNow.AddDays(-3),
+                        UpdatedAt = DateTime.UtcNow
+                    }
+                );
+                context.SaveChanges();
+            }
+
+            // Situation Assessments
+            if (!context.SituationAssessments.Any() && context.Incidents.Any())
+            {
+                var firstInc = context.Incidents.First();
+                context.SituationAssessments.Add(new SituationAssessment
+                {
+                    IncidentId = firstInc.Id,
+                    UrgencyScore = 92,
+                    UrgencyLevel = "Critical",
+                    AnalysisSummary = "High-temperature multi-story blaze. Structural integrity compromised above 12th floor. Smoke inhalation risk acute for trapped occupants.",
+                    RecommendedResourceTypes = "Heavy Extrication Fire Tender, Rapid Response Ambulance, High-Rise Ladder",
+                    NearestShelterId = shelter1.Id,
+                    ResourceDeficiencyJson = "[\"High-Rise Ladder Tender\", \"Specialized Burn Trauma Kits\"]",
+                    CreatedAt = DateTime.UtcNow.AddMinutes(-20)
+                });
+                context.SaveChanges();
+            }
+        }
     }
     catch (Exception ex)
     {
@@ -502,7 +830,8 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
-// Health check endpoint for Railway
+// Health check endpoint for cloud platforms
+app.MapGet("/", () => Results.Ok(new { status = "healthy", service = "ERCP.Api", timestamp = DateTime.UtcNow }));
 app.MapGet("/api/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 
 // Railway handles SSL at the edge — no HTTPS redirect needed

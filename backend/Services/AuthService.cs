@@ -2,6 +2,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Collections.Concurrent;
+using System.Net.Http.Headers;
+using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -18,16 +20,23 @@ public class AuthService : IAuthService
     private readonly PasswordHasher<User> _passwordHasher;
     private readonly ILogger<AuthService> _logger;
     private readonly IEmailService _emailService;
+    private readonly IHttpClientFactory? _httpClientFactory;
 
     // Secure in-memory OTP cache for demo purposes (avoids DB migrations)
     private static readonly ConcurrentDictionary<string, (string Otp, DateTime Expiry)> _otpStore = new(StringComparer.OrdinalIgnoreCase);
 
-    public AuthService(AppDbContext context, IConfiguration configuration, ILogger<AuthService> logger, IEmailService emailService)
+    public AuthService(
+        AppDbContext context,
+        IConfiguration configuration,
+        ILogger<AuthService> logger,
+        IEmailService emailService,
+        IHttpClientFactory? httpClientFactory = null)
     {
         _context = context;
         _configuration = configuration;
         _logger = logger;
         _emailService = emailService;
+        _httpClientFactory = httpClientFactory;
         _passwordHasher = new PasswordHasher<User>();
     }
 
@@ -240,6 +249,188 @@ public class AuthService : IAuthService
 
         _logger.LogInformation("Password successfully reset for {Email}", email);
         return (true, "Password successfully reset.");
+    }
+
+    public async Task<AuthResponseDto> GoogleLoginAsync(GoogleLoginRequestDto request)
+    {
+        var normalizedEmail = request.Email.Trim().ToLowerInvariant();
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
+        if (user == null)
+        {
+            user = new User
+            {
+                FullName = string.IsNullOrWhiteSpace(request.Name) ? normalizedEmail.Split('@')[0] : request.Name.Trim(),
+                Email = normalizedEmail,
+                Role = "Citizen",
+                PhoneNumber = "",
+                Skills = "Google Authenticated",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+            user.PasswordHash = _passwordHasher.HashPassword(user, Guid.NewGuid().ToString("N"));
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("New user created via Google Sign-In: {Email}", user.Email);
+        }
+
+        var token = GenerateJwtToken(user);
+        var expiresAt = DateTime.UtcNow.AddHours(8);
+
+        return new AuthResponseDto
+        {
+            Token = token,
+            ExpiresAt = expiresAt,
+            User = MapToSummaryDto(user)
+        };
+    }
+
+    public async Task<AuthResponseDto> GithubLoginAsync(GithubLoginRequestDto request)
+    {
+        var clientId = _configuration["GitHub:ClientId"]
+            ?? Environment.GetEnvironmentVariable("GITHUB_CLIENT_ID")
+            ?? "Ov23liWTjFyFPOxBL4Xe";
+        var clientSecret = _configuration["GitHub:ClientSecret"]
+            ?? Environment.GetEnvironmentVariable("GITHUB_CLIENT_SECRET")
+            ?? "e718a026e1e24ac8b7fe83c441dec20fe25531a7";
+
+        var client = _httpClientFactory != null ? _httpClientFactory.CreateClient() : new HttpClient();
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("ERCP-EmergencyPlatform");
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        // Step 1: Exchange code for access_token with GitHub OAuth
+        var tokenParams = new Dictionary<string, string>
+        {
+            { "client_id", clientId },
+            { "client_secret", clientSecret },
+            { "code", request.Code }
+        };
+
+        if (!string.IsNullOrWhiteSpace(request.RedirectUri))
+        {
+            tokenParams["redirect_uri"] = request.RedirectUri;
+        }
+
+        var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://github.com/login/oauth/access_token")
+        {
+            Content = new FormUrlEncodedContent(tokenParams)
+        };
+
+        var tokenResponse = await client.SendAsync(tokenRequest);
+        if (!tokenResponse.IsSuccessStatusCode)
+        {
+            var err = await tokenResponse.Content.ReadAsStringAsync();
+            _logger.LogError("Failed to get GitHub access token: {Error}", err);
+            throw new InvalidOperationException("Failed to exchange GitHub authorization code.");
+        }
+
+        var tokenJson = await tokenResponse.Content.ReadAsStringAsync();
+        using var tokenDoc = JsonDocument.Parse(tokenJson);
+        if (tokenDoc.RootElement.TryGetProperty("error", out var errorProp))
+        {
+            var desc = tokenDoc.RootElement.TryGetProperty("error_description", out var d) ? d.GetString() : errorProp.GetString();
+            _logger.LogError("GitHub OAuth error: {Description}", desc);
+            throw new InvalidOperationException($"GitHub authentication failed: {desc}");
+        }
+
+        var accessToken = tokenDoc.RootElement.GetProperty("access_token").GetString();
+        if (string.IsNullOrEmpty(accessToken))
+        {
+            throw new InvalidOperationException("Did not receive a valid access token from GitHub.");
+        }
+
+        // Step 2: Fetch user profile
+        var userRequest = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user");
+        userRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        var userResponse = await client.SendAsync(userRequest);
+        if (!userResponse.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException("Failed to fetch GitHub profile.");
+        }
+
+        var userJson = await userResponse.Content.ReadAsStringAsync();
+        using var userDoc = JsonDocument.Parse(userJson);
+        var githubLogin = userDoc.RootElement.GetProperty("login").GetString() ?? "github_user";
+        var name = userDoc.RootElement.TryGetProperty("name", out var nameProp) && nameProp.ValueKind == JsonValueKind.String
+            ? nameProp.GetString()
+            : null;
+        var email = userDoc.RootElement.TryGetProperty("email", out var emailProp) && emailProp.ValueKind == JsonValueKind.String
+            ? emailProp.GetString()
+            : null;
+
+        // Step 3: If email is private/null, fetch user emails
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            try
+            {
+                var emailsRequest = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user/emails");
+                emailsRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                var emailsResponse = await client.SendAsync(emailsRequest);
+                if (emailsResponse.IsSuccessStatusCode)
+                {
+                    var emailsJson = await emailsResponse.Content.ReadAsStringAsync();
+                    using var emailsDoc = JsonDocument.Parse(emailsJson);
+                    foreach (var elem in emailsDoc.RootElement.EnumerateArray())
+                    {
+                        var e = elem.GetProperty("email").GetString();
+                        var isPrimary = elem.TryGetProperty("primary", out var p) && p.GetBoolean();
+                        var isVerified = elem.TryGetProperty("verified", out var v) && v.GetBoolean();
+                        if (isPrimary && isVerified && !string.IsNullOrEmpty(e))
+                        {
+                            email = e;
+                            break;
+                        }
+                        if (isVerified && string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(e))
+                        {
+                            email = e;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to retrieve GitHub user emails.");
+            }
+        }
+
+        // Fallback email if still missing
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            email = $"{githubLogin.ToLowerInvariant()}@users.noreply.github.com";
+        }
+
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+        var displayName = !string.IsNullOrWhiteSpace(name) ? name.Trim() : githubLogin;
+
+        // Step 4: Find or create user
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
+        if (user == null)
+        {
+            user = new User
+            {
+                FullName = displayName,
+                Email = normalizedEmail,
+                Role = "Citizen",
+                PhoneNumber = "",
+                Skills = $"GitHub Authenticated (@{githubLogin})",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+            user.PasswordHash = _passwordHasher.HashPassword(user, Guid.NewGuid().ToString("N"));
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("New user created via GitHub Sign-In: {Email} (@{Login})", user.Email, githubLogin);
+        }
+
+        var token = GenerateJwtToken(user);
+        var expiresAt = DateTime.UtcNow.AddHours(8);
+
+        return new AuthResponseDto
+        {
+            Token = token,
+            ExpiresAt = expiresAt,
+            User = MapToSummaryDto(user)
+        };
     }
 
     private static UserSummaryDto MapToSummaryDto(User user) => new()

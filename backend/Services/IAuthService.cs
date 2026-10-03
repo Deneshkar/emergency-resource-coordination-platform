@@ -13,4 +13,6 @@ public interface IAuthService
     
     Task<bool> GeneratePasswordResetOtpAsync(string email);
     Task<(bool Success, string Message)> ResetPasswordWithOtpAsync(string email, string otp, string newPassword);
+    Task<AuthResponseDto> GoogleLoginAsync(GoogleLoginRequestDto request);
+    Task<AuthResponseDto> GithubLoginAsync(GithubLoginRequestDto request);
 }

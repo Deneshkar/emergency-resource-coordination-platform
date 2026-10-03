@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: ercp-backend
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: Dockerfile
+    dockerContext: .
+    plan: free
+    region: singapore
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://postgres.elucnjilcahvibuvnzal:ErcpCoordPlatform2026!@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ALERT_EMAIL
+        value: xpalythanusikan@gmail.com
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_USER
+        value: xpalythanusikan@gmail.com
+      - key: SMTP_PASS
+        value: nonh ncuk pipo mvpi
+      - key: SMTP_PORT
+        value: "465"
+      - key: SMTP_FROM
+        value: HEXORA <xpalythanusikan@gmail.com>
