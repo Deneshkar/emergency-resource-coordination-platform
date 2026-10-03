@@ -22,6 +22,7 @@ public class DispatchesController : ControllerBase
 
     // POST: api/Dispatches
     [HttpPost]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<ActionResult<DispatchResponseDto>> Create(
         [FromBody] CreateDispatchDto dto)
     {
@@ -79,6 +80,7 @@ public class DispatchesController : ControllerBase
 
     // PUT: api/Dispatches/5/status
     [HttpPut("{id}/status")]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<IActionResult> UpdateStatus(
         int id,
         [FromBody] UpdateDispatchStatusDto dto)
@@ -145,6 +147,7 @@ public class DispatchesController : ControllerBase
 
     // POST: api/Dispatches/5/tasks
     [HttpPost("{id}/tasks")]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<ActionResult> CreateTask(
         int id,
         [FromBody] CreateDispatchTaskDto dto)
@@ -210,6 +213,7 @@ public class DispatchesController : ControllerBase
     }
 
     [HttpPut("{id}/tasks/{taskId}")]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<IActionResult> UpdateTask(
         int id,
         int taskId,
@@ -244,6 +248,7 @@ public class DispatchesController : ControllerBase
     }
 
     [HttpDelete("{id}/tasks/{taskId}")]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<IActionResult> DeleteTask(int id, int taskId)
     {
         var dispatch = await _context.Dispatches.FirstOrDefaultAsync(d => d.Id == id);
@@ -267,6 +272,7 @@ public class DispatchesController : ControllerBase
 
     // POST: api/Dispatches/5/propose-allocation
     [HttpPost("{id}/propose-allocation")]
+    [Authorize(Roles = "Coordinator,Admin")]
     public async Task<ActionResult> ProposeAllocation(
         int id,
         [FromBody] ProposeDispatchAllocationDto dto)

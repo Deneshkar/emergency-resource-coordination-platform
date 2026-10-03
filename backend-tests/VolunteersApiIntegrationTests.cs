@@ -59,7 +59,7 @@ public class VolunteersApiIntegrationTests : IClassFixture<ErcpApiFactory>
             fullName = "E2E Coordinator",
             email,
             password,
-            role = "Coordinator",
+            role = "Citizen",
         });
         Assert.Equal(HttpStatusCode.Created, register.StatusCode);
 
@@ -67,12 +67,21 @@ public class VolunteersApiIntegrationTests : IClassFixture<ErcpApiFactory>
         var token = doc.RootElement.GetProperty("token").GetString();
         Assert.False(string.IsNullOrWhiteSpace(token));
 
+        // Privileged users are provisioned by trusted setup, never public registration.
+        using (var scope = _factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var user = await db.Users.SingleAsync(u => u.Email == email);
+            user.Role = "Coordinator";
+            await db.SaveChangesAsync();
+        }
+
         // Prove the credentials work through the login path too.
         var login = await client.PostAsJsonAsync("/api/Auth/login", new { email, password });
         Assert.Equal(HttpStatusCode.OK, login.StatusCode);
         using var loginDoc = JsonDocument.Parse(await login.Content.ReadAsStringAsync());
         Assert.Equal("Coordinator", loginDoc.RootElement.GetProperty("user").GetProperty("role").GetString());
-        return token!;
+        return loginDoc.RootElement.GetProperty("token").GetString()!;
     }
 
     [Fact]
