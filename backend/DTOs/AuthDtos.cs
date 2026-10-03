@@ -28,7 +28,7 @@ public class RegisterRequestDto
     public string Password { get; set; } = string.Empty;
 
     [Required]
-    [RegularExpression("^(Citizen|Volunteer|Coordinator|Admin)$", ErrorMessage = "Role must be Citizen, Volunteer, Coordinator, or Admin.")]
+    [RegularExpression("^(Citizen|Volunteer)$", ErrorMessage = "Public registration only permits Citizen or Volunteer.")]
     public string Role { get; set; } = "Citizen";
 
     [MaxLength(30)]

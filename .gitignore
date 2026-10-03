@@ -2,6 +2,8 @@
 backend/bin/
 backend/obj/
 *.user
+# MSBuild preprocessed output (dotnet msbuild -pp)
+fullproject.xml
 
 # Node / React
 frontend-react/node_modules/

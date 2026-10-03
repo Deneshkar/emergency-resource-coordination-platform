@@ -56,6 +56,9 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<AuthResponseDto>> Register([FromBody] RegisterRequestDto request)
     {
+        if (request.Role is not ("Citizen" or "Volunteer"))
+            return BadRequest(new { message = "Public registration only permits Citizen or Volunteer." });
+
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);

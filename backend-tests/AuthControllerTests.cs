@@ -119,9 +119,9 @@ public class AuthControllerTests
     {
         // Arrange
         var context = GetInMemoryContext();
-        var (controller, _, _) = CreateController(context);
+        var (controller, authService, _) = CreateController(context);
 
-        await controller.Register(new RegisterRequestDto
+        await authService.RegisterAsync(new RegisterRequestDto
         {
             FullName = "Jane Coordinator",
             Email = "coordinator@test.com",
