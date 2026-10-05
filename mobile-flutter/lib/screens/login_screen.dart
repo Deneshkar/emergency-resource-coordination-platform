@@ -97,12 +97,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                       child: ClipOval(
-                        child: Image.asset(
-                          'assets/images/hero_emergency.png',
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(CupertinoIcons.shield_lefthalf_fill, size: 40, color: Colors.cyanAccent);
-                          },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            'assets/images/logo.png',
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(CupertinoIcons.shield_lefthalf_fill, size: 40, color: Colors.cyanAccent);
+                            },
+                          ),
                         ),
                       ),
                     ),

@@ -145,7 +145,13 @@ class _CitizenDashboard extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF0B0F19),
       appBar: AppBar(
-        title: const Text('Citizen Emergency Hub', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: Row(
+          children: [
+            Image.asset('assets/images/logo.png', height: 28, width: 28, errorBuilder: (_, _, _) => const Icon(Icons.shield, color: Colors.cyanAccent)),
+            const SizedBox(width: 10),
+            const Text('Citizen Emergency Hub', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+          ],
+        ),
         backgroundColor: const Color(0xFF0F172A),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -493,7 +499,13 @@ class _CoordinatorDashboardState extends State<_CoordinatorDashboard> {
     return Scaffold(
       backgroundColor: const Color(0xFF0B0F19),
       appBar: AppBar(
-        title: const Text('Coordinator Command Hub', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: Row(
+          children: [
+            Image.asset('assets/images/logo.png', height: 28, width: 28, errorBuilder: (_, _, _) => const Icon(Icons.shield, color: Colors.cyanAccent)),
+            const SizedBox(width: 10),
+            const Text('Coordinator Command Hub', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+          ],
+        ),
         backgroundColor: const Color(0xFF0F172A),
         foregroundColor: Colors.white,
         actions: [
