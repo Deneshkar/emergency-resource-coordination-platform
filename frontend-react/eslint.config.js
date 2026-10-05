@@ -2,33 +2,29 @@ import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
-import { defineConfig, globalIgnores } from 'eslint/config'
 
-export default defineConfig([
-  globalIgnores(['dist']),
+export default [
+  {
+    ignores: ['dist/**', '**/dist/**', 'node_modules/**', 'build/**'],
+  },
+  js.configs.recommended,
+  reactHooks.configs.flat.recommended,
+  reactRefresh.configs.vite,
   {
     files: ['**/*.{js,jsx}'],
-    extends: [
-      js.configs.recommended,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-    ],
     languageOptions: {
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
     rules: {
-      // Team-standard data-fetch pattern (fetchX() in useEffect on mount/filter
-      // change) trips the new v7 set-state-in-effect rule across all pages.
       'react-hooks/set-state-in-effect': 'off',
       'react-hooks/exhaustive-deps': 'warn',
     },
   },
   {
-    // Vitest globals for test files.
     files: ['**/*.test.{js,jsx}', 'src/test/**/*.js'],
     languageOptions: {
       globals: { ...globals.browser, ...globals.vitest },
     },
   },
-])
+]
