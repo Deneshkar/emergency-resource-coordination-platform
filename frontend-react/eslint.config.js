@@ -2,11 +2,10 @@ import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import { globalIgnores } from 'eslint/config'
 
 export default [
-  {
-    ignores: ['dist/**', '**/dist/**', 'node_modules/**', 'build/**'],
-  },
+  globalIgnores(['dist', 'node_modules', 'build']),
   js.configs.recommended,
   reactHooks.configs.flat.recommended,
   reactRefresh.configs.vite,
