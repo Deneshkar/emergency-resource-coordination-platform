@@ -1,0 +1,46 @@
+{
+  "automated_suites": {
+    "backend": {
+      "total": 95,
+      "passed": 95,
+      "failed": 0,
+      "skipped": 0
+    },
+    "react": {
+      "total": 47,
+      "passed": 47,
+      "failed": 0,
+      "skipped": 0
+    },
+    "flutter": {
+      "total": 91,
+      "passed": 91,
+      "failed": 0,
+      "skipped": 0
+    },
+    "agents": {
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0
+    },
+    "http": {
+      "total": 17,
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "automated": {
+    "total": 270,
+    "passed": 270,
+    "failed": 0,
+    "skipped": 0
+  },
+  "additional_checks": {
+    "performance_scenario": "Passed",
+    "migration_cli_check": "Passed"
+  },
+  "inventory_records": 272,
+  "passed_gate": true
+}

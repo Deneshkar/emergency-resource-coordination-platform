@@ -1,0 +1,14 @@
+waiting for server to start.... done
+server started
+QMS API: http://127.0.0.1:5009 | PostgreSQL: 55432/ercp_qms_verified
+Startup applies EF migrations and rejects legacy schemas without history. Ctrl+C stops the API.
+D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend\ERCP.Api.csproj : warning NU1902: Package 'MailKit' 4.7.1.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend\ERCP.Api.csproj : warning NU1902: Package 'MailKit' 4.7.1.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+warn: Microsoft.EntityFrameworkCore.Query[10103]
+      The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+warn: Microsoft.EntityFrameworkCore.Query[20504]
+      Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+warn: ERCP.Api.Services.SmtpEmailService[0]
+      [EmailService] SMTP credentials not configured — skipping email.
+warn: ERCP.Api.Services.SmtpEmailService[0]
+      [EmailService] SMTP credentials not configured — skipping email.

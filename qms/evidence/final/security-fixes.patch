@@ -1,0 +1,138 @@
+diff --git a/backend-tests/AuthControllerTests.cs b/backend-tests/AuthControllerTests.cs
+index cd85c78..236e7de 100644
+--- a/backend-tests/AuthControllerTests.cs
++++ b/backend-tests/AuthControllerTests.cs
+@@ -119,9 +119,9 @@ public class AuthControllerTests
+     {
+         // Arrange
+         var context = GetInMemoryContext();
+-        var (controller, _, _) = CreateController(context);
++        var (controller, authService, _) = CreateController(context);
+ 
+-        await controller.Register(new RegisterRequestDto
++        await authService.RegisterAsync(new RegisterRequestDto
+         {
+             FullName = "Jane Coordinator",
+             Email = "coordinator@test.com",
+diff --git a/backend-tests/VolunteersApiIntegrationTests.cs b/backend-tests/VolunteersApiIntegrationTests.cs
+index 68d9509..a86ba71 100644
+--- a/backend-tests/VolunteersApiIntegrationTests.cs
++++ b/backend-tests/VolunteersApiIntegrationTests.cs
+@@ -59,7 +59,7 @@ public class VolunteersApiIntegrationTests : IClassFixture<ErcpApiFactory>
+             fullName = "E2E Coordinator",
+             email,
+             password,
+-            role = "Coordinator",
++            role = "Citizen",
+         });
+         Assert.Equal(HttpStatusCode.Created, register.StatusCode);
+ 
+@@ -67,12 +67,21 @@ public class VolunteersApiIntegrationTests : IClassFixture<ErcpApiFactory>
+         var token = doc.RootElement.GetProperty("token").GetString();
+         Assert.False(string.IsNullOrWhiteSpace(token));
+ 
++        // Privileged users are provisioned by trusted setup, never public registration.
++        using (var scope = _factory.Services.CreateScope())
++        {
++            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
++            var user = await db.Users.SingleAsync(u => u.Email == email);
++            user.Role = "Coordinator";
++            await db.SaveChangesAsync();
++        }
++
+         // Prove the credentials work through the login path too.
+         var login = await client.PostAsJsonAsync("/api/Auth/login", new { email, password });
+         Assert.Equal(HttpStatusCode.OK, login.StatusCode);
+         using var loginDoc = JsonDocument.Parse(await login.Content.ReadAsStringAsync());
+         Assert.Equal("Coordinator", loginDoc.RootElement.GetProperty("user").GetProperty("role").GetString());
+-        return token!;
++        return loginDoc.RootElement.GetProperty("token").GetString()!;
+     }
+ 
+     [Fact]
+diff --git a/backend/Controllers/AuthController.cs b/backend/Controllers/AuthController.cs
+index 1c42538..b3225f3 100644
+--- a/backend/Controllers/AuthController.cs
++++ b/backend/Controllers/AuthController.cs
+@@ -56,6 +56,9 @@ public class AuthController : ControllerBase
+     [ProducesResponseType(StatusCodes.Status409Conflict)]
+     public async Task<ActionResult<AuthResponseDto>> Register([FromBody] RegisterRequestDto request)
+     {
++        if (request.Role is not ("Citizen" or "Volunteer"))
++            return BadRequest(new { message = "Public registration only permits Citizen or Volunteer." });
++
+         if (!ModelState.IsValid)
+         {
+             return BadRequest(ModelState);
+diff --git a/backend/Controllers/DispatchesController.cs b/backend/Controllers/DispatchesController.cs
+index 41ef006..9d137de 100644
+--- a/backend/Controllers/DispatchesController.cs
++++ b/backend/Controllers/DispatchesController.cs
+@@ -22,6 +22,7 @@ public class DispatchesController : ControllerBase
+ 
+     // POST: api/Dispatches
+     [HttpPost]
++    [Authorize(Roles = "Coordinator,Admin")]
+     public async Task<ActionResult<DispatchResponseDto>> Create(
+         [FromBody] CreateDispatchDto dto)
+     {
+@@ -79,6 +80,7 @@ public class DispatchesController : ControllerBase
+ 
+     // PUT: api/Dispatches/5/status
+     [HttpPut("{id}/status")]
++    [Authorize(Roles = "Coordinator,Admin")]
+     public async Task<IActionResult> UpdateStatus(
+         int id,
+         [FromBody] UpdateDispatchStatusDto dto)
+@@ -145,6 +147,7 @@ public class DispatchesController : ControllerBase
+ 
+     // POST: api/Dispatches/5/tasks
+     [HttpPost("{id}/tasks")]
++    [Authorize(Roles = "Coordinator,Admin")]
+     public async Task<ActionResult> CreateTask(
+         int id,
+         [FromBody] CreateDispatchTaskDto dto)
+@@ -210,6 +213,7 @@ public class DispatchesController : ControllerBase
+     }
+ 
+     [HttpPut("{id}/tasks/{taskId}")]
++    [Authorize(Roles = "Coordinator,Admin")]
+     public async Task<IActionResult> UpdateTask(
+         int id,
+         int taskId,
+@@ -244,6 +248,7 @@ public class DispatchesController : ControllerBase
+     }
+ 
+     [HttpDelete("{id}/tasks/{taskId}")]
++    [Authorize(Roles = "Coordinator,Admin")]
+     public async Task<IActionResult> DeleteTask(int id, int taskId)
+     {
+         var dispatch = await _context.Dispatches.FirstOrDefaultAsync(d => d.Id == id);
+@@ -267,6 +272,7 @@ public class DispatchesController : ControllerBase
+ 
+     // POST: api/Dispatches/5/propose-allocation
+     [HttpPost("{id}/propose-allocation")]
++    [Authorize(Roles = "Coordinator,Admin")]
+     public async Task<ActionResult> ProposeAllocation(
+         int id,
+         [FromBody] ProposeDispatchAllocationDto dto)
+@@ -369,4 +375,4 @@ public class DispatchesController : ControllerBase
+             return new List<T>();
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/backend/DTOs/AuthDtos.cs b/backend/DTOs/AuthDtos.cs
+index b65d4d9..3ae8b6e 100644
+--- a/backend/DTOs/AuthDtos.cs
++++ b/backend/DTOs/AuthDtos.cs
+@@ -28,7 +28,7 @@ public class RegisterRequestDto
+     public string Password { get; set; } = string.Empty;
+ 
+     [Required]
+-    [RegularExpression("^(Citizen|Volunteer|Coordinator|Admin)$", ErrorMessage = "Role must be Citizen, Volunteer, Coordinator, or Admin.")]
++    [RegularExpression("^(Citizen|Volunteer)$", ErrorMessage = "Public registration only permits Citizen or Volunteer.")]
+     public string Role { get; set; } = "Citizen";
+ 
+     [MaxLength(30)]

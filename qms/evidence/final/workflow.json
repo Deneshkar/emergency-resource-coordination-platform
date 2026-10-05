@@ -1,0 +1,59 @@
+{
+  "incident_id": 4,
+  "plan_id": 3,
+  "dispatch_id": 1,
+  "volunteer_id": "72b78797-cf50-4a92-a8cd-92c15437c5c5",
+  "validation": {
+    "dispatchId": 1,
+    "incidentId": 4,
+    "isValid": true,
+    "recommendation": "APPROVE",
+    "violations": [],
+    "warnings": [],
+    "checks": [
+      {
+        "tool": "check_volunteer_availability",
+        "passed": true,
+        "detail": "Volunteer QMS Responder (72b78797-cf50-4a92-a8cd-92c15437c5c5) available=True."
+      }
+    ],
+    "validatedAt": "2026-10-05T18:46:28.913938Z",
+    "auditId": 1,
+    "durationMs": 23,
+    "validatedBy": "coordinator@ercp.org"
+  },
+  "saved_dispatch": {
+    "id": 1,
+    "incidentId": 4,
+    "status": "Approved",
+    "priority": "High",
+    "createdAt": "2026-10-05T18:46:28.717198Z",
+    "updatedAt": "2026-10-05T18:46:28.96644Z",
+    "approvedAt": null,
+    "approvedBy": null,
+    "tasks": [
+      {
+        "id": 1,
+        "volunteerId": "72b78797-cf50-4a92-a8cd-92c15437c5c5",
+        "resourceId": null,
+        "taskType": "Rescue",
+        "status": "Assigned"
+      }
+    ],
+    "allocationProposal": null
+  },
+  "components": [
+    "HTTP client",
+    "ASP.NET Core",
+    "planner integration",
+    "safety service",
+    "PostgreSQL"
+  ],
+  "scope": "API integration workflow; not a browser or mobile E2E test",
+  "postgres_verification": {
+    "Id": 1,
+    "Status": "Approved"
+  },
+  "database": "ercp_qms_github",
+  "execution_date": "2026-10-06T00:17:14.631188+05:30"
+}

@@ -1,0 +1,795 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="e3ac8298-7255-4e01-a049-994b237129ee" name="USER@DESKTOP-HUE8OII 2026-10-03 11:28:20" runUser="DESKTOP-HUE8OII\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-03T11:28:20.5621320+05:30" queuing="2026-10-03T11:28:20.5621326+05:30" start="2026-10-03T11:28:18.4962094+05:30" finish="2026-10-03T11:28:22.8343256+05:30" />
+  <TestSettings name="default" id="d28eed07-a0a0-478f-922f-07e7d776cdb4">
+    <Deployment runDeploymentRoot="USER_DESKTOP-HUE8OII_2026-10-03_11_28_20" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="acaadb4f-6b6d-43ad-903f-52aa0cd9e8f9" testId="81514c45-6f58-0ddb-9e1b-efa02422b4bd" testName="ERCP.Api.Tests.SheltersControllerTests.CreateShelter_ReturnsCreated" computerName="DESKTOP-HUE8OII" duration="00:00:00.0307521" startTime="2026-10-03T11:28:21.0428563+05:30" endTime="2026-10-03T11:28:21.0428565+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="acaadb4f-6b6d-43ad-903f-52aa0cd9e8f9" />
+    <UnitTestResult executionId="af3d0bac-9211-437f-9d71-d5a8125d1668" testId="79c5f4de-66f3-b076-6241-4a55d5a8b707" testName="ERCP.Api.Tests.VolunteersApiIntegrationTests.VolunteerShiftLifecycle_OverHttp" computerName="DESKTOP-HUE8OII" duration="00:00:00.1358215" startTime="2026-10-03T11:28:22.3172221+05:30" endTime="2026-10-03T11:28:22.3172224+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="af3d0bac-9211-437f-9d71-d5a8125d1668" />
+    <UnitTestResult executionId="4f85cf40-4aea-427e-b968-7c832fe65a82" testId="8fc342a5-31b8-8b5f-ebcb-e64318d93af6" testName="ERCP.Api.Tests.VolunteerEditTests.UpdateShift_ValidWindow_UpdatesStatus" computerName="DESKTOP-HUE8OII" duration="00:00:00.0207066" startTime="2026-10-03T11:28:21.1397025+05:30" endTime="2026-10-03T11:28:21.1397029+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4f85cf40-4aea-427e-b968-7c832fe65a82" />
+    <UnitTestResult executionId="4d9e692b-a7c4-425e-b50a-8cfc87a75af1" testId="705c667f-04e8-1273-64c1-5ca58a591483" testName="ERCP.Api.Tests.VolunteerEditTests.DeleteShift_RemovesRecord_ReturnsNoContent" computerName="DESKTOP-HUE8OII" duration="00:00:00.0206732" startTime="2026-10-03T11:28:21.1188142+05:30" endTime="2026-10-03T11:28:21.1188145+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4d9e692b-a7c4-425e-b50a-8cfc87a75af1" />
+    <UnitTestResult executionId="db8ea56a-909c-43c9-8f40-dd5c2d9bd77d" testId="8c68d565-11f1-b5a2-5ffe-44eab499fe90" testName="ERCP.Api.Tests.DispatchesControllerTests.UpdateTask_RejectsChangesAfterApproval" computerName="DESKTOP-HUE8OII" duration="00:00:00.0040551" startTime="2026-10-03T11:28:21.1889665+05:30" endTime="2026-10-03T11:28:21.1889667+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="db8ea56a-909c-43c9-8f40-dd5c2d9bd77d" />
+    <UnitTestResult executionId="8d1ec936-c8b2-4102-ab5b-b2f9db27b91e" testId="fd03821a-c242-b305-1fc9-766ac9c303ed" testName="ERCP.Api.Tests.VolunteerTasksTests.GetTasks_ReturnsTasksWithDispatchAndIncidentContext" computerName="DESKTOP-HUE8OII" duration="00:00:00.0091380" startTime="2026-10-03T11:28:21.1547209+05:30" endTime="2026-10-03T11:28:21.1547211+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8d1ec936-c8b2-4102-ab5b-b2f9db27b91e" />
+    <UnitTestResult executionId="b80fe126-7cc1-4b9b-814a-a63b6f55fbb4" testId="c3d61a3d-b404-d1ff-fc67-e0c90373d6a6" testName="ERCP.Api.Tests.QmsSecurityTests.SEC02_LowPrivilegeUser_CannotCreateDispatch(role: &quot;Volunteer&quot;)" computerName="DESKTOP-HUE8OII" duration="00:00:01.5502475" startTime="2026-10-03T11:28:22.0035094+05:30" endTime="2026-10-03T11:28:22.0035096+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b80fe126-7cc1-4b9b-814a-a63b6f55fbb4" />
+    <UnitTestResult executionId="b822e6fd-121e-41f5-87ec-a98f7f224dcd" testId="409941c5-2861-27d0-cf32-a0b56c331d25" testName="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_AvailableVolunteer_ReturnsApprove" computerName="DESKTOP-HUE8OII" duration="00:00:00.0023689" startTime="2026-10-03T11:28:21.1746666+05:30" endTime="2026-10-03T11:28:21.1746668+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b822e6fd-121e-41f5-87ec-a98f7f224dcd" />
+    <UnitTestResult executionId="8af136ac-c66d-406c-8a46-7c9cfc5fd601" testId="cb173754-74e4-bfc0-d50b-1d8bfef528b8" testName="ERCP.Api.Tests.VolunteersControllerTests.UpdateAvailability_VolunteerCanUpdateOwnAvailability_ReturnsNoContent" computerName="DESKTOP-HUE8OII" duration="00:00:00.0027180" startTime="2026-10-03T11:28:21.0925246+05:30" endTime="2026-10-03T11:28:21.0925252+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8af136ac-c66d-406c-8a46-7c9cfc5fd601" />
+    <UnitTestResult executionId="79309b9a-0de9-42db-8604-9eff763550c2" testId="212f5daf-680f-5d09-280e-9a087f29814c" testName="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_ShelterOverAllocation_ReturnsRevise_WithS2" computerName="DESKTOP-HUE8OII" duration="00:00:00.0044331" startTime="2026-10-03T11:28:21.0961919+05:30" endTime="2026-10-03T11:28:21.0961922+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="79309b9a-0de9-42db-8604-9eff763550c2" />
+    <UnitTestResult executionId="2018a635-0e4e-4712-9e2c-dff2d7406f2c" testId="7c229b43-ba98-d8cc-5c9c-84803fd1205d" testName="ERCP.Api.Tests.VolunteersControllerTests.UpdateAvailability_VolunteerCannotUpdateOtherVolunteer_ReturnsForbidden" computerName="DESKTOP-HUE8OII" duration="00:00:00.0193796" startTime="2026-10-03T11:28:21.0896944+05:30" endTime="2026-10-03T11:28:21.0896953+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2018a635-0e4e-4712-9e2c-dff2d7406f2c" />
+    <UnitTestResult executionId="0dd04d73-1731-4ce0-8d68-46cf627eb564" testId="c7cdf3d4-31ea-c916-08d6-e0cccc88ddf3" testName="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_PersistsAudit_WithDurationAndHistory" computerName="DESKTOP-HUE8OII" duration="00:00:00.0477181" startTime="2026-10-03T11:28:21.1527168+05:30" endTime="2026-10-03T11:28:21.1527172+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0dd04d73-1731-4ce0-8d68-46cf627eb564" />
+    <UnitTestResult executionId="24cd7fc7-bf3e-4a0e-8568-eb6a30e909f5" testId="c8583261-6f6d-4744-2d01-385037616aa5" testName="ERCP.Api.Tests.QmsSecurityTests.SEC01_PublicRegistration_RejectsPrivilegedRole(role: &quot;Coordinator&quot;)" computerName="DESKTOP-HUE8OII" duration="00:00:00.0011047" startTime="2026-10-03T11:28:22.0954812+05:30" endTime="2026-10-03T11:28:22.0954813+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="24cd7fc7-bf3e-4a0e-8568-eb6a30e909f5" />
+    <UnitTestResult executionId="225f8a1a-9e9d-49b6-8f93-225b26adf78f" testId="0f881778-f42c-12df-16b2-5f15c933f30e" testName="ERCP.Api.Tests.VolunteersApiIntegrationTests.CreateShift_InvalidWindow_OverHttp_Returns400" computerName="DESKTOP-HUE8OII" duration="00:00:00.1202348" startTime="2026-10-03T11:28:22.1812803+05:30" endTime="2026-10-03T11:28:22.1812805+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="225f8a1a-9e9d-49b6-8f93-225b26adf78f" />
+    <UnitTestResult executionId="a2d28b1e-0a9a-4551-bcb1-2f7185b29c0a" testId="0356de84-72df-d8ad-32b8-7e951c4e3c0d" testName="ERCP.Api.Tests.QmsPostgresTests.DB02_OrphanShift_IsRejectedByForeignKey" computerName="DESKTOP-HUE8OII" duration="00:00:00.0797762" startTime="2026-10-03T11:28:21.5987195+05:30" endTime="2026-10-03T11:28:21.5987198+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a2d28b1e-0a9a-4551-bcb1-2f7185b29c0a" />
+    <UnitTestResult executionId="8afb3174-833c-4989-b2b6-5c0f91a87f97" testId="acaae4bd-5743-b7c9-7769-cae90cecefad" testName="ERCP.Api.Tests.QmsPostgresTests.DB04_Rollback_DoesNotPersistResource" computerName="DESKTOP-HUE8OII" duration="00:00:00.0510863" startTime="2026-10-03T11:28:21.6499781+05:30" endTime="2026-10-03T11:28:21.6499783+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8afb3174-833c-4989-b2b6-5c0f91a87f97" />
+    <UnitTestResult executionId="c506cb6a-96e1-4f26-9889-4bf147737ab4" testId="1f05b8e8-ed5f-124a-e1e7-b2e42e136a64" testName="ERCP.Api.Tests.QmsPostgresTests.DB03_DeletingVolunteer_CascadesShift" computerName="DESKTOP-HUE8OII" duration="00:00:00.1556520" startTime="2026-10-03T11:28:21.5187825+05:30" endTime="2026-10-03T11:28:21.5187828+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c506cb6a-96e1-4f26-9889-4bf147737ab4" />
+    <UnitTestResult executionId="2a140fb8-490f-432e-a136-e76a9750f5dd" testId="ac5aced2-a34c-7907-227f-f4f7f98b3855" testName="ERCP.Api.Tests.VolunteerTasksTests.GetTasks_TaskWithoutResource_ReturnsNullResourceName" computerName="DESKTOP-HUE8OII" duration="00:00:00.0036020" startTime="2026-10-03T11:28:21.1584845+05:30" endTime="2026-10-03T11:28:21.1584849+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2a140fb8-490f-432e-a136-e76a9750f5dd" />
+    <UnitTestResult executionId="0447724f-c361-4c58-843b-b4b074320f9b" testId="9d576504-98b4-bea6-d135-f8f561668f61" testName="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_ValidWindow_PersistsAndReturnsCreated" computerName="DESKTOP-HUE8OII" duration="00:00:00.0412765" startTime="2026-10-03T11:28:21.0834123+05:30" endTime="2026-10-03T11:28:21.0834132+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0447724f-c361-4c58-843b-b4b074320f9b" />
+    <UnitTestResult executionId="009736e0-f7ca-475c-8ab4-947e4a5af8d0" testId="241b639a-8dca-f922-8960-8b51b1d2ff18" testName="ERCP.Api.Tests.DispatchesControllerTests.UpdateStatus_ApprovalWithNewerFailedSafetyAudit_IsRejected" computerName="DESKTOP-HUE8OII" duration="00:00:00.0811474" startTime="2026-10-03T11:28:21.1160136+05:30" endTime="2026-10-03T11:28:21.1160143+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="009736e0-f7ca-475c-8ab4-947e4a5af8d0" />
+    <UnitTestResult executionId="246bcd1b-045e-4d5b-9b1b-4eb5c8692c4b" testId="4ef2cbcb-4747-2870-1b91-6b6740ca7ae0" testName="ERCP.Api.Tests.InventoryControllerTests.CreateInventoryItem_SetsLowStock_WhenBelowThreshold" computerName="DESKTOP-HUE8OII" duration="00:00:00.0047601" startTime="2026-10-03T11:28:21.0456321+05:30" endTime="2026-10-03T11:28:21.0456322+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="246bcd1b-045e-4d5b-9b1b-4eb5c8692c4b" />
+    <UnitTestResult executionId="d731b08c-d280-4773-8b2e-2381b3e0b321" testId="fa614e2c-7f65-d129-8a58-cadd5934ff06" testName="ERCP.Api.Tests.InventoryControllerTests.AdjustStock_SubtractsQuantity_UpdatesStatus" computerName="DESKTOP-HUE8OII" duration="00:00:00.5581466" startTime="2026-10-03T11:28:21.0122915+05:30" endTime="2026-10-03T11:28:21.0122917+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d731b08c-d280-4773-8b2e-2381b3e0b321" />
+    <UnitTestResult executionId="01513770-1965-4f70-ace2-976cf2f66d5d" testId="915e6250-1b0a-a94c-9dde-54a7d93945c1" testName="ERCP.Api.Tests.DispatchesControllerTests.UpdateStatus_ApprovalWithoutSafetyAudit_IsRejected" computerName="DESKTOP-HUE8OII" duration="00:00:00.0021660" startTime="2026-10-03T11:28:21.2072718+05:30" endTime="2026-10-03T11:28:21.2072723+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="01513770-1965-4f70-ace2-976cf2f66d5d" />
+    <UnitTestResult executionId="a5e019a3-108d-440c-9c30-bf74b3ca1ed0" testId="21e89f8a-d98e-6a87-9ec7-03a1183f2741" testName="ERCP.Api.Tests.VolunteerEditTests.UpdateShift_BadWindow_ReturnsBadRequest" computerName="DESKTOP-HUE8OII" duration="00:00:00.0041830" startTime="2026-10-03T11:28:21.0980118+05:30" endTime="2026-10-03T11:28:21.0980125+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a5e019a3-108d-440c-9c30-bf74b3ca1ed0" />
+    <UnitTestResult executionId="80ccad53-4ef1-4264-bf49-55e15c181b2d" testId="5679c413-3ccb-3fae-87ef-dd43bd8fba1a" testName="ERCP.Api.Tests.ResourcesControllerTests.Create_AddsResource_ReturnsCreated" computerName="DESKTOP-HUE8OII" duration="00:00:00.0038794" startTime="2026-10-03T11:28:21.0682673+05:30" endTime="2026-10-03T11:28:21.0682676+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="80ccad53-4ef1-4264-bf49-55e15c181b2d" />
+    <UnitTestResult executionId="82f7714c-ea50-4bfb-a527-2760fbb5b9e0" testId="e7ebe63a-66a7-d4d3-e39c-9cd273e969f2" testName="ERCP.Api.Tests.AuthControllerTests.GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim(roleName: &quot;Admin&quot;)" computerName="DESKTOP-HUE8OII" duration="00:00:00.6497454" startTime="2026-10-03T11:28:21.1877975+05:30" endTime="2026-10-03T11:28:21.1877978+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="82f7714c-ea50-4bfb-a527-2760fbb5b9e0" />
+    <UnitTestResult executionId="63ea652b-1e73-472c-b5ce-e41c2cb2d607" testId="b96ee441-acd5-3c4f-da23-5cd4ab6f32f8" testName="ERCP.Api.Tests.AuthControllerTests.GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim(roleName: &quot;Volunteer&quot;)" computerName="DESKTOP-HUE8OII" duration="00:00:00.0589639" startTime="2026-10-03T11:28:21.3665317+05:30" endTime="2026-10-03T11:28:21.3665318+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="63ea652b-1e73-472c-b5ce-e41c2cb2d607" />
+    <UnitTestResult executionId="e78bdd64-c2c8-4452-add8-2d9c6235bfe7" testId="e0088677-0ac2-f8f3-e588-28182b3f95e6" testName="ERCP.Api.Tests.ResourcesControllerTests.UpdateStatus_ChangesResourceStatus" computerName="DESKTOP-HUE8OII" duration="00:00:00.0139330" startTime="2026-10-03T11:28:21.0643016+05:30" endTime="2026-10-03T11:28:21.0643019+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e78bdd64-c2c8-4452-add8-2d9c6235bfe7" />
+    <UnitTestResult executionId="c22632fd-de1e-4dc9-b8f0-4ed46a2b7412" testId="107a1baa-6d67-7d8b-879a-2b5c4b25c87f" testName="ERCP.Api.Tests.InventoryControllerTests.AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative" computerName="DESKTOP-HUE8OII" duration="00:00:00.0282211" startTime="2026-10-03T11:28:21.0397683+05:30" endTime="2026-10-03T11:28:21.0397687+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c22632fd-de1e-4dc9-b8f0-4ed46a2b7412" />
+    <UnitTestResult executionId="f536e0f3-3fbf-4191-9c2f-a7cb5edb077b" testId="d9d90897-fbc4-8045-50da-7c671ea41769" testName="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_EmitsTimelineEvent_WhenIncidentExists" computerName="DESKTOP-HUE8OII" duration="00:00:00.0099851" startTime="2026-10-03T11:28:21.1628458+05:30" endTime="2026-10-03T11:28:21.1628462+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f536e0f3-3fbf-4191-9c2f-a7cb5edb077b" />
+    <UnitTestResult executionId="be1d419f-1947-48bc-90db-20084c9a7928" testId="2efeba62-dd3e-0b3a-2f50-99fe7f9c42cd" testName="ERCP.Api.Tests.VolunteersApiIntegrationTests.SeededDemoData_Exists" computerName="DESKTOP-HUE8OII" duration="00:00:01.3593783" startTime="2026-10-03T11:28:21.8126803+05:30" endTime="2026-10-03T11:28:21.8126805+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="be1d419f-1947-48bc-90db-20084c9a7928" />
+    <UnitTestResult executionId="ee927523-6742-4db8-8b21-83337ec7d095" testId="709ec14c-a2af-5b21-4b86-389f80b2f0ba" testName="ERCP.Api.Tests.VolunteersControllerTests.GetById_ReturnsNotFound_WhenVolunteerDoesNotExist" computerName="DESKTOP-HUE8OII" duration="00:00:00.0228580" startTime="2026-10-03T11:28:21.0701967+05:30" endTime="2026-10-03T11:28:21.0701969+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ee927523-6742-4db8-8b21-83337ec7d095" />
+    <UnitTestResult executionId="8e36c6a4-872b-4d05-8c58-8bcc7f37ce79" testId="3dafb0b1-8845-c96e-7dfc-c7a90754c18a" testName="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_NoTasks_ReturnsRevise_WithW0" computerName="DESKTOP-HUE8OII" duration="00:00:00.0026936" startTime="2026-10-03T11:28:21.1774670+05:30" endTime="2026-10-03T11:28:21.1774674+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8e36c6a4-872b-4d05-8c58-8bcc7f37ce79" />
+    <UnitTestResult executionId="abca7ae7-4306-4888-98fd-72e56f8d93f8" testId="122c61a0-8d5c-2e5d-7be5-1362edcf2c0e" testName="ERCP.Api.Tests.VolunteerEditTests.DeleteShift_WrongVolunteer_ReturnsNotFound" computerName="DESKTOP-HUE8OII" duration="00:00:00.0820827" startTime="2026-10-03T11:28:21.0943260+05:30" endTime="2026-10-03T11:28:21.0943263+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="abca7ae7-4306-4888-98fd-72e56f8d93f8" />
+    <UnitTestResult executionId="a006a564-99c2-4666-8cd0-3f24686e20bb" testId="023e8717-19a8-8f1c-d92f-68317f1e4035" testName="ERCP.Api.Tests.IncidentControllerTests.GetTimeline_ReturnsEventsInChronologicalOrder" computerName="DESKTOP-HUE8OII" duration="00:00:00.0109215" startTime="2026-10-03T11:28:21.2598633+05:30" endTime="2026-10-03T11:28:21.2598638+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a006a564-99c2-4666-8cd0-3f24686e20bb" />
+    <UnitTestResult executionId="643f1179-d86e-4bfc-9ace-b6796d31e713" testId="a5236374-da19-9fa0-5da3-ab4512314180" testName="ERCP.Api.Tests.AuthControllerTests.GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim(roleName: &quot;Citizen&quot;)" computerName="DESKTOP-HUE8OII" duration="00:00:00.0612456" startTime="2026-10-03T11:28:21.2493109+05:30" endTime="2026-10-03T11:28:21.2493111+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="643f1179-d86e-4bfc-9ace-b6796d31e713" />
+    <UnitTestResult executionId="7cc7329e-0c34-44bf-bf6f-f3fd2b508bbd" testId="0e26a2ab-e0cc-6818-a2ee-ae4f6ca9e243" testName="ERCP.Api.Tests.IncidentControllerTests.UpdatePriority_CreatesPriorityChangedTimelineEvent" computerName="DESKTOP-HUE8OII" duration="00:00:00.0092770" startTime="2026-10-03T11:28:21.2692687+05:30" endTime="2026-10-03T11:28:21.2692692+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7cc7329e-0c34-44bf-bf6f-f3fd2b508bbd" />
+    <UnitTestResult executionId="62c2da8f-b27d-4867-9aa5-680de58f3af7" testId="46116e47-4e0e-781a-a2cf-e229fdc85a2f" testName="ERCP.Api.Tests.VolunteersControllerTests.GetAvailableBySkill_ReturnsOnlyMatchingAndAvailable" computerName="DESKTOP-HUE8OII" duration="00:00:00.0147430" startTime="2026-10-03T11:28:21.1089151+05:30" endTime="2026-10-03T11:28:21.1089157+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="62c2da8f-b27d-4867-9aa5-680de58f3af7" />
+    <UnitTestResult executionId="1672edb4-8a9a-4651-93f3-4f6d8664d3c6" testId="fa285b5c-8791-3552-a9ee-9008014cf5af" testName="ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest" computerName="DESKTOP-HUE8OII" duration="00:00:00.0026438" startTime="2026-10-03T11:28:21.2901632+05:30" endTime="2026-10-03T11:28:21.2901637+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1672edb4-8a9a-4651-93f3-4f6d8664d3c6" />
+    <UnitTestResult executionId="74fc8092-0408-424c-a56f-599eda30e7ac" testId="12199f45-9216-f8f8-bbe3-b8b42642f883" testName="ERCP.Api.Tests.IncidentControllerTests.CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent" computerName="DESKTOP-HUE8OII" duration="00:00:00.6400086" startTime="2026-10-03T11:28:21.0933173+05:30" endTime="2026-10-03T11:28:21.0933174+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="74fc8092-0408-424c-a56f-599eda30e7ac" />
+    <UnitTestResult executionId="c37ac067-bd90-47e9-bcc3-11c6a02160e6" testId="6eb75f86-96c2-8b20-9109-047ad8cb1039" testName="ERCP.Api.Tests.AuthControllerTests.Register_DuplicateEmail_ReturnsConflict" computerName="DESKTOP-HUE8OII" duration="00:00:00.0571298" startTime="2026-10-03T11:28:21.6646628+05:30" endTime="2026-10-03T11:28:21.6646629+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c37ac067-bd90-47e9-bcc3-11c6a02160e6" />
+    <UnitTestResult executionId="d2cb1705-a217-49ce-a749-21da591fe36a" testId="1d9678ad-cd14-2188-46d9-0f1120e6134f" testName="ERCP.Api.Tests.VolunteersApiIntegrationTests.GetVolunteers_Anonymous_Returns401" computerName="DESKTOP-HUE8OII" duration="00:00:00.0564803" startTime="2026-10-03T11:28:21.8692949+05:30" endTime="2026-10-03T11:28:21.8692954+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d2cb1705-a217-49ce-a749-21da591fe36a" />
+    <UnitTestResult executionId="1e7943b2-7f95-4d26-a3cc-3509d340c98c" testId="221537f7-c66c-5e4f-d411-429526b436a6" testName="ERCP.Api.Tests.AuthControllerTests.Register_NewCitizen_ReturnsCreatedWithToken" computerName="DESKTOP-HUE8OII" duration="00:00:00.0485147" startTime="2026-10-03T11:28:21.4151357+05:30" endTime="2026-10-03T11:28:21.4151359+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1e7943b2-7f95-4d26-a3cc-3509d340c98c" />
+    <UnitTestResult executionId="82b956aa-8a0d-41df-bfd4-f67b8486b21c" testId="952d57dd-5d9d-e739-41e3-73bad8193313" testName="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_InvalidStatus_ReturnsBadRequest" computerName="DESKTOP-HUE8OII" duration="00:00:00.0126056" startTime="2026-10-03T11:28:21.0412379+05:30" endTime="2026-10-03T11:28:21.0412381+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="82b956aa-8a0d-41df-bfd4-f67b8486b21c" />
+    <UnitTestResult executionId="934bb5ad-099a-4521-908e-30aed59eb19f" testId="7ceb0c66-aa6b-78c0-4ba6-13b663ea8800" testName="ERCP.Api.Tests.DispatchesControllerTests.UpdateStatus_ApprovalWithLatestPassingSafetyAudit_Succeeds" computerName="DESKTOP-HUE8OII" duration="00:00:00.0024306" startTime="2026-10-03T11:28:21.2098272+05:30" endTime="2026-10-03T11:28:21.2098278+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="934bb5ad-099a-4521-908e-30aed59eb19f" />
+    <UnitTestResult executionId="b51d33f3-44c1-4588-bbcf-440fa4df2770" testId="c40acdb8-e199-cef2-1513-7b8c8fc58fa8" testName="ERCP.Api.Tests.VolunteersApiIntegrationTests.RegisterAndLogin_Coordinator_ReturnsToken" computerName="DESKTOP-HUE8OII" duration="00:00:00.1915165" startTime="2026-10-03T11:28:22.0609299+05:30" endTime="2026-10-03T11:28:22.0609301+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b51d33f3-44c1-4588-bbcf-440fa4df2770" />
+    <UnitTestResult executionId="7a597640-8f97-4cf7-b012-a5beb5b49188" testId="57224785-ded1-33f4-aa10-fe3e423e1eff" testName="ERCP.Api.Tests.VolunteerEditTests.Update_BlankName_ReturnsBadRequest" computerName="DESKTOP-HUE8OII" duration="00:00:00.0020074" startTime="2026-10-03T11:28:21.1418440+05:30" endTime="2026-10-03T11:28:21.1418442+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7a597640-8f97-4cf7-b012-a5beb5b49188" />
+    <UnitTestResult executionId="72e9a495-cf97-47c9-82cc-201aac54ba98" testId="19cf73da-349c-340c-8030-dfce6e572b55" testName="ERCP.Api.Tests.QmsPostgresTests.DB01_DuplicateEmail_IsRejectedByPostgres" computerName="DESKTOP-HUE8OII" duration="00:00:00.9069339" startTime="2026-10-03T11:28:21.3620953+05:30" endTime="2026-10-03T11:28:21.3620958+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="72e9a495-cf97-47c9-82cc-201aac54ba98" />
+    <UnitTestResult executionId="3099d737-c99d-4a4f-8a15-c760470b1748" testId="1acc2d4c-21e7-dde7-e0b6-04968489ad9a" testName="ERCP.Api.Tests.AuthControllerTests.GetDemoUsers_ReturnsFourStandardRoleAccounts" computerName="DESKTOP-HUE8OII" duration="00:00:00.0846666" startTime="2026-10-03T11:28:20.5379554+05:30" endTime="2026-10-03T11:28:20.5379556+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3099d737-c99d-4a4f-8a15-c760470b1748" />
+    <UnitTestResult executionId="7350d3fb-9f2a-4acc-8fc4-1728876207a8" testId="e32bcca6-82da-912b-42e9-0b8e67be0c4f" testName="ERCP.Api.Tests.DispatchAllocationTests.DispatchTask_ResourceRelationshipIsOptionalIntegerAndSetNullOnDelete" computerName="DESKTOP-HUE8OII" duration="00:00:00.0052211" startTime="2026-10-03T11:28:21.2223395+05:30" endTime="2026-10-03T11:28:21.2223399+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7350d3fb-9f2a-4acc-8fc4-1728876207a8" />
+    <UnitTestResult executionId="2ec841f0-4b2d-4447-9e00-c0ce03b7a6bc" testId="ddd27cf8-6d6c-682d-141c-1bc228b56ef3" testName="ERCP.Api.Tests.QmsSecurityTests.SEC03_MalformedToken_IsRejected(endpoint: &quot;/api/volunteers&quot;)" computerName="DESKTOP-HUE8OII" duration="00:00:00.0004169" startTime="2026-10-03T11:28:22.0808331+05:30" endTime="2026-10-03T11:28:22.0808332+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2ec841f0-4b2d-4447-9e00-c0ce03b7a6bc" />
+    <UnitTestResult executionId="cd213e80-4eeb-4af8-8845-d9b6c2f8754f" testId="c71f5d4a-2cc9-0e3e-5612-7fad56fd7730" testName="ERCP.Api.Tests.QmsSecurityTests.SEC01_PublicRegistration_RejectsPrivilegedRole(role: &quot;Admin&quot;)" computerName="DESKTOP-HUE8OII" duration="00:00:00.0133810" startTime="2026-10-03T11:28:22.0943182+05:30" endTime="2026-10-03T11:28:22.0943184+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cd213e80-4eeb-4af8-8845-d9b6c2f8754f" />
+    <UnitTestResult executionId="b4c1c93b-7ce9-4b77-9845-edfbaca8e796" testId="9299499e-8688-744d-edbd-9f1aab9c0d97" testName="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_UnavailableVolunteer_ReturnsReject_WithV1" computerName="DESKTOP-HUE8OII" duration="00:00:00.0029873" startTime="2026-10-03T11:28:21.0994048+05:30" endTime="2026-10-03T11:28:21.0994051+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b4c1c93b-7ce9-4b77-9845-edfbaca8e796" />
+    <UnitTestResult executionId="3c81eed0-95d2-4a07-af2f-175cc206dfc6" testId="414a9daa-7151-d45e-5d35-889ac22ef1e2" testName="ERCP.Api.Tests.AuthControllerTests.GetProfile_WithAuthenticatedClaim_ReturnsUserProfile" computerName="DESKTOP-HUE8OII" duration="00:00:00.0634816" startTime="2026-10-03T11:28:21.6074169+05:30" endTime="2026-10-03T11:28:21.6074176+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3c81eed0-95d2-4a07-af2f-175cc206dfc6" />
+    <UnitTestResult executionId="55a454f1-c748-45ad-84e9-5d8c285a6944" testId="17a269c4-8c20-dfda-0d71-707e0d36e8db" testName="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_EndBeforeStart_ReturnsBadRequest" computerName="DESKTOP-HUE8OII" duration="00:00:00.5746037" startTime="2026-10-03T11:28:21.0279127+05:30" endTime="2026-10-03T11:28:21.0279131+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="55a454f1-c748-45ad-84e9-5d8c285a6944" />
+    <UnitTestResult executionId="09b560db-bbdb-4517-a872-b977f3d81209" testId="1451b531-7556-7791-21f0-6893c8c043b3" testName="ERCP.Api.Tests.VolunteersControllerTests.UpdateAvailability_SetsIsAvailableFalse" computerName="DESKTOP-HUE8OII" duration="00:00:00.0014071" startTime="2026-10-03T11:28:21.0956235+05:30" endTime="2026-10-03T11:28:21.0956238+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="09b560db-bbdb-4517-a872-b977f3d81209" />
+    <UnitTestResult executionId="df678ec4-3fc4-4bbd-9ef0-731d1ce29fd5" testId="d6d3b678-19d5-660f-71c7-80c548bf2df0" testName="ERCP.Api.Tests.DispatchAllocationTests.ProposeAllocation_PersistsPlanAndReturnsAllocationResults" computerName="DESKTOP-HUE8OII" duration="00:00:00.1209134" startTime="2026-10-03T11:28:21.2147264+05:30" endTime="2026-10-03T11:28:21.2147269+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="df678ec4-3fc4-4bbd-9ef0-731d1ce29fd5" />
+    <UnitTestResult executionId="b52c7250-021c-40bd-97c2-a3ca742c2136" testId="3422bf5e-772b-0e6f-6ade-12960d4ed980" testName="ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached" computerName="DESKTOP-HUE8OII" duration="00:00:00.5580541" startTime="2026-10-03T11:28:21.0114697+05:30" endTime="2026-10-03T11:28:21.0114699+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b52c7250-021c-40bd-97c2-a3ca742c2136" />
+    <UnitTestResult executionId="7dc4f461-e1da-4a52-9cbc-72fbcc62c90c" testId="9cc471d6-aa9e-bc16-3ae6-bce9f2fb553b" testName="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_UnknownVolunteer_ReturnsNotFound" computerName="DESKTOP-HUE8OII" duration="00:00:00.0013085" startTime="2026-10-03T11:28:21.0420890+05:30" endTime="2026-10-03T11:28:21.0420892+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7dc4f461-e1da-4a52-9cbc-72fbcc62c90c" />
+    <UnitTestResult executionId="75d33056-3288-4f39-87eb-33507f5b1b59" testId="dc0bd730-70d4-147e-bada-9b4ad1f9d599" testName="ERCP.Api.Tests.QmsSecurityTests.SEC03_MalformedToken_IsRejected(endpoint: &quot;/api/auth/me&quot;)" computerName="DESKTOP-HUE8OII" duration="00:00:00.0009926" startTime="2026-10-03T11:28:22.0803606+05:30" endTime="2026-10-03T11:28:22.0803607+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="75d33056-3288-4f39-87eb-33507f5b1b59" />
+    <UnitTestResult executionId="7b84a6ac-666d-43b8-a940-f4f4d61b3500" testId="0d1cbe0a-3acf-a46c-683a-a01be8d0380e" testName="ERCP.Api.Tests.IncidentControllerTests.GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent" computerName="DESKTOP-HUE8OII" duration="00:00:00.1553402" startTime="2026-10-03T11:28:21.2488062+05:30" endTime="2026-10-03T11:28:21.2488071+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7b84a6ac-666d-43b8-a940-f4f4d61b3500" />
+    <UnitTestResult executionId="1adaee04-ea9d-4e58-ac76-441321623ae6" testId="f9fb1257-844c-9348-1ac8-12d577033abe" testName="ERCP.Api.Tests.GeolocationServiceTests.GetNearestShelters_OrdersSheltersByProximity" computerName="DESKTOP-HUE8OII" duration="00:00:00.5712758" startTime="2026-10-03T11:28:21.0323493+05:30" endTime="2026-10-03T11:28:21.0323496+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1adaee04-ea9d-4e58-ac76-441321623ae6" />
+    <UnitTestResult executionId="ff12563b-6e32-4191-8602-75b7484b5c40" testId="4f9eb048-e3cd-3577-f162-fa526504c267" testName="ERCP.Api.Tests.VolunteerEditTests.Update_ValidDto_UpdatesAndReturnsOk" computerName="DESKTOP-HUE8OII" duration="00:00:00.5583456" startTime="2026-10-03T11:28:21.0135204+05:30" endTime="2026-10-03T11:28:21.0135206+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff12563b-6e32-4191-8602-75b7484b5c40" />
+    <UnitTestResult executionId="421270ff-0bdd-4d54-9c71-c96b031ced4e" testId="6fb227d2-3cbb-6710-2185-858959c8826d" testName="ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_ValidTransition_ReportedToVerified_Succeeds" computerName="DESKTOP-HUE8OII" duration="00:00:00.0071931" startTime="2026-10-03T11:28:21.2974929+05:30" endTime="2026-10-03T11:28:21.2974942+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="421270ff-0bdd-4d54-9c71-c96b031ced4e" />
+    <UnitTestResult executionId="28802e30-e213-4a9c-ac83-55723dbc4586" testId="a16beb14-79d2-8a28-1605-ed09b4bb4a5d" testName="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_UnknownDispatch_ThrowsNotFound" computerName="DESKTOP-HUE8OII" duration="00:00:00.5807149" startTime="2026-10-03T11:28:21.0339874+05:30" endTime="2026-10-03T11:28:21.0339878+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="28802e30-e213-4a9c-ac83-55723dbc4586" />
+    <UnitTestResult executionId="b3325e1a-6b97-4501-89b4-e9eb94cb5091" testId="76fe3100-2232-d5a8-2877-d37e6e59c23d" testName="ERCP.Api.Tests.VolunteerTasksTests.GetTasks_NoTasks_ReturnsEmptyList" computerName="DESKTOP-HUE8OII" duration="00:00:00.1247159" startTime="2026-10-03T11:28:21.1454561+05:30" endTime="2026-10-03T11:28:21.1454565+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b3325e1a-6b97-4501-89b4-e9eb94cb5091" />
+    <UnitTestResult executionId="a8905c2e-7520-41bb-8798-d2b8fcce9847" testId="ebd750fb-e8bf-f714-0405-010f93d0027e" testName="ERCP.Api.Tests.SituationAnalysisAgentTests.AssessSituation_GeneratesValidAssessment" computerName="DESKTOP-HUE8OII" duration="00:00:00.6491959" startTime="2026-10-03T11:28:21.1024856+05:30" endTime="2026-10-03T11:28:21.1024861+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a8905c2e-7520-41bb-8798-d2b8fcce9847" />
+    <UnitTestResult executionId="0e9b8a6e-1236-4fcb-9293-8df85c02c1e5" testId="eb30ad4b-ee4c-d969-03dc-5b03da26993c" testName="ERCP.Api.Tests.DispatchAllocationTests.ProposeAllocation_UnknownDispatchReturnsNotFound" computerName="DESKTOP-HUE8OII" duration="00:00:00.0012221" startTime="2026-10-03T11:28:21.2267954+05:30" endTime="2026-10-03T11:28:21.2267956+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0e9b8a6e-1236-4fcb-9293-8df85c02c1e5" />
+    <UnitTestResult executionId="0ebfac08-83a0-49bf-bcf6-33be0bf2ec17" testId="bf5a4790-a617-1f1f-8e1a-34bb674608c5" testName="ERCP.Api.Tests.DispatchAllocationTests.ValidateDispatch_UnavailableVolunteerRejectsAllocation" computerName="DESKTOP-HUE8OII" duration="00:00:00.0030383" startTime="2026-10-03T11:28:21.2263838+05:30" endTime="2026-10-03T11:28:21.2263841+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0ebfac08-83a0-49bf-bcf6-33be0bf2ec17" />
+    <UnitTestResult executionId="95bbc196-673b-434c-9712-aa5982caa100" testId="969492cf-65ac-d36d-270e-68a715b97115" testName="ERCP.Api.Tests.AuthControllerTests.Login_WithValidCredentials_ReturnsOkWithJwt" computerName="DESKTOP-HUE8OII" duration="00:00:00.1285411" startTime="2026-10-03T11:28:21.5438013+05:30" endTime="2026-10-03T11:28:21.5438015+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="95bbc196-673b-434c-9712-aa5982caa100" />
+    <UnitTestResult executionId="6a6cd835-84a0-4e13-a7cd-1eb49d705d3e" testId="2b6d3646-1a04-d86b-73a5-6b27f2754258" testName="ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData" computerName="DESKTOP-HUE8OII" duration="00:00:00.7720350" startTime="2026-10-03T11:28:21.2253358+05:30" endTime="2026-10-03T11:28:21.2253364+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6a6cd835-84a0-4e13-a7cd-1eb49d705d3e" />
+    <UnitTestResult executionId="586f64a9-e78d-47d0-9272-b609aefc353c" testId="f74bbcd2-17a4-59ff-3e6e-2ca1f8f97904" testName="ERCP.Api.Tests.GeolocationServiceTests.CalculateHaversineDistanceKm_ReturnsAccurateKmDistance" computerName="DESKTOP-HUE8OII" duration="00:00:00.0054513" startTime="2026-10-03T11:28:20.4797903+05:30" endTime="2026-10-03T11:28:20.4798096+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="586f64a9-e78d-47d0-9272-b609aefc353c" />
+    <UnitTestResult executionId="31aaac46-35de-45fe-ada0-e640f6795f85" testId="511d6634-0b78-3d76-537f-c0731aaa1cdd" testName="ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity" computerName="DESKTOP-HUE8OII" duration="00:00:00.0014171" startTime="2026-10-03T11:28:21.0451466+05:30" endTime="2026-10-03T11:28:21.0451470+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="31aaac46-35de-45fe-ada0-e640f6795f85" />
+    <UnitTestResult executionId="154d04a3-150d-490c-9ccb-7ffcd6b898d5" testId="7b61c813-ec95-a90b-0cdd-65a36adff03e" testName="ERCP.Api.Tests.AuthControllerTests.GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim(roleName: &quot;Coordinator&quot;)" computerName="DESKTOP-HUE8OII" duration="00:00:00.0580759" startTime="2026-10-03T11:28:21.3073388+05:30" endTime="2026-10-03T11:28:21.3073392+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="154d04a3-150d-490c-9ccb-7ffcd6b898d5" />
+    <UnitTestResult executionId="dcf50a46-a563-4d0b-8d69-178c830fece2" testId="467a061e-b47c-c26a-c9c4-7fc90809ce67" testName="ERCP.Api.Tests.VolunteersControllerTests.UpdateAvailability_CoordinatorCanUpdateAnyVolunteer_ReturnsNoContent" computerName="DESKTOP-HUE8OII" duration="00:00:00.0022018" startTime="2026-10-03T11:28:21.1112111+05:30" endTime="2026-10-03T11:28:21.1112114+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dcf50a46-a563-4d0b-8d69-178c830fece2" />
+    <UnitTestResult executionId="62e2bc87-9e9f-4427-b40a-5a87a78e74db" testId="fa2dd6dc-ae67-eb02-fbc3-6cc630103dae" testName="ERCP.Api.Tests.ResourcesControllerTests.GetAvailable_ReturnsOnlyAvailableResources" computerName="DESKTOP-HUE8OII" duration="00:00:00.5968329" startTime="2026-10-03T11:28:21.0501766+05:30" endTime="2026-10-03T11:28:21.0501769+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="62e2bc87-9e9f-4427-b40a-5a87a78e74db" />
+    <UnitTestResult executionId="54590f36-b451-423f-b7ac-56ed68c8ecd1" testId="9f4875f0-b8a8-38e9-9392-fac479a2bc97" testName="ERCP.Api.Tests.DispatchesControllerTests.UpdateTask_ChangesAssignmentAndRefreshesDispatchTimestamp" computerName="DESKTOP-HUE8OII" duration="00:00:00.0158316" startTime="2026-10-03T11:28:21.2049589+05:30" endTime="2026-10-03T11:28:21.2049593+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="54590f36-b451-423f-b7ac-56ed68c8ecd1" />
+    <UnitTestResult executionId="903ebe88-784f-4d4d-b5a6-b9129c78a81d" testId="db9f3360-c716-5785-eec9-a070814b5a18" testName="ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable" computerName="DESKTOP-HUE8OII" duration="00:00:00.1158981" startTime="2026-10-03T11:28:21.3413550+05:30" endTime="2026-10-03T11:28:21.3413552+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="903ebe88-784f-4d4d-b5a6-b9129c78a81d" />
+    <UnitTestResult executionId="d9462e7b-75cd-4721-9e8b-c14e199b9985" testId="395bbcfe-8f9e-61c7-430a-593a92e06f9f" testName="ERCP.Api.Tests.VolunteerTasksTests.GetTasks_UnknownVolunteer_ReturnsNotFound" computerName="DESKTOP-HUE8OII" duration="00:00:00.5673075" startTime="2026-10-03T11:28:21.0206084+05:30" endTime="2026-10-03T11:28:21.0206088+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d9462e7b-75cd-4721-9e8b-c14e199b9985" />
+    <UnitTestResult executionId="1ef6600a-24fe-4adf-b55d-3ac3cd4294bc" testId="268d514f-a584-f479-8e6f-1da8d90fba59" testName="ERCP.Api.Tests.DispatchAllocationTests.DeletingResourceClearsDispatchTaskResourceId" computerName="DESKTOP-HUE8OII" duration="00:00:00.0071472" startTime="2026-10-03T11:28:21.2340132+05:30" endTime="2026-10-03T11:28:21.2340134+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1ef6600a-24fe-4adf-b55d-3ac3cd4294bc" />
+    <UnitTestResult executionId="22b79308-5644-42f9-81b3-ae7f6428f488" testId="90036ee3-4c52-6a6e-456a-5599b3c710f1" testName="ERCP.Api.Tests.QmsSecurityTests.SEC03_MalformedToken_IsRejected(endpoint: &quot;/api/dispatches&quot;)" computerName="DESKTOP-HUE8OII" duration="00:00:00.0043205" startTime="2026-10-03T11:28:22.0792720+05:30" endTime="2026-10-03T11:28:22.0792723+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="22b79308-5644-42f9-81b3-ae7f6428f488" />
+    <UnitTestResult executionId="1944a04e-6e7f-4507-8784-7150ffecb51e" testId="461e2139-653a-84fa-ad3c-de33b2fdb9dc" testName="ERCP.Api.Tests.QmsSecurityTests.SEC02_LowPrivilegeUser_CannotCreateDispatch(role: &quot;Citizen&quot;)" computerName="DESKTOP-HUE8OII" duration="00:00:00.0712153" startTime="2026-10-03T11:28:22.0748269+05:30" endTime="2026-10-03T11:28:22.0748273+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1944a04e-6e7f-4507-8784-7150ffecb51e" />
+    <UnitTestResult executionId="b6ba0dcd-ede0-444a-8b92-00290a85a5ec" testId="4d1d3cdb-9c1c-58b0-be60-25ab09ad1327" testName="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_InsufficientInventory_ReturnsRevise_WithI1" computerName="DESKTOP-HUE8OII" duration="00:00:00.0054661" startTime="2026-10-03T11:28:21.1050072+05:30" endTime="2026-10-03T11:28:21.1050075+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6ba0dcd-ede0-444a-8b92-00290a85a5ec" />
+    <UnitTestResult executionId="5816ce03-6156-4af4-820e-3e3e2bb57dab" testId="4f12620d-b59c-b04a-56a4-fd2e59efa629" testName="ERCP.Api.Tests.DispatchesControllerTests.ProposeAllocation_AttachesIncidentPlanAndMovesToPendingApproval" computerName="DESKTOP-HUE8OII" duration="00:00:00.0686570" startTime="2026-10-03T11:28:21.1847344+05:30" endTime="2026-10-03T11:28:21.1847347+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5816ce03-6156-4af4-820e-3e3e2bb57dab" />
+    <UnitTestResult executionId="06eac9d9-6b28-4a05-9b2b-bd290b78e1fe" testId="03ab2743-90f6-ffd2-8994-86bb9e8367ae" testName="ERCP.Api.Tests.IncidentControllerTests.GetIncident_NonExistingId_ReturnsNotFound" computerName="DESKTOP-HUE8OII" duration="00:00:00.0179826" startTime="2026-10-03T11:28:21.2874026+05:30" endTime="2026-10-03T11:28:21.2874037+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="06eac9d9-6b28-4a05-9b2b-bd290b78e1fe" />
+    <UnitTestResult executionId="30759803-e6ff-45cf-9dab-c9927ca69a7c" testId="ca56c79a-2b3c-c118-31ce-58f0369345fa" testName="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_UnavailableLinkedResource_ReturnsReject_WithR1" computerName="DESKTOP-HUE8OII" duration="00:00:00.0575269" startTime="2026-10-03T11:28:21.0916292+05:30" endTime="2026-10-03T11:28:21.0916294+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="30759803-e6ff-45cf-9dab-c9927ca69a7c" />
+    <UnitTestResult executionId="79fd7cf2-51bd-45a3-a97a-1335693d9964" testId="e6c8d2de-e0f7-4547-21b2-95c82a39732b" testName="ERCP.Api.Tests.DispatchAllocationTests.ValidateDispatch_UnavailableResourceRejectsAllocation" computerName="DESKTOP-HUE8OII" duration="00:00:00.6404229" startTime="2026-10-03T11:28:21.0938133+05:30" endTime="2026-10-03T11:28:21.0938136+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="79fd7cf2-51bd-45a3-a97a-1335693d9964" />
+    <UnitTestResult executionId="1c06a406-7347-4e49-8313-d4d35797e46d" testId="80402d8a-72f2-d09a-733f-29f528b45e93" testName="ERCP.Api.Tests.DispatchAllocationTests.UpdateStatus_CannotApproveWithoutPassingValidationAudit" computerName="DESKTOP-HUE8OII" duration="00:00:00.0018728" startTime="2026-10-03T11:28:21.2169945+05:30" endTime="2026-10-03T11:28:21.2169948+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1c06a406-7347-4e49-8313-d4d35797e46d" />
+    <UnitTestResult executionId="f5cb52cb-714d-4254-b494-4dd1e243ddee" testId="15db2e8f-b0ac-955b-6f5d-c86264ae3be1" testName="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_OverlappingShift_ReturnsRevise_WithV2" computerName="DESKTOP-HUE8OII" duration="00:00:00.0091927" startTime="2026-10-03T11:28:21.1721895+05:30" endTime="2026-10-03T11:28:21.1721905+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f5cb52cb-714d-4254-b494-4dd1e243ddee" />
+    <UnitTestResult executionId="ec381d76-37a9-41e8-b059-87f29d4e3cd5" testId="7492f381-444a-4475-3e93-acf2f4634102" testName="ERCP.Api.Tests.VolunteersControllerTests.Create_AddsVolunteer_ReturnsCreated" computerName="DESKTOP-HUE8OII" duration="00:00:00.0032006" startTime="2026-10-03T11:28:21.0472385+05:30" endTime="2026-10-03T11:28:21.0472388+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ec381d76-37a9-41e8-b059-87f29d4e3cd5" />
+    <UnitTestResult executionId="a05ff721-4f02-46fa-834b-2d608e6e1a09" testId="d7d58036-a838-00c0-b2ed-09f1a1ce8fda" testName="ERCP.Api.Tests.AuthControllerTests.Login_WithIncorrectPassword_ReturnsUnauthorized" computerName="DESKTOP-HUE8OII" duration="00:00:00.1118945" startTime="2026-10-03T11:28:21.7766682+05:30" endTime="2026-10-03T11:28:21.7766685+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a05ff721-4f02-46fa-834b-2d608e6e1a09" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="3422bf5e-772b-0e6f-6ade-12960d4ed980">
+      <Execution id="b52c7250-021c-40bd-97c2-a3ca742c2136" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.SheltersControllerTests" name="UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_OverlappingShift_ReturnsRevise_WithV2" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="15db2e8f-b0ac-955b-6f5d-c86264ae3be1">
+      <Execution id="f5cb52cb-714d-4254-b494-4dd1e243ddee" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchValidationServiceTests" name="ValidateDispatch_OverlappingShift_ReturnsRevise_WithV2" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="511d6634-0b78-3d76-537f-c0731aaa1cdd">
+      <Execution id="31aaac46-35de-45fe-ada0-e640f6795f85" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.SheltersControllerTests" name="UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="12199f45-9216-f8f8-bbe3-b8b42642f883">
+      <Execution id="74fc8092-0408-424c-a56f-599eda30e7ac" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersApiIntegrationTests.CreateShift_InvalidWindow_OverHttp_Returns400" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="0f881778-f42c-12df-16b2-5f15c933f30e">
+      <Execution id="225f8a1a-9e9d-49b6-8f93-225b26adf78f" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersApiIntegrationTests" name="CreateShift_InvalidWindow_OverHttp_Returns400" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_EndBeforeStart_ReturnsBadRequest" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="17a269c4-8c20-dfda-0d71-707e0d36e8db">
+      <Execution id="55a454f1-c748-45ad-84e9-5d8c285a6944" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerShiftTests" name="CreateShift_EndBeforeStart_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsSecurityTests.SEC03_MalformedToken_IsRejected(endpoint: &quot;/api/volunteers&quot;)" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="ddd27cf8-6d6c-682d-141c-1bc228b56ef3">
+      <Execution id="2ec841f0-4b2d-4447-9e00-c0ce03b7a6bc" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsSecurityTests" name="SEC03_MalformedToken_IsRejected" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersControllerTests.UpdateAvailability_SetsIsAvailableFalse" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="1451b531-7556-7791-21f0-6893c8c043b3">
+      <Execution id="09b560db-bbdb-4517-a872-b977f3d81209" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersControllerTests" name="UpdateAvailability_SetsIsAvailableFalse" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchesControllerTests.UpdateStatus_ApprovalWithoutSafetyAudit_IsRejected" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="915e6250-1b0a-a94c-9dde-54a7d93945c1">
+      <Execution id="01513770-1965-4f70-ace2-976cf2f66d5d" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchesControllerTests" name="UpdateStatus_ApprovalWithoutSafetyAudit_IsRejected" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.AuthControllerTests.Login_WithIncorrectPassword_ReturnsUnauthorized" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="d7d58036-a838-00c0-b2ed-09f1a1ce8fda">
+      <Execution id="a05ff721-4f02-46fa-834b-2d608e6e1a09" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.AuthControllerTests" name="Login_WithIncorrectPassword_ReturnsUnauthorized" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsPostgresTests.DB02_OrphanShift_IsRejectedByForeignKey" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="0356de84-72df-d8ad-32b8-7e951c4e3c0d">
+      <Execution id="a2d28b1e-0a9a-4551-bcb1-2f7185b29c0a" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsPostgresTests" name="DB02_OrphanShift_IsRejectedByForeignKey" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchAllocationTests.DispatchTask_ResourceRelationshipIsOptionalIntegerAndSetNullOnDelete" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="e32bcca6-82da-912b-42e9-0b8e67be0c4f">
+      <Execution id="7350d3fb-9f2a-4acc-8fc4-1728876207a8" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchAllocationTests" name="DispatchTask_ResourceRelationshipIsOptionalIntegerAndSetNullOnDelete" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchAllocationTests.ValidateDispatch_UnavailableResourceRejectsAllocation" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="e6c8d2de-e0f7-4547-21b2-95c82a39732b">
+      <Execution id="79fd7cf2-51bd-45a3-a97a-1335693d9964" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchAllocationTests" name="ValidateDispatch_UnavailableResourceRejectsAllocation" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.AuthControllerTests.Register_DuplicateEmail_ReturnsConflict" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="6eb75f86-96c2-8b20-9109-047ad8cb1039">
+      <Execution id="c37ac067-bd90-47e9-bcc3-11c6a02160e6" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.AuthControllerTests" name="Register_DuplicateEmail_ReturnsConflict" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerEditTests.Update_BlankName_ReturnsBadRequest" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="57224785-ded1-33f4-aa10-fe3e423e1eff">
+      <Execution id="7a597640-8f97-4cf7-b012-a5beb5b49188" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerEditTests" name="Update_BlankName_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchAllocationTests.ProposeAllocation_PersistsPlanAndReturnsAllocationResults" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="d6d3b678-19d5-660f-71c7-80c548bf2df0">
+      <Execution id="df678ec4-3fc4-4bbd-9ef0-731d1ce29fd5" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchAllocationTests" name="ProposeAllocation_PersistsPlanAndReturnsAllocationResults" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.InventoryControllerTests.AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="107a1baa-6d67-7d8b-879a-2b5c4b25c87f">
+      <Execution id="c22632fd-de1e-4dc9-b8f0-4ed46a2b7412" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.InventoryControllerTests" name="AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsPostgresTests.DB03_DeletingVolunteer_CascadesShift" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="1f05b8e8-ed5f-124a-e1e7-b2e42e136a64">
+      <Execution id="c506cb6a-96e1-4f26-9889-4bf147737ab4" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsPostgresTests" name="DB03_DeletingVolunteer_CascadesShift" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchesControllerTests.UpdateStatus_ApprovalWithLatestPassingSafetyAudit_Succeeds" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="7ceb0c66-aa6b-78c0-4ba6-13b663ea8800">
+      <Execution id="934bb5ad-099a-4521-908e-30aed59eb19f" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchesControllerTests" name="UpdateStatus_ApprovalWithLatestPassingSafetyAudit_Succeeds" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersApiIntegrationTests.VolunteerShiftLifecycle_OverHttp" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="79c5f4de-66f3-b076-6241-4a55d5a8b707">
+      <Execution id="af3d0bac-9211-437f-9d71-d5a8125d1668" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersApiIntegrationTests" name="VolunteerShiftLifecycle_OverHttp" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerEditTests.Update_ValidDto_UpdatesAndReturnsOk" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="4f9eb048-e3cd-3577-f162-fa526504c267">
+      <Execution id="ff12563b-6e32-4191-8602-75b7484b5c40" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerEditTests" name="Update_ValidDto_UpdatesAndReturnsOk" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersControllerTests.UpdateAvailability_VolunteerCanUpdateOwnAvailability_ReturnsNoContent" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="cb173754-74e4-bfc0-d50b-1d8bfef528b8">
+      <Execution id="8af136ac-c66d-406c-8a46-7c9cfc5fd601" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersControllerTests" name="UpdateAvailability_VolunteerCanUpdateOwnAvailability_ReturnsNoContent" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersApiIntegrationTests.RegisterAndLogin_Coordinator_ReturnsToken" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="c40acdb8-e199-cef2-1513-7b8c8fc58fa8">
+      <Execution id="b51d33f3-44c1-4588-bbcf-440fa4df2770" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersApiIntegrationTests" name="RegisterAndLogin_Coordinator_ReturnsToken" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerTasksTests.GetTasks_UnknownVolunteer_ReturnsNotFound" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="395bbcfe-8f9e-61c7-430a-593a92e06f9f">
+      <Execution id="d9462e7b-75cd-4721-9e8b-c14e199b9985" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerTasksTests" name="GetTasks_UnknownVolunteer_ReturnsNotFound" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.GetIncident_NonExistingId_ReturnsNotFound" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="03ab2743-90f6-ffd2-8994-86bb9e8367ae">
+      <Execution id="06eac9d9-6b28-4a05-9b2b-bd290b78e1fe" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="GetIncident_NonExistingId_ReturnsNotFound" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="fa285b5c-8791-3552-a9ee-9008014cf5af">
+      <Execution id="1672edb4-8a9a-4651-93f3-4f6d8664d3c6" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchAllocationTests.ProposeAllocation_UnknownDispatchReturnsNotFound" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="eb30ad4b-ee4c-d969-03dc-5b03da26993c">
+      <Execution id="0e9b8a6e-1236-4fcb-9293-8df85c02c1e5" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchAllocationTests" name="ProposeAllocation_UnknownDispatchReturnsNotFound" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_UnavailableLinkedResource_ReturnsReject_WithR1" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="ca56c79a-2b3c-c118-31ce-58f0369345fa">
+      <Execution id="30759803-e6ff-45cf-9dab-c9927ca69a7c" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchValidationServiceTests" name="ValidateDispatch_UnavailableLinkedResource_ReturnsReject_WithR1" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.GeolocationServiceTests.CalculateHaversineDistanceKm_ReturnsAccurateKmDistance" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="f74bbcd2-17a4-59ff-3e6e-2ca1f8f97904">
+      <Execution id="586f64a9-e78d-47d0-9272-b609aefc353c" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.GeolocationServiceTests" name="CalculateHaversineDistanceKm_ReturnsAccurateKmDistance" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="0d1cbe0a-3acf-a46c-683a-a01be8d0380e">
+      <Execution id="7b84a6ac-666d-43b8-a940-f4f4d61b3500" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.GeolocationServiceTests.GetNearestShelters_OrdersSheltersByProximity" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="f9fb1257-844c-9348-1ac8-12d577033abe">
+      <Execution id="1adaee04-ea9d-4e58-ac76-441321623ae6" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.GeolocationServiceTests" name="GetNearestShelters_OrdersSheltersByProximity" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_AvailableVolunteer_ReturnsApprove" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="409941c5-2861-27d0-cf32-a0b56c331d25">
+      <Execution id="b822e6fd-121e-41f5-87ec-a98f7f224dcd" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchValidationServiceTests" name="ValidateDispatch_AvailableVolunteer_ReturnsApprove" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchAllocationTests.UpdateStatus_CannotApproveWithoutPassingValidationAudit" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="80402d8a-72f2-d09a-733f-29f528b45e93">
+      <Execution id="1c06a406-7347-4e49-8313-d4d35797e46d" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchAllocationTests" name="UpdateStatus_CannotApproveWithoutPassingValidationAudit" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.AuthControllerTests.GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim(roleName: &quot;Volunteer&quot;)" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="b96ee441-acd5-3c4f-da23-5cd4ab6f32f8">
+      <Execution id="63ea652b-1e73-472c-b5ce-e41c2cb2d607" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.AuthControllerTests" name="GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchesControllerTests.UpdateTask_RejectsChangesAfterApproval" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="8c68d565-11f1-b5a2-5ffe-44eab499fe90">
+      <Execution id="db8ea56a-909c-43c9-8f40-dd5c2d9bd77d" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchesControllerTests" name="UpdateTask_RejectsChangesAfterApproval" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.AuthControllerTests.GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim(roleName: &quot;Coordinator&quot;)" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="7b61c813-ec95-a90b-0cdd-65a36adff03e">
+      <Execution id="154d04a3-150d-490c-9ccb-7ffcd6b898d5" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.AuthControllerTests" name="GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.SheltersControllerTests.CreateShelter_ReturnsCreated" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="81514c45-6f58-0ddb-9e1b-efa02422b4bd">
+      <Execution id="acaadb4f-6b6d-43ad-903f-52aa0cd9e8f9" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.SheltersControllerTests" name="CreateShelter_ReturnsCreated" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersControllerTests.GetAvailableBySkill_ReturnsOnlyMatchingAndAvailable" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="46116e47-4e0e-781a-a2cf-e229fdc85a2f">
+      <Execution id="62c2da8f-b27d-4867-9aa5-680de58f3af7" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersControllerTests" name="GetAvailableBySkill_ReturnsOnlyMatchingAndAvailable" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_UnknownDispatch_ThrowsNotFound" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="a16beb14-79d2-8a28-1605-ed09b4bb4a5d">
+      <Execution id="28802e30-e213-4a9c-ac83-55723dbc4586" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchValidationServiceTests" name="ValidateDispatch_UnknownDispatch_ThrowsNotFound" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="2b6d3646-1a04-d86b-73a5-6b27f2754258">
+      <Execution id="6a6cd835-84a0-4e13-a7cd-1eb49d705d3e" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentPlannerServiceTests" name="GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerTasksTests.GetTasks_TaskWithoutResource_ReturnsNullResourceName" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="ac5aced2-a34c-7907-227f-f4f7f98b3855">
+      <Execution id="2a140fb8-490f-432e-a136-e76a9750f5dd" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerTasksTests" name="GetTasks_TaskWithoutResource_ReturnsNullResourceName" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchesControllerTests.ProposeAllocation_AttachesIncidentPlanAndMovesToPendingApproval" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="4f12620d-b59c-b04a-56a4-fd2e59efa629">
+      <Execution id="5816ce03-6156-4af4-820e-3e3e2bb57dab" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchesControllerTests" name="ProposeAllocation_AttachesIncidentPlanAndMovesToPendingApproval" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersControllerTests.UpdateAvailability_CoordinatorCanUpdateAnyVolunteer_ReturnsNoContent" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="467a061e-b47c-c26a-c9c4-7fc90809ce67">
+      <Execution id="dcf50a46-a563-4d0b-8d69-178c830fece2" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersControllerTests" name="UpdateAvailability_CoordinatorCanUpdateAnyVolunteer_ReturnsNoContent" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.AuthControllerTests.GetProfile_WithAuthenticatedClaim_ReturnsUserProfile" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="414a9daa-7151-d45e-5d35-889ac22ef1e2">
+      <Execution id="3c81eed0-95d2-4a07-af2f-175cc206dfc6" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.AuthControllerTests" name="GetProfile_WithAuthenticatedClaim_ReturnsUserProfile" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_ValidWindow_PersistsAndReturnsCreated" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="9d576504-98b4-bea6-d135-f8f561668f61">
+      <Execution id="0447724f-c361-4c58-843b-b4b074320f9b" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerShiftTests" name="CreateShift_ValidWindow_PersistsAndReturnsCreated" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.GetTimeline_ReturnsEventsInChronologicalOrder" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="023e8717-19a8-8f1c-d92f-68317f1e4035">
+      <Execution id="a006a564-99c2-4666-8cd0-3f24686e20bb" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="GetTimeline_ReturnsEventsInChronologicalOrder" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsPostgresTests.DB04_Rollback_DoesNotPersistResource" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="acaae4bd-5743-b7c9-7769-cae90cecefad">
+      <Execution id="8afb3174-833c-4989-b2b6-5c0f91a87f97" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsPostgresTests" name="DB04_Rollback_DoesNotPersistResource" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_ValidTransition_ReportedToVerified_Succeeds" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="6fb227d2-3cbb-6710-2185-858959c8826d">
+      <Execution id="421270ff-0bdd-4d54-9c71-c96b031ced4e" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="UpdateStatus_ValidTransition_ReportedToVerified_Succeeds" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.AuthControllerTests.GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim(roleName: &quot;Citizen&quot;)" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="a5236374-da19-9fa0-5da3-ab4512314180">
+      <Execution id="643f1179-d86e-4bfc-9ace-b6796d31e713" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.AuthControllerTests" name="GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_PersistsAudit_WithDurationAndHistory" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="c7cdf3d4-31ea-c916-08d6-e0cccc88ddf3">
+      <Execution id="0dd04d73-1731-4ce0-8d68-46cf627eb564" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchValidationServiceTests" name="ValidateDispatch_PersistsAudit_WithDurationAndHistory" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsSecurityTests.SEC02_LowPrivilegeUser_CannotCreateDispatch(role: &quot;Volunteer&quot;)" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="c3d61a3d-b404-d1ff-fc67-e0c90373d6a6">
+      <Execution id="b80fe126-7cc1-4b9b-814a-a63b6f55fbb4" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsSecurityTests" name="SEC02_LowPrivilegeUser_CannotCreateDispatch" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersControllerTests.UpdateAvailability_VolunteerCannotUpdateOtherVolunteer_ReturnsForbidden" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="7c229b43-ba98-d8cc-5c9c-84803fd1205d">
+      <Execution id="2018a635-0e4e-4712-9e2c-dff2d7406f2c" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersControllerTests" name="UpdateAvailability_VolunteerCannotUpdateOtherVolunteer_ReturnsForbidden" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsSecurityTests.SEC03_MalformedToken_IsRejected(endpoint: &quot;/api/dispatches&quot;)" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="90036ee3-4c52-6a6e-456a-5599b3c710f1">
+      <Execution id="22b79308-5644-42f9-81b3-ae7f6428f488" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsSecurityTests" name="SEC03_MalformedToken_IsRejected" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersApiIntegrationTests.GetVolunteers_Anonymous_Returns401" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="1d9678ad-cd14-2188-46d9-0f1120e6134f">
+      <Execution id="d2cb1705-a217-49ce-a749-21da591fe36a" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersApiIntegrationTests" name="GetVolunteers_Anonymous_Returns401" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerEditTests.DeleteShift_WrongVolunteer_ReturnsNotFound" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="122c61a0-8d5c-2e5d-7be5-1362edcf2c0e">
+      <Execution id="abca7ae7-4306-4888-98fd-72e56f8d93f8" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerEditTests" name="DeleteShift_WrongVolunteer_ReturnsNotFound" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerTasksTests.GetTasks_NoTasks_ReturnsEmptyList" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="76fe3100-2232-d5a8-2877-d37e6e59c23d">
+      <Execution id="b3325e1a-6b97-4501-89b4-e9eb94cb5091" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerTasksTests" name="GetTasks_NoTasks_ReturnsEmptyList" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_InvalidStatus_ReturnsBadRequest" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="952d57dd-5d9d-e739-41e3-73bad8193313">
+      <Execution id="82b956aa-8a0d-41df-bfd4-f67b8486b21c" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerShiftTests" name="CreateShift_InvalidStatus_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_InsufficientInventory_ReturnsRevise_WithI1" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="4d1d3cdb-9c1c-58b0-be60-25ab09ad1327">
+      <Execution id="b6ba0dcd-ede0-444a-8b92-00290a85a5ec" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchValidationServiceTests" name="ValidateDispatch_InsufficientInventory_ReturnsRevise_WithI1" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.AuthControllerTests.Login_WithValidCredentials_ReturnsOkWithJwt" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="969492cf-65ac-d36d-270e-68a715b97115">
+      <Execution id="95bbc196-673b-434c-9712-aa5982caa100" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.AuthControllerTests" name="Login_WithValidCredentials_ReturnsOkWithJwt" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.ResourcesControllerTests.GetAvailable_ReturnsOnlyAvailableResources" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="fa2dd6dc-ae67-eb02-fbc3-6cc630103dae">
+      <Execution id="62e2bc87-9e9f-4427-b40a-5a87a78e74db" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.ResourcesControllerTests" name="GetAvailable_ReturnsOnlyAvailableResources" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersControllerTests.Create_AddsVolunteer_ReturnsCreated" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="7492f381-444a-4475-3e93-acf2f4634102">
+      <Execution id="ec381d76-37a9-41e8-b059-87f29d4e3cd5" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersControllerTests" name="Create_AddsVolunteer_ReturnsCreated" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.SituationAnalysisAgentTests.AssessSituation_GeneratesValidAssessment" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="ebd750fb-e8bf-f714-0405-010f93d0027e">
+      <Execution id="a8905c2e-7520-41bb-8798-d2b8fcce9847" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.SituationAnalysisAgentTests" name="AssessSituation_GeneratesValidAssessment" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_UnavailableVolunteer_ReturnsReject_WithV1" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="9299499e-8688-744d-edbd-9f1aab9c0d97">
+      <Execution id="b4c1c93b-7ce9-4b77-9845-edfbaca8e796" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchValidationServiceTests" name="ValidateDispatch_UnavailableVolunteer_ReturnsReject_WithV1" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsSecurityTests.SEC01_PublicRegistration_RejectsPrivilegedRole(role: &quot;Coordinator&quot;)" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="c8583261-6f6d-4744-2d01-385037616aa5">
+      <Execution id="24cd7fc7-bf3e-4a0e-8568-eb6a30e909f5" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsSecurityTests" name="SEC01_PublicRegistration_RejectsPrivilegedRole" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.UpdatePriority_CreatesPriorityChangedTimelineEvent" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="0e26a2ab-e0cc-6818-a2ee-ae4f6ca9e243">
+      <Execution id="7cc7329e-0c34-44bf-bf6f-f3fd2b508bbd" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="UpdatePriority_CreatesPriorityChangedTimelineEvent" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_EmitsTimelineEvent_WhenIncidentExists" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="d9d90897-fbc4-8045-50da-7c671ea41769">
+      <Execution id="f536e0f3-3fbf-4191-9c2f-a7cb5edb077b" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchValidationServiceTests" name="ValidateDispatch_EmitsTimelineEvent_WhenIncidentExists" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.InventoryControllerTests.AdjustStock_SubtractsQuantity_UpdatesStatus" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="fa614e2c-7f65-d129-8a58-cadd5934ff06">
+      <Execution id="d731b08c-d280-4773-8b2e-2381b3e0b321" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.InventoryControllerTests" name="AdjustStock_SubtractsQuantity_UpdatesStatus" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="db9f3360-c716-5785-eec9-a070814b5a18">
+      <Execution id="903ebe88-784f-4d4d-b5a6-b9129c78a81d" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentPlannerServiceTests" name="GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.InventoryControllerTests.CreateInventoryItem_SetsLowStock_WhenBelowThreshold" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="4ef2cbcb-4747-2870-1b91-6b6740ca7ae0">
+      <Execution id="246bcd1b-045e-4d5b-9b1b-4eb5c8692c4b" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.InventoryControllerTests" name="CreateInventoryItem_SetsLowStock_WhenBelowThreshold" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_NoTasks_ReturnsRevise_WithW0" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="3dafb0b1-8845-c96e-7dfc-c7a90754c18a">
+      <Execution id="8e36c6a4-872b-4d05-8c58-8bcc7f37ce79" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchValidationServiceTests" name="ValidateDispatch_NoTasks_ReturnsRevise_WithW0" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.AuthControllerTests.GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim(roleName: &quot;Admin&quot;)" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="e7ebe63a-66a7-d4d3-e39c-9cd273e969f2">
+      <Execution id="82f7714c-ea50-4bfb-a527-2760fbb5b9e0" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.AuthControllerTests" name="GenerateJwtToken_AllRoles_ValidatesAndContainsSingleRoleClaim" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.AuthControllerTests.GetDemoUsers_ReturnsFourStandardRoleAccounts" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="1acc2d4c-21e7-dde7-e0b6-04968489ad9a">
+      <Execution id="3099d737-c99d-4a4f-8a15-c760470b1748" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.AuthControllerTests" name="GetDemoUsers_ReturnsFourStandardRoleAccounts" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchesControllerTests.UpdateTask_ChangesAssignmentAndRefreshesDispatchTimestamp" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="9f4875f0-b8a8-38e9-9392-fac479a2bc97">
+      <Execution id="54590f36-b451-423f-b7ac-56ed68c8ecd1" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchesControllerTests" name="UpdateTask_ChangesAssignmentAndRefreshesDispatchTimestamp" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchAllocationTests.DeletingResourceClearsDispatchTaskResourceId" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="268d514f-a584-f479-8e6f-1da8d90fba59">
+      <Execution id="1ef6600a-24fe-4adf-b55d-3ac3cd4294bc" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchAllocationTests" name="DeletingResourceClearsDispatchTaskResourceId" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsSecurityTests.SEC02_LowPrivilegeUser_CannotCreateDispatch(role: &quot;Citizen&quot;)" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="461e2139-653a-84fa-ad3c-de33b2fdb9dc">
+      <Execution id="1944a04e-6e7f-4507-8784-7150ffecb51e" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsSecurityTests" name="SEC02_LowPrivilegeUser_CannotCreateDispatch" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.ResourcesControllerTests.Create_AddsResource_ReturnsCreated" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="5679c413-3ccb-3fae-87ef-dd43bd8fba1a">
+      <Execution id="80ccad53-4ef1-4264-bf49-55e15c181b2d" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.ResourcesControllerTests" name="Create_AddsResource_ReturnsCreated" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.AuthControllerTests.Register_NewCitizen_ReturnsCreatedWithToken" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="221537f7-c66c-5e4f-d411-429526b436a6">
+      <Execution id="1e7943b2-7f95-4d26-a3cc-3509d340c98c" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.AuthControllerTests" name="Register_NewCitizen_ReturnsCreatedWithToken" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerEditTests.DeleteShift_RemovesRecord_ReturnsNoContent" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="705c667f-04e8-1273-64c1-5ca58a591483">
+      <Execution id="4d9e692b-a7c4-425e-b50a-8cfc87a75af1" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerEditTests" name="DeleteShift_RemovesRecord_ReturnsNoContent" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsSecurityTests.SEC01_PublicRegistration_RejectsPrivilegedRole(role: &quot;Admin&quot;)" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="c71f5d4a-2cc9-0e3e-5612-7fad56fd7730">
+      <Execution id="cd213e80-4eeb-4af8-8845-d9b6c2f8754f" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsSecurityTests" name="SEC01_PublicRegistration_RejectsPrivilegedRole" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerEditTests.UpdateShift_ValidWindow_UpdatesStatus" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="8fc342a5-31b8-8b5f-ebcb-e64318d93af6">
+      <Execution id="4f85cf40-4aea-427e-b968-7c832fe65a82" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerEditTests" name="UpdateShift_ValidWindow_UpdatesStatus" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsPostgresTests.DB01_DuplicateEmail_IsRejectedByPostgres" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="19cf73da-349c-340c-8030-dfce6e572b55">
+      <Execution id="72e9a495-cf97-47c9-82cc-201aac54ba98" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsPostgresTests" name="DB01_DuplicateEmail_IsRejectedByPostgres" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsSecurityTests.SEC03_MalformedToken_IsRejected(endpoint: &quot;/api/auth/me&quot;)" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="dc0bd730-70d4-147e-bada-9b4ad1f9d599">
+      <Execution id="75d33056-3288-4f39-87eb-33507f5b1b59" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsSecurityTests" name="SEC03_MalformedToken_IsRejected" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchAllocationTests.ValidateDispatch_UnavailableVolunteerRejectsAllocation" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="bf5a4790-a617-1f1f-8e1a-34bb674608c5">
+      <Execution id="0ebfac08-83a0-49bf-bcf6-33be0bf2ec17" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchAllocationTests" name="ValidateDispatch_UnavailableVolunteerRejectsAllocation" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.ResourcesControllerTests.UpdateStatus_ChangesResourceStatus" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="e0088677-0ac2-f8f3-e588-28182b3f95e6">
+      <Execution id="e78bdd64-c2c8-4452-add8-2d9c6235bfe7" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.ResourcesControllerTests" name="UpdateStatus_ChangesResourceStatus" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersApiIntegrationTests.SeededDemoData_Exists" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="2efeba62-dd3e-0b3a-2f50-99fe7f9c42cd">
+      <Execution id="be1d419f-1947-48bc-90db-20084c9a7928" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersApiIntegrationTests" name="SeededDemoData_Exists" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchesControllerTests.UpdateStatus_ApprovalWithNewerFailedSafetyAudit_IsRejected" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="241b639a-8dca-f922-8960-8b51b1d2ff18">
+      <Execution id="009736e0-f7ca-475c-8ab4-947e4a5af8d0" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchesControllerTests" name="UpdateStatus_ApprovalWithNewerFailedSafetyAudit_IsRejected" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_UnknownVolunteer_ReturnsNotFound" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="9cc471d6-aa9e-bc16-3ae6-bce9f2fb553b">
+      <Execution id="7dc4f461-e1da-4a52-9cbc-72fbcc62c90c" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerShiftTests" name="CreateShift_UnknownVolunteer_ReturnsNotFound" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_ShelterOverAllocation_ReturnsRevise_WithS2" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="212f5daf-680f-5d09-280e-9a087f29814c">
+      <Execution id="79309b9a-0de9-42db-8604-9eff763550c2" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.DispatchValidationServiceTests" name="ValidateDispatch_ShelterOverAllocation_ReturnsRevise_WithS2" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersControllerTests.GetById_ReturnsNotFound_WhenVolunteerDoesNotExist" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="709ec14c-a2af-5b21-4b86-389f80b2f0ba">
+      <Execution id="ee927523-6742-4db8-8b21-83337ec7d095" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersControllerTests" name="GetById_ReturnsNotFound_WhenVolunteerDoesNotExist" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerEditTests.UpdateShift_BadWindow_ReturnsBadRequest" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="21e89f8a-d98e-6a87-9ec7-03a1183f2741">
+      <Execution id="a5e019a3-108d-440c-9c30-bf74b3ca1ed0" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerEditTests" name="UpdateShift_BadWindow_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerTasksTests.GetTasks_ReturnsTasksWithDispatchAndIncidentContext" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="fd03821a-c242-b305-1fc9-766ac9c303ed">
+      <Execution id="8d1ec936-c8b2-4102-ab5b-b2f9db27b91e" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerTasksTests" name="GetTasks_ReturnsTasksWithDispatchAndIncidentContext" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="81514c45-6f58-0ddb-9e1b-efa02422b4bd" executionId="acaadb4f-6b6d-43ad-903f-52aa0cd9e8f9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="79c5f4de-66f3-b076-6241-4a55d5a8b707" executionId="af3d0bac-9211-437f-9d71-d5a8125d1668" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8fc342a5-31b8-8b5f-ebcb-e64318d93af6" executionId="4f85cf40-4aea-427e-b968-7c832fe65a82" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="705c667f-04e8-1273-64c1-5ca58a591483" executionId="4d9e692b-a7c4-425e-b50a-8cfc87a75af1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8c68d565-11f1-b5a2-5ffe-44eab499fe90" executionId="db8ea56a-909c-43c9-8f40-dd5c2d9bd77d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fd03821a-c242-b305-1fc9-766ac9c303ed" executionId="8d1ec936-c8b2-4102-ab5b-b2f9db27b91e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c3d61a3d-b404-d1ff-fc67-e0c90373d6a6" executionId="b80fe126-7cc1-4b9b-814a-a63b6f55fbb4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="409941c5-2861-27d0-cf32-a0b56c331d25" executionId="b822e6fd-121e-41f5-87ec-a98f7f224dcd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cb173754-74e4-bfc0-d50b-1d8bfef528b8" executionId="8af136ac-c66d-406c-8a46-7c9cfc5fd601" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="212f5daf-680f-5d09-280e-9a087f29814c" executionId="79309b9a-0de9-42db-8604-9eff763550c2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7c229b43-ba98-d8cc-5c9c-84803fd1205d" executionId="2018a635-0e4e-4712-9e2c-dff2d7406f2c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c7cdf3d4-31ea-c916-08d6-e0cccc88ddf3" executionId="0dd04d73-1731-4ce0-8d68-46cf627eb564" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c8583261-6f6d-4744-2d01-385037616aa5" executionId="24cd7fc7-bf3e-4a0e-8568-eb6a30e909f5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0f881778-f42c-12df-16b2-5f15c933f30e" executionId="225f8a1a-9e9d-49b6-8f93-225b26adf78f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0356de84-72df-d8ad-32b8-7e951c4e3c0d" executionId="a2d28b1e-0a9a-4551-bcb1-2f7185b29c0a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="acaae4bd-5743-b7c9-7769-cae90cecefad" executionId="8afb3174-833c-4989-b2b6-5c0f91a87f97" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f05b8e8-ed5f-124a-e1e7-b2e42e136a64" executionId="c506cb6a-96e1-4f26-9889-4bf147737ab4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ac5aced2-a34c-7907-227f-f4f7f98b3855" executionId="2a140fb8-490f-432e-a136-e76a9750f5dd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9d576504-98b4-bea6-d135-f8f561668f61" executionId="0447724f-c361-4c58-843b-b4b074320f9b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="241b639a-8dca-f922-8960-8b51b1d2ff18" executionId="009736e0-f7ca-475c-8ab4-947e4a5af8d0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4ef2cbcb-4747-2870-1b91-6b6740ca7ae0" executionId="246bcd1b-045e-4d5b-9b1b-4eb5c8692c4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fa614e2c-7f65-d129-8a58-cadd5934ff06" executionId="d731b08c-d280-4773-8b2e-2381b3e0b321" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="915e6250-1b0a-a94c-9dde-54a7d93945c1" executionId="01513770-1965-4f70-ace2-976cf2f66d5d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="21e89f8a-d98e-6a87-9ec7-03a1183f2741" executionId="a5e019a3-108d-440c-9c30-bf74b3ca1ed0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5679c413-3ccb-3fae-87ef-dd43bd8fba1a" executionId="80ccad53-4ef1-4264-bf49-55e15c181b2d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e7ebe63a-66a7-d4d3-e39c-9cd273e969f2" executionId="82f7714c-ea50-4bfb-a527-2760fbb5b9e0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b96ee441-acd5-3c4f-da23-5cd4ab6f32f8" executionId="63ea652b-1e73-472c-b5ce-e41c2cb2d607" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e0088677-0ac2-f8f3-e588-28182b3f95e6" executionId="e78bdd64-c2c8-4452-add8-2d9c6235bfe7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="107a1baa-6d67-7d8b-879a-2b5c4b25c87f" executionId="c22632fd-de1e-4dc9-b8f0-4ed46a2b7412" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d9d90897-fbc4-8045-50da-7c671ea41769" executionId="f536e0f3-3fbf-4191-9c2f-a7cb5edb077b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2efeba62-dd3e-0b3a-2f50-99fe7f9c42cd" executionId="be1d419f-1947-48bc-90db-20084c9a7928" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="709ec14c-a2af-5b21-4b86-389f80b2f0ba" executionId="ee927523-6742-4db8-8b21-83337ec7d095" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3dafb0b1-8845-c96e-7dfc-c7a90754c18a" executionId="8e36c6a4-872b-4d05-8c58-8bcc7f37ce79" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="122c61a0-8d5c-2e5d-7be5-1362edcf2c0e" executionId="abca7ae7-4306-4888-98fd-72e56f8d93f8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="023e8717-19a8-8f1c-d92f-68317f1e4035" executionId="a006a564-99c2-4666-8cd0-3f24686e20bb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a5236374-da19-9fa0-5da3-ab4512314180" executionId="643f1179-d86e-4bfc-9ace-b6796d31e713" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0e26a2ab-e0cc-6818-a2ee-ae4f6ca9e243" executionId="7cc7329e-0c34-44bf-bf6f-f3fd2b508bbd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="46116e47-4e0e-781a-a2cf-e229fdc85a2f" executionId="62c2da8f-b27d-4867-9aa5-680de58f3af7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fa285b5c-8791-3552-a9ee-9008014cf5af" executionId="1672edb4-8a9a-4651-93f3-4f6d8664d3c6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="12199f45-9216-f8f8-bbe3-b8b42642f883" executionId="74fc8092-0408-424c-a56f-599eda30e7ac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6eb75f86-96c2-8b20-9109-047ad8cb1039" executionId="c37ac067-bd90-47e9-bcc3-11c6a02160e6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d9678ad-cd14-2188-46d9-0f1120e6134f" executionId="d2cb1705-a217-49ce-a749-21da591fe36a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="221537f7-c66c-5e4f-d411-429526b436a6" executionId="1e7943b2-7f95-4d26-a3cc-3509d340c98c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="952d57dd-5d9d-e739-41e3-73bad8193313" executionId="82b956aa-8a0d-41df-bfd4-f67b8486b21c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7ceb0c66-aa6b-78c0-4ba6-13b663ea8800" executionId="934bb5ad-099a-4521-908e-30aed59eb19f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c40acdb8-e199-cef2-1513-7b8c8fc58fa8" executionId="b51d33f3-44c1-4588-bbcf-440fa4df2770" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="57224785-ded1-33f4-aa10-fe3e423e1eff" executionId="7a597640-8f97-4cf7-b012-a5beb5b49188" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="19cf73da-349c-340c-8030-dfce6e572b55" executionId="72e9a495-cf97-47c9-82cc-201aac54ba98" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1acc2d4c-21e7-dde7-e0b6-04968489ad9a" executionId="3099d737-c99d-4a4f-8a15-c760470b1748" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e32bcca6-82da-912b-42e9-0b8e67be0c4f" executionId="7350d3fb-9f2a-4acc-8fc4-1728876207a8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ddd27cf8-6d6c-682d-141c-1bc228b56ef3" executionId="2ec841f0-4b2d-4447-9e00-c0ce03b7a6bc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c71f5d4a-2cc9-0e3e-5612-7fad56fd7730" executionId="cd213e80-4eeb-4af8-8845-d9b6c2f8754f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9299499e-8688-744d-edbd-9f1aab9c0d97" executionId="b4c1c93b-7ce9-4b77-9845-edfbaca8e796" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="414a9daa-7151-d45e-5d35-889ac22ef1e2" executionId="3c81eed0-95d2-4a07-af2f-175cc206dfc6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17a269c4-8c20-dfda-0d71-707e0d36e8db" executionId="55a454f1-c748-45ad-84e9-5d8c285a6944" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1451b531-7556-7791-21f0-6893c8c043b3" executionId="09b560db-bbdb-4517-a872-b977f3d81209" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d6d3b678-19d5-660f-71c7-80c548bf2df0" executionId="df678ec4-3fc4-4bbd-9ef0-731d1ce29fd5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3422bf5e-772b-0e6f-6ade-12960d4ed980" executionId="b52c7250-021c-40bd-97c2-a3ca742c2136" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9cc471d6-aa9e-bc16-3ae6-bce9f2fb553b" executionId="7dc4f461-e1da-4a52-9cbc-72fbcc62c90c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dc0bd730-70d4-147e-bada-9b4ad1f9d599" executionId="75d33056-3288-4f39-87eb-33507f5b1b59" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0d1cbe0a-3acf-a46c-683a-a01be8d0380e" executionId="7b84a6ac-666d-43b8-a940-f4f4d61b3500" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f9fb1257-844c-9348-1ac8-12d577033abe" executionId="1adaee04-ea9d-4e58-ac76-441321623ae6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4f9eb048-e3cd-3577-f162-fa526504c267" executionId="ff12563b-6e32-4191-8602-75b7484b5c40" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6fb227d2-3cbb-6710-2185-858959c8826d" executionId="421270ff-0bdd-4d54-9c71-c96b031ced4e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a16beb14-79d2-8a28-1605-ed09b4bb4a5d" executionId="28802e30-e213-4a9c-ac83-55723dbc4586" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="76fe3100-2232-d5a8-2877-d37e6e59c23d" executionId="b3325e1a-6b97-4501-89b4-e9eb94cb5091" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ebd750fb-e8bf-f714-0405-010f93d0027e" executionId="a8905c2e-7520-41bb-8798-d2b8fcce9847" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eb30ad4b-ee4c-d969-03dc-5b03da26993c" executionId="0e9b8a6e-1236-4fcb-9293-8df85c02c1e5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bf5a4790-a617-1f1f-8e1a-34bb674608c5" executionId="0ebfac08-83a0-49bf-bcf6-33be0bf2ec17" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="969492cf-65ac-d36d-270e-68a715b97115" executionId="95bbc196-673b-434c-9712-aa5982caa100" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2b6d3646-1a04-d86b-73a5-6b27f2754258" executionId="6a6cd835-84a0-4e13-a7cd-1eb49d705d3e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f74bbcd2-17a4-59ff-3e6e-2ca1f8f97904" executionId="586f64a9-e78d-47d0-9272-b609aefc353c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="511d6634-0b78-3d76-537f-c0731aaa1cdd" executionId="31aaac46-35de-45fe-ada0-e640f6795f85" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7b61c813-ec95-a90b-0cdd-65a36adff03e" executionId="154d04a3-150d-490c-9ccb-7ffcd6b898d5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="467a061e-b47c-c26a-c9c4-7fc90809ce67" executionId="dcf50a46-a563-4d0b-8d69-178c830fece2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fa2dd6dc-ae67-eb02-fbc3-6cc630103dae" executionId="62e2bc87-9e9f-4427-b40a-5a87a78e74db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9f4875f0-b8a8-38e9-9392-fac479a2bc97" executionId="54590f36-b451-423f-b7ac-56ed68c8ecd1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="db9f3360-c716-5785-eec9-a070814b5a18" executionId="903ebe88-784f-4d4d-b5a6-b9129c78a81d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="395bbcfe-8f9e-61c7-430a-593a92e06f9f" executionId="d9462e7b-75cd-4721-9e8b-c14e199b9985" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="268d514f-a584-f479-8e6f-1da8d90fba59" executionId="1ef6600a-24fe-4adf-b55d-3ac3cd4294bc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="90036ee3-4c52-6a6e-456a-5599b3c710f1" executionId="22b79308-5644-42f9-81b3-ae7f6428f488" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="461e2139-653a-84fa-ad3c-de33b2fdb9dc" executionId="1944a04e-6e7f-4507-8784-7150ffecb51e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4d1d3cdb-9c1c-58b0-be60-25ab09ad1327" executionId="b6ba0dcd-ede0-444a-8b92-00290a85a5ec" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4f12620d-b59c-b04a-56a4-fd2e59efa629" executionId="5816ce03-6156-4af4-820e-3e3e2bb57dab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="03ab2743-90f6-ffd2-8994-86bb9e8367ae" executionId="06eac9d9-6b28-4a05-9b2b-bd290b78e1fe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ca56c79a-2b3c-c118-31ce-58f0369345fa" executionId="30759803-e6ff-45cf-9dab-c9927ca69a7c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e6c8d2de-e0f7-4547-21b2-95c82a39732b" executionId="79fd7cf2-51bd-45a3-a97a-1335693d9964" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="80402d8a-72f2-d09a-733f-29f528b45e93" executionId="1c06a406-7347-4e49-8313-d4d35797e46d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="15db2e8f-b0ac-955b-6f5d-c86264ae3be1" executionId="f5cb52cb-714d-4254-b494-4dd1e243ddee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7492f381-444a-4475-3e93-acf2f4634102" executionId="ec381d76-37a9-41e8-b059-87f29d4e3cd5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d7d58036-a838-00c0-b2ed-09f1a1ce8fda" executionId="a05ff721-4f02-46fa-834b-2d608e6e1a09" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="91" executed="91" passed="91" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.29)&#xD;
+[xUnit.net 00:00:00.08]   Discovering: ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:00.13]   Discovered:  ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:00.13]   Starting:    ERCP.Api.Tests&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 0 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 0 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 2 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 2 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 4 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 4 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 4 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 4 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 2 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 2 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+fail: Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor[43]&#xD;
+      An exception occurred while trying to decrypt the element.&#xD;
+      System.Security.Cryptography.CryptographicException: Error occurred during a cryptographic operation.&#xD;
+         at Microsoft.AspNetCore.DataProtection.Cng.DpapiSecretSerializerHelper.UnprotectWithDpapiCore(Byte* pbProtectedData, UInt32 cbProtectedData, Byte* pbOptionalEntropy, UInt32 cbOptionalEntropy)&#xD;
+         at Microsoft.AspNetCore.DataProtection.Cng.DpapiSecretSerializerHelper.UnprotectWithDpapi(Byte[] protectedSecret)&#xD;
+         at Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor.Decrypt(XElement encryptedElement)&#xD;
+fail: Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor[43]&#xD;
+      An exception occurred while trying to decrypt the element.&#xD;
+      System.Security.Cryptography.CryptographicException: Error occurred during a cryptographic operation.&#xD;
+         at Microsoft.AspNetCore.DataProtection.Cng.DpapiSecretSerializerHelper.UnprotectWithDpapiCore(Byte* pbProtectedData, UInt32 cbProtectedData, Byte* pbOptionalEntropy, UInt32 cbOptionalEntropy)&#xD;
+         at Microsoft.AspNetCore.DataProtection.Cng.DpapiSecretSerializerHelper.UnprotectWithDpapi(Byte[] protectedSecret)&#xD;
+         at Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor.Decrypt(XElement encryptedElement)&#xD;
+fail: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[24]&#xD;
+      An exception occurred while processing the key element '&lt;key id="af19ab9b-ea8c-4f66-87df-a0025ed5de34" version="1" /&gt;'.&#xD;
+      System.AggregateException: An error occurred while writing to logger(s). (Cannot open log for source '.NET Runtime'. You may not have write access.)&#xD;
+       ---&gt; System.InvalidOperationException: Cannot open log for source '.NET Runtime'. You may not have write access.&#xD;
+       ---&gt; System.ComponentModel.Win32Exception (5): Access is denied.&#xD;
+         --- End of inner exception stack trace ---&#xD;
+         at System.Diagnostics.EventLogInternal.OpenForWrite(String currentMachineName)&#xD;
+         at System.Diagnostics.EventLogInternal.InternalWriteEvent(UInt32 eventID, UInt16 category, EventLogEntryType type, String[] strings, Byte[] rawData, String currentMachineName)&#xD;
+         at System.Diagnostics.EventLogInternal.WriteEvent(EventInstance instance, Byte[] data, Object[] values)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.WindowsEventLog.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.EventLogLogger.WriteMessage(String message, EventLogEntryType eventLogEntryType, Int32 eventId)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.EventLogLogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.Logger.&lt;Log&gt;g__LoggerLog|14_0[TState](LogLevel logLevel, EventId eventId, ILogger logger, Exception exception, Func`3 formatter, List`1&amp; exceptions, TState&amp; state)&#xD;
+         --- End of inner exception stack trace ---&#xD;
+         at Microsoft.Extensions.Logging.Logger.ThrowLoggingError(List`1 exceptions)&#xD;
+         at Microsoft.Extensions.Logging.Logger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.LoggerMessage.&lt;&gt;c__DisplayClass8_0.&lt;Define&gt;g__Log|0(ILogger logger, Exception exception)&#xD;
+         at Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor.Decrypt(XElement encryptedElement)&#xD;
+         at Microsoft.AspNetCore.DataProtection.XmlEncryption.XmlEncryptionExtensions.DecryptElement(XElement element, IActivator activator)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager.Microsoft.AspNetCore.DataProtection.KeyManagement.Internal.IInternalXmlKeyManager.DeserializeDescriptorFromKeyElement(XElement keyElement)&#xD;
+fail: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[24]&#xD;
+      An exception occurred while processing the key element '&lt;key id="af19ab9b-ea8c-4f66-87df-a0025ed5de34" version="1" /&gt;'.&#xD;
+      System.AggregateException: An error occurred while writing to logger(s). (Cannot open log for source '.NET Runtime'. You may not have write access.)&#xD;
+       ---&gt; System.InvalidOperationException: Cannot open log for source '.NET Runtime'. You may not have write access.&#xD;
+       ---&gt; System.ComponentModel.Win32Exception (5): Access is denied.&#xD;
+         --- End of inner exception stack trace ---&#xD;
+         at System.Diagnostics.EventLogInternal.OpenForWrite(String currentMachineName)&#xD;
+         at System.Diagnostics.EventLogInternal.InternalWriteEvent(UInt32 eventID, UInt16 category, EventLogEntryType type, String[] strings, Byte[] rawData, String currentMachineName)&#xD;
+         at System.Diagnostics.EventLogInternal.WriteEvent(EventInstance instance, Byte[] data, Object[] values)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.WindowsEventLog.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.EventLogLogger.WriteMessage(String message, EventLogEntryType eventLogEntryType, Int32 eventId)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.EventLogLogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.Logger.&lt;Log&gt;g__LoggerLog|14_0[TState](LogLevel logLevel, EventId eventId, ILogger logger, Exception exception, Func`3 formatter, List`1&amp; exceptions, TState&amp; state)&#xD;
+         --- End of inner exception stack trace ---&#xD;
+         at Microsoft.Extensions.Logging.Logger.ThrowLoggingError(List`1 exceptions)&#xD;
+         at Microsoft.Extensions.Logging.Logger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.LoggerMessage.&lt;&gt;c__DisplayClass8_0.&lt;Define&gt;g__Log|0(ILogger logger, Exception exception)&#xD;
+         at Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor.Decrypt(XElement encryptedElement)&#xD;
+         at Microsoft.AspNetCore.DataProtection.XmlEncryption.XmlEncryptionExtensions.DecryptElement(XElement element, IActivator activator)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager.Microsoft.AspNetCore.DataProtection.KeyManagement.Internal.IInternalXmlKeyManager.DeserializeDescriptorFromKeyElement(XElement keyElement)&#xD;
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver[12]&#xD;
+      Key {af19ab9b-ea8c-4f66-87df-a0025ed5de34} is ineligible to be the default key because its CreateEncryptor method failed.&#xD;
+      System.AggregateException: An error occurred while writing to logger(s). (Cannot open log for source '.NET Runtime'. You may not have write access.)&#xD;
+       ---&gt; System.InvalidOperationException: Cannot open log for source '.NET Runtime'. You may not have write access.&#xD;
+       ---&gt; System.ComponentModel.Win32Exception (5): Access is denied.&#xD;
+         --- End of inner exception stack trace ---&#xD;
+         at System.Diagnostics.EventLogInternal.OpenForWrite(String currentMachineName)&#xD;
+         at System.Diagnostics.EventLogInternal.InternalWriteEvent(UInt32 eventID, UInt16 category, EventLogEntryType type, String[] strings, Byte[] rawData, String currentMachineName)&#xD;
+         at System.Diagnostics.EventLogInternal.WriteEvent(EventInstance instance, Byte[] data, Object[] values)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.WindowsEventLog.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.EventLogLogger.WriteMessage(String message, EventLogEntryType eventLogEntryType, Int32 eventId)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.EventLogLogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.Logger.&lt;Log&gt;g__LoggerLog|14_0[TState](LogLevel logLevel, EventId eventId, ILogger logger, Exception exception, Func`3 formatter, List`1&amp; exceptions, TState&amp; state)&#xD;
+         --- End of inner exception stack trace ---&#xD;
+         at Microsoft.Extensions.Logging.Logger.ThrowLoggingError(List`1 exceptions)&#xD;
+         at Microsoft.Extensions.Logging.Logger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.Logger`1.Microsoft.Extensions.Logging.ILogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.LoggerMessage.&lt;&gt;c__DisplayClass10_0`1.&lt;Define&gt;g__Log|0(ILogger logger, T1 arg1, Exception exception)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager.WriteKeyDeserializationErrorToLog(Exception error, XElement keyElement)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager.Microsoft.AspNetCore.DataProtection.KeyManagement.Internal.IInternalXmlKeyManager.DeserializeDescriptorFromKeyElement(XElement keyElement)&#xD;
+         at System.Lazy`1.ViaFactory(LazyThreadSafetyMode mode)&#xD;
+         at System.Lazy`1.ExecutionAndPublication(LazyHelper executionAndPublication, Boolean useDefaultConstructor)&#xD;
+         at System.Lazy`1.CreateValue()&#xD;
+         at Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory.CreateEncryptorInstance(IKey key)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyBase.CreateEncryptor()&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver.CanCreateAuthenticatedEncryptor(IKey key)&#xD;
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver[12]&#xD;
+      Key {af19ab9b-ea8c-4f66-87df-a0025ed5de34} is ineligible to be the default key because its CreateEncryptor method failed.&#xD;
+      System.AggregateException: An error occurred while writing to logger(s). (Cannot open log for source '.NET Runtime'. You may not have write access.)&#xD;
+       ---&gt; System.InvalidOperationException: Cannot open log for source '.NET Runtime'. You may not have write access.&#xD;
+       ---&gt; System.ComponentModel.Win32Exception (5): Access is denied.&#xD;
+         --- End of inner exception stack trace ---&#xD;
+         at System.Diagnostics.EventLogInternal.OpenForWrite(String currentMachineName)&#xD;
+         at System.Diagnostics.EventLogInternal.InternalWriteEvent(UInt32 eventID, UInt16 category, EventLogEntryType type, String[] strings, Byte[] rawData, String currentMachineName)&#xD;
+         at System.Diagnostics.EventLogInternal.WriteEvent(EventInstance instance, Byte[] data, Object[] values)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.WindowsEventLog.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.EventLogLogger.WriteMessage(String message, EventLogEntryType eventLogEntryType, Int32 eventId)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.EventLogLogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.Logger.&lt;Log&gt;g__LoggerLog|14_0[TState](LogLevel logLevel, EventId eventId, ILogger logger, Exception exception, Func`3 formatter, List`1&amp; exceptions, TState&amp; state)&#xD;
+         --- End of inner exception stack trace ---&#xD;
+         at Microsoft.Extensions.Logging.Logger.ThrowLoggingError(List`1 exceptions)&#xD;
+         at Microsoft.Extensions.Logging.Logger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.Logger`1.Microsoft.Extensions.Logging.ILogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.LoggerMessage.&lt;&gt;c__DisplayClass10_0`1.&lt;Define&gt;g__Log|0(ILogger logger, T1 arg1, Exception exception)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager.WriteKeyDeserializationErrorToLog(Exception error, XElement keyElement)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager.Microsoft.AspNetCore.DataProtection.KeyManagement.Internal.IInternalXmlKeyManager.DeserializeDescriptorFromKeyElement(XElement keyElement)&#xD;
+         at System.Lazy`1.ViaFactory(LazyThreadSafetyMode mode)&#xD;
+         at System.Lazy`1.ExecutionAndPublication(LazyHelper executionAndPublication, Boolean useDefaultConstructor)&#xD;
+         at System.Lazy`1.CreateValue()&#xD;
+         at Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory.CreateEncryptorInstance(IKey key)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyBase.CreateEncryptor()&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver.CanCreateAuthenticatedEncryptor(IKey key)&#xD;
+fail: Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider[48]&#xD;
+      An error occurred while reading the key ring.&#xD;
+      System.AggregateException: An error occurred while writing to logger(s). (Cannot open log for source '.NET Runtime'. You may not have write access.)&#xD;
+       ---&gt; System.InvalidOperationException: Cannot open log for source '.NET Runtime'. You may not have write access.&#xD;
+       ---&gt; System.ComponentModel.Win32Exception (5): Access is denied.&#xD;
+         --- End of inner exception stack trace ---&#xD;
+         at System.Diagnostics.EventLogInternal.OpenForWrite(String currentMachineName)&#xD;
+         at System.Diagnostics.EventLogInternal.InternalWriteEvent(UInt32 eventID, UInt16 category, EventLogEntryType type, String[] strings, Byte[] rawData, String currentMachineName)&#xD;
+         at System.Diagnostics.EventLogInternal.WriteEvent(EventInstance instance, Byte[] data, Object[] values)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.WindowsEventLog.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.EventLogLogger.WriteMessage(String message, EventLogEntryType eventLogEntryType, Int32 eventId)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.EventLogLogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.Logger.&lt;Log&gt;g__LoggerLog|14_0[TState](LogLevel logLevel, EventId eventId, ILogger logger, Exception exception, Func`3 formatter, List`1&amp; exceptions, TState&amp; state)&#xD;
+         --- End of inner exception stack trace ---&#xD;
+         at Microsoft.Extensions.Logging.Logger.ThrowLoggingError(List`1 exceptions)&#xD;
+         at Microsoft.Extensions.Logging.Logger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.Logger`1.Microsoft.Extensions.Logging.ILogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.LoggerMessage.&lt;&gt;c__DisplayClass12_0`2.&lt;Define&gt;g__Log|0(ILogger logger, T1 arg1, T2 arg2, Exception exception)&#xD;
+         at Microsoft.Extensions.Logging.LoggingExtensions.KeyIsIneligibleToBeTheDefaultKeyBecauseItsMethodFailed(ILogger logger, Guid keyId, String methodName, Exception exception)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver.CanCreateAuthenticatedEncryptor(IKey key)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver.FindDefaultKey(DateTimeOffset now, IEnumerable`1 allKeys, IKey&amp; fallbackKey, Boolean&amp; callerShouldGenerateNewKey)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver.ResolveDefaultKeyPolicy(DateTimeOffset now, IEnumerable`1 allKeys)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider.CreateCacheableKeyRingCore(DateTimeOffset now, IKey keyJustAdded)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider.GetCurrentKeyRingCore(DateTime utcNow, Boolean forceRefresh)&#xD;
+fail: Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider[48]&#xD;
+      An error occurred while reading the key ring.&#xD;
+      System.AggregateException: An error occurred while writing to logger(s). (Cannot open log for source '.NET Runtime'. You may not have write access.)&#xD;
+       ---&gt; System.InvalidOperationException: Cannot open log for source '.NET Runtime'. You may not have write access.&#xD;
+       ---&gt; System.ComponentModel.Win32Exception (5): Access is denied.&#xD;
+         --- End of inner exception stack trace ---&#xD;
+         at System.Diagnostics.EventLogInternal.OpenForWrite(String currentMachineName)&#xD;
+         at System.Diagnostics.EventLogInternal.InternalWriteEvent(UInt32 eventID, UInt16 category, EventLogEntryType type, String[] strings, Byte[] rawData, String currentMachineName)&#xD;
+         at System.Diagnostics.EventLogInternal.WriteEvent(EventInstance instance, Byte[] data, Object[] values)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.WindowsEventLog.WriteEntry(String message, EventLogEntryType type, Int32 eventID, Int16 category)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.EventLogLogger.WriteMessage(String message, EventLogEntryType eventLogEntryType, Int32 eventId)&#xD;
+         at Microsoft.Extensions.Logging.EventLog.EventLogLogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.Logger.&lt;Log&gt;g__LoggerLog|14_0[TState](LogLevel logLevel, EventId eventId, ILogger logger, Exception exception, Func`3 formatter, List`1&amp; exceptions, TState&amp; state)&#xD;
+         --- End of inner exception stack trace ---&#xD;
+         at Microsoft.Extensions.Logging.Logger.ThrowLoggingError(List`1 exceptions)&#xD;
+         at Microsoft.Extensions.Logging.Logger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.Logger`1.Microsoft.Extensions.Logging.ILogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)&#xD;
+         at Microsoft.Extensions.Logging.LoggerMessage.&lt;&gt;c__DisplayClass12_0`2.&lt;Define&gt;g__Log|0(ILogger logger, T1 arg1, T2 arg2, Exception exception)&#xD;
+         at Microsoft.Extensions.Logging.LoggingExtensions.KeyIsIneligibleToBeTheDefaultKeyBecauseItsMethodFailed(ILogger logger, Guid keyId, String methodName, Exception exception)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver.CanCreateAuthenticatedEncryptor(IKey key)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver.FindDefaultKey(DateTimeOffset now, IEnumerable`1 allKeys, IKey&amp; fallbackKey, Boolean&amp; callerShouldGenerateNewKey)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver.ResolveDefaultKeyPolicy(DateTimeOffset now, IEnumerable`1 allKeys)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider.CreateCacheableKeyRingCore(DateTimeOffset now, IKey keyJustAdded)&#xD;
+         at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider.GetCurrentKeyRingCore(DateTime utcNow, Boolean forceRefresh)&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: ERCP.Api.Services.AuthService[0]&#xD;
+      New user registered: e2e-coord-3a5e3fe9-c5e6-4233-b251-24a03025cb96@test.local with role Citizen&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: ERCP.Api.Services.AuthService[0]&#xD;
+      New user registered: security-5c7ffff3-3ee2-4de9-ad42-dbfc6d136ebc@test.local with role Volunteer&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: ERCP.Api.Services.AuthService[0]&#xD;
+      New user registered: security-e7f43802-f119-459a-8755-307bcec5b264@test.local with role Citizen&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: ERCP.Api.Services.AuthService[0]&#xD;
+      New user registered: e2e-coord-fe4ed703-561b-45e9-96d6-5fee3143ce7c@test.local with role Citizen&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: ERCP.Api.Services.AuthService[0]&#xD;
+      New user registered: e2e-coord-71ecaea4-6528-4f4c-a4e2-7f9273488999@test.local with role Citizen&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+[xUnit.net 00:00:02.03]   Finished:    ERCP.Api.Tests&#xD;
+</StdOut>
+    </Output>
+    <CollectorDataEntries>
+      <Collector agentName="DESKTOP-HUE8OII" uri="datacollector://microsoft/CoverletCodeCoverage/1.0" collectorDisplayName="XPlat code coverage">
+        <UriAttachments>
+          <UriAttachment>
+            <A href="DESKTOP-HUE8OII\coverage.cobertura.xml"></A>
+          </UriAttachment>
+        </UriAttachments>
+      </Collector>
+    </CollectorDataEntries>
+  </ResultSummary>
+</TestRun>

@@ -1,0 +1,9 @@
+{
+  "checks": [
+    "Complete evidence accepted",
+    "Skipped database test rejected",
+    "Skipped agent test rejected",
+    "Failed performance threshold rejected"
+  ],
+  "status": "Passed"
+}

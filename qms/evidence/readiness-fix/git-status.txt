@@ -1,0 +1,13 @@
+ M .github/workflows/ci.yml
+ M .gitignore
+ M backend/Migrations/20260910131851_AddResourceAndShelterManagement.cs
+ M backend/Migrations/20260916110602_AddAffectedCountToIncidents.cs
+ M backend/Program.cs
+ M backend/Services/IncidentPlannerService.cs
+ M mobile-flutter/pubspec.lock
+?? backend-tests/QmsMigrationTests.cs
+?? backend/Migrations/20261005091547_CompleteAuthenticationAndPlanningSchema.Designer.cs
+?? backend/Migrations/20261005091547_CompleteAuthenticationAndPlanningSchema.cs
+?? backend/appsettings.Qms.json
+?? docs/BUG03_Migration_Repair.md
+?? qms/

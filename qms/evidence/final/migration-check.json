@@ -1,0 +1,17 @@
+{
+  "status": "Passed",
+  "applied_migrations": [
+    "20260810011821_InitVolunteerAndShift",
+    "20260816095524_AddDispatchAndTaskAssignment",
+    "20260823065230_AddIncidentManagement",
+    "20260910131851_AddResourceAndShelterManagement",
+    "20260916110602_AddAffectedCountToIncidents",
+    "20260926062717_UnifyDispatchTaskResourceId",
+    "20260926063743_AddAllocationPlanToDispatch",
+    "20261005091547_CompleteAuthenticationAndPlanningSchema"
+  ],
+  "pending_migrations": 0,
+  "database": "ercp_qms_github",
+  "checked_at": "2026-10-06T00:17:14.631188+05:30",
+  "cli_exit": 0
+}

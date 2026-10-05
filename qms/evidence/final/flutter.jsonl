@@ -1,0 +1,337 @@
+﻿Resolving dependencies...
+Downloading packages...
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  dbus 0.7.13 (0.8.0 available)
+  flutter_local_notifications 17.2.4 (22.3.1 available)
+  flutter_local_notifications_linux 4.0.1 (8.0.1 available)
+  flutter_local_notifications_platform_interface 7.2.0 (12.2.0 available)
+  flutter_secure_storage 9.2.4 (11.2.0 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.3 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.1.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  hooks 2.0.2 (2.2.0 available)
+  js 0.6.7 (0.7.2 available)
+  matcher 0.12.19 (0.12.20 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.0 (1.19.0 available)
+  objective_c 9.5.0 (9.6.2 available)
+! path_provider_android 2.2.17 (overridden) (2.3.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  record_use 0.6.0 (1.1.1 available)
+  shared_preferences_android 2.4.27 (2.4.28 available)
+  shared_preferences_foundation 2.5.6 (2.5.7 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  test_api 0.7.11 (0.7.14 available)
+  timezone 0.9.4 (0.11.1 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  vector_math 2.2.0 (2.4.3 available)
+  vm_service 15.2.0 (15.3.0 available)
+  win32 5.15.0 (6.4.0 available)
+  xml 7.0.1 (7.1.0 available)
+Got dependencies!
+33 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+{"protocolVersion":"0.1.1","runnerVersion":null,"pid":33536,"type":"start","time":0}
+{"suite":{"id":0,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"suite","time":0}
+{"test":{"id":1,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart","suiteID":0,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":1}
+{"suite":{"id":2,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/inventory_item_model_test.dart"},"type":"suite","time":5}
+{"test":{"id":3,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/inventory_item_model_test.dart","suiteID":2,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":5}
+{"suite":{"id":4,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/resource_model_test.dart"},"type":"suite","time":5}
+{"test":{"id":5,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/resource_model_test.dart","suiteID":4,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":5}
+{"suite":{"id":6,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/shelter_model_test.dart"},"type":"suite","time":5}
+{"test":{"id":7,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/shelter_model_test.dart","suiteID":6,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":5}
+{"suite":{"id":8,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/situation_assessment_model_test.dart"},"type":"suite","time":6}
+{"test":{"id":9,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/situation_assessment_model_test.dart","suiteID":8,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":6}
+{"suite":{"id":10,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/profile_screen_test.dart"},"type":"suite","time":6}
+{"test":{"id":11,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/profile_screen_test.dart","suiteID":10,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":6}
+{"suite":{"id":12,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart"},"type":"suite","time":6}
+{"test":{"id":13,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart","suiteID":12,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":6}
+{"suite":{"id":14,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/register_screen_test.dart"},"type":"suite","time":6}
+{"test":{"id":15,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/register_screen_test.dart","suiteID":14,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":7}
+{"count":17,"time":8,"type":"allSuites"}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":3,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":2910}
+{"group":{"id":16,"suiteID":2,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":null,"column":null,"url":null},"type":"group","time":2912}
+{"group":{"id":17,"suiteID":2,"parentID":16,"name":"InventoryItemModel","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":6,"column":3,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/inventory_item_model_test.dart"},"type":"group","time":2913}
+{"test":{"id":18,"name":"InventoryItemModel fromJson parses all fields correctly","suiteID":2,"groupIDs":[16,17],"metadata":{"skip":false,"skipReason":null},"line":7,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/inventory_item_model_test.dart"},"type":"testStart","time":2913}
+{"testID":1,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":2919}
+{"group":{"id":19,"suiteID":0,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":13,"line":null,"column":null,"url":null},"type":"group","time":2919}
+{"group":{"id":20,"suiteID":0,"parentID":19,"name":"AuthUser model","metadata":{"skip":false,"skipReason":null},"testCount":13,"line":6,"column":3,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"group","time":2919}
+{"test":{"id":21,"name":"AuthUser model fromJson parses all fields correctly","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":8,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":2920}
+{"testID":18,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2939}
+{"test":{"id":22,"name":"InventoryItemModel fromJson detects LowStock status when quantity below threshold","suiteID":2,"groupIDs":[16,17],"metadata":{"skip":false,"skipReason":null},"line":29,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/inventory_item_model_test.dart"},"type":"testStart","time":2940}
+{"testID":21,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2944}
+{"testID":22,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2944}
+{"test":{"id":23,"name":"AuthUser model fromJson handles missing optional fields with null","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":26,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":2944}
+{"test":{"id":24,"name":"InventoryItemModel fromJson handles OutOfStock status","suiteID":2,"groupIDs":[16,17],"metadata":{"skip":false,"skipReason":null},"line":43,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/inventory_item_model_test.dart"},"type":"testStart","time":2945}
+{"testID":24,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2948}
+{"test":{"id":25,"name":"InventoryItemModel fromJson defaults status to InStock when missing","suiteID":2,"groupIDs":[16,17],"metadata":{"skip":false,"skipReason":null},"line":57,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/inventory_item_model_test.dart"},"type":"testStart","time":2948}
+{"testID":23,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2949}
+{"test":{"id":26,"name":"AuthUser model fromJson handles string id by parsing to int","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":39,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":2949}
+{"testID":25,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2951}
+{"test":{"id":27,"name":"InventoryItemModel fromJson defaults numeric fields to 0 when missing","suiteID":2,"groupIDs":[16,17],"metadata":{"skip":false,"skipReason":null},"line":68,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/inventory_item_model_test.dart"},"type":"testStart","time":2951}
+{"testID":26,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2952}
+{"test":{"id":28,"name":"AuthUser model fromJson handles null id gracefully (defaults to 0)","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":50,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":2953}
+{"testID":27,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2955}
+{"test":{"id":29,"name":"InventoryItemModel fromJson defaults string fields to empty when null","suiteID":2,"groupIDs":[16,17],"metadata":{"skip":false,"skipReason":null},"line":78,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/inventory_item_model_test.dart"},"type":"testStart","time":2956}
+{"testID":28,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2957}
+{"test":{"id":30,"name":"AuthUser model fromJson defaults role to Citizen when missing","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":60,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":2957}
+{"testID":30,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2960}
+{"testID":29,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2961}
+{"test":{"id":31,"name":"AuthUser model fromJson defaults fullName and email to empty string when null","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":70,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":2961}
+{"test":{"id":32,"name":"InventoryItemModel stock adjustment scenario: quantity decreases from 50 to 10","suiteID":2,"groupIDs":[16,17],"metadata":{"skip":false,"skipReason":null},"line":87,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/inventory_item_model_test.dart"},"type":"testStart","time":2962}
+{"testID":31,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2965}
+{"test":{"id":33,"name":"AuthUser model isVolunteer returns true for Volunteer role (case-insensitive)","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":78,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":2966}
+{"testID":32,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2966}
+{"testID":33,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2974}
+{"test":{"id":34,"name":"AuthUser model isCitizen returns true for Citizen role","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":92,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":2974}
+{"testID":34,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2980}
+{"test":{"id":35,"name":"AuthUser model isCoordinator returns true for Coordinator role","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":104,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":2981}
+{"suite":{"id":36,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/resource_status_screen_test.dart"},"type":"suite","time":2994}
+{"test":{"id":37,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/resource_status_screen_test.dart","suiteID":36,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":2994}
+{"testID":35,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3000}
+{"test":{"id":38,"name":"AuthUser model isAdmin returns true for Admin role","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":116,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":3000}
+{"testID":38,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3006}
+{"test":{"id":39,"name":"AuthUser model canCoordinate returns false for Volunteer and Citizen","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":128,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":3007}
+{"testID":39,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3012}
+{"test":{"id":40,"name":"AuthUser model toJson produces correct map structure","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":147,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":3012}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":40,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3033}
+{"test":{"id":41,"name":"AuthUser model fromJson -> toJson -> fromJson round-trip preserves data","suiteID":0,"groupIDs":[19,20],"metadata":{"skip":false,"skipReason":null},"line":167,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/auth_user_model_test.dart"},"type":"testStart","time":3034}
+{"testID":41,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3040}
+{"testID":5,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":3056}
+{"group":{"id":42,"suiteID":4,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":null,"column":null,"url":null},"type":"group","time":3057}
+{"group":{"id":43,"suiteID":4,"parentID":42,"name":"ResourceModel","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":6,"column":3,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/resource_model_test.dart"},"type":"group","time":3057}
+{"test":{"id":44,"name":"ResourceModel fromJson parses all required fields correctly","suiteID":4,"groupIDs":[42,43],"metadata":{"skip":false,"skipReason":null},"line":7,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/resource_model_test.dart"},"type":"testStart","time":3058}
+{"suite":{"id":45,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/home_screen_test.dart"},"type":"suite","time":3066}
+{"test":{"id":46,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/home_screen_test.dart","suiteID":45,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":3066}
+{"testID":44,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3099}
+{"test":{"id":47,"name":"ResourceModel fromJson defaults status to Available when missing","suiteID":4,"groupIDs":[42,43],"metadata":{"skip":false,"skipReason":null},"line":29,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/resource_model_test.dart"},"type":"testStart","time":3100}
+{"testID":47,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3106}
+{"test":{"id":48,"name":"ResourceModel fromJson defaults capacity to 1 when missing","suiteID":4,"groupIDs":[42,43],"metadata":{"skip":false,"skipReason":null},"line":41,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/resource_model_test.dart"},"type":"testStart","time":3107}
+{"testID":48,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3110}
+{"test":{"id":49,"name":"ResourceModel fromJson handles null optional shelterId and shelterName","suiteID":4,"groupIDs":[42,43],"metadata":{"skip":false,"skipReason":null},"line":52,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/resource_model_test.dart"},"type":"testStart","time":3111}
+{"testID":49,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3117}
+{"test":{"id":50,"name":"ResourceModel fromJson handles dispatched status","suiteID":4,"groupIDs":[42,43],"metadata":{"skip":false,"skipReason":null},"line":65,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/resource_model_test.dart"},"type":"testStart","time":3118}
+{"testID":50,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3124}
+{"test":{"id":51,"name":"ResourceModel fromJson handles maintenance status","suiteID":4,"groupIDs":[42,43],"metadata":{"skip":false,"skipReason":null},"line":78,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/resource_model_test.dart"},"type":"testStart","time":3124}
+{"testID":51,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3131}
+{"test":{"id":52,"name":"ResourceModel fromJson defaults all string fields to empty when null","suiteID":4,"groupIDs":[42,43],"metadata":{"skip":false,"skipReason":null},"line":91,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/resource_model_test.dart"},"type":"testStart","time":3132}
+{"testID":52,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3141}
+{"suite":{"id":53,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/login_screen_test.dart"},"type":"suite","time":3168}
+{"test":{"id":54,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/login_screen_test.dart","suiteID":53,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":3168}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":7,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":3494}
+{"group":{"id":55,"suiteID":6,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":6,"line":null,"column":null,"url":null},"type":"group","time":3494}
+{"group":{"id":56,"suiteID":6,"parentID":55,"name":"ShelterModel","metadata":{"skip":false,"skipReason":null},"testCount":6,"line":6,"column":3,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/shelter_model_test.dart"},"type":"group","time":3495}
+{"test":{"id":57,"name":"ShelterModel fromJson parses all fields correctly","suiteID":6,"groupIDs":[55,56],"metadata":{"skip":false,"skipReason":null},"line":7,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/shelter_model_test.dart"},"type":"testStart","time":3495}
+{"testID":57,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3518}
+{"test":{"id":58,"name":"ShelterModel fromJson defaults status to Active when missing","suiteID":6,"groupIDs":[55,56],"metadata":{"skip":false,"skipReason":null},"line":31,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/shelter_model_test.dart"},"type":"testStart","time":3519}
+{"testID":58,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3524}
+{"test":{"id":59,"name":"ShelterModel fromJson sets capacities to 0 when missing","suiteID":6,"groupIDs":[55,56],"metadata":{"skip":false,"skipReason":null},"line":41,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/shelter_model_test.dart"},"type":"testStart","time":3525}
+{"testID":59,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3528}
+{"test":{"id":60,"name":"ShelterModel shelter at full capacity (occupancy >= total)","suiteID":6,"groupIDs":[55,56],"metadata":{"skip":false,"skipReason":null},"line":52,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/shelter_model_test.dart"},"type":"testStart","time":3529}
+{"testID":60,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3532}
+{"test":{"id":61,"name":"ShelterModel shelter with available space","suiteID":6,"groupIDs":[55,56],"metadata":{"skip":false,"skipReason":null},"line":66,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/shelter_model_test.dart"},"type":"testStart","time":3532}
+{"testID":61,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3537}
+{"test":{"id":62,"name":"ShelterModel fromJson defaults string fields to empty when null","suiteID":6,"groupIDs":[55,56],"metadata":{"skip":false,"skipReason":null},"line":80,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/shelter_model_test.dart"},"type":"testStart","time":3537}
+{"testID":62,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3541}
+{"suite":{"id":63,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/services/api_config_test.dart"},"type":"suite","time":3565}
+{"test":{"id":64,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/services/api_config_test.dart","suiteID":63,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":3565}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":9,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":3818}
+{"group":{"id":65,"suiteID":8,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":8,"line":null,"column":null,"url":null},"type":"group","time":3819}
+{"group":{"id":66,"suiteID":8,"parentID":65,"name":"SituationAssessmentModel","metadata":{"skip":false,"skipReason":null},"testCount":8,"line":6,"column":3,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/situation_assessment_model_test.dart"},"type":"group","time":3819}
+{"test":{"id":67,"name":"SituationAssessmentModel fromJson parses full assessment response","suiteID":8,"groupIDs":[65,66],"metadata":{"skip":false,"skipReason":null},"line":7,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/situation_assessment_model_test.dart"},"type":"testStart","time":3819}
+{"testID":67,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3843}
+{"test":{"id":68,"name":"SituationAssessmentModel fromJson critical urgency score >= 85","suiteID":8,"groupIDs":[65,66],"metadata":{"skip":false,"skipReason":null},"line":31,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/situation_assessment_model_test.dart"},"type":"testStart","time":3843}
+{"testID":68,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3848}
+{"test":{"id":69,"name":"SituationAssessmentModel fromJson high urgency assessment","suiteID":8,"groupIDs":[65,66],"metadata":{"skip":false,"skipReason":null},"line":43,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/situation_assessment_model_test.dart"},"type":"testStart","time":3849}
+{"testID":69,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3853}
+{"test":{"id":70,"name":"SituationAssessmentModel fromJson medium urgency assessment","suiteID":8,"groupIDs":[65,66],"metadata":{"skip":false,"skipReason":null},"line":57,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/situation_assessment_model_test.dart"},"type":"testStart","time":3854}
+{"testID":70,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3859}
+{"test":{"id":71,"name":"SituationAssessmentModel fromJson defaults urgencyLevel to Medium when missing","suiteID":8,"groupIDs":[65,66],"metadata":{"skip":false,"skipReason":null},"line":69,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/situation_assessment_model_test.dart"},"type":"testStart","time":3859}
+{"testID":71,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3863}
+{"test":{"id":72,"name":"SituationAssessmentModel fromJson handles null nearestShelterName","suiteID":8,"groupIDs":[65,66],"metadata":{"skip":false,"skipReason":null},"line":79,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/situation_assessment_model_test.dart"},"type":"testStart","time":3863}
+{"testID":72,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3869}
+{"test":{"id":73,"name":"SituationAssessmentModel fromJson defaults numeric fields to 0 when missing","suiteID":8,"groupIDs":[65,66],"metadata":{"skip":false,"skipReason":null},"line":90,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/situation_assessment_model_test.dart"},"type":"testStart","time":3869}
+{"testID":73,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3873}
+{"test":{"id":74,"name":"SituationAssessmentModel fromJson defaults string fields to empty when null","suiteID":8,"groupIDs":[65,66],"metadata":{"skip":false,"skipReason":null},"line":100,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/models/situation_assessment_model_test.dart"},"type":"testStart","time":3874}
+{"testID":74,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3878}
+{"suite":{"id":75,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/shelter_locator_screen_test.dart"},"type":"suite","time":3900}
+{"test":{"id":76,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/shelter_locator_screen_test.dart","suiteID":75,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":3900}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":11,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":4313}
+{"group":{"id":77,"suiteID":10,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":4313}
+{"test":{"id":78,"name":"on-duty volunteer shows Available status + shifts button","suiteID":10,"groupIDs":[77],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":45,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/profile_screen_test.dart"},"type":"testStart","time":4313}
+{"testID":13,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":4611}
+{"group":{"id":79,"suiteID":12,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":10,"line":null,"column":null,"url":null},"type":"group","time":4611}
+{"group":{"id":80,"suiteID":12,"parentID":79,"name":"AuthProvider","metadata":{"skip":false,"skipReason":null},"testCount":10,"line":9,"column":3,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart"},"type":"group","time":4611}
+{"test":{"id":81,"name":"AuthProvider initial state has null user and token","suiteID":12,"groupIDs":[79,80],"metadata":{"skip":false,"skipReason":null},"line":14,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart"},"type":"testStart","time":4611}
+{"testID":81,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4631}
+{"test":{"id":82,"name":"AuthProvider isAuthenticated is false when user is null","suiteID":12,"groupIDs":[79,80],"metadata":{"skip":false,"skipReason":null},"line":23,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart"},"type":"testStart","time":4632}
+{"testID":82,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4639}
+{"test":{"id":83,"name":"AuthProvider init with empty storage sets isLoading to false","suiteID":12,"groupIDs":[79,80],"metadata":{"skip":false,"skipReason":null},"line":29,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart"},"type":"testStart","time":4639}
+{"testID":83,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4646}
+{"test":{"id":84,"name":"AuthProvider init with no saved token remains unauthenticated","suiteID":12,"groupIDs":[79,80],"metadata":{"skip":false,"skipReason":null},"line":41,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart"},"type":"testStart","time":4647}
+{"testID":84,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4649}
+{"test":{"id":85,"name":"AuthProvider logout clears user, token, and error","suiteID":12,"groupIDs":[79,80],"metadata":{"skip":false,"skipReason":null},"line":51,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart"},"type":"testStart","time":4650}
+{"testID":85,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4678}
+{"test":{"id":86,"name":"AuthProvider logout clears SharedPreferences token and user","suiteID":12,"groupIDs":[79,80],"metadata":{"skip":false,"skipReason":null},"line":67,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart"},"type":"testStart","time":4678}
+{"testID":86,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4682}
+{"test":{"id":87,"name":"AuthProvider login with invalid credentials sets errorMessage","suiteID":12,"groupIDs":[79,80],"metadata":{"skip":false,"skipReason":null},"line":82,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart"},"type":"testStart","time":4682}
+{"testID":87,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4696}
+{"test":{"id":88,"name":"AuthProvider register with missing backend sets errorMessage","suiteID":12,"groupIDs":[79,80],"metadata":{"skip":false,"skipReason":null},"line":96,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart"},"type":"testStart","time":4696}
+{"testID":88,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4701}
+{"test":{"id":89,"name":"AuthProvider multiple logout calls are idempotent","suiteID":12,"groupIDs":[79,80],"metadata":{"skip":false,"skipReason":null},"line":113,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart"},"type":"testStart","time":4701}
+{"testID":89,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4704}
+{"test":{"id":90,"name":"AuthProvider notifyListeners is called during login (loading transitions)","suiteID":12,"groupIDs":[79,80],"metadata":{"skip":false,"skipReason":null},"line":127,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/providers/auth_provider_test.dart"},"type":"testStart","time":4704}
+{"testID":90,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4709}
+{"suite":{"id":91,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/validation_result_model_test.dart"},"type":"suite","time":4782}
+{"test":{"id":92,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/validation_result_model_test.dart","suiteID":91,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":4782}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":15,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":5396}
+{"group":{"id":93,"suiteID":14,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":null,"column":null,"url":null},"type":"group","time":5396}
+{"test":{"id":94,"name":"renders all registration fields and role selector","suiteID":14,"groupIDs":[93],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":27,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/register_screen_test.dart"},"type":"testStart","time":5396}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":37,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":5705}
+{"group":{"id":95,"suiteID":36,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":5706}
+{"test":{"id":96,"name":"ResourceStatusScreen renders app bar and loading state","suiteID":36,"groupIDs":[95],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":9,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/resource_status_screen_test.dart"},"type":"testStart","time":5706}
+{"testID":78,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":5817}
+{"test":{"id":97,"name":"off-duty volunteer shows Off-Duty status","suiteID":10,"groupIDs":[77],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":55,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/profile_screen_test.dart"},"type":"testStart","time":5818}
+{"testID":97,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":6003}
+{"test":{"id":98,"name":"sign out button is always present","suiteID":10,"groupIDs":[77],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":62,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/profile_screen_test.dart"},"type":"testStart","time":6003}
+{"testID":98,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":6117}
+{"suite":{"id":99,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_provider_test.dart"},"type":"suite","time":6145}
+{"test":{"id":100,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_provider_test.dart","suiteID":99,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":6145}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":46,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":6640}
+{"group":{"id":101,"suiteID":45,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":null,"column":null,"url":null},"type":"group","time":6641}
+{"test":{"id":102,"name":"unauthenticated user sees login screen","suiteID":45,"groupIDs":[101],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":15,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/home_screen_test.dart"},"type":"testStart","time":6641}
+{"testID":96,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":6838}
+{"suite":{"id":103,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_shift_model_test.dart"},"type":"suite","time":6872}
+{"test":{"id":104,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_shift_model_test.dart","suiteID":103,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":6872}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":94,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7115}
+{"test":{"id":105,"name":"empty submit shows validation errors, does not call backend","suiteID":14,"groupIDs":[93],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":37,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/register_screen_test.dart"},"type":"testStart","time":7116}
+{"testID":54,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":7137}
+{"group":{"id":106,"suiteID":53,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":null,"column":null,"url":null},"type":"group","time":7137}
+{"test":{"id":107,"name":"renders brand header, fields, and sign-in button","suiteID":53,"groupIDs":[106],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":27,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/login_screen_test.dart"},"type":"testStart","time":7138}
+{"testID":64,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":7431}
+{"group":{"id":108,"suiteID":63,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":null,"column":null,"url":null},"type":"group","time":7432}
+{"group":{"id":109,"suiteID":63,"parentID":108,"name":"ApiConfig","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":6,"column":3,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/services/api_config_test.dart"},"type":"group","time":7432}
+{"test":{"id":110,"name":"ApiConfig setBaseUrl overrides default baseUrl","suiteID":63,"groupIDs":[108,109],"metadata":{"skip":false,"skipReason":null},"line":12,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/services/api_config_test.dart"},"type":"testStart","time":7432}
+{"testID":110,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7493}
+{"test":{"id":111,"name":"ApiConfig setBaseUrl with empty string falls back to default","suiteID":63,"groupIDs":[108,109],"metadata":{"skip":false,"skipReason":null},"line":18,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/services/api_config_test.dart"},"type":"testStart","time":7494}
+{"testID":111,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7499}
+{"test":{"id":112,"name":"ApiConfig defaultHeaders without token includes Content-Type and Accept","suiteID":63,"groupIDs":[108,109],"metadata":{"skip":false,"skipReason":null},"line":27,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/services/api_config_test.dart"},"type":"testStart","time":7499}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":112,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7519}
+{"test":{"id":113,"name":"ApiConfig defaultHeaders with null token does not include Authorization","suiteID":63,"groupIDs":[108,109],"metadata":{"skip":false,"skipReason":null},"line":35,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/services/api_config_test.dart"},"type":"testStart","time":7520}
+{"testID":113,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7527}
+{"test":{"id":114,"name":"ApiConfig defaultHeaders with empty token does not include Authorization","suiteID":63,"groupIDs":[108,109],"metadata":{"skip":false,"skipReason":null},"line":41,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/services/api_config_test.dart"},"type":"testStart","time":7528}
+{"testID":114,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7534}
+{"test":{"id":115,"name":"ApiConfig defaultHeaders with valid token includes Bearer Authorization","suiteID":63,"groupIDs":[108,109],"metadata":{"skip":false,"skipReason":null},"line":47,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/services/api_config_test.dart"},"type":"testStart","time":7535}
+{"testID":115,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7546}
+{"test":{"id":116,"name":"ApiConfig defaultHeaders returns new map instance each call","suiteID":63,"groupIDs":[108,109],"metadata":{"skip":false,"skipReason":null},"line":55,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/services/api_config_test.dart"},"type":"testStart","time":7547}
+{"testID":116,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7553}
+{"suite":{"id":117,"platform":"vm","path":"D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/widget_test.dart"},"type":"suite","time":7581}
+{"test":{"id":118,"name":"loading D:/Sliit Subjects/Y3 S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/widget_test.dart","suiteID":117,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":7581}
+{"testID":105,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7845}
+{"test":{"id":119,"name":"invalid email shows email validation error","suiteID":14,"groupIDs":[93],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":51,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/register_screen_test.dart"},"type":"testStart","time":7846}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":76,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":8045}
+{"group":{"id":120,"suiteID":75,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":8046}
+{"test":{"id":121,"name":"ShelterLocatorScreen renders title and search bar","suiteID":75,"groupIDs":[120],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":9,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/shelter_locator_screen_test.dart"},"type":"testStart","time":8046}
+{"testID":92,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":8490}
+{"group":{"id":122,"suiteID":91,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":8491}
+{"group":{"id":123,"suiteID":91,"parentID":122,"name":"ValidationResult (Student 4 Safety Agent)","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":5,"column":3,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/validation_result_model_test.dart"},"type":"group","time":8491}
+{"test":{"id":124,"name":"ValidationResult (Student 4 Safety Agent) parses APPROVE result","suiteID":91,"groupIDs":[122,123],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/validation_result_model_test.dart"},"type":"testStart","time":8491}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":124,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8544}
+{"test":{"id":125,"name":"ValidationResult (Student 4 Safety Agent) parses REJECT with blockers","suiteID":91,"groupIDs":[122,123],"metadata":{"skip":false,"skipReason":null},"line":26,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/validation_result_model_test.dart"},"type":"testStart","time":8545}
+{"testID":125,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8553}
+{"test":{"id":126,"name":"ValidationResult (Student 4 Safety Agent) history entry parses","suiteID":91,"groupIDs":[122,123],"metadata":{"skip":false,"skipReason":null},"line":43,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/validation_result_model_test.dart"},"type":"testStart","time":8554}
+{"testID":126,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8562}
+{"testID":102,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8605}
+{"test":{"id":127,"name":"loading state shows CircularProgressIndicator","suiteID":45,"groupIDs":[101],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":34,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/home_screen_test.dart"},"type":"testStart","time":8606}
+{"testID":127,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8678}
+{"test":{"id":128,"name":"ERCPApp has correct MaterialApp title","suiteID":45,"groupIDs":[101],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":53,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/home_screen_test.dart"},"type":"testStart","time":8678}
+{"testID":119,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8728}
+{"test":{"id":129,"name":"switching role to Citizen changes skills label","suiteID":14,"groupIDs":[93],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":67,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/register_screen_test.dart"},"type":"testStart","time":8729}
+{"testID":128,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8934}
+{"test":{"id":130,"name":"ERCPApp uses Material3 theme","suiteID":45,"groupIDs":[101],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":72,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/home_screen_test.dart"},"type":"testStart","time":8935}
+{"testID":107,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8985}
+{"test":{"id":131,"name":"renders quick demo sign-in chips","suiteID":53,"groupIDs":[106],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":42,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/login_screen_test.dart"},"type":"testStart","time":8986}
+{"testID":100,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":9014}
+{"group":{"id":132,"suiteID":99,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":9014}
+{"group":{"id":133,"suiteID":99,"parentID":132,"name":"VolunteerProvider (Student 4)","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":5,"column":3,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_provider_test.dart"},"type":"group","time":9015}
+{"test":{"id":134,"name":"VolunteerProvider (Student 4) initial state is empty and not loading","suiteID":99,"groupIDs":[132,133],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_provider_test.dart"},"type":"testStart","time":9015}
+{"testID":134,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9041}
+{"test":{"id":135,"name":"VolunteerProvider (Student 4) load offline surfaces error without crash","suiteID":99,"groupIDs":[132,133],"metadata":{"skip":false,"skipReason":null},"line":13,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_provider_test.dart"},"type":"testStart","time":9042}
+{"testID":135,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9114}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":130,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9155}
+{"testID":131,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9242}
+{"test":{"id":136,"name":"renders Register New Account link","suiteID":53,"groupIDs":[106],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":52,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/login_screen_test.dart"},"type":"testStart","time":9242}
+{"testID":129,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9435}
+{"testID":136,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9459}
+{"test":{"id":137,"name":"empty submit shows email and password validation errors","suiteID":53,"groupIDs":[106],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":60,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/login_screen_test.dart"},"type":"testStart","time":9459}
+{"testID":104,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":9482}
+{"group":{"id":138,"suiteID":103,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":null,"column":null,"url":null},"type":"group","time":9483}
+{"group":{"id":139,"suiteID":103,"parentID":138,"name":"Volunteer model (Student 4)","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":6,"column":3,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_shift_model_test.dart"},"type":"group","time":9483}
+{"test":{"id":140,"name":"Volunteer model (Student 4) fromJson parses all fields correctly","suiteID":103,"groupIDs":[138,139],"metadata":{"skip":false,"skipReason":null},"line":7,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_shift_model_test.dart"},"type":"testStart","time":9483}
+{"testID":140,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9513}
+{"test":{"id":141,"name":"Volunteer model (Student 4) off-duty volunteer parses isAvailable=false","suiteID":103,"groupIDs":[138,139],"metadata":{"skip":false,"skipReason":null},"line":25,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_shift_model_test.dart"},"type":"testStart","time":9513}
+{"testID":141,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9518}
+{"group":{"id":142,"suiteID":103,"parentID":138,"name":"Volunteer robustness (Student 4)","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":41,"column":3,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_shift_model_test.dart"},"type":"group","time":9519}
+{"test":{"id":143,"name":"Volunteer robustness (Student 4) tolerates nulls and string rating","suiteID":103,"groupIDs":[138,142],"metadata":{"skip":false,"skipReason":null},"line":42,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_shift_model_test.dart"},"type":"testStart","time":9519}
+{"testID":143,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9525}
+{"test":{"id":144,"name":"Volunteer robustness (Student 4) copyWith toggles availability","suiteID":103,"groupIDs":[138,142],"metadata":{"skip":false,"skipReason":null},"line":56,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_shift_model_test.dart"},"type":"testStart","time":9526}
+{"testID":144,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9530}
+{"group":{"id":145,"suiteID":103,"parentID":138,"name":"Shift model (Student 4)","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":70,"column":3,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_shift_model_test.dart"},"type":"group","time":9531}
+{"test":{"id":146,"name":"Shift model (Student 4) fromJson parses shift history entry","suiteID":103,"groupIDs":[138,145],"metadata":{"skip":false,"skipReason":null},"line":71,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_shift_model_test.dart"},"type":"testStart","time":9531}
+{"testID":146,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9542}
+{"test":{"id":147,"name":"Shift model (Student 4) numeric status maps to enum name (backend enum serialises as int)","suiteID":103,"groupIDs":[138,145],"metadata":{"skip":false,"skipReason":null},"line":85,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_shift_model_test.dart"},"type":"testStart","time":9543}
+{"testID":147,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9548}
+{"test":{"id":148,"name":"Shift model (Student 4) string int status maps too","suiteID":103,"groupIDs":[138,145],"metadata":{"skip":false,"skipReason":null},"line":96,"column":5,"url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/volunteer_shift_model_test.dart"},"type":"testStart","time":9548}
+{"testID":148,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9553}
+{"testID":121,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9646}
+{"testID":118,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":9907}
+{"group":{"id":149,"suiteID":117,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":9907}
+{"test":{"id":150,"name":"App smoke test renders login or initialization","suiteID":117,"groupIDs":[149],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":11,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/widget_test.dart"},"type":"testStart","time":9908}
+{"testID":137,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9953}
+{"test":{"id":151,"name":"invalid email shows email validation error","suiteID":53,"groupIDs":[106],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":69,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/login_screen_test.dart"},"type":"testStart","time":9953}
+{"testID":151,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":10451}
+{"test":{"id":152,"name":"short password shows minimum length error","suiteID":53,"groupIDs":[106],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":81,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/login_screen_test.dart"},"type":"testStart","time":10451}
+{"testID":152,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":10728}
+{"test":{"id":153,"name":"password visibility toggle button exists","suiteID":53,"groupIDs":[106],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":94,"root_column":3,"root_url":"file:///D:/Sliit%20Subjects/Y3%20S1/SEF/Assignment/SEF/emergency-resource-coordination-platform/mobile-flutter/test/screens/login_screen_test.dart"},"type":"testStart","time":10729}
+{"testID":153,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":10966}
+{"testID":150,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":11176}
+{"success":true,"type":"done","time":11204}

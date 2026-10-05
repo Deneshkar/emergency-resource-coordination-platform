@@ -1,0 +1,47 @@
+[
+  {
+    "id": "BUG-01",
+    "title": "Public registration grants privileged roles",
+    "severity": "Critical",
+    "priority": "P1",
+    "status": "Fixed and retested",
+    "description": "An anonymous caller could register as Admin or Coordinator and receive a valid role-bearing JWT.",
+    "steps": "POST /api/auth/register with a unique email, valid password and role Admin or Coordinator.",
+    "expected": "400 Bad Request; public accounts restricted to Citizen or Volunteer.",
+    "actual": "Before fix both role variants returned 201 Created.",
+    "cause": "Registration DTO explicitly allowed privileged roles; the public controller had no role restriction.",
+    "fix": "Restrict DTO roles and explicitly reject privileged roles in the public registration action. Trusted test setup provisions a coordinator before logging in.",
+    "evidence": "evidence/security-before/security-before.trx: SEC01, two failed cases. evidence/final/backend/backend.trx: SEC01, two passes. evidence/final/live-api.xml: SEC04, two passes.",
+    "retest": "Both public privileged roles rejected; ordinary registration and existing authentication tests remain passing."
+  },
+  {
+    "id": "BUG-02",
+    "title": "Low privilege users can modify dispatches",
+    "severity": "High",
+    "priority": "P1",
+    "status": "Fixed and retested",
+    "description": "Any authenticated Citizen or Volunteer could create a dispatch. Mutation routes lacked a coordinator/admin authorization requirement.",
+    "steps": "Register Citizen or Volunteer, use returned JWT, POST /api/dispatches with incidentId 1 and priority High.",
+    "expected": "403 Forbidden for Citizen and Volunteer; coordinator/admin mutation routes remain available.",
+    "actual": "Before fix both role variants returned 201 Created.",
+    "cause": "Class-level Authorize required authentication only; mutation actions did not specify allowed roles.",
+    "fix": "Add Coordinator/Admin authorization to create, status, task create/update/delete and allocation-proposal actions.",
+    "evidence": "evidence/security-before/security-before.trx: SEC02, two failures. evidence/final/backend/backend.trx: SEC02 passes. evidence/final/live-api.xml: SEC05 covers seven forbidden actions, and E2E01 verifies authorized completion.",
+    "retest": "Citizen/Volunteer dispatch creation rejected; Citizen mutations and validation rejected; coordinator workflow succeeds."
+  },
+  {
+    "id": "BUG-03",
+    "title": "Sequential PostgreSQL migrations create Shelters twice",
+    "severity": "High",
+    "priority": "P2",
+    "status": "Fixed and retested",
+    "description": "The original clean migration installation failed. The repaired migration chain now matches the current model schema and supports the tested rollback/upgrade paths.",
+    "steps": "Create a separate empty database; run dotnet ef database update with its explicit connection string. Migrations progress until AddAffectedCountToIncidents.",
+    "expected": "Migrations apply sequentially without duplicate relations.",
+    "actual": "Before: PostgreSQL 42P07, relation Shelters already exists. After: clean schema comparison, rollback/data-preservation and repeated-update tests pass.",
+    "cause": "Overlapping table/index creation and incorrect rollback ownership; the model snapshot also contained Users, ValidationAudits and six planner fields without corresponding migration operations.",
+    "fix": "Removed duplicate table/index creation, corrected both rollback methods, altered existing shelter foreign keys to match the snapshot, and added CompleteAuthenticationAndPlanningSchema for the missing tables and planner fields.",
+    "evidence": "evidence/migration-fix/before/migration-before.trx; evidence/migration-fix/retest/migration-retest.trx; evidence/final/migrations.log; evidence/migration-fix/model-consistency.log; QmsMigrationTests.cs.",
+    "retest": "Four regression tests failed before and passed after. The originally failed isolated database upgraded through eight migrations. Backend 95/95 and live HTTP 17/17 pass. Shared/startup-created databases were not automatically adopted."
+  }
+]

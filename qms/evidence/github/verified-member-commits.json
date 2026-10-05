@@ -1,0 +1,140 @@
+[
+  {
+    "member": "Jathurshy.S",
+    "student_id": "IT24103355",
+    "sha": "50f9414e8ceeb8f287112bde2a81883fa9ba4245",
+    "url": "https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/50f9414e8ceeb8f287112bde2a81883fa9ba4245",
+    "git_author": "Jathurshy11",
+    "github_author": "Jathurshy11",
+    "commit_date": "2026-09-16T05:25:54Z",
+    "subject": "feat: complete student 1 incident intelligence and planner agent",
+    "changed_files": [
+      "ai-agents/coordinator_planner_agent.py",
+      "backend-tests/IncidentControllerTests.cs",
+      "backend/Controllers/IncidentController.cs",
+      "backend/DTOs/IncidentDtos.cs",
+      "backend/Program.cs",
+      "backend/Services/IncidentPlannerService.cs",
+      "backend/appsettings.json"
+    ]
+  },
+  {
+    "member": "M.Thanusikan",
+    "student_id": "IT24103609",
+    "sha": "25de8a92bee86fe982b6fdbbe65afdc35055ce43",
+    "url": "https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/25de8a92bee86fe982b6fdbbe65afdc35055ce43",
+    "git_author": "it24103609",
+    "github_author": "it24103609",
+    "commit_date": "2026-09-16T02:54:46Z",
+    "subject": "test(backend): Add edge case unit tests for shelters, inventory, and geolocation",
+    "changed_files": [
+      "backend-tests/GeolocationServiceTests.cs",
+      "backend-tests/InventoryControllerTests.cs",
+      "backend-tests/SheltersControllerTests.cs"
+    ]
+  },
+  {
+    "member": "M.Thanusikan",
+    "student_id": "IT24103609",
+    "sha": "6846af6080a41d8f9f02be333440d2fdcb641714",
+    "url": "https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/6846af6080a41d8f9f02be333440d2fdcb641714",
+    "git_author": "it24103609",
+    "github_author": "it24103609",
+    "commit_date": "2026-09-16T02:58:53Z",
+    "subject": "test(react): Add unit tests for ShelterList, ResourceList, and InventoryList pages",
+    "changed_files": [
+      "frontend-react/src/pages/__tests__/InventoryList.test.jsx",
+      "frontend-react/src/pages/__tests__/ResourceList.test.jsx",
+      "frontend-react/src/pages/__tests__/ShelterList.test.jsx"
+    ]
+  },
+  {
+    "member": "Denesh N",
+    "student_id": "IT24102826",
+    "sha": "48a9c3b9cd87d67ce48b9c16aeb960be85baa266",
+    "url": "https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/48a9c3b9cd87d67ce48b9c16aeb960be85baa266",
+    "git_author": "Denesh005",
+    "github_author": "Denesh005",
+    "commit_date": "2026-09-26T07:05:36Z",
+    "subject": "Implement dispatch task allocation",
+    "changed_files": [
+      "backend-tests/DispatchAllocationTests.cs",
+      "backend-tests/DispatchValidationServiceTests.cs",
+      "backend-tests/DispatchesControllerTests.cs",
+      "backend/Controllers/DispatchesController.cs",
+      "backend/DTOs/DispatchDtos.cs",
+      "backend/Data/AppDbContext.cs",
+      "backend/Migrations/20260926062717_UnifyDispatchTaskResourceId.Designer.cs",
+      "backend/Migrations/20260926062717_UnifyDispatchTaskResourceId.cs",
+      "backend/Migrations/20260926063743_AddAllocationPlanToDispatch.Designer.cs",
+      "backend/Migrations/20260926063743_AddAllocationPlanToDispatch.cs",
+      "backend/Migrations/AppDbContextModelSnapshot.cs",
+      "backend/Models/Dispatch.cs",
+      "backend/Models/DispatchTask.cs",
+      "backend/Services/DispatchValidationService.cs",
+      "backend/appsettings.json",
+      "frontend-react/src/pages/DispatchList.jsx",
+      "frontend-react/src/pages/__tests__/DispatchList.test.jsx",
+      "frontend-react/src/services/__tests__/validationService.test.js",
+      "frontend-react/src/services/dispatchService.js",
+      "frontend-react/src/services/validationService.js",
+      "mobile-flutter/lib/models/dispatch.dart"
+    ]
+  },
+  {
+    "member": "Denesh N",
+    "student_id": "IT24102826",
+    "sha": "cd967173f349ae343a729b885cb7182eca7a2d83",
+    "url": "https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/cd967173f349ae343a729b885cb7182eca7a2d83",
+    "git_author": "Denesh005",
+    "github_author": "Denesh005",
+    "commit_date": "2026-10-05T07:00:00Z",
+    "subject": "fix: database migrations and prepare backend deployment",
+    "changed_files": [
+      "backend/ERCP.Api.csproj",
+      "backend/Migrations/20260916110602_AddAffectedCountToIncidents.cs"
+    ]
+  },
+  {
+    "member": "Deneshkar. P",
+    "student_id": "IT24103828",
+    "sha": "3c059a63c9093f6347de4fbef73f9b3e7164910a",
+    "url": "https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/3c059a63c9093f6347de4fbef73f9b3e7164910a",
+    "git_author": "Deneshkar Punyamoorthy",
+    "github_author": "Deneshkar",
+    "commit_date": "2026-09-16T15:38:35Z",
+    "subject": "feat: add volunteer shift and API integration tests, and update documentation",
+    "changed_files": [
+      "backend-tests/VolunteerShiftTests.cs",
+      "backend-tests/VolunteersApiIntegrationTests.cs",
+      "backend/Controllers/ValidationsController.cs",
+      "backend/Controllers/VolunteersController.cs",
+      "backend/DTOs/VolunteerDtos.cs",
+      "backend/Program.cs",
+      "docs/AI_Usage_Log_Student4.md",
+      "docs/Individual_Report_Student4.md"
+    ]
+  },
+  {
+    "member": "Deneshkar. P",
+    "student_id": "IT24103828",
+    "sha": "ee924e23010cdc591afd7fa393c3b239c438bfef",
+    "url": "https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/ee924e23010cdc591afd7fa393c3b239c438bfef",
+    "git_author": "Deneshkar Punyamoorthy",
+    "github_author": "Deneshkar",
+    "commit_date": "2026-10-03T07:51:27Z",
+    "subject": "feat(security): restrict public registration to Citizen/Volunteer, lock dispatch writes to Coordinator/Admin",
+    "changed_files": [
+      ".gitignore",
+      "backend-tests/AuthControllerTests.cs",
+      "backend-tests/QmsPostgresTests.cs",
+      "backend-tests/QmsSecurityTests.cs",
+      "backend-tests/VolunteersApiIntegrationTests.cs",
+      "backend/Controllers/AuthController.cs",
+      "backend/Controllers/DispatchesController.cs",
+      "backend/DTOs/AuthDtos.cs",
+      "frontend-react/src/components/__tests__/ProtectedRoute.test.jsx",
+      "frontend-react/src/pages/__tests__/ResourceBehaviour.test.jsx"
+    ]
+  }
+]

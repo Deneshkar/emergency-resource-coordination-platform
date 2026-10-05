@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-05",
+  "sdk": "10.0.401",
+  "target_framework": "net8.0",
+  "base_commit": "fea099acd24db060505335cb5de23440de7c29a6",
+  "database": "ercp_qms_migrations on isolated localhost:55432",
+  "shared_databases_modified": false
+}

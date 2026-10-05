@@ -1,0 +1,16 @@
+{
+  "status": "Passed",
+  "archive_manifest_entries": 591,
+  "fresh_extraction_build": "Passed",
+  "fresh_database_health": {
+    "status": "healthy",
+    "environment": "Qms",
+    "database": "PostgreSQL",
+    "appliedMigrations": 8,
+    "pendingMigrations": 0
+  },
+  "http_suite": "17 passed",
+  "api_port_override": 58257,
+  "database_fixture": "ercp_qms_package_a0359e8da47e480f92318062fc53e396",
+  "source": "Extracted ZIP without repository .env files or installed dependencies"
+}
