@@ -124,9 +124,6 @@ namespace ERCP.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "IncidentPlans");
-
-            migrationBuilder.DropTable(
                 name: "InventoryItems");
 
             migrationBuilder.DropTable(
@@ -134,9 +131,6 @@ namespace ERCP.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "SituationAssessments");
-
-            migrationBuilder.DropTable(
-                name: "Incidents");
 
             migrationBuilder.DropTable(
                 name: "Shelters");

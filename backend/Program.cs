@@ -46,12 +46,21 @@ static void LoadDotEnv()
     }
 }
 
-LoadDotEnv();
+// QMS runs use explicit test configuration; never import local service credentials.
+var requestedEnvironment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
+    ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+if (!string.Equals(requestedEnvironment, "Qms", StringComparison.OrdinalIgnoreCase)) LoadDotEnv();
 
 var builder = WebApplication.CreateBuilder(args);
+var qmsMode = builder.Environment.IsEnvironment("Qms");
+if (qmsMode)
+{
+    builder.Configuration["SMTP_USER"] = "";
+    builder.Configuration["SMTP_PASS"] = "";
+}
 
 var portEnv = Environment.GetEnvironmentVariable("PORT");
-if (!string.IsNullOrEmpty(portEnv))
+if (!qmsMode && !string.IsNullOrEmpty(portEnv))
 {
     builder.WebHost.UseUrls($"http://0.0.0.0:{portEnv}");
 }
@@ -160,6 +169,13 @@ static string? ConvertDatabaseUrl(string? databaseUrl)
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 var connString = ConvertDatabaseUrl(databaseUrl)
     ?? builder.Configuration.GetConnectionString("DefaultConnection");
+if (qmsMode)
+{
+    var testConfig = new NpgsqlConnectionStringBuilder(connString);
+    if (testConfig.Host is not ("127.0.0.1" or "localhost") ||
+        testConfig.Database?.StartsWith("ercp_qms", StringComparison.Ordinal) != true)
+        throw new InvalidOperationException("QMS requires a localhost database named ercp_qms or ercp_qms_*.");
+}
 if (!string.IsNullOrEmpty(connString))
 {
     try
@@ -168,11 +184,14 @@ if (!string.IsNullOrEmpty(connString))
         testConn.Open();
         usePostgres = true;
     }
-    catch
+    catch when (!qmsMode)
     {
         usePostgres = false;
     }
 }
+
+if (qmsMode && !usePostgres)
+    throw new InvalidOperationException("QMS requires a reachable PostgreSQL database. Run qms/scripts/start-qms.ps1; in-memory fallback is disabled.");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -206,7 +225,26 @@ using (var scope = app.Services.CreateScope())
     var planner = scope.ServiceProvider.GetRequiredService<IncidentPlannerService>();
     try
     {
-        if (context.Database.IsRelational())
+        if (qmsMode)
+        {
+            // A database created by the legacy startup path must not be adopted implicitly.
+            await using var connection = new NpgsqlConnection(connString);
+            await connection.OpenAsync();
+            await using var check = new NpgsqlCommand("""
+                SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='public'
+                    AND table_type='BASE TABLE' AND table_name <> '__EFMigrationsHistory');
+                """, connection);
+            var hasTables = (bool)(await check.ExecuteScalarAsync())!;
+            var applied = await context.Database.GetAppliedMigrationsAsync();
+            if (hasTables && !applied.Any())
+                throw new InvalidOperationException("QMS found tables without EF migration history. Choose a fresh ercp_qms_* database; existing databases require an adoption review.");
+            await context.Database.MigrateAsync();
+            if (context.Database.HasPendingModelChanges())
+                throw new InvalidOperationException("QMS model differs from its migration snapshot.");
+            app.Logger.LogInformation("QMS PostgreSQL ready: {MigrationCount} migrations applied.",
+                (await context.Database.GetAppliedMigrationsAsync()).Count());
+        }
+        else if (context.Database.IsRelational())
         {
             var creator = context.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
             if (creator != null)
@@ -219,7 +257,7 @@ using (var scope = app.Services.CreateScope())
             context.Database.EnsureCreated();
         }
 
-        if (context.Database.IsRelational())
+        if (!qmsMode && context.Database.IsRelational())
         {
             context.Database.ExecuteSqlRaw(@"
                 CREATE TABLE IF NOT EXISTS ""Users"" (
@@ -817,6 +855,7 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
+        if (qmsMode) throw;
         app.Logger.LogWarning(ex, "Database auto-migration/seeding skipped.");
     }
 }
@@ -832,7 +871,19 @@ app.UseSwaggerUI(c =>
 
 // Health check endpoint for cloud platforms
 app.MapGet("/", () => Results.Ok(new { status = "healthy", service = "ERCP.Api", timestamp = DateTime.UtcNow }));
-app.MapGet("/api/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
+app.MapGet("/api/health", async (AppDbContext db) =>
+{
+    if (!qmsMode) return Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow });
+    try
+    {
+        if (!await db.Database.CanConnectAsync()) return Results.StatusCode(503);
+        var pending = (await db.Database.GetPendingMigrationsAsync()).Count();
+        if (pending != 0) return Results.StatusCode(503);
+        return Results.Ok(new { status = "healthy", environment = "Qms", database = "PostgreSQL",
+            appliedMigrations = (await db.Database.GetAppliedMigrationsAsync()).Count(), pendingMigrations = pending });
+    }
+    catch { return Results.StatusCode(503); }
+});
 
 // Railway handles SSL at the edge — no HTTPS redirect needed
 app.UseCors("AllowAll");

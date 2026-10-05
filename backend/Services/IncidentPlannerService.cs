@@ -66,6 +66,9 @@ public class IncidentPlannerService
             var geminiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
             if (!string.IsNullOrWhiteSpace(geminiKey) && !psi.Environment.ContainsKey("GEMINI_API_KEY"))
                 psi.Environment["GEMINI_API_KEY"] = geminiKey;
+            if (string.Equals(Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
+                ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Qms", StringComparison.OrdinalIgnoreCase))
+                psi.Environment["GEMINI_API_KEY"] = "";
 
             using var process = Process.Start(psi);
             if (process == null) return null;

@@ -10,6 +10,25 @@ jobs:
   backend-build-and-test:
     name: Backend (.NET) build + test
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: qms
+          POSTGRES_PASSWORD: qms_ci_only
+          POSTGRES_DB: ercp_qms_ci
+        ports:
+          - 55432:5432
+        options: >-
+          --health-cmd "pg_isready -U qms -d ercp_qms_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      QMS_POSTGRES: Host=127.0.0.1;Port=55432;Database=ercp_qms_ci;Username=qms;Password=qms_ci_only
+      QMS_MIGRATION_ADMIN: Host=127.0.0.1;Port=55432;Database=postgres;Username=qms;Password=qms_ci_only
+      ConnectionStrings__DefaultConnection: Host=127.0.0.1;Port=55432;Database=ercp_qms_ci;Username=qms;Password=qms_ci_only
+      DATABASE_URL: ' '
+      SMTP_USER: ' '
+      SMTP_PASS: ' '
 
     steps:
       - name: Checkout code
@@ -26,11 +45,55 @@ jobs:
       - name: Build
         run: dotnet build ./backend-tests/ERCP.Api.Tests.csproj --no-restore
 
-      - name: Run tests
-        run: dotnet test ./backend-tests/ERCP.Api.Tests.csproj --no-build --verbosity normal
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
 
-      - name: Validate Python agents compile
-        run: python3 -m py_compile ai-agents/validation_safety_agent.py ai-agents/coordinator_planner_agent.py ai-agents/situation_analysis_agent.py
+      - name: Install QMS test dependencies
+        run: python -m pip install -r qms/scripts/requirements.txt
+
+      - name: Start migrated QMS API
+        working-directory: backend
+        env:
+          DOTNET_ENVIRONMENT: Qms
+          ASPNETCORE_ENVIRONMENT: Qms
+          ASPNETCORE_URLS: http://127.0.0.1:5009
+          ConnectionStrings__DefaultConnection: ${{ env.QMS_POSTGRES }}
+          DATABASE_URL: ' '
+        run: |
+          mkdir -p ../qms/evidence/ci/backend
+          dotnet run --no-build --no-launch-profile > ../qms/evidence/ci/api.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:5009/api/health > ../qms/evidence/ci/health.json; then
+              python -c "import json; h=json.load(open('../qms/evidence/ci/health.json')); assert h['environment']=='Qms' and h['database']=='PostgreSQL' and h['appliedMigrations']==8 and h['pendingMigrations']==0"
+              exit 0
+            fi
+            sleep 2
+          done
+          cat ../qms/evidence/ci/api.log
+          exit 1
+
+      - name: Run tests
+        run: dotnet test ./backend-tests/ERCP.Api.Tests.csproj --no-build --logger "trx;LogFileName=backend.trx" --results-directory qms/evidence/ci/backend
+
+      - name: Require every database regression to pass
+        run: python qms/scripts/summarize_results.py qms/evidence/ci --backend-only
+
+      - name: Run real agent and HTTP suites
+        env:
+          QMS_API: http://127.0.0.1:5009
+          QMS_WORKFLOW_OUTPUT: qms/evidence/ci/workflow.json
+        run: |
+          python -m pytest qms/scripts/test_agents.py -q --junitxml=qms/evidence/ci/agents.xml
+          python -m pytest qms/scripts/test_live_api.py -q --junitxml=qms/evidence/ci/live-api.xml
+
+      - name: Upload QMS backend evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qms-backend-agent-http-evidence
+          path: qms/evidence/ci
 
   frontend-build-and-test:
     name: Frontend (React) lint + test + build
@@ -46,7 +109,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: frontend-react/package-lock.json
 
@@ -73,6 +136,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.44.9'
           channel: stable
 
       - name: Install dependencies

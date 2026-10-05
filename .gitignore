@@ -38,3 +38,14 @@ frontend-react/dist/
 
 # Office Temp Files
 ~$*
+
+# QMS source, documentation and curated evidence belong in the repository.
+qms/.postgres/
+qms/.tools/
+qms/qa/
+qms/archive/
+qms/evidence/rerun-*/
+qms/evidence/ci/
+qms/*.zip
+**/.pytest_cache/
+!qms/evidence/**/*.log
