@@ -107,8 +107,9 @@ function AppShell() {
     return <HomePage />;
   }
 
-  // Light-theme login renders full-screen with its own header
-  if (location.pathname === "/login" || location.pathname === "/auth/github/callback") {
+  // Light-theme login and register render full-screen with their own header
+  if (location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/auth/github/callback") {
+    if (location.pathname === "/register") return <Register />;
     return <Login />;
   }
 
