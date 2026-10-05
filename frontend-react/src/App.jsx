@@ -66,6 +66,7 @@ function AuthLayout({ children }) {
 
 function AppShell() {
   const location = useLocation();
+  const isLandingPage = location.pathname === "/" || location.pathname === "/home";
   const isAuthPage =
     location.pathname === "/login" ||
     location.pathname === "/register" ||
@@ -78,7 +79,7 @@ function AppShell() {
 
   // Live badge count for the sidebar (non-blocking, fails silently)
   useEffect(() => {
-    if (isAuthPage) return;
+    if (isAuthPage || isLandingPage) return;
     let alive = true;
     incidentService
       .getSummaryStats()
@@ -89,7 +90,7 @@ function AppShell() {
     return () => {
       alive = false;
     };
-  }, [isAuthPage]);
+  }, [isAuthPage, isLandingPage]);
 
   // Load global theme
   useEffect(() => {
@@ -100,6 +101,11 @@ function AppShell() {
   }, []);
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
+
+  // Standalone full-screen Landing Page without Sidebar or Topbar wrapper
+  if (isLandingPage) {
+    return <HomePage />;
+  }
 
   // Standalone full-screen layout without Sidebar or Topbar for authentication pages
   if (isAuthPage) {
