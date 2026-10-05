@@ -63,10 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
         icon: const Icon(Icons.psychology),
-        label: const Text("AI Agent"),
-        backgroundColor: Colors.deepPurple,
+        label: const Text("AI Coordinator"),
+        backgroundColor: const Color(0xFF0284C7),
         foregroundColor: Colors.white,
-        elevation: 4,
+        elevation: 6,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       bottomNavigationBar: NavigationBar(
@@ -124,7 +124,7 @@ class _HomeTabWrapper extends StatelessWidget {
 }
 
 // ==========================================
-// CITIZEN DASHBOARD
+// CITIZEN DASHBOARD (WITH HERO & GENERATED ASSETS)
 // ==========================================
 class _CitizenDashboard extends StatelessWidget {
   final dynamic user;
@@ -143,124 +143,216 @@ class _CitizenDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF0B0F19),
       appBar: AppBar(
-        title: const Text('Citizen Emergency Hub', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.teal.shade800,
+        title: const Text('Citizen Emergency Hub', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        backgroundColor: const Color(0xFF0F172A),
         foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 80),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Welcome Card
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.teal.shade50,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.teal.shade200),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(color: Colors.teal.shade700, borderRadius: BorderRadius.circular(4)),
-                    child: const Text("🛡️ Public Safety & Citizen Portal", style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+            // HERO IMAGE BANNER
+            Stack(
+              children: [
+                Container(
+                  height: 200,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF1E293B),
                   ),
-                  const SizedBox(height: 12),
-                  Text("Welcome, ${user.fullName}", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 4),
-                  const Text("Access rapid incident reporting, live response tracking, and verified regional emergency advisories.", style: TextStyle(color: Colors.black87)),
-                ],
-              ),
+                  child: Image.asset(
+                    'assets/images/hero_emergency.png',
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.blueGrey.shade900,
+                        child: const Center(
+                          child: Icon(Icons.emergency_share, size: 60, color: Colors.cyanAccent),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        const Color(0xFF0B0F19).withAlpha(240),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 16,
+                  left: 16,
+                  right: 16,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFEF4444),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.circle, color: Colors.white, size: 8),
+                            SizedBox(width: 6),
+                            Text("LIVE DISASTER NETWORK ACTIVE", style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Welcome, ${user.fullName}",
+                        style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      const Text(
+                        "AI Automated Dispatch & Community Relief Station",
+                        style: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
 
-            // Hotlines
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _HotlineButton(icon: "🚨", label: "Police: 119", color: Colors.red, onTap: () => _makePhoneCall("119")),
-                  const SizedBox(width: 8),
-                  _HotlineButton(icon: "🚑", label: "Ambulance: 1990", color: Colors.green, onTap: () => _makePhoneCall("1990")),
-                  const SizedBox(width: 8),
-                  _HotlineButton(icon: "🌊", label: "DMC: 117", color: Colors.blue, onTap: () => _makePhoneCall("117")),
-                  const SizedBox(width: 8),
-                  _HotlineButton(icon: "👤", label: "My Profile", color: Colors.purple, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileScreen()))),
+                  // Emergency Hotlines Strip
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _HotlineButton(icon: "🚨", label: "Police: 119", color: Colors.red, onTap: () => _makePhoneCall("119")),
+                        const SizedBox(width: 8),
+                        _HotlineButton(icon: "🚑", label: "Ambulance: 1990", color: Colors.green, onTap: () => _makePhoneCall("1990")),
+                        const SizedBox(width: 8),
+                        _HotlineButton(icon: "🌊", label: "Disaster: 117", color: Colors.blue, onTap: () => _makePhoneCall("117")),
+                        const SizedBox(width: 8),
+                        _HotlineButton(icon: "👤", label: "My Profile", color: Colors.purple, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileScreen()))),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Action Cards with Generated Assets
+                  _buildVisualActionCard(
+                    context,
+                    title: "Report Emergency Incident",
+                    desc: "Trapped in flood, fallen power lines, or medical crisis? Tap to alert AI dispatch instantly.",
+                    imageAsset: "assets/images/hero_emergency.png",
+                    color: const Color(0xFFEF4444),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportIncidentScreen())),
+                    btnLabel: "🚨 Report Incident Now",
+                  ),
+                  const SizedBox(height: 16),
+                  _buildVisualActionCard(
+                    context,
+                    title: "AI Drone & Dispatch Logistics",
+                    desc: "Track real-time response units, drone telemetry, and assigned rescue vehicles.",
+                    imageAsset: "assets/images/ai_dispatch.png",
+                    color: const Color(0xFF0284C7),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const IncidentListScreen())),
+                    btnLabel: "⚡ Track Response Status",
+                  ),
+                  const SizedBox(height: 16),
+                  _buildVisualActionCard(
+                    context,
+                    title: "Emergency Relief Shelters",
+                    desc: "Locate verified community shelters, bed availability, and food distribution centers.",
+                    imageAsset: "assets/images/shelter_relief.png",
+                    color: const Color(0xFF10B981),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ShelterLocatorScreen())),
+                    btnLabel: "🏠 Find Open Shelters",
+                  ),
+                  const SizedBox(height: 24),
+
+                  const Text("⚠️ Severe Weather Advisories", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 12),
+                  _buildSafetyGuide("🌊 Flash Flood Precautions", "Do not drive into flooded roads. 6 inches of fast-moving water knocks humans down.", Colors.blue),
+                  const SizedBox(height: 8),
+                  _buildSafetyGuide("⚡ Electrical Hazards", "Maintain 30 feet clearance from downed power lines and fallen electrical poles.", Colors.amber.shade900),
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
-            const SizedBox(height: 24),
-
-            // Action Cards
-            _buildActionCard(
-              context,
-              title: "Report Emergency",
-              desc: "Encountering flash floods, landslides, fallen trees, or trapped citizens? Submit a rapid report directly to command.",
-              icon: "🚨",
-              color: Colors.red,
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportIncidentScreen())),
-              btnLabel: "+ Report Incident Now",
-            ),
-            const SizedBox(height: 12),
-            _buildActionCard(
-              context,
-              title: "My Incident Reports",
-              desc: "Track the real-time status of your submissions, AI triage classifications, and responding unit dispatch progress.",
-              icon: "📋",
-              color: Colors.blue,
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const IncidentListScreen())),
-              btnLabel: "View My Reports Status",
-            ),
-            const SizedBox(height: 12),
-            _buildActionCard(
-              context,
-              title: "Emergency Shelters",
-              desc: "Locate safe evacuation shelters in your district, verified capacity, facilities, and current occupancy levels.",
-              icon: "🏠",
-              color: Colors.green,
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ShelterLocatorScreen())),
-              btnLabel: "Find Safe Shelters",
-            ),
-            const SizedBox(height: 24),
-
-            const Text("⚠️ Severe Weather & Emergency Safety Guidelines", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-            _buildSafetyGuide("🌊 Flash Flood Precautions", "Never drive or walk through moving water. 6 inches of fast-moving water can knock you down, and 12 inches can float a vehicle.", Colors.blue),
-            const SizedBox(height: 8),
-            _buildSafetyGuide("⚡ Downed Electrical Lines", "Assume all downed wires are energized. Maintain a minimum perimeter distance of 30 feet and report immediately.", Colors.amber.shade900),
-            const SizedBox(height: 8),
-            _buildSafetyGuide("🎒 Emergency Go-Bag", "Prepare drinking water, non-perishable food, essential prescription medications, phone chargers, and national identity documents.", Colors.purple),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildActionCard(BuildContext context, {required String title, required String desc, required String icon, required MaterialColor color, required VoidCallback onTap, required String btnLabel}) {
+  Widget _buildVisualActionCard(BuildContext context, {
+    required String title,
+    required String desc,
+    required String imageAsset,
+    required Color color,
+    required VoidCallback onTap,
+    required String btnLabel,
+  }) {
     return Container(
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withAlpha(15),
-        border: Border.all(color: color.withAlpha(100)),
-        borderRadius: BorderRadius.circular(12),
+        color: const Color(0xFF1E293B),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withAlpha(80)),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withAlpha(50), blurRadius: 10, offset: const Offset(0, 4)),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(icon, style: const TextStyle(fontSize: 32)),
-          const SizedBox(height: 8),
-          Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color.shade800)),
-          const SizedBox(height: 8),
-          Text(desc, style: const TextStyle(fontSize: 13, height: 1.4)),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: onTap,
-            style: ElevatedButton.styleFrom(backgroundColor: color, foregroundColor: Colors.white, minimumSize: const Size.fromHeight(40)),
-            child: Text(btnLabel, style: const TextStyle(fontWeight: FontWeight.bold)),
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: SizedBox(
+              height: 120,
+              width: double.infinity,
+              child: Image.asset(
+                imageAsset,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: color.withAlpha(40),
+                    child: Center(child: Icon(Icons.image, size: 40, color: color)),
+                  );
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                const SizedBox(height: 6),
+                Text(desc, style: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8), height: 1.4)),
+                const SizedBox(height: 14),
+                ElevatedButton(
+                  onPressed: onTap,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: color,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size.fromHeight(44),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: Text(btnLabel, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -270,13 +362,17 @@ class _CitizenDashboard extends StatelessWidget {
   Widget _buildSafetyGuide(String title, String desc, Color color) {
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E293B),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.white10),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: color)),
           const SizedBox(height: 4),
-          Text(desc, style: TextStyle(fontSize: 12, color: Colors.grey.shade700)),
+          Text(desc, style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8))),
         ],
       ),
     );
@@ -299,7 +395,8 @@ class _HotlineButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          border: Border.all(color: color),
+          color: color.withAlpha(20),
+          border: Border.all(color: color.withAlpha(120)),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -307,7 +404,7 @@ class _HotlineButton extends StatelessWidget {
           children: [
             Text(icon),
             const SizedBox(width: 6),
-            Text(label, style: TextStyle(fontWeight: FontWeight.bold, color: color.shade700)),
+            Text(label, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
           ],
         ),
       ),
@@ -373,7 +470,8 @@ class _CoordinatorDashboardState extends State<_CoordinatorDashboard> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Coordinator Dashboard')),
+        backgroundColor: const Color(0xFF0B0F19),
+        appBar: AppBar(title: const Text('Coordinator Dashboard'), backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
@@ -383,7 +481,7 @@ class _CoordinatorDashboardState extends State<_CoordinatorDashboard> {
     final availableVolunteers = _volunteers.where((v) => v.isAvailable).toList();
     final availableResources = _resources.where((r) => r.status == 'Available').toList();
     final lowStockItems = _inventory.where((i) => i.status == 'LowStock' || i.status == 'OutOfStock').toList();
-    
+
     int totalCapacity = 0;
     int totalOccupancy = 0;
     for (var s in _shelters) {
@@ -393,9 +491,10 @@ class _CoordinatorDashboardState extends State<_CoordinatorDashboard> {
     final shelterPct = totalCapacity > 0 ? ((totalOccupancy / totalCapacity) * 100).round() : 0;
 
     return Scaffold(
+      backgroundColor: const Color(0xFF0B0F19),
       appBar: AppBar(
-        title: const Text('Coordinator Dashboard'),
-        backgroundColor: Colors.blue.shade900,
+        title: const Text('Coordinator Command Hub', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        backgroundColor: const Color(0xFF0F172A),
         foregroundColor: Colors.white,
         actions: [
           IconButton(icon: const Icon(Icons.refresh), onPressed: _loadData),
@@ -408,92 +507,145 @@ class _CoordinatorDashboardState extends State<_CoordinatorDashboard> {
       body: RefreshIndicator(
         onRefresh: _loadData,
         child: ListView(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 80),
+          padding: const EdgeInsets.only(bottom: 80),
           children: [
-            // Stat Grid
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.4,
+            // HERO CARD FOR COORDINATORS
+            Stack(
               children: [
-                _StatCard(
-                  icon: "⚠️",
-                  label: "Active Incidents",
-                  value: "${activeIncidents.length}",
-                  sub: "${criticalIncidents.length} critical",
-                  color: criticalIncidents.isNotEmpty ? Colors.red : Colors.orange,
+                SizedBox(
+                  height: 160,
+                  width: double.infinity,
+                  child: Image.asset(
+                    'assets/images/hero_emergency.png',
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(color: Colors.blueGrey.shade900),
+                  ),
                 ),
-                _StatCard(
-                  icon: "🚛",
-                  label: "Dispatches",
-                  value: "${_dispatches.length}",
-                  sub: "active tasks",
-                  color: Colors.blue,
+                Container(
+                  height: 160,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.transparent, const Color(0xFF0B0F19).withAlpha(240)],
+                    ),
+                  ),
                 ),
-                _StatCard(
-                  icon: "👤",
-                  label: "Volunteers",
-                  value: "${_volunteers.length}",
-                  sub: "${availableVolunteers.length} available",
-                  color: Colors.green,
-                ),
-                _StatCard(
-                  icon: "📦",
-                  label: "Resources",
-                  value: "${_resources.length}",
-                  sub: "${availableResources.length} ready",
-                  color: Colors.cyan,
-                ),
-                _StatCard(
-                  icon: "🏠",
-                  label: "Shelter Cap",
-                  value: "$shelterPct%",
-                  sub: "$totalOccupancy / $totalCapacity",
-                  color: shelterPct > 80 ? Colors.red : Colors.green,
-                ),
-                _StatCard(
-                  icon: "📋",
-                  label: "Low Stock",
-                  value: "${lowStockItems.length}",
-                  sub: "items need restock",
-                  color: lowStockItems.isNotEmpty ? Colors.orange : Colors.green,
+                Positioned(
+                  bottom: 16,
+                  left: 16,
+                  right: 16,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("OPERATIONS COMMAND CENTER", style: TextStyle(color: Color(0xFF38BDF8), fontSize: 12, fontWeight: FontWeight.bold)),
+                          Text("Welcome, ${widget.user.fullName}", style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(color: const Color(0xFF10B981).withAlpha(40), border: Border.all(color: const Color(0xFF10B981)), borderRadius: BorderRadius.circular(20)),
+                        child: const Text("ONLINE 🟢", style: TextStyle(color: Color(0xFF10B981), fontWeight: FontWeight.bold, fontSize: 11)),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
 
-            // Quick Actions
-            const Text("QUICK ACTIONS", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                ActionChip(
-                  avatar: const Icon(Icons.add_alert, size: 16),
-                  label: const Text("New Incident"),
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportIncidentScreen())),
-                ),
-                ActionChip(
-                  avatar: const Icon(Icons.person_add, size: 16),
-                  label: const Text("Add Volunteer"),
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SelectProfileScreen())),
-                ),
-                ActionChip(
-                  avatar: const Icon(Icons.person_add_alt_1, size: 16),
-                  label: const Text("Register User"),
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen())),
-                ),
-                ActionChip(
-                  avatar: const Icon(Icons.verified_user, size: 16),
-                  label: const Text("Safety Validation"),
-                  onPressed: () => Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => const ValidationResultScreen())),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Stat Grid
+                  GridView.count(
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    childAspectRatio: 1.4,
+                    children: [
+                      _StatCard(
+                        icon: "⚠️",
+                        label: "Active Incidents",
+                        value: "${activeIncidents.length}",
+                        sub: "${criticalIncidents.length} critical",
+                        color: criticalIncidents.isNotEmpty ? Colors.red : Colors.orange,
+                      ),
+                      _StatCard(
+                        icon: "🚛",
+                        label: "Dispatches",
+                        value: "${_dispatches.length}",
+                        sub: "active tasks",
+                        color: Colors.blue,
+                      ),
+                      _StatCard(
+                        icon: "👤",
+                        label: "Volunteers",
+                        value: "${_volunteers.length}",
+                        sub: "${availableVolunteers.length} available",
+                        color: Colors.green,
+                      ),
+                      _StatCard(
+                        icon: "📦",
+                        label: "Resources",
+                        value: "${_resources.length}",
+                        sub: "${availableResources.length} ready",
+                        color: Colors.cyan,
+                      ),
+                      _StatCard(
+                        icon: "🏠",
+                        label: "Shelter Cap",
+                        value: "$shelterPct%",
+                        sub: "$totalOccupancy / $totalCapacity",
+                        color: shelterPct > 80 ? Colors.red : Colors.green,
+                      ),
+                      _StatCard(
+                        icon: "📋",
+                        label: "Low Stock",
+                        value: "${lowStockItems.length}",
+                        sub: "items need restock",
+                        color: lowStockItems.isNotEmpty ? Colors.orange : Colors.green,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  const Text("QUICK COMMAND ACTIONS", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      ActionChip(
+                        avatar: const Icon(Icons.add_alert, size: 16),
+                        label: const Text("New Incident"),
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportIncidentScreen())),
+                      ),
+                      ActionChip(
+                        avatar: const Icon(Icons.person_add, size: 16),
+                        label: const Text("Add Volunteer"),
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SelectProfileScreen())),
+                      ),
+                      ActionChip(
+                        avatar: const Icon(Icons.person_add_alt_1, size: 16),
+                        label: const Text("Register User"),
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen())),
+                      ),
+                      ActionChip(
+                        avatar: const Icon(Icons.verified_user, size: 16),
+                        label: const Text("Safety Validation"),
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ValidationResultScreen())),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -516,9 +668,9 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withAlpha(20),
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withAlpha(60)),
+        border: Border.all(color: color.withAlpha(80)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -528,21 +680,17 @@ class _StatCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(icon, style: const TextStyle(fontSize: 20)),
-              Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color.shade700)),
+              Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color.shade300)),
             ],
           ),
           const Spacer(),
-          Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12), maxLines: 1, overflow: TextOverflow.ellipsis),
-          Text(sub, style: TextStyle(fontSize: 10, color: Colors.grey.shade700), maxLines: 1, overflow: TextOverflow.ellipsis),
+          Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.white), maxLines: 1, overflow: TextOverflow.ellipsis),
+          Text(sub, style: const TextStyle(fontSize: 10, color: Color(0xFF94A3B8)), maxLines: 1, overflow: TextOverflow.ellipsis),
         ],
       ),
     );
   }
 }
-
-// ==========================================
-// EXISTING TABS
-// ==========================================
 
 class _ResourcesTab extends StatelessWidget {
   const _ResourcesTab();
@@ -550,8 +698,11 @@ class _ResourcesTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF0B0F19),
       appBar: AppBar(
         title: const Text('Resources & Logistics'),
+        backgroundColor: const Color(0xFF0F172A),
+        foregroundColor: Colors.white,
       ),
       body: ListView(
         padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 80),
@@ -589,8 +740,9 @@ class _ResourcesTab extends StatelessWidget {
 
   Widget _buildResourceCard(BuildContext context, {required String title, required String subtitle, required IconData icon, required Color color, required VoidCallback onTap}) {
     return Card(
+      color: const Color(0xFF1E293B),
       elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: color.withAlpha(80))),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
@@ -601,7 +753,7 @@ class _ResourcesTab extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withAlpha(26),
+                  color: color.withAlpha(40),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, size: 32, color: color),
@@ -611,9 +763,9 @@ class _ResourcesTab extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                     const SizedBox(height: 4),
-                    Text(subtitle, style: TextStyle(fontSize: 13, color: Colors.grey.shade600)),
+                    Text(subtitle, style: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
                   ],
                 ),
               ),
@@ -646,8 +798,11 @@ class _SettingsTab extends StatelessWidget {
     ];
 
     return Scaffold(
+      backgroundColor: const Color(0xFF0B0F19),
       appBar: AppBar(
         title: const Text('Settings'),
+        backgroundColor: const Color(0xFF0F172A),
+        foregroundColor: Colors.white,
       ),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 80),
@@ -660,9 +815,9 @@ class _SettingsTab extends StatelessWidget {
             ),
           ),
           SwitchListTile(
-            title: const Text("System Notifications"),
-            subtitle: const Text("Receive critical alerts and AI updates"),
-            secondary: const Icon(Icons.notifications_active),
+            title: const Text("System Notifications", style: TextStyle(color: Colors.white)),
+            subtitle: const Text("Receive critical alerts and AI updates", style: TextStyle(color: Color(0xFF94A3B8))),
+            secondary: const Icon(Icons.notifications_active, color: Color(0xFF38BDF8)),
             value: settings.notificationsEnabled,
             onChanged: (val) {
               settings.setNotificationsEnabled(val);
@@ -673,7 +828,7 @@ class _SettingsTab extends StatelessWidget {
               }
             },
           ),
-          const Divider(),
+          const Divider(color: Colors.white10),
           const Padding(
             padding: EdgeInsets.all(16.0),
             child: Text(
@@ -699,7 +854,7 @@ class _SettingsTab extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-          const Divider(),
+          const Divider(color: Colors.white10),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text("Sign Out", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),

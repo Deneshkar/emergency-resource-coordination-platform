@@ -81,21 +81,30 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Top Icon
+                    // Top Visual Image Banner
                     Container(
-                      padding: const EdgeInsets.all(16),
+                      height: 80,
+                      width: 80,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
+                        border: Border.all(color: Colors.cyanAccent, width: 2),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.2),
-                            blurRadius: 10,
+                            color: Colors.cyanAccent.withValues(alpha: 0.3),
+                            blurRadius: 15,
                             spreadRadius: 2,
                           ),
                         ],
                       ),
-                      child: const Icon(CupertinoIcons.shield_lefthalf_fill, size: 50, color: Colors.cyanAccent),
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/images/hero_emergency.png',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(CupertinoIcons.shield_lefthalf_fill, size: 40, color: Colors.cyanAccent);
+                          },
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 20),
                     const Text(

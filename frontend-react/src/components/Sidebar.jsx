@@ -11,6 +11,7 @@ const Icon = ({ d }) => (
 
 const ICONS = {
   dashboard: <Icon d={<><rect x="3" y="3" width="7" height="9" rx="1.5" /><rect x="14" y="3" width="7" height="5" rx="1.5" /><rect x="14" y="12" width="7" height="9" rx="1.5" /><rect x="3" y="16" width="7" height="5" rx="1.5" /></>} />,
+  home: <Icon d={<path d="M3 12l9-9 9 9M5 10v10a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1V10" />} />,
   incident: <Icon d={<><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" /></>} />,
   list: <Icon d={<><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01" /></>} />,
   dispatch: <Icon d={<><path d="M1 8h14v9H1zM15 11h4l4 4v2h-8z" /><circle cx="5.5" cy="18.5" r="1.8" /><circle cx="18.5" cy="18.5" r="1.8" /></>} />,
@@ -26,6 +27,7 @@ const ICONS = {
 
 const NAV = [
   { sectionKey: "overview", defaultSection: "Overview" },
+  { to: "/home", labelKey: "home_page", defaultLabel: "Home Page", icon: ICONS.home },
   { to: "/dashboard", labelKey: "dashboard", defaultLabel: "Dashboard", icon: ICONS.dashboard },
   { to: "/incidents", labelKey: "incident_hub", defaultLabel: "Incident Hub", icon: ICONS.incident, badgeKey: "active" },
   { sectionKey: "operations", defaultSection: "Operations" },

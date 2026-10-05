@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ToastContainer from "./components/ToastContainer";
 import { Toaster } from "sonner";
 
+import HomePage from "./pages/HomePage";
 import IncidentDashboard from "./pages/IncidentDashboard";
 import IncidentDetail from "./pages/IncidentDetail";
 import ReportIncident from "./pages/ReportIncident";
@@ -134,7 +135,8 @@ function AppShell() {
 
         <main className="app-main-content">
           <Routes>
-            <Route path="/" element={<Navigate to="/incidents" replace />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/home" element={<HomePage />} />
 
             {/* Incident Intelligence & AI Coordinator Routes */}
             <Route
