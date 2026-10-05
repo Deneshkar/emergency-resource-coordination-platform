@@ -80,7 +80,7 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onClose, acti
       <aside className={`sidebar${collapsed ? " collapsed" : ""}${mobileOpen ? " mobile-open" : ""}`} aria-label="Primary navigation">
         <div className="sidebar-header">
           <div className="sidebar-brand">
-            <div className="sidebar-logo" aria-hidden="true">🚨</div>
+            <img src="/assets/images/logo.png" alt="ERCP" style={{ width: 30, height: 30, objectFit: "contain" }} />
             {showText && (
               <div className="sidebar-brand-text">
                 <div className="sidebar-title">ERCP</div>

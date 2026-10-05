@@ -41,7 +41,7 @@ function AuthLayout({ children }) {
     <div className="auth-standalone-layout">
       <header className="auth-standalone-topbar">
         <Link to="/" className="auth-standalone-brand">
-          <span className="auth-standalone-logo" aria-hidden="true">🚨</span>
+          <img src="/assets/images/logo.png" alt="ERCP" style={{ width: 32, height: 32, objectFit: "contain" }} />
           <div>
             <div className="auth-standalone-brand-title">Emergency Resource Platform</div>
             <div className="auth-standalone-brand-sub">Unified Full-Stack & Agentic Operations</div>

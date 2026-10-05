@@ -179,7 +179,7 @@ export default function Login() {
       {/* Top bar */}
       <header className="lg-topbar">
         <Link to="/home" className="lg-brand">
-          <span className="lg-brand-logo">🚨</span>
+          <img src="/assets/images/logo.png" alt="ERCP" style={{ width: 36, height: 36, objectFit: "contain" }} />
           <span>
             <strong>ERCP Platform</strong>
             <small>Emergency Resource Coordination</small>

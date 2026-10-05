@@ -79,7 +79,7 @@ export default function HomePage() {
       {/* TOP STANDALONE NAVBAR */}
       <header className="homepage-navbar-light">
         <div className="navbar-brand-light">
-          <span className="brand-logo-icon">🚨</span>
+          <img src="/assets/images/logo.png" alt="ERCP Logo" style={{ width: 40, height: 40, objectFit: "contain" }} />
           <div>
             <span className="brand-title-light">ERCP PLATFORM</span>
             <span className="brand-sub-light">Emergency Resource & Dispatch System</span>
@@ -434,7 +434,10 @@ export default function HomePage() {
       <footer className="homepage-footer-light">
         <div className="footer-content-light">
           <div className="footer-brand-light">
-            <div className="footer-logo-light">🚨 ERCP PLATFORM</div>
+            <div className="footer-logo-light" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <img src="/assets/images/logo.png" alt="ERCP" style={{ width: 32, height: 32, objectFit: "contain" }} />
+              <span>ERCP PLATFORM</span>
+            </div>
             <p>Unified Full-Stack & Agentic AI Emergency Resource Coordination Platform.</p>
             <div className="footer-status-badge">Status: All Core Services Operational 🟢</div>
           </div>
