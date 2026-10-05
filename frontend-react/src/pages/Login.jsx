@@ -1,6 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "./Login.css";
+
+const DEMO_ROLES = [
+  { key: "Coordinator", label: "Coordinator", icon: "🛡️", tone: "amber", hint: "AI plan approval & dispatches" },
+  { key: "Volunteer", label: "Volunteer", icon: "🦺", tone: "green", hint: "Field responder & shifts" },
+  { key: "Citizen", label: "Citizen", icon: "👤", tone: "blue", hint: "Report incidents & tracking" },
+  { key: "Admin", label: "Admin", icon: "⚙️", tone: "purple", hint: "Full system control" },
+];
 
 export default function Login() {
   const { login, demoLogin, googleLogin, githubLogin } = useAuth();
@@ -9,6 +17,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [demoRoleLoading, setDemoRoleLoading] = useState(null);
@@ -106,10 +115,10 @@ export default function Login() {
           window.google.accounts.id.renderButton(googleBtnRef.current, {
             theme: "outline",
             size: "large",
-            text: "signin_with",
-            shape: "rectangular",
-            logo_alignment: "left",
-            width: 320,
+            text: "continue_with",
+            shape: "pill",
+            logo_alignment: "center",
+            width: 200,
           });
           setGoogleReady(true);
           if (interval) clearInterval(interval);
@@ -163,223 +172,145 @@ export default function Login() {
     }
   };
 
+  const busy = loading || Boolean(demoRoleLoading);
+
   return (
-    <div className="login-light-container">
-      <div className="login-light-wrapper">
-        {/* LEFT SIDE HERO PANEL (LIGHT THEME) */}
-        <div className="login-light-hero">
-          <div className="hero-light-bg">
-            <img 
-              src="/assets/images/hero_emergency.png" 
-              alt="Emergency Command Operations" 
-              className="hero-light-img" 
-            />
-            <div className="hero-light-mask"></div>
-          </div>
+    <div className="lg-page">
+      {/* Top bar */}
+      <header className="lg-topbar">
+        <Link to="/home" className="lg-brand">
+          <span className="lg-brand-logo">🚨</span>
+          <span>
+            <strong>ERCP Platform</strong>
+            <small>Emergency Resource Coordination</small>
+          </span>
+        </Link>
+        <Link to="/home" className="lg-back">← Back to Home</Link>
+      </header>
 
-          <div className="hero-light-content">
-            <div className="hero-badge-light-pill">
-              <span className="pulse-dot-red"></span>
-              <span>24/7 AI EMERGENCY RESPONSE NETWORK</span>
-            </div>
-
-            <h2 className="hero-light-title">
-              Unified Emergency & <span className="gradient-text-light">Resource Command</span>
-            </h2>
-
-            <p className="hero-light-desc">
-              Connecting citizens, medical teams, field volunteers, and emergency coordinators in real time with satellite telemetry and AI drone dispatches.
-            </p>
-
-            <ul className="hero-light-features">
-              <li>
-                <span className="feat-light-icon">🛰️</span>
-                <div>
-                  <strong>Satellite Situation Analytics</strong>
-                  <p>Live threat tracking & GIS mapping</p>
-                </div>
-              </li>
-              <li>
-                <span className="feat-light-icon">⚡</span>
-                <div>
-                  <strong>AI Automated Dispatch Engine</strong>
-                  <p>Fastest route calculation & responder triage</p>
-                </div>
-              </li>
-              <li>
-                <span className="feat-light-icon">🛡️</span>
-                <div>
-                  <strong>Multi-Role Access Control</strong>
-                  <p>Secure portals for citizens, volunteers & coordinators</p>
-                </div>
-              </li>
-            </ul>
-
-            <div className="hero-light-footer">
-              <span className="status-live-dot">🟢</span>
-              <span>All Systems Operational • 99.9% Uptime</span>
+      <main className="lg-main">
+        {/* Visual panel */}
+        <section className="lg-visual" aria-hidden="true">
+          <img src="/assets/images/shelter_relief.png" alt="" className="lg-visual-img" />
+          <div className="lg-visual-shade" />
+          <div className="lg-visual-content">
+            <span className="lg-live-pill"><span className="lg-live-dot" /> Live operations network</span>
+            <h2>Coordinate every response, from report to relief.</h2>
+            <div className="lg-stat-row">
+              <div><strong>24/7</strong><span>AI triage</span></div>
+              <div><strong>4</strong><span>Role portals</span></div>
+              <div><strong>&lt;2 min</strong><span>Dispatch time</span></div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* RIGHT SIDE AUTH FORM CARD (LIGHT THEME) */}
-        <div className="login-light-form-panel">
-          <div className="login-card-light">
-            <div className="login-card-header">
-              <Link to="/home" className="back-home-link-light">← Back to Home Page</Link>
-              
-              <div className="brand-badge-light">
-                <span className="logo-icon-light">🚨</span>
-                <span className="brand-title-text">ERCP OPERATIONS</span>
-              </div>
+        {/* Form card */}
+        <section className="lg-card">
+          <div className="lg-card-head">
+            <h1>Welcome back</h1>
+            <p>Sign in to access incident coordination and responder tools.</p>
+          </div>
 
-              <h1 className="login-title-light">Sign In to Platform</h1>
-              <p className="login-subtitle-light">
-                Enter your credentials or choose a quick demo role to access the command hub.
-              </p>
+          {error && (
+            <div className="lg-error" role="alert">
+              <span>⚠️</span>
+              <span>{error}</span>
             </div>
+          )}
 
-            {error && (
-              <div className="login-alert-error" role="alert">
-                <span>⚠️ {error}</span>
-              </div>
-            )}
+          <form onSubmit={handleSubmit} className="lg-form">
+            <label className="lg-field">
+              <span>Email address</span>
+              <input
+                id="auth-email"
+                type="email"
+                placeholder="you@ercp.org"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                required
+              />
+            </label>
 
-            {/* COMPACT TOP DEMO ROLE STRIP (Compact & space-saving) */}
-            <div className="compact-demo-strip">
-              <div className="compact-demo-label">
-                <span>⚡ Instant Demo Access:</span>
-              </div>
-              <div className="compact-role-pills">
-                <button
-                  type="button"
-                  className="role-pill coord"
-                  title="Sign in as Emergency Coordinator"
-                  disabled={Boolean(demoRoleLoading) || loading}
-                  onClick={() => handleDemoClick("Coordinator")}
-                >
-                  <span className="pill-dot coord"></span>
-                  <span>Coordinator</span>
-                  {demoRoleLoading === "Coordinator" && <span className="pill-spinner" />}
-                </button>
-
-                <button
-                  type="button"
-                  className="role-pill vol"
-                  title="Sign in as Field Responder / Volunteer"
-                  disabled={Boolean(demoRoleLoading) || loading}
-                  onClick={() => handleDemoClick("Volunteer")}
-                >
-                  <span className="pill-dot vol"></span>
-                  <span>Volunteer</span>
-                  {demoRoleLoading === "Volunteer" && <span className="pill-spinner" />}
-                </button>
-
-                <button
-                  type="button"
-                  className="role-pill cit"
-                  title="Sign in as Citizen"
-                  disabled={Boolean(demoRoleLoading) || loading}
-                  onClick={() => handleDemoClick("Citizen")}
-                >
-                  <span className="pill-dot cit"></span>
-                  <span>Citizen</span>
-                  {demoRoleLoading === "Citizen" && <span className="pill-spinner" />}
-                </button>
-
-                <button
-                  type="button"
-                  className="role-pill admin"
-                  title="Sign in as System Administrator"
-                  disabled={Boolean(demoRoleLoading) || loading}
-                  onClick={() => handleDemoClick("Admin")}
-                >
-                  <span className="pill-dot admin"></span>
-                  <span>Admin</span>
-                  {demoRoleLoading === "Admin" && <span className="pill-spinner" />}
-                </button>
-              </div>
-            </div>
-
-            {/* TRADITIONAL CREDENTIALS FORM */}
-            <form onSubmit={handleSubmit} className="login-form-light">
-              <div className="form-group-light">
-                <label htmlFor="auth-email">Email Address</label>
-                <input
-                  id="auth-email"
-                  type="email"
-                  placeholder="e.g. coordinator@ercp.org"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="input-light"
-                  autoComplete="email"
-                  required
-                />
-              </div>
-
-              <div className="form-group-light">
-                <div className="password-label-row">
-                  <label htmlFor="auth-password">Password</label>
-                  <Link to="/forgot-password" className="forgot-pass-link">Forgot Password?</Link>
-                </div>
+            <label className="lg-field">
+              <span className="lg-field-row">
+                Password
+                <Link to="/forgot-password" className="lg-forgot">Forgot?</Link>
+              </span>
+              <div className="lg-pass-wrap">
                 <input
                   id="auth-password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="input-light"
                   autoComplete="current-password"
                   required
                 />
+                <button
+                  type="button"
+                  className="lg-eye"
+                  onClick={() => setShowPassword((s) => !s)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
               </div>
+            </label>
 
-              <button
-                type="submit"
-                className="btn-submit-light"
-                disabled={loading || Boolean(demoRoleLoading)}
-              >
-                {loading ? "Authenticating..." : "Sign In to Operations"}
-              </button>
-            </form>
+            <button type="submit" className="lg-submit" disabled={busy}>
+              {loading ? "Signing in…" : "Sign in"}
+            </button>
+          </form>
 
-            {/* SOCIAL SIGN-IN AT THE BOTTOM */}
-            <div className="social-divider-light">
-              <span>OR CONNECT WITH SOCIAL ACCOUNT</span>
-            </div>
-
-            <div className="social-auth-bottom">
-              {/* Google Button */}
-              <div ref={googleBtnRef} className="google-btn-wrapper" />
-              {!googleReady && (
-                <div className="social-init-text">
-                  Initializing Google Sign-In...
-                </div>
-              )}
-
-              {/* GitHub Button */}
-              <button
-                type="button"
-                className="github-btn-light"
-                onClick={handleGithubLogin}
-                disabled={loading || githubLoading || Boolean(demoRoleLoading)}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-                </svg>
-                <span>{githubLoading ? "Connecting to GitHub..." : "Continue with GitHub"}</span>
-              </button>
-            </div>
-
-            <div className="login-footer-light">
-              <span>Don't have an account?</span>{" "}
-              <Link to="/register" className="register-link-light">
-                Register as Citizen or Volunteer
-              </Link>
+          {/* Compact demo access */}
+          <div className="lg-demo">
+            <span className="lg-demo-label">⚡ Quick demo</span>
+            <div className="lg-demo-chips">
+              {DEMO_ROLES.map((r) => (
+                <button
+                  key={r.key}
+                  type="button"
+                  className={`lg-chip lg-chip-${r.tone}`}
+                  title={r.hint}
+                  disabled={busy}
+                  onClick={() => handleDemoClick(r.key)}
+                >
+                  {demoRoleLoading === r.key ? <span className="lg-spin" /> : <span>{r.icon}</span>}
+                  {r.label}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
-      </div>
+
+          {/* Social sign-in at the bottom */}
+          <div className="lg-divider"><span>or continue with</span></div>
+
+          <div className="lg-social">
+            <div className="lg-google-slot">
+              <div ref={googleBtnRef} />
+              {!googleReady && <span className="lg-google-wait">Loading Google…</span>}
+            </div>
+            <button
+              type="button"
+              className="lg-github"
+              onClick={handleGithubLogin}
+              disabled={busy || githubLoading}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+              </svg>
+              {githubLoading ? "Connecting…" : "GitHub"}
+            </button>
+          </div>
+
+          <p className="lg-register">
+            New here? <Link to="/register">Create a Citizen or Volunteer account</Link>
+          </p>
+        </section>
+      </main>
+
+      <footer className="lg-footer">© 2026 ERCP • Emergency hotline 119 / 1990 / 117</footer>
     </div>
   );
 }
