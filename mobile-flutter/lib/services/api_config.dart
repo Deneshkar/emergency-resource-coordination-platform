@@ -21,7 +21,7 @@ class ApiConfig {
     }
     if (_envBaseUrl.isNotEmpty) return _envBaseUrl;
 
-    return 'https://programs-agenda-contracting-seven.trycloudflare.com/api';
+    return 'https://ercp-backend-production-81a5.up.railway.app/api';
 
     /*
     if (kIsWeb) {
