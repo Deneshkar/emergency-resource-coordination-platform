@@ -1,0 +1,45 @@
+{
+  "number": 2,
+  "name": "M.Thanusikan",
+  "student_id": "IT24103609",
+  "component": "Resource and Inventory Management",
+  "agent_module": "situation_analysis_agent",
+  "agent_class": "SituationAnalysisAgent",
+  "agent_method": "run_assessment",
+  "backend_classes": [
+    "ResourcesControllerTests",
+    "InventoryControllerTests",
+    "SheltersControllerTests",
+    "GeolocationServiceTests",
+    "SituationAnalysisAgentTests"
+  ],
+  "agent_codes": [
+    "AI04",
+    "AI05"
+  ],
+  "allowlist_agent": null,
+  "demo_note": "Incident priority, inventory, resources and shelters produce urgency and shortage analysis. The current method named nearest_shelter selects the eligible shelter with most available capacity; it does not calculate geographic distance. Backend tests here use InMemory, not PostgreSQL.",
+  "backend_tests": [
+    "ERCP.Api.Tests.GeolocationServiceTests.CalculateHaversineDistanceKm_ReturnsAccurateKmDistance",
+    "ERCP.Api.Tests.GeolocationServiceTests.GetNearestShelters_OrdersSheltersByProximity",
+    "ERCP.Api.Tests.InventoryControllerTests.AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative",
+    "ERCP.Api.Tests.InventoryControllerTests.AdjustStock_SubtractsQuantity_UpdatesStatus",
+    "ERCP.Api.Tests.InventoryControllerTests.CreateInventoryItem_SetsLowStock_WhenBelowThreshold",
+    "ERCP.Api.Tests.ResourcesControllerTests.Create_AddsResource_ReturnsCreated",
+    "ERCP.Api.Tests.ResourcesControllerTests.GetAvailable_ReturnsOnlyAvailableResources",
+    "ERCP.Api.Tests.ResourcesControllerTests.UpdateStatus_ChangesResourceStatus",
+    "ERCP.Api.Tests.SheltersControllerTests.CreateShelter_ReturnsCreated",
+    "ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity",
+    "ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached",
+    "ERCP.Api.Tests.SituationAnalysisAgentTests.AssessSituation_GeneratesValidAssessment"
+  ],
+  "agent_tests": [
+    "test_AI04_urgency_score[Low-25]",
+    "test_AI04_urgency_score[Medium-50]",
+    "test_AI04_urgency_score[High-75]",
+    "test_AI04_urgency_score[Critical-90]",
+    "test_AI05_full_shelter_is_excluded"
+  ],
+  "expected_backend_count": 12,
+  "expected_agent_count": 5
+}

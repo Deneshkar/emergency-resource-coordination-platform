@@ -1,0 +1,202 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Member 4 - Test cases</title>
+<style>body{font:16px/1.55 system-ui,sans-serif;color:#173247;background:#edf2f5;margin:0}
+main{max-width:1100px;margin:32px auto;padding:32px;background:white;border-radius:12px}
+h1{font-size:30px}h2{margin-top:28px}a{color:#145797}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f4f7;padding:18px;font:13px/1.5 Consolas,monospace}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{border:1px solid #c6d4df;padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#e4edf4}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.note{background:#eaf2f8;padding:16px}.pass{color:#14652e}.fail{color:#a31919}details{margin:12px 0}section{border-top:1px solid #c6d4df;margin-top:28px;padding-top:12px}
+@media(max-width:750px){main{margin:0;padding:18px}.grid{display:block}}
+@media print{body{background:white}main{margin:0;padding:0}pre{font-size:10px}section{break-inside:avoid}}</style>
+<main><h1>Member 4 - Test cases</h1><p><b>Deneshkar. P | IT24103828</b><br>Volunteer/Responder Management + ValidationSafetyAgent</p><p class="note">9 backend cases + 10 agent cases. These are selections of canonical group tests, not duplicated implementations. Source and expected assertions are below. Results shown as historical are from the group run; open results/&lt;dated run&gt;/results.html for a separate execution.</p><section><h2>BE-068: ERCP.Api.Tests.VolunteerShiftTests.CreateShift_EndBeforeStart_ReturnsBadRequest</h2><p><a href="Source_Code.html#VolunteerShiftTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.VolunteerShiftTests.CreateShift_EndBeforeStart_ReturnsBadRequest&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.IsType&lt;Microsoft.AspNetCore.Mvc.BadRequestObjectResult&gt;(result.Result);
+Assert.Equal(0, await ctx.Shifts.CountAsync());</pre><p>Historical group result: Passed - Passed; duration 00:00:00.7714451; recorded 2026-10-06T00:15:35.1759208+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task CreateShift_EndBeforeStart_ReturnsBadRequest()
+    {
+        var (ctx, volunteer) = await SeedVolunteerAsync();
+        var controller = new VolunteersController(ctx);
+
+        var result = await controller.CreateShift(
+            volunteer.Id,
+            new CreateShiftDto
+            {
+                StartTime = new DateTime(2026, 10, 1, 16, 0, 0, DateTimeKind.Utc),
+                EndTime = new DateTime(2026, 10, 1, 8, 0, 0, DateTimeKind.Utc),
+            });
+
+        Assert.IsType&lt;Microsoft.AspNetCore.Mvc.BadRequestObjectResult&gt;(result.Result);
+        Assert.Equal(0, await ctx.Shifts.CountAsync());
+    }</pre></details></section><section><h2>BE-069: ERCP.Api.Tests.VolunteerShiftTests.CreateShift_InvalidStatus_ReturnsBadRequest</h2><p><a href="Source_Code.html#VolunteerShiftTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.VolunteerShiftTests.CreateShift_InvalidStatus_ReturnsBadRequest&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.IsType&lt;Microsoft.AspNetCore.Mvc.BadRequestObjectResult&gt;(result.Result);
+Assert.Equal(0, await ctx.Shifts.CountAsync());</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0034683; recorded 2026-10-06T00:15:35.1795150+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task CreateShift_InvalidStatus_ReturnsBadRequest()
+    {
+        var (ctx, volunteer) = await SeedVolunteerAsync();
+        var controller = new VolunteersController(ctx);
+
+        var result = await controller.CreateShift(
+            volunteer.Id,
+            new CreateShiftDto
+            {
+                StartTime = new DateTime(2026, 10, 1, 8, 0, 0, DateTimeKind.Utc),
+                EndTime = new DateTime(2026, 10, 1, 16, 0, 0, DateTimeKind.Utc),
+                Status = &quot;PartyTime&quot;,
+            });
+
+        Assert.IsType&lt;Microsoft.AspNetCore.Mvc.BadRequestObjectResult&gt;(result.Result);
+        Assert.Equal(0, await ctx.Shifts.CountAsync());
+    }
+}</pre></details></section><section><h2>BE-070: ERCP.Api.Tests.VolunteerShiftTests.CreateShift_UnknownVolunteer_ReturnsNotFound</h2><p><a href="Source_Code.html#VolunteerShiftTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.VolunteerShiftTests.CreateShift_UnknownVolunteer_ReturnsNotFound&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.IsType&lt;Microsoft.AspNetCore.Mvc.NotFoundResult&gt;(result.Result);
+Assert.Equal(0, await ctx.Shifts.CountAsync());</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0014960; recorded 2026-10-06T00:15:35.1815204+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task CreateShift_UnknownVolunteer_ReturnsNotFound()
+    {
+        var ctx = GetInMemoryContext();
+        var controller = new VolunteersController(ctx);
+
+        var result = await controller.CreateShift(
+            Guid.NewGuid(),
+            new CreateShiftDto
+            {
+                StartTime = new DateTime(2026, 10, 1, 8, 0, 0, DateTimeKind.Utc),
+                EndTime = new DateTime(2026, 10, 1, 16, 0, 0, DateTimeKind.Utc),
+            });
+
+        Assert.IsType&lt;Microsoft.AspNetCore.Mvc.NotFoundResult&gt;(result.Result);
+        Assert.Equal(0, await ctx.Shifts.CountAsync());
+    }</pre></details></section><section><h2>BE-071: ERCP.Api.Tests.VolunteerShiftTests.CreateShift_ValidWindow_PersistsAndReturnsCreated</h2><p><a href="Source_Code.html#VolunteerShiftTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.VolunteerShiftTests.CreateShift_ValidWindow_PersistsAndReturnsCreated&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>var created = Assert.IsType&lt;Microsoft.AspNetCore.Mvc.CreatedAtActionResult&gt;(result.Result);
+var shift = Assert.IsType&lt;ShiftResponseDto&gt;(created.Value);
+Assert.Equal(volunteer.Id, shift.VolunteerId);
+Assert.Equal(ShiftStatus.Scheduled.ToString(), shift.Status);
+Assert.Equal(1, await ctx.Shifts.CountAsync());</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0172307; recorded 2026-10-06T00:15:35.1984290+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task CreateShift_ValidWindow_PersistsAndReturnsCreated()
+    {
+        var (ctx, volunteer) = await SeedVolunteerAsync();
+        var controller = new VolunteersController(ctx);
+        var start = new DateTime(2026, 10, 1, 8, 0, 0, DateTimeKind.Utc);
+        var end = new DateTime(2026, 10, 1, 16, 0, 0, DateTimeKind.Utc);
+
+        var result = await controller.CreateShift(
+            volunteer.Id, new CreateShiftDto { StartTime = start, EndTime = end, Status = &quot;Scheduled&quot; });
+
+        var created = Assert.IsType&lt;Microsoft.AspNetCore.Mvc.CreatedAtActionResult&gt;(result.Result);
+        var shift = Assert.IsType&lt;ShiftResponseDto&gt;(created.Value);
+        Assert.Equal(volunteer.Id, shift.VolunteerId);
+        Assert.Equal(ShiftStatus.Scheduled.ToString(), shift.Status);
+        Assert.Equal(1, await ctx.Shifts.CountAsync());
+    }</pre></details></section><section><h2>BE-076: ERCP.Api.Tests.VolunteersApiIntegrationTests.CreateShift_InvalidWindow_OverHttp_Returns400</h2><p><a href="Source_Code.html#VolunteersApiIntegrationTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.VolunteersApiIntegrationTests.CreateShift_InvalidWindow_OverHttp_Returns400&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.Equal(HttpStatusCode.BadRequest, badShift.StatusCode);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.1364798; recorded 2026-10-06T00:15:36.8295165+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task CreateShift_InvalidWindow_OverHttp_Returns400()
+    {
+        var client = _factory.CreateClient();
+        var token = await RegisterCoordinatorAsync(client);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(&quot;Bearer&quot;, token);
+
+        var create = await client.PostAsJsonAsync(&quot;/api/volunteers&quot;, new
+        {
+            name = &quot;E2E Window&quot;,
+            email = UniqueEmail(&quot;e2e-window&quot;),
+            phone = &quot;1&quot;,
+            skills = &quot;driving&quot;,
+        });
+        using var createdDoc = JsonDocument.Parse(await create.Content.ReadAsStringAsync());
+        var volunteerId = createdDoc.RootElement.GetProperty(&quot;id&quot;).GetGuid();
+
+        var badShift = await client.PostAsJsonAsync($&quot;/api/volunteers/{volunteerId}/shifts&quot;, new
+        {
+            startTime = new DateTime(2026, 10, 3, 16, 0, 0, DateTimeKind.Utc),
+            endTime = new DateTime(2026, 10, 3, 8, 0, 0, DateTimeKind.Utc),
+            status = &quot;Scheduled&quot;,
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, badShift.StatusCode);
+    }
+}</pre></details></section><section><h2>BE-077: ERCP.Api.Tests.VolunteersApiIntegrationTests.GetVolunteers_Anonymous_Returns401</h2><p><a href="Source_Code.html#VolunteersApiIntegrationTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.VolunteersApiIntegrationTests.GetVolunteers_Anonymous_Returns401&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0999650; recorded 2026-10-06T00:15:36.4717288+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task GetVolunteers_Anonymous_Returns401()
+    {
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync(&quot;/api/volunteers&quot;);
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }</pre></details></section><section><h2>BE-078: ERCP.Api.Tests.VolunteersApiIntegrationTests.RegisterAndLogin_Coordinator_ReturnsToken</h2><p><a href="Source_Code.html#VolunteersApiIntegrationTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.VolunteersApiIntegrationTests.RegisterAndLogin_Coordinator_ReturnsToken&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.NotEmpty(token);
+Assert.Equal(HttpStatusCode.OK, me.StatusCode);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.2209630; recorded 2026-10-06T00:15:36.6928661+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task RegisterAndLogin_Coordinator_ReturnsToken()
+    {
+        var client = _factory.CreateClient();
+
+        var token = await RegisterCoordinatorAsync(client);
+
+        Assert.NotEmpty(token);
+
+        // The new identity is recognized by the protected profile endpoint.
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(&quot;Bearer&quot;, token);
+        var me = await client.GetAsync(&quot;/api/Auth/me&quot;);
+        Assert.Equal(HttpStatusCode.OK, me.StatusCode);
+    }</pre></details></section><section><h2>BE-079: ERCP.Api.Tests.VolunteersApiIntegrationTests.SeededDemoData_Exists</h2><p><a href="Source_Code.html#VolunteersApiIntegrationTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.VolunteersApiIntegrationTests.SeededDemoData_Exists&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.True(await context.Incidents.AnyAsync());
+Assert.True(await context.Users.AnyAsync(u =&gt; u.Role == &quot;Coordinator&quot;));</pre><p>Historical group result: Passed - Passed; duration 00:00:01.9670233; recorded 2026-10-06T00:15:36.3715090+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task SeededDemoData_Exists()
+    {
+        // Startup seeding (incidents + demo users incl. coordinator@ercp.org)
+        // must survive on a fresh database — the assessed demo logins depend on it.
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService&lt;AppDbContext&gt;();
+
+        Assert.True(await context.Incidents.AnyAsync());
+        Assert.True(await context.Users.AnyAsync(u =&gt; u.Role == &quot;Coordinator&quot;));
+    }</pre></details></section><section><h2>BE-080: ERCP.Api.Tests.VolunteersApiIntegrationTests.VolunteerShiftLifecycle_OverHttp</h2><p><a href="Source_Code.html#VolunteersApiIntegrationTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.VolunteersApiIntegrationTests.VolunteerShiftLifecycle_OverHttp&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.Equal(HttpStatusCode.Created, create.StatusCode);
+Assert.NotEqual(Guid.Empty, volunteerId);
+Assert.Equal(HttpStatusCode.Created, shift.StatusCode);
+Assert.Equal(HttpStatusCode.OK, history.StatusCode);
+Assert.Contains(&quot;2026-10-02&quot;, historyBody);
+Assert.Equal(HttpStatusCode.NoContent, toggle.StatusCode);
+Assert.Equal(HttpStatusCode.OK, fetched.StatusCode);
+Assert.False(fetchedDoc.RootElement.GetProperty(&quot;isAvailable&quot;).GetBoolean());</pre><p>Historical group result: Passed - Passed; duration 00:00:00.1996998; recorded 2026-10-06T00:15:37.0367799+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task VolunteerShiftLifecycle_OverHttp()
+    {
+        var client = _factory.CreateClient();
+        var token = await RegisterCoordinatorAsync(client);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(&quot;Bearer&quot;, token);
+
+        // 1. Register a volunteer
+        var email = UniqueEmail(&quot;e2e-responder&quot;);
+        var create = await client.PostAsJsonAsync(&quot;/api/volunteers&quot;, new
+        {
+            name = &quot;E2E Responder&quot;,
+            email,
+            phone = &quot;0770000000&quot;,
+            skills = &quot;medical, rescue&quot;,
+        });
+        Assert.Equal(HttpStatusCode.Created, create.StatusCode);
+        using var createdDoc = JsonDocument.Parse(await create.Content.ReadAsStringAsync());
+        var volunteerId = createdDoc.RootElement.GetProperty(&quot;id&quot;).GetGuid();
+        Assert.NotEqual(Guid.Empty, volunteerId);
+
+        // 2. Assign a shift
+        var start = new DateTime(2026, 10, 2, 8, 0, 0, DateTimeKind.Utc);
+        var end = new DateTime(2026, 10, 2, 16, 0, 0, DateTimeKind.Utc);
+        var shift = await client.PostAsJsonAsync($&quot;/api/volunteers/{volunteerId}/shifts&quot;, new
+        {
+            startTime = start,
+            endTime = end,
+            status = &quot;Scheduled&quot;,
+        });
+        Assert.Equal(HttpStatusCode.Created, shift.StatusCode);
+
+        // 3. Shift history contains the new shift
+        var history = await client.GetAsync($&quot;/api/volunteers/{volunteerId}/shifts&quot;);
+        Assert.Equal(HttpStatusCode.OK, history.StatusCode);
+        var historyBody = await history.Content.ReadAsStringAsync();
+        Assert.Contains(&quot;2026-10-02&quot;, historyBody);
+
+        // 4. Toggle availability off-duty and verify via GET
+        var toggle = await client.PutAsJsonAsync(
+            $&quot;/api/volunteers/{volunteerId}/availability&quot;, new { isAvailable = false });
+        Assert.Equal(HttpStatusCode.NoContent, toggle.StatusCode);
+
+        var fetched = await client.GetAsync($&quot;/api/volunteers/{volunteerId}&quot;);
+        Assert.Equal(HttpStatusCode.OK, fetched.StatusCode);
+        using var fetchedDoc = JsonDocument.Parse(await fetched.Content.ReadAsStringAsync());
+        Assert.False(fetchedDoc.RootElement.GetProperty(&quot;isAvailable&quot;).GetBoolean());
+    }</pre></details></section><section><h2>AI-003: test_AI01_unapproved_tool_is_rejected[ValidationSafetyAgent]</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI01_unapproved_tool_is_rejected&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>All assertions in the named test must pass for its configured fixture.</pre><p>Historical group result: Passed - JUnit records pass; 0.000 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI01_unapproved_tool_is_rejected(agent):
+    with pytest.raises(ValueError):
+        agent().execute_tool(&#x27;delete_database&#x27;, {})</pre></details></section><section><h2>AI-011: test_AI06_shelter_capacity_boundary[0-True]</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI06_shelter_capacity_boundary&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert ValidationSafetyAgent().check_shelter_capacity({&#x27;status&#x27;:&#x27;Active&#x27;,&#x27;total_capacity&#x27;:10,&#x27;current_occupancy&#x27;:5,&#x27;incoming_count&#x27;:incoming})[&#x27;passed&#x27;] is passed</pre><p>Historical group result: Passed - JUnit records pass; 0.000 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI06_shelter_capacity_boundary(incoming, passed):
+    assert ValidationSafetyAgent().check_shelter_capacity({&#x27;status&#x27;:&#x27;Active&#x27;,&#x27;total_capacity&#x27;:10,&#x27;current_occupancy&#x27;:5,&#x27;incoming_count&#x27;:incoming})[&#x27;passed&#x27;] is passed</pre></details></section><section><h2>AI-012: test_AI06_shelter_capacity_boundary[5-True]</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI06_shelter_capacity_boundary&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert ValidationSafetyAgent().check_shelter_capacity({&#x27;status&#x27;:&#x27;Active&#x27;,&#x27;total_capacity&#x27;:10,&#x27;current_occupancy&#x27;:5,&#x27;incoming_count&#x27;:incoming})[&#x27;passed&#x27;] is passed</pre><p>Historical group result: Passed - JUnit records pass; 0.000 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI06_shelter_capacity_boundary(incoming, passed):
+    assert ValidationSafetyAgent().check_shelter_capacity({&#x27;status&#x27;:&#x27;Active&#x27;,&#x27;total_capacity&#x27;:10,&#x27;current_occupancy&#x27;:5,&#x27;incoming_count&#x27;:incoming})[&#x27;passed&#x27;] is passed</pre></details></section><section><h2>AI-013: test_AI06_shelter_capacity_boundary[6-False]</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI06_shelter_capacity_boundary&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert ValidationSafetyAgent().check_shelter_capacity({&#x27;status&#x27;:&#x27;Active&#x27;,&#x27;total_capacity&#x27;:10,&#x27;current_occupancy&#x27;:5,&#x27;incoming_count&#x27;:incoming})[&#x27;passed&#x27;] is passed</pre><p>Historical group result: Passed - JUnit records pass; 0.000 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI06_shelter_capacity_boundary(incoming, passed):
+    assert ValidationSafetyAgent().check_shelter_capacity({&#x27;status&#x27;:&#x27;Active&#x27;,&#x27;total_capacity&#x27;:10,&#x27;current_occupancy&#x27;:5,&#x27;incoming_count&#x27;:incoming})[&#x27;passed&#x27;] is passed</pre></details></section><section><h2>AI-014: test_AI07_stock_boundary[1-True]</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI07_stock_boundary&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert ValidationSafetyAgent().check_resource_stock({&#x27;available_qty&#x27;:5,&#x27;requested_qty&#x27;:qty,&#x27;status&#x27;:&#x27;Available&#x27;})[&#x27;passed&#x27;] is passed</pre><p>Historical group result: Passed - JUnit records pass; 0.001 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI07_stock_boundary(qty, passed):
+    assert ValidationSafetyAgent().check_resource_stock({&#x27;available_qty&#x27;:5,&#x27;requested_qty&#x27;:qty,&#x27;status&#x27;:&#x27;Available&#x27;})[&#x27;passed&#x27;] is passed</pre></details></section><section><h2>AI-015: test_AI07_stock_boundary[5-True]</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI07_stock_boundary&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert ValidationSafetyAgent().check_resource_stock({&#x27;available_qty&#x27;:5,&#x27;requested_qty&#x27;:qty,&#x27;status&#x27;:&#x27;Available&#x27;})[&#x27;passed&#x27;] is passed</pre><p>Historical group result: Passed - JUnit records pass; 0.000 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI07_stock_boundary(qty, passed):
+    assert ValidationSafetyAgent().check_resource_stock({&#x27;available_qty&#x27;:5,&#x27;requested_qty&#x27;:qty,&#x27;status&#x27;:&#x27;Available&#x27;})[&#x27;passed&#x27;] is passed</pre></details></section><section><h2>AI-016: test_AI07_stock_boundary[6-False]</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI07_stock_boundary&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert ValidationSafetyAgent().check_resource_stock({&#x27;available_qty&#x27;:5,&#x27;requested_qty&#x27;:qty,&#x27;status&#x27;:&#x27;Available&#x27;})[&#x27;passed&#x27;] is passed</pre><p>Historical group result: Passed - JUnit records pass; 0.001 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI07_stock_boundary(qty, passed):
+    assert ValidationSafetyAgent().check_resource_stock({&#x27;available_qty&#x27;:5,&#x27;requested_qty&#x27;:qty,&#x27;status&#x27;:&#x27;Available&#x27;})[&#x27;passed&#x27;] is passed</pre></details></section><section><h2>AI-017: test_AI08_unavailable_volunteer_is_rejected</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI08_unavailable_volunteer_is_rejected&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert result[&#x27;is_valid&#x27;] is False and result[&#x27;recommendation&#x27;] == &#x27;REJECT&#x27;</pre><p>Historical group result: Passed - JUnit records pass; 0.000 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI08_unavailable_volunteer_is_rejected():
+    result = ValidationSafetyAgent().validate_assignment({&#x27;assignments&#x27;:[{&#x27;volunteer_id&#x27;:&#x27;test&#x27;,&#x27;is_available&#x27;:False}]})
+    assert result[&#x27;is_valid&#x27;] is False and result[&#x27;recommendation&#x27;] == &#x27;REJECT&#x27;</pre></details></section><section><h2>AI-018: test_AI09_malformed_payload_fails_safely</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI09_malformed_payload_fails_safely&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert result[&#x27;is_valid&#x27;] is False and result[&#x27;recommendation&#x27;] == &#x27;REJECT&#x27;</pre><p>Historical group result: Passed - JUnit records pass; 0.001 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI09_malformed_payload_fails_safely():
+    result = ValidationSafetyAgent().validate_assignment(None)
+    assert result[&#x27;is_valid&#x27;] is False and result[&#x27;recommendation&#x27;] == &#x27;REJECT&#x27;</pre></details></section><section><h2>AI-019: test_AI10_adjacent_shifts_do_not_overlap</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI10_adjacent_shifts_do_not_overlap&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert result[&#x27;passed&#x27;] is True</pre><p>Historical group result: Passed - JUnit records pass; 0.001 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI10_adjacent_shifts_do_not_overlap():
+    result = ValidationSafetyAgent().check_shift_overlap({&#x27;proposed_shift&#x27;:{&#x27;start&#x27;:&#x27;2026-10-04T10:00:00Z&#x27;,&#x27;end&#x27;:&#x27;2026-10-04T11:00:00Z&#x27;},
+        &#x27;existing_shifts&#x27;:[{&#x27;id&#x27;:&#x27;old&#x27;,&#x27;start&#x27;:&#x27;2026-10-04T09:00:00Z&#x27;,&#x27;end&#x27;:&#x27;2026-10-04T10:00:00Z&#x27;,&#x27;status&#x27;:&#x27;Scheduled&#x27;}]})
+    assert result[&#x27;passed&#x27;] is True</pre></details></section></main></html>

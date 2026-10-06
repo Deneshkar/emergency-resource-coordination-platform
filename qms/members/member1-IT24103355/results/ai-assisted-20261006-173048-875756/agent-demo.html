@@ -1,0 +1,239 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Member 1 - Agent demonstration</title>
+<style>body{font:16px/1.55 system-ui,sans-serif;color:#173247;background:#edf2f5;margin:0}
+main{max-width:1100px;margin:32px auto;padding:32px;background:white;border-radius:12px}
+h1{font-size:30px}h2{margin-top:28px}a{color:#145797}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f4f7;padding:18px;font:13px/1.5 Consolas,monospace}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{border:1px solid #c6d4df;padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#e4edf4}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.note{background:#eaf2f8;padding:16px}.pass{color:#14652e}.fail{color:#a31919}details{margin:12px 0}section{border-top:1px solid #c6d4df;margin-top:28px;padding-top:12px}
+@media(max-width:750px){main{margin:0;padding:18px}.grid{display:block}}
+@media print{body{background:white}main{margin:0;padding:0}pre{font-size:10px}section{break-inside:avoid}}</style>
+<main><h1>Member 1 - Agent demonstration</h1><p><b>Jathurshy.S | IT24103355</b><br>Incident Management &rarr; CoordinatorPlannerAgent</p><p class="note">Execution: ai-assisted. Operator: OpenAI Codex. Time: 2026-10-06T17:30:57.103447+05:30.<br>Actual Python agent method: analyze_and_plan. Deterministic mode; no live LLM calls. A recommendation does not itself approve or save a dispatch.</p><p>Incident details and supplied resources produce a response plan with actions, reasoning and required human approval. This deterministic demonstration does not call Gemini or save a plan to the database.</p><p><a href="agent-output.json">Raw output</a> | <a href="agent-inputs.json">Saved input</a></p><section><h2>M1-D01: Incident with available responders <span class="pass">PASS</span></h2><table><tr><th>Expected check</th><th>Observed value</th><th>Result</th></tr><tr><td>{&quot;path&quot;: &quot;incidentId&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: 7}</td><td>7</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;requiresHumanApproval&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: true}</td><td>true</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;actions&quot;, &quot;op&quot;: &quot;nonempty&quot;, &quot;value&quot;: null}</td><td>[&quot;Secure perimeter at Demo Sector&quot;, &quot;Deploy allocated resources and volunteers&quot;]</td><td>PASS</td></tr></table><div class="grid"><div><h3>Input</h3><pre>{
+  &quot;incident_id&quot;: 7,
+  &quot;title&quot;: &quot;Building fire&quot;,
+  &quot;category&quot;: &quot;Fire&quot;,
+  &quot;priority&quot;: &quot;High&quot;,
+  &quot;location&quot;: &quot;Demo Sector&quot;,
+  &quot;affected_count&quot;: 5,
+  &quot;resources&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;Rescue vehicle&quot;,
+      &quot;resourceType&quot;: &quot;Vehicle&quot;,
+      &quot;status&quot;: &quot;Available&quot;
+    }
+  ],
+  &quot;volunteers&quot;: [
+    {
+      &quot;id&quot;: &quot;v1&quot;,
+      &quot;name&quot;: &quot;Responder&quot;,
+      &quot;isAvailable&quot;: true
+    }
+  ]
+}</pre></div><div><h3>Actual output</h3><pre>{
+  &quot;agent_id&quot;: &quot;AI-Coordinator-Alpha&quot;,
+  &quot;timestamp&quot;: &quot;2026-10-06T12:00:57.103341+00:00&quot;,
+  &quot;incidentId&quot;: 7,
+  &quot;priority&quot;: &quot;High&quot;,
+  &quot;objective&quot;: &quot;Contain Fire emergency and protect 5 civilians.&quot;,
+  &quot;actions&quot;: [
+    &quot;Secure perimeter at Demo Sector&quot;,
+    &quot;Deploy allocated resources and volunteers&quot;
+  ],
+  &quot;requiredResources&quot;: [
+    {
+      &quot;resource_type&quot;: &quot;Personnel&quot;,
+      &quot;quantity&quot;: 6,
+      &quot;unit&quot;: &quot;Emergency Responders&quot;
+    },
+    {
+      &quot;resource_type&quot;: &quot;Vehicle&quot;,
+      &quot;quantity&quot;: 4,
+      &quot;unit&quot;: &quot;Emergency Response Vehicles&quot;
+    },
+    {
+      &quot;resource_type&quot;: &quot;Medical&quot;,
+      &quot;quantity&quot;: 10,
+      &quot;unit&quot;: &quot;Field Medical Kits&quot;
+    }
+  ],
+  &quot;status&quot;: &quot;Generated&quot;,
+  &quot;incident_id&quot;: 7,
+  &quot;plan_title&quot;: &quot;Agentic Tactical Plan: Building fire&quot;,
+  &quot;plan_description&quot;: &quot;Autonomous coordination strategy by AI-Coordinator-Alpha. Analyzed 1 resources.&quot;,
+  &quot;phase&quot;: &quot;Immediate Containment&quot;,
+  &quot;action_steps&quot;: [
+    {
+      &quot;step_number&quot;: 1,
+      &quot;task&quot;: &quot;Secure perimeter at Demo Sector&quot;,
+      &quot;responsible_team&quot;: &quot;First Responders&quot;,
+      &quot;priority&quot;: &quot;Critical&quot;,
+      &quot;estimated_minutes&quot;: 15,
+      &quot;is_completed&quot;: false
+    },
+    {
+      &quot;step_number&quot;: 2,
+      &quot;task&quot;: &quot;Deploy allocated resources and volunteers&quot;,
+      &quot;responsible_team&quot;: &quot;Dispatch&quot;,
+      &quot;priority&quot;: &quot;High&quot;,
+      &quot;estimated_minutes&quot;: 30,
+      &quot;is_completed&quot;: false
+    }
+  ],
+  &quot;estimated_resources&quot;: [
+    {
+      &quot;resource_type&quot;: &quot;Personnel&quot;,
+      &quot;quantity&quot;: 6,
+      &quot;unit&quot;: &quot;Emergency Responders&quot;,
+      &quot;description&quot;: &quot;First responders, paramedics, and rescue personnel.&quot;
+    },
+    {
+      &quot;resource_type&quot;: &quot;Vehicle&quot;,
+      &quot;quantity&quot;: 4,
+      &quot;unit&quot;: &quot;Emergency Response Vehicles&quot;,
+      &quot;description&quot;: &quot;Primary suppression, ambulance, or mobile command units.&quot;
+    },
+    {
+      &quot;resource_type&quot;: &quot;Medical&quot;,
+      &quot;quantity&quot;: 10,
+      &quot;unit&quot;: &quot;Field Medical Kits&quot;,
+      &quot;description&quot;: &quot;Trauma kits, oxygen, burn care, and IV fluids.&quot;
+    }
+  ],
+  &quot;risk_assessment&quot;: &quot;[CRITICAL THREAT] High hazard severity detected for Fire. Risk of rapid escalation, mass casualty potential, or severe infrastructural failure. Immediate intervention required.&quot;,
+  &quot;reasoning&quot;: &quot;1. Observed High priority Fire incident with 5 affected.\n2. Gathered real data: 1 resources available.\n3. Gathered real data: 1 volunteers available.\n4. Identified constraint: Lack of required vehicles.\n5. Identified constraint: Lack of required volunteers.\n6. Formulating safe dispatch plan. Requires human validation before execution.&quot;,
+  &quot;risks&quot;: [
+    &quot;High risk of escalation. Rapid deployment required.&quot;
+  ],
+  &quot;constraints&quot;: [
+    &quot;Insufficient vehicles. Need 2, but only 1 available.&quot;,
+    &quot;Insufficient volunteers. Need 2, but only 1 available.&quot;
+  ],
+  &quot;requiresHumanApproval&quot;: true,
+  &quot;suggestedAssignments&quot;: [
+    {
+      &quot;Role&quot;: &quot;Field Support - Fire&quot;,
+      &quot;EntityName&quot;: &quot;Responder&quot;,
+      &quot;Reason&quot;: &quot;Assigned based on availability and incident priority.&quot;
+    }
+  ],
+  &quot;dispatchPlan&quot;: [
+    {
+      &quot;Action&quot;: &quot;Deploy Vehicle&quot;,
+      &quot;Resource&quot;: &quot;Rescue vehicle&quot;,
+      &quot;Location&quot;: &quot;Demo Sector&quot;,
+      &quot;Reason&quot;: &quot;Primary response unit&quot;
+    }
+  ],
+  &quot;subagent_directives&quot;: {
+    &quot;SituationAnalysisAgent&quot;: &quot;Request real-time weather and spatial hazard overlay for Demo Sector.&quot;,
+    &quot;ResourceAllocationAgent&quot;: &quot;Lock reserve inventory for Fire response with High priority level.&quot;,
+    &quot;ValidationSafetyAgent&quot;: &quot;Verify responder safety protocols and structural integrity prior to team entry.&quot;
+  },
+  &quot;allowed_tools&quot;: [
+    &quot;get_incident&quot;,
+    &quot;get_available_resources&quot;,
+    &quot;get_available_volunteers&quot;,
+    &quot;get_nearby_shelters&quot;,
+    &quot;create_response_plan&quot;
+  ]
+}</pre></div></div></section><section><h2>M1-D02: Incident without available resources <span class="pass">PASS</span></h2><table><tr><th>Expected check</th><th>Observed value</th><th>Result</th></tr><tr><td>{&quot;path&quot;: &quot;requiresHumanApproval&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: true}</td><td>true</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;reasoning&quot;, &quot;op&quot;: &quot;contains&quot;, &quot;value&quot;: &quot;No available resources found&quot;}</td><td>&quot;1. Observed Medium priority General incident with 2 affected.\n2. Gathered real data: No available resources found.\n3. Gathered real data: No available volunteers found.\n4. Identified constraint: Lack of required vehicles.\n5. Identified constraint: Lack of required volunteers.\n6. Formulating safe dispatch plan. Requires human validation before execution.&quot;</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;reasoning&quot;, &quot;op&quot;: &quot;contains&quot;, &quot;value&quot;: &quot;No available volunteers found&quot;}</td><td>&quot;1. Observed Medium priority General incident with 2 affected.\n2. Gathered real data: No available resources found.\n3. Gathered real data: No available volunteers found.\n4. Identified constraint: Lack of required vehicles.\n5. Identified constraint: Lack of required volunteers.\n6. Formulating safe dispatch plan. Requires human validation before execution.&quot;</td><td>PASS</td></tr></table><div class="grid"><div><h3>Input</h3><pre>{
+  &quot;incident_id&quot;: 8,
+  &quot;title&quot;: &quot;Demo incident&quot;,
+  &quot;category&quot;: &quot;General&quot;,
+  &quot;priority&quot;: &quot;Medium&quot;,
+  &quot;affected_count&quot;: 2,
+  &quot;resources&quot;: [],
+  &quot;volunteers&quot;: []
+}</pre></div><div><h3>Actual output</h3><pre>{
+  &quot;agent_id&quot;: &quot;AI-Coordinator-Alpha&quot;,
+  &quot;timestamp&quot;: &quot;2026-10-06T12:00:57.103425+00:00&quot;,
+  &quot;incidentId&quot;: 8,
+  &quot;priority&quot;: &quot;Medium&quot;,
+  &quot;objective&quot;: &quot;Contain General emergency and protect 2 civilians.&quot;,
+  &quot;actions&quot;: [
+    &quot;Secure perimeter at Unknown Location&quot;,
+    &quot;Deploy allocated resources and volunteers&quot;
+  ],
+  &quot;requiredResources&quot;: [
+    {
+      &quot;resource_type&quot;: &quot;Personnel&quot;,
+      &quot;quantity&quot;: 6,
+      &quot;unit&quot;: &quot;Emergency Responders&quot;
+    },
+    {
+      &quot;resource_type&quot;: &quot;Vehicle&quot;,
+      &quot;quantity&quot;: 2,
+      &quot;unit&quot;: &quot;Emergency Response Vehicles&quot;
+    },
+    {
+      &quot;resource_type&quot;: &quot;Medical&quot;,
+      &quot;quantity&quot;: 10,
+      &quot;unit&quot;: &quot;Field Medical Kits&quot;
+    }
+  ],
+  &quot;status&quot;: &quot;Generated&quot;,
+  &quot;incident_id&quot;: 8,
+  &quot;plan_title&quot;: &quot;Agentic Tactical Plan: Demo incident&quot;,
+  &quot;plan_description&quot;: &quot;Autonomous coordination strategy by AI-Coordinator-Alpha. Analyzed 0 resources.&quot;,
+  &quot;phase&quot;: &quot;Immediate Containment&quot;,
+  &quot;action_steps&quot;: [
+    {
+      &quot;step_number&quot;: 1,
+      &quot;task&quot;: &quot;Secure perimeter at Unknown Location&quot;,
+      &quot;responsible_team&quot;: &quot;First Responders&quot;,
+      &quot;priority&quot;: &quot;Critical&quot;,
+      &quot;estimated_minutes&quot;: 15,
+      &quot;is_completed&quot;: false
+    },
+    {
+      &quot;step_number&quot;: 2,
+      &quot;task&quot;: &quot;Deploy allocated resources and volunteers&quot;,
+      &quot;responsible_team&quot;: &quot;Dispatch&quot;,
+      &quot;priority&quot;: &quot;High&quot;,
+      &quot;estimated_minutes&quot;: 30,
+      &quot;is_completed&quot;: false
+    }
+  ],
+  &quot;estimated_resources&quot;: [
+    {
+      &quot;resource_type&quot;: &quot;Personnel&quot;,
+      &quot;quantity&quot;: 6,
+      &quot;unit&quot;: &quot;Emergency Responders&quot;,
+      &quot;description&quot;: &quot;First responders, paramedics, and rescue personnel.&quot;
+    },
+    {
+      &quot;resource_type&quot;: &quot;Vehicle&quot;,
+      &quot;quantity&quot;: 2,
+      &quot;unit&quot;: &quot;Emergency Response Vehicles&quot;,
+      &quot;description&quot;: &quot;Primary suppression, ambulance, or mobile command units.&quot;
+    },
+    {
+      &quot;resource_type&quot;: &quot;Medical&quot;,
+      &quot;quantity&quot;: 10,
+      &quot;unit&quot;: &quot;Field Medical Kits&quot;,
+      &quot;description&quot;: &quot;Trauma kits, oxygen, burn care, and IV fluids.&quot;
+    }
+  ],
+  &quot;risk_assessment&quot;: &quot;[MODERATE THREAT] Moderate disruption expected for General. Active monitoring and controlled response recommended.&quot;,
+  &quot;reasoning&quot;: &quot;1. Observed Medium priority General incident with 2 affected.\n2. Gathered real data: No available resources found.\n3. Gathered real data: No available volunteers found.\n4. Identified constraint: Lack of required vehicles.\n5. Identified constraint: Lack of required volunteers.\n6. Formulating safe dispatch plan. Requires human validation before execution.&quot;,
+  &quot;risks&quot;: [],
+  &quot;constraints&quot;: [
+    &quot;Insufficient vehicles. Need 1, but only 0 available.&quot;,
+    &quot;Insufficient volunteers. Need 2, but only 0 available.&quot;
+  ],
+  &quot;requiresHumanApproval&quot;: true,
+  &quot;suggestedAssignments&quot;: [],
+  &quot;dispatchPlan&quot;: [],
+  &quot;subagent_directives&quot;: {
+    &quot;SituationAnalysisAgent&quot;: &quot;Request real-time weather and spatial hazard overlay for Unknown Location.&quot;,
+    &quot;ResourceAllocationAgent&quot;: &quot;Lock reserve inventory for General response with Medium priority level.&quot;,
+    &quot;ValidationSafetyAgent&quot;: &quot;Verify responder safety protocols and structural integrity prior to team entry.&quot;
+  },
+  &quot;allowed_tools&quot;: [
+    &quot;get_incident&quot;,
+    &quot;get_available_resources&quot;,
+    &quot;get_available_volunteers&quot;,
+    &quot;get_nearby_shelters&quot;,
+    &quot;create_response_plan&quot;
+  ]
+}</pre></div></div></section></main></html>

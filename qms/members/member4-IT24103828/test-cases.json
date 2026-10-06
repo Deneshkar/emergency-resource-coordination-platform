@@ -1,0 +1,344 @@
+[
+  {
+    "id": "BE-068",
+    "feature": "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_EndBeforeStart_ReturnsBadRequest",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/VolunteerShiftTests.cs",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.VolunteerShiftTests.CreateShift_EndBeforeStart_ReturnsBadRequest\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.IsType<Microsoft.AspNetCore.Mvc.BadRequestObjectResult>(result.Result);\nAssert.Equal(0, await ctx.Shifts.CountAsync());",
+    "source_excerpt": "public async Task CreateShift_EndBeforeStart_ReturnsBadRequest()\n    {\n        var (ctx, volunteer) = await SeedVolunteerAsync();\n        var controller = new VolunteersController(ctx);\n\n        var result = await controller.CreateShift(\n            volunteer.Id,\n            new CreateShiftDto\n            {\n                StartTime = new DateTime(2026, 10, 1, 16, 0, 0, DateTimeKind.Utc),\n                EndTime = new DateTime(2026, 10, 1, 8, 0, 0, DateTimeKind.Utc),\n            });\n\n        Assert.IsType<Microsoft.AspNetCore.Mvc.BadRequestObjectResult>(result.Result);\n        Assert.Equal(0, await ctx.Shifts.CountAsync());\n    }",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.7714451; recorded 2026-10-06T00:15:35.1759208+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-069",
+    "feature": "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_InvalidStatus_ReturnsBadRequest",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/VolunteerShiftTests.cs",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.VolunteerShiftTests.CreateShift_InvalidStatus_ReturnsBadRequest\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.IsType<Microsoft.AspNetCore.Mvc.BadRequestObjectResult>(result.Result);\nAssert.Equal(0, await ctx.Shifts.CountAsync());",
+    "source_excerpt": "public async Task CreateShift_InvalidStatus_ReturnsBadRequest()\n    {\n        var (ctx, volunteer) = await SeedVolunteerAsync();\n        var controller = new VolunteersController(ctx);\n\n        var result = await controller.CreateShift(\n            volunteer.Id,\n            new CreateShiftDto\n            {\n                StartTime = new DateTime(2026, 10, 1, 8, 0, 0, DateTimeKind.Utc),\n                EndTime = new DateTime(2026, 10, 1, 16, 0, 0, DateTimeKind.Utc),\n                Status = \"PartyTime\",\n            });\n\n        Assert.IsType<Microsoft.AspNetCore.Mvc.BadRequestObjectResult>(result.Result);\n        Assert.Equal(0, await ctx.Shifts.CountAsync());\n    }\n}",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0034683; recorded 2026-10-06T00:15:35.1795150+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-070",
+    "feature": "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_UnknownVolunteer_ReturnsNotFound",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/VolunteerShiftTests.cs",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.VolunteerShiftTests.CreateShift_UnknownVolunteer_ReturnsNotFound\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.IsType<Microsoft.AspNetCore.Mvc.NotFoundResult>(result.Result);\nAssert.Equal(0, await ctx.Shifts.CountAsync());",
+    "source_excerpt": "public async Task CreateShift_UnknownVolunteer_ReturnsNotFound()\n    {\n        var ctx = GetInMemoryContext();\n        var controller = new VolunteersController(ctx);\n\n        var result = await controller.CreateShift(\n            Guid.NewGuid(),\n            new CreateShiftDto\n            {\n                StartTime = new DateTime(2026, 10, 1, 8, 0, 0, DateTimeKind.Utc),\n                EndTime = new DateTime(2026, 10, 1, 16, 0, 0, DateTimeKind.Utc),\n            });\n\n        Assert.IsType<Microsoft.AspNetCore.Mvc.NotFoundResult>(result.Result);\n        Assert.Equal(0, await ctx.Shifts.CountAsync());\n    }",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0014960; recorded 2026-10-06T00:15:35.1815204+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-071",
+    "feature": "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_ValidWindow_PersistsAndReturnsCreated",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/VolunteerShiftTests.cs",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.VolunteerShiftTests.CreateShift_ValidWindow_PersistsAndReturnsCreated\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "var created = Assert.IsType<Microsoft.AspNetCore.Mvc.CreatedAtActionResult>(result.Result);\nvar shift = Assert.IsType<ShiftResponseDto>(created.Value);\nAssert.Equal(volunteer.Id, shift.VolunteerId);\nAssert.Equal(ShiftStatus.Scheduled.ToString(), shift.Status);\nAssert.Equal(1, await ctx.Shifts.CountAsync());",
+    "source_excerpt": "public async Task CreateShift_ValidWindow_PersistsAndReturnsCreated()\n    {\n        var (ctx, volunteer) = await SeedVolunteerAsync();\n        var controller = new VolunteersController(ctx);\n        var start = new DateTime(2026, 10, 1, 8, 0, 0, DateTimeKind.Utc);\n        var end = new DateTime(2026, 10, 1, 16, 0, 0, DateTimeKind.Utc);\n\n        var result = await controller.CreateShift(\n            volunteer.Id, new CreateShiftDto { StartTime = start, EndTime = end, Status = \"Scheduled\" });\n\n        var created = Assert.IsType<Microsoft.AspNetCore.Mvc.CreatedAtActionResult>(result.Result);\n        var shift = Assert.IsType<ShiftResponseDto>(created.Value);\n        Assert.Equal(volunteer.Id, shift.VolunteerId);\n        Assert.Equal(ShiftStatus.Scheduled.ToString(), shift.Status);\n        Assert.Equal(1, await ctx.Shifts.CountAsync());\n    }",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0172307; recorded 2026-10-06T00:15:35.1984290+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-076",
+    "feature": "ERCP.Api.Tests.VolunteersApiIntegrationTests.CreateShift_InvalidWindow_OverHttp_Returns400",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/VolunteersApiIntegrationTests.cs",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.VolunteersApiIntegrationTests.CreateShift_InvalidWindow_OverHttp_Returns400\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.Equal(HttpStatusCode.BadRequest, badShift.StatusCode);",
+    "source_excerpt": "public async Task CreateShift_InvalidWindow_OverHttp_Returns400()\n    {\n        var client = _factory.CreateClient();\n        var token = await RegisterCoordinatorAsync(client);\n        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(\"Bearer\", token);\n\n        var create = await client.PostAsJsonAsync(\"/api/volunteers\", new\n        {\n            name = \"E2E Window\",\n            email = UniqueEmail(\"e2e-window\"),\n            phone = \"1\",\n            skills = \"driving\",\n        });\n        using var createdDoc = JsonDocument.Parse(await create.Content.ReadAsStringAsync());\n        var volunteerId = createdDoc.RootElement.GetProperty(\"id\").GetGuid();\n\n        var badShift = await client.PostAsJsonAsync($\"/api/volunteers/{volunteerId}/shifts\", new\n        {\n            startTime = new DateTime(2026, 10, 3, 16, 0, 0, DateTimeKind.Utc),\n            endTime = new DateTime(2026, 10, 3, 8, 0, 0, DateTimeKind.Utc),\n            status = \"Scheduled\",\n        });\n\n        Assert.Equal(HttpStatusCode.BadRequest, badShift.StatusCode);\n    }\n}",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.1364798; recorded 2026-10-06T00:15:36.8295165+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-077",
+    "feature": "ERCP.Api.Tests.VolunteersApiIntegrationTests.GetVolunteers_Anonymous_Returns401",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/VolunteersApiIntegrationTests.cs",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.VolunteersApiIntegrationTests.GetVolunteers_Anonymous_Returns401\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);",
+    "source_excerpt": "public async Task GetVolunteers_Anonymous_Returns401()\n    {\n        var client = _factory.CreateClient();\n\n        var response = await client.GetAsync(\"/api/volunteers\");\n\n        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);\n    }",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0999650; recorded 2026-10-06T00:15:36.4717288+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-078",
+    "feature": "ERCP.Api.Tests.VolunteersApiIntegrationTests.RegisterAndLogin_Coordinator_ReturnsToken",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/VolunteersApiIntegrationTests.cs",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.VolunteersApiIntegrationTests.RegisterAndLogin_Coordinator_ReturnsToken\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.NotEmpty(token);\nAssert.Equal(HttpStatusCode.OK, me.StatusCode);",
+    "source_excerpt": "public async Task RegisterAndLogin_Coordinator_ReturnsToken()\n    {\n        var client = _factory.CreateClient();\n\n        var token = await RegisterCoordinatorAsync(client);\n\n        Assert.NotEmpty(token);\n\n        // The new identity is recognized by the protected profile endpoint.\n        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(\"Bearer\", token);\n        var me = await client.GetAsync(\"/api/Auth/me\");\n        Assert.Equal(HttpStatusCode.OK, me.StatusCode);\n    }",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.2209630; recorded 2026-10-06T00:15:36.6928661+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-079",
+    "feature": "ERCP.Api.Tests.VolunteersApiIntegrationTests.SeededDemoData_Exists",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/VolunteersApiIntegrationTests.cs",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.VolunteersApiIntegrationTests.SeededDemoData_Exists\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.True(await context.Incidents.AnyAsync());\nAssert.True(await context.Users.AnyAsync(u => u.Role == \"Coordinator\"));",
+    "source_excerpt": "public async Task SeededDemoData_Exists()\n    {\n        // Startup seeding (incidents + demo users incl. coordinator@ercp.org)\n        // must survive on a fresh database \u2014 the assessed demo logins depend on it.\n        using var scope = _factory.Services.CreateScope();\n        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();\n\n        Assert.True(await context.Incidents.AnyAsync());\n        Assert.True(await context.Users.AnyAsync(u => u.Role == \"Coordinator\"));\n    }",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:01.9670233; recorded 2026-10-06T00:15:36.3715090+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-080",
+    "feature": "ERCP.Api.Tests.VolunteersApiIntegrationTests.VolunteerShiftLifecycle_OverHttp",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/VolunteersApiIntegrationTests.cs",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.VolunteersApiIntegrationTests.VolunteerShiftLifecycle_OverHttp\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.Equal(HttpStatusCode.Created, create.StatusCode);\nAssert.NotEqual(Guid.Empty, volunteerId);\nAssert.Equal(HttpStatusCode.Created, shift.StatusCode);\nAssert.Equal(HttpStatusCode.OK, history.StatusCode);\nAssert.Contains(\"2026-10-02\", historyBody);\nAssert.Equal(HttpStatusCode.NoContent, toggle.StatusCode);\nAssert.Equal(HttpStatusCode.OK, fetched.StatusCode);\nAssert.False(fetchedDoc.RootElement.GetProperty(\"isAvailable\").GetBoolean());",
+    "source_excerpt": "public async Task VolunteerShiftLifecycle_OverHttp()\n    {\n        var client = _factory.CreateClient();\n        var token = await RegisterCoordinatorAsync(client);\n        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(\"Bearer\", token);\n\n        // 1. Register a volunteer\n        var email = UniqueEmail(\"e2e-responder\");\n        var create = await client.PostAsJsonAsync(\"/api/volunteers\", new\n        {\n            name = \"E2E Responder\",\n            email,\n            phone = \"0770000000\",\n            skills = \"medical, rescue\",\n        });\n        Assert.Equal(HttpStatusCode.Created, create.StatusCode);\n        using var createdDoc = JsonDocument.Parse(await create.Content.ReadAsStringAsync());\n        var volunteerId = createdDoc.RootElement.GetProperty(\"id\").GetGuid();\n        Assert.NotEqual(Guid.Empty, volunteerId);\n\n        // 2. Assign a shift\n        var start = new DateTime(2026, 10, 2, 8, 0, 0, DateTimeKind.Utc);\n        var end = new DateTime(2026, 10, 2, 16, 0, 0, DateTimeKind.Utc);\n        var shift = await client.PostAsJsonAsync($\"/api/volunteers/{volunteerId}/shifts\", new\n        {\n            startTime = start,\n            endTime = end,\n            status = \"Scheduled\",\n        });\n        Assert.Equal(HttpStatusCode.Created, shift.StatusCode);\n\n        // 3. Shift history contains the new shift\n        var history = await client.GetAsync($\"/api/volunteers/{volunteerId}/shifts\");\n        Assert.Equal(HttpStatusCode.OK, history.StatusCode);\n        var historyBody = await history.Content.ReadAsStringAsync();\n        Assert.Contains(\"2026-10-02\", historyBody);\n\n        // 4. Toggle availability off-duty and verify via GET\n        var toggle = await client.PutAsJsonAsync(\n            $\"/api/volunteers/{volunteerId}/availability\", new { isAvailable = false });\n        Assert.Equal(HttpStatusCode.NoContent, toggle.StatusCode);\n\n        var fetched = await client.GetAsync($\"/api/volunteers/{volunteerId}\");\n        Assert.Equal(HttpStatusCode.OK, fetched.StatusCode);\n        using var fetchedDoc = JsonDocument.Parse(await fetched.Content.ReadAsStringAsync());\n        Assert.False(fetchedDoc.RootElement.GetProperty(\"isAvailable\").GetBoolean());\n    }",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.1996998; recorded 2026-10-06T00:15:37.0367799+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-003",
+    "feature": "test_AI01_unapproved_tool_is_rejected[ValidationSafetyAgent]",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI01_unapproved_tool_is_rejected\" -v. Parameter values are included in the case name.",
+    "expected": "All assertions in the named test must pass for its configured fixture.",
+    "source_excerpt": "def test_AI01_unapproved_tool_is_rejected(agent):\n    with pytest.raises(ValueError):\n        agent().execute_tool('delete_database', {})",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.000 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-011",
+    "feature": "test_AI06_shelter_capacity_boundary[0-True]",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI06_shelter_capacity_boundary\" -v. Parameter values are included in the case name.",
+    "expected": "assert ValidationSafetyAgent().check_shelter_capacity({'status':'Active','total_capacity':10,'current_occupancy':5,'incoming_count':incoming})['passed'] is passed",
+    "source_excerpt": "def test_AI06_shelter_capacity_boundary(incoming, passed):\n    assert ValidationSafetyAgent().check_shelter_capacity({'status':'Active','total_capacity':10,'current_occupancy':5,'incoming_count':incoming})['passed'] is passed",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.000 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-012",
+    "feature": "test_AI06_shelter_capacity_boundary[5-True]",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI06_shelter_capacity_boundary\" -v. Parameter values are included in the case name.",
+    "expected": "assert ValidationSafetyAgent().check_shelter_capacity({'status':'Active','total_capacity':10,'current_occupancy':5,'incoming_count':incoming})['passed'] is passed",
+    "source_excerpt": "def test_AI06_shelter_capacity_boundary(incoming, passed):\n    assert ValidationSafetyAgent().check_shelter_capacity({'status':'Active','total_capacity':10,'current_occupancy':5,'incoming_count':incoming})['passed'] is passed",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.000 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-013",
+    "feature": "test_AI06_shelter_capacity_boundary[6-False]",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI06_shelter_capacity_boundary\" -v. Parameter values are included in the case name.",
+    "expected": "assert ValidationSafetyAgent().check_shelter_capacity({'status':'Active','total_capacity':10,'current_occupancy':5,'incoming_count':incoming})['passed'] is passed",
+    "source_excerpt": "def test_AI06_shelter_capacity_boundary(incoming, passed):\n    assert ValidationSafetyAgent().check_shelter_capacity({'status':'Active','total_capacity':10,'current_occupancy':5,'incoming_count':incoming})['passed'] is passed",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.000 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-014",
+    "feature": "test_AI07_stock_boundary[1-True]",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI07_stock_boundary\" -v. Parameter values are included in the case name.",
+    "expected": "assert ValidationSafetyAgent().check_resource_stock({'available_qty':5,'requested_qty':qty,'status':'Available'})['passed'] is passed",
+    "source_excerpt": "def test_AI07_stock_boundary(qty, passed):\n    assert ValidationSafetyAgent().check_resource_stock({'available_qty':5,'requested_qty':qty,'status':'Available'})['passed'] is passed",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.001 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-015",
+    "feature": "test_AI07_stock_boundary[5-True]",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI07_stock_boundary\" -v. Parameter values are included in the case name.",
+    "expected": "assert ValidationSafetyAgent().check_resource_stock({'available_qty':5,'requested_qty':qty,'status':'Available'})['passed'] is passed",
+    "source_excerpt": "def test_AI07_stock_boundary(qty, passed):\n    assert ValidationSafetyAgent().check_resource_stock({'available_qty':5,'requested_qty':qty,'status':'Available'})['passed'] is passed",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.000 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-016",
+    "feature": "test_AI07_stock_boundary[6-False]",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI07_stock_boundary\" -v. Parameter values are included in the case name.",
+    "expected": "assert ValidationSafetyAgent().check_resource_stock({'available_qty':5,'requested_qty':qty,'status':'Available'})['passed'] is passed",
+    "source_excerpt": "def test_AI07_stock_boundary(qty, passed):\n    assert ValidationSafetyAgent().check_resource_stock({'available_qty':5,'requested_qty':qty,'status':'Available'})['passed'] is passed",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.001 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-017",
+    "feature": "test_AI08_unavailable_volunteer_is_rejected",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI08_unavailable_volunteer_is_rejected\" -v. Parameter values are included in the case name.",
+    "expected": "assert result['is_valid'] is False and result['recommendation'] == 'REJECT'",
+    "source_excerpt": "def test_AI08_unavailable_volunteer_is_rejected():\n    result = ValidationSafetyAgent().validate_assignment({'assignments':[{'volunteer_id':'test','is_available':False}]})\n    assert result['is_valid'] is False and result['recommendation'] == 'REJECT'",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.000 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-018",
+    "feature": "test_AI09_malformed_payload_fails_safely",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "Jathurshy.S",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI09_malformed_payload_fails_safely\" -v. Parameter values are included in the case name.",
+    "expected": "assert result['is_valid'] is False and result['recommendation'] == 'REJECT'",
+    "source_excerpt": "def test_AI09_malformed_payload_fails_safely():\n    result = ValidationSafetyAgent().validate_assignment(None)\n    assert result['is_valid'] is False and result['recommendation'] == 'REJECT'",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.001 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-019",
+    "feature": "test_AI10_adjacent_shifts_do_not_overlap",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI10_adjacent_shifts_do_not_overlap\" -v. Parameter values are included in the case name.",
+    "expected": "assert result['passed'] is True",
+    "source_excerpt": "def test_AI10_adjacent_shifts_do_not_overlap():\n    result = ValidationSafetyAgent().check_shift_overlap({'proposed_shift':{'start':'2026-10-04T10:00:00Z','end':'2026-10-04T11:00:00Z'},\n        'existing_shifts':[{'id':'old','start':'2026-10-04T09:00:00Z','end':'2026-10-04T10:00:00Z','status':'Scheduled'}]})\n    assert result['passed'] is True",
+    "package_member": "Deneshkar. P",
+    "package_student_id": "IT24103828",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.001 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  }
+]

@@ -1,0 +1,323 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Member 1 - Test cases</title>
+<style>body{font:16px/1.55 system-ui,sans-serif;color:#173247;background:#edf2f5;margin:0}
+main{max-width:1100px;margin:32px auto;padding:32px;background:white;border-radius:12px}
+h1{font-size:30px}h2{margin-top:28px}a{color:#145797}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f4f7;padding:18px;font:13px/1.5 Consolas,monospace}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{border:1px solid #c6d4df;padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#e4edf4}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.note{background:#eaf2f8;padding:16px}.pass{color:#14652e}.fail{color:#a31919}details{margin:12px 0}section{border-top:1px solid #c6d4df;margin-top:28px;padding-top:12px}
+@media(max-width:750px){main{margin:0;padding:18px}.grid{display:block}}
+@media print{body{background:white}main{margin:0;padding:0}pre{font-size:10px}section{break-inside:avoid}}</style>
+<main><h1>Member 1 - Test cases</h1><p><b>Jathurshy.S | IT24103355</b><br>Incident Management + CoordinatorPlannerAgent</p><p class="note">9 backend cases + 2 agent cases. These are selections of canonical group tests, not duplicated implementations. Source and expected assertions are below. Results shown as historical are from the group run; open results/&lt;dated run&gt;/results.html for a separate execution.</p><section><h2>BE-036: ERCP.Api.Tests.IncidentControllerTests.CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent</h2><p><a href="Source_Code.html#IncidentControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>var createdResult = Assert.IsType&lt;CreatedAtActionResult&gt;(result.Result);
+var incidentDetail = Assert.IsType&lt;IncidentDetailDto&gt;(createdResult.Value);
+Assert.True(incidentDetail.Id &gt; 0);
+Assert.Equal(&quot;Industrial Chemical Spill&quot;, incidentDetail.Title);
+Assert.Equal(&quot;Reported&quot;, incidentDetail.Status);
+Assert.NotEmpty(timelineEvents);
+Assert.Contains(timelineEvents, e =&gt; e.EventType == &quot;Created&quot;);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.8258533; recorded 2026-10-06T00:15:35.2301651+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent()
+    {
+        // Arrange
+        var context = GetInMemoryContext();
+        var controller = CreateController(context);
+
+        var dto = new CreateIncidentDto
+        {
+            Title = &quot;Industrial Chemical Spill&quot;,
+            Description = &quot;Tanker leak near riverbank&quot;,
+            Location = &quot;Sector 4 Industrial Zone&quot;,
+            Category = &quot;Chemical&quot;,
+            Priority = &quot;High&quot;,
+            AffectedCount = 25,
+            ReporterContact = &quot;Plant Supervisor&quot;,
+            AutoGeneratePlan = false
+        };
+
+        // Act
+        var result = await controller.CreateIncident(dto);
+
+        // Assert
+        var createdResult = Assert.IsType&lt;CreatedAtActionResult&gt;(result.Result);
+        var incidentDetail = Assert.IsType&lt;IncidentDetailDto&gt;(createdResult.Value);
+
+        Assert.True(incidentDetail.Id &gt; 0);
+        Assert.Equal(&quot;Industrial Chemical Spill&quot;, incidentDetail.Title);
+        Assert.Equal(&quot;Reported&quot;, incidentDetail.Status);
+
+        // Verify timeline event created
+        var timelineEvents = await context.IncidentTimelineEvents
+            .Where(e =&gt; e.IncidentId == incidentDetail.Id)
+            .ToListAsync();
+
+        Assert.NotEmpty(timelineEvents);
+        Assert.Contains(timelineEvents, e =&gt; e.EventType == &quot;Created&quot;);
+    }</pre></details></section><section><h2>BE-037: ERCP.Api.Tests.IncidentControllerTests.GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent</h2><p><a href="Source_Code.html#IncidentControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>var okResult = Assert.IsType&lt;OkObjectResult&gt;(result.Result);
+var planDto = Assert.IsType&lt;IncidentPlanDto&gt;(okResult.Value);
+Assert.NotNull(planDto);
+Assert.Equal(incident.Id, planDto.IncidentId);
+Assert.NotEmpty(planDto.ActionSteps);
+Assert.NotNull(savedPlan);
+Assert.NotNull(timelineEvent);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.2051225; recorded 2026-10-06T00:15:35.4354733+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent()
+    {
+        // Arrange
+        var context = GetInMemoryContext();
+        var incident = new Incident
+        {
+            Title = &quot;Wildfire Threat&quot;,
+            Category = &quot;Fire&quot;,
+            Priority = &quot;Critical&quot;,
+            Location = &quot;Pine Ridge Hill&quot;,
+            AffectedCount = 50,
+            Status = &quot;Reported&quot;
+        };
+        context.Incidents.Add(incident);
+        await context.SaveChangesAsync();
+
+        var controller = CreateController(context);
+        var requestDto = new GeneratePlanRequestDto
+        {
+            CustomDirectives = &quot;Focus on residential evacuation&quot;,
+            FocusPhase = &quot;Mass Evacuation&quot;
+        };
+
+        // Act
+        var result = await controller.GeneratePlan(incident.Id, requestDto);
+
+        // Assert
+        var okResult = Assert.IsType&lt;OkObjectResult&gt;(result.Result);
+        var planDto = Assert.IsType&lt;IncidentPlanDto&gt;(okResult.Value);
+
+        Assert.NotNull(planDto);
+        Assert.Equal(incident.Id, planDto.IncidentId);
+        Assert.NotEmpty(planDto.ActionSteps);
+
+        // Verify plan saved in DB
+        var savedPlan = await context.IncidentPlans.FirstOrDefaultAsync(p =&gt; p.IncidentId == incident.Id);
+        Assert.NotNull(savedPlan);
+
+        // Verify PlanGenerated timeline event
+        var timelineEvent = await context.IncidentTimelineEvents
+            .FirstOrDefaultAsync(e =&gt; e.IncidentId == incident.Id &amp;&amp; e.EventType == &quot;PlanGenerated&quot;);
+        Assert.NotNull(timelineEvent);
+    }</pre></details></section><section><h2>BE-038: ERCP.Api.Tests.IncidentControllerTests.GetIncident_NonExistingId_ReturnsNotFound</h2><p><a href="Source_Code.html#IncidentControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.GetIncident_NonExistingId_ReturnsNotFound&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.IsType&lt;NotFoundResult&gt;(result.Result);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0368072; recorded 2026-10-06T00:15:35.5010647+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task GetIncident_NonExistingId_ReturnsNotFound()
+    {
+        // Arrange
+        var context = GetInMemoryContext();
+        var controller = CreateController(context);
+
+        // Act
+        var result = await controller.GetIncident(99999);
+
+        // Assert
+        Assert.IsType&lt;NotFoundResult&gt;(result.Result);
+    }</pre></details></section><section><h2>BE-039: ERCP.Api.Tests.IncidentControllerTests.GetTimeline_ReturnsEventsInChronologicalOrder</h2><p><a href="Source_Code.html#IncidentControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.GetTimeline_ReturnsEventsInChronologicalOrder&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>var okResult = Assert.IsType&lt;OkObjectResult&gt;(result.Result);
+var events = Assert.IsAssignableFrom&lt;IEnumerable&lt;IncidentTimelineEventDto&gt;&gt;(okResult.Value).ToList();
+Assert.Equal(2, events.Count);
+Assert.True(events[0].Timestamp &lt;= events[1].Timestamp);
+Assert.Equal(&quot;Incident Reported&quot;, events[0].Title);
+Assert.Equal(&quot;Incident Verified&quot;, events[1].Title);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0159325; recorded 2026-10-06T00:15:35.4515397+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task GetTimeline_ReturnsEventsInChronologicalOrder()
+    {
+        // Arrange
+        var context = GetInMemoryContext();
+        var incident = new Incident { Title = &quot;Building Collapse&quot;, Status = &quot;Reported&quot; };
+        context.Incidents.Add(incident);
+        await context.SaveChangesAsync();
+
+        var time1 = DateTime.UtcNow.AddMinutes(-30);
+        var time2 = DateTime.UtcNow.AddMinutes(-10);
+
+        context.IncidentTimelineEvents.Add(new IncidentTimelineEvent
+        {
+            IncidentId = incident.Id,
+            EventType = &quot;Created&quot;,
+            Title = &quot;Incident Reported&quot;,
+            Timestamp = time1
+        });
+
+        context.IncidentTimelineEvents.Add(new IncidentTimelineEvent
+        {
+            IncidentId = incident.Id,
+            EventType = &quot;StatusUpdate&quot;,
+            Title = &quot;Incident Verified&quot;,
+            Timestamp = time2
+        });
+
+        await context.SaveChangesAsync();
+
+        var controller = CreateController(context);
+
+        // Act
+        var result = await controller.GetTimeline(incident.Id);
+
+        // Assert
+        var okResult = Assert.IsType&lt;OkObjectResult&gt;(result.Result);
+        var events = Assert.IsAssignableFrom&lt;IEnumerable&lt;IncidentTimelineEventDto&gt;&gt;(okResult.Value).ToList();
+
+        Assert.Equal(2, events.Count);
+        Assert.True(events[0].Timestamp &lt;= events[1].Timestamp);
+        Assert.Equal(&quot;Incident Reported&quot;, events[0].Title);
+        Assert.Equal(&quot;Incident Verified&quot;, events[1].Title);
+    }</pre></details></section><section><h2>BE-040: ERCP.Api.Tests.IncidentControllerTests.UpdatePriority_CreatesPriorityChangedTimelineEvent</h2><p><a href="Source_Code.html#IncidentControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.UpdatePriority_CreatesPriorityChangedTimelineEvent&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.IsType&lt;NoContentResult&gt;(result);
+Assert.Single(timelineEvents);
+Assert.Contains(&quot;Critical&quot;, timelineEvents[0].Title);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0124201; recorded 2026-10-06T00:15:35.4641122+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task UpdatePriority_CreatesPriorityChangedTimelineEvent()
+    {
+        // Arrange
+        var context = GetInMemoryContext();
+        var incident = new Incident
+        {
+            Title = &quot;Substation Overload&quot;,
+            Status = &quot;Reported&quot;,
+            Priority = &quot;Medium&quot;,
+            Location = &quot;Grid Station 4&quot;
+        };
+        context.Incidents.Add(incident);
+        await context.SaveChangesAsync();
+
+        var controller = CreateController(context);
+        var updateDto = new UpdateIncidentDto { Priority = &quot;Critical&quot; };
+
+        // Act
+        var result = await controller.UpdateIncident(incident.Id, updateDto);
+
+        // Assert
+        Assert.IsType&lt;NoContentResult&gt;(result);
+
+        var timelineEvents = await context.IncidentTimelineEvents
+            .Where(e =&gt; e.IncidentId == incident.Id &amp;&amp; e.EventType == &quot;PriorityChanged&quot;)
+            .ToListAsync();
+
+        Assert.Single(timelineEvents);
+        Assert.Contains(&quot;Critical&quot;, timelineEvents[0].Title);
+    }
+}</pre></details></section><section><h2>BE-041: ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest</h2><p><a href="Source_Code.html#IncidentControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>var badRequestResult = Assert.IsType&lt;BadRequestObjectResult&gt;(result);
+Assert.NotNull(badRequestResult.Value);
+Assert.NotNull(unchangedIncident);
+Assert.Equal(&quot;Reported&quot;, unchangedIncident.Status);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0031554; recorded 2026-10-06T00:15:35.5046888+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest()
+    {
+        // Arrange
+        var context = GetInMemoryContext();
+        var incident = new Incident
+        {
+            Title = &quot;Power Substation Failure&quot;,
+            Status = &quot;Reported&quot;,
+            Priority = &quot;High&quot;,
+            Location = &quot;Substation 9&quot;
+        };
+        context.Incidents.Add(incident);
+        await context.SaveChangesAsync();
+
+        var controller = CreateController(context);
+        var updateDto = new UpdateIncidentDto
+        {
+            Status = &quot;Resolved&quot; // Illegal jump: Reported -&gt; Resolved
+        };
+
+        // Act
+        var result = await controller.UpdateIncident(incident.Id, updateDto);
+
+        // Assert
+        var badRequestResult = Assert.IsType&lt;BadRequestObjectResult&gt;(result);
+        Assert.NotNull(badRequestResult.Value);
+
+        // Ensure status in database was NOT changed
+        var unchangedIncident = await context.Incidents.FindAsync(incident.Id);
+        Assert.NotNull(unchangedIncident);
+        Assert.Equal(&quot;Reported&quot;, unchangedIncident.Status);
+    }</pre></details></section><section><h2>BE-042: ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_ValidTransition_ReportedToVerified_Succeeds</h2><p><a href="Source_Code.html#IncidentControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_ValidTransition_ReportedToVerified_Succeeds&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.IsType&lt;NoContentResult&gt;(result);
+Assert.NotNull(updatedIncident);
+Assert.Equal(&quot;Verified&quot;, updatedIncident.Status);
+Assert.NotNull(statusEvent);
+Assert.Equal(&quot;StatusUpdate&quot;, statusEvent.EventType);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0084748; recorded 2026-10-06T00:15:35.5129221+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task UpdateStatus_ValidTransition_ReportedToVerified_Succeeds()
+    {
+        // Arrange
+        var context = GetInMemoryContext();
+        var incident = new Incident
+        {
+            Title = &quot;Pipeline Leak&quot;,
+            Status = &quot;Reported&quot;,
+            Priority = &quot;Medium&quot;,
+            Location = &quot;North Station&quot;
+        };
+        context.Incidents.Add(incident);
+        await context.SaveChangesAsync();
+
+        var controller = CreateController(context);
+        var updateDto = new UpdateIncidentDto
+        {
+            Status = &quot;Verified&quot;,
+            Note = &quot;Verified on site by field officer&quot;
+        };
+
+        // Act
+        var result = await controller.UpdateIncident(incident.Id, updateDto);
+
+        // Assert
+        Assert.IsType&lt;NoContentResult&gt;(result);
+
+        var updatedIncident = await context.Incidents.FindAsync(incident.Id);
+        Assert.NotNull(updatedIncident);
+        Assert.Equal(&quot;Verified&quot;, updatedIncident.Status);
+
+        // Verify timeline logging
+        var timeline = await context.IncidentTimelineEvents
+            .Where(e =&gt; e.IncidentId == incident.Id)
+            .ToListAsync();
+
+        var statusEvent = timeline.FirstOrDefault(e =&gt; e.Title == &quot;Incident Verified&quot;);
+        Assert.NotNull(statusEvent);
+        Assert.Equal(&quot;StatusUpdate&quot;, statusEvent.EventType);
+    }</pre></details></section><section><h2>BE-043: ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData</h2><p><a href="Source_Code.html#IncidentPlannerServiceTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.NotNull(plan);
+Assert.Contains(&quot;1 resources available&quot;, plan.Reasoning); // Ambulance ignored
+Assert.Contains(&quot;1 volunteers available&quot;, plan.Reasoning);</pre><p>Historical group result: Passed - Passed; duration 00:00:01.0317692; recorded 2026-10-06T00:15:35.4361220+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public void GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData()
+    {
+        var (service, context) = CreateService(Guid.NewGuid().ToString());
+
+        context.Resources.Add(new Resource { Id = 101, Name = &quot;Fire Engine 1&quot;, ResourceType = &quot;Vehicle&quot;, Status = &quot;Available&quot; });
+        context.Resources.Add(new Resource { Id = 102, Name = &quot;Ambulance 1&quot;, ResourceType = &quot;Vehicle&quot;, Status = &quot;InUse&quot; }); // Should be ignored
+        context.Volunteers.Add(new Volunteer { Id = Guid.NewGuid(), Name = &quot;John Doe&quot;, IsAvailable = true });
+        context.SaveChanges();
+
+        var incident = new Incident
+        {
+            Id = 2,
+            Title = &quot;Major Fire&quot;,
+            Location = &quot;Uptown&quot;,
+            Category = &quot;Fire&quot;,
+            Priority = &quot;Critical&quot;,
+            AffectedCount = 15
+        };
+
+        var plan = service.GeneratePlan(incident);
+
+        Assert.NotNull(plan);
+        Assert.Contains(&quot;1 resources available&quot;, plan.Reasoning); // Ambulance ignored
+        Assert.Contains(&quot;1 volunteers available&quot;, plan.Reasoning);
+    }
+}</pre></details></section><section><h2>BE-044: ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable</h2><p><a href="Source_Code.html#IncidentPlannerServiceTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.NotNull(plan);
+Assert.Contains(&quot;No available resources found&quot;, plan.Reasoning);
+Assert.Contains(&quot;No available volunteers found&quot;, plan.Reasoning);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.1535154; recorded 2026-10-06T00:15:35.5896971+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public void GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable()
+    {
+        var (service, context) = CreateService(Guid.NewGuid().ToString());
+
+        var incident = new Incident
+        {
+            Id = 1,
+            Title = &quot;Test Incident&quot;,
+            Location = &quot;Downtown&quot;,
+            Category = &quot;Fire&quot;,
+            Priority = &quot;High&quot;,
+            AffectedCount = 5
+        };
+
+        var plan = service.GeneratePlan(incident);
+
+        Assert.NotNull(plan);
+        Assert.Contains(&quot;No available resources found&quot;, plan.Reasoning);
+        Assert.Contains(&quot;No available volunteers found&quot;, plan.Reasoning);
+    }</pre></details></section><section><h2>AI-001: test_AI01_unapproved_tool_is_rejected[CoordinatorPlannerAgent]</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI01_unapproved_tool_is_rejected&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>All assertions in the named test must pass for its configured fixture.</pre><p>Historical group result: Passed - JUnit records pass; 0.001 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI01_unapproved_tool_is_rejected(agent):
+    with pytest.raises(ValueError):
+        agent().execute_tool(&#x27;delete_database&#x27;, {})</pre></details></section><section><h2>AI-004: test_AI02_coordinator_output_requires_human_approval</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI02_coordinator_output_requires_human_approval&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert result[&#x27;incidentId&#x27;] == 42
+assert result[&#x27;requiresHumanApproval&#x27;] is True
+assert result[&#x27;actions&#x27;] and result[&#x27;requiredResources&#x27;]</pre><p>Historical group result: Passed - JUnit records pass; 0.001 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI02_coordinator_output_requires_human_approval():
+    result = CoordinatorPlannerAgent().analyze_and_plan({&#x27;incident_id&#x27;: 42, &#x27;title&#x27;: &#x27;Building fire&#x27;, &#x27;category&#x27;: &#x27;Fire&#x27;, &#x27;priority&#x27;: &#x27;High&#x27;, &#x27;affected_count&#x27;: 10})
+    assert result[&#x27;incidentId&#x27;] == 42
+    assert result[&#x27;requiresHumanApproval&#x27;] is True
+    assert result[&#x27;actions&#x27;] and result[&#x27;requiredResources&#x27;]</pre></details></section></main></html>

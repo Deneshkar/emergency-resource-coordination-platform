@@ -12,7 +12,7 @@ def include(path,arc=None):
         arc = ('QMS/' + path.relative_to(qms).as_posix()) if path.is_relative_to(qms) else ('SEF/emergency-resource-coordination-platform/' + path.relative_to(repo).as_posix())
     entries[arc]=path.read_bytes()
 
-for folder in [qms/'submission',qms/'scripts']:
+for folder in [qms/'submission',qms/'scripts',qms/'members']:
     for path in folder.rglob('*'):
         if path.is_file() and not any(p in ('__pycache__','.pytest_cache') for p in path.parts):
             include(path)
@@ -22,7 +22,7 @@ for path in (qms/'evidence').rglob('*'):
     if relative.startswith('rerun-'): continue
     if relative.startswith('final/backend/') and relative not in ['final/backend/backend.trx','final/backend/coverage.cobertura.xml']:
         continue
-    if path.suffix.lower() in ['.trx','.json','.jsonl','.log','.xml','.txt','.patch']:
+    if path.suffix.lower() in ['.trx','.json','.jsonl','.log','.xml','.txt','.patch','.png']:
         include(path)
 
 files=subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard'],cwd=repo,text=True).splitlines()

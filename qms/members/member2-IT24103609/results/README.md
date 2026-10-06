@@ -1,0 +1,1 @@
+Dated runs are saved here. ai-assisted = package verification by Codex; personal = declared execution by the named operator; practice = rehearsal. Keep raw reports and screenshots. Do not rename verification runs as personal evidence.

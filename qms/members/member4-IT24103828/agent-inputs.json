@@ -1,0 +1,172 @@
+[
+  {
+    "id": "M4-D01",
+    "title": "Available volunteer with valid shift",
+    "input": {
+      "dispatch_id": 42,
+      "incident_id": 7,
+      "assignments": [
+        {
+          "volunteer_id": "vol-demo-4",
+          "volunteer_name": "Demo Responder",
+          "is_available": true,
+          "skills": "medical, rescue",
+          "required_skills": "medical",
+          "proposed_shift": {
+            "start": "2026-10-06T10:00:00Z",
+            "end": "2026-10-06T11:00:00Z"
+          },
+          "existing_shifts": []
+        }
+      ]
+    },
+    "checks": [
+      {
+        "path": "is_valid",
+        "op": "equals",
+        "value": true
+      },
+      {
+        "path": "recommendation",
+        "op": "equals",
+        "value": "APPROVE"
+      },
+      {
+        "path": "checks.1.passed",
+        "op": "equals",
+        "value": true
+      }
+    ]
+  },
+  {
+    "id": "M4-D02",
+    "title": "Unavailable volunteer",
+    "input": {
+      "dispatch_id": 42,
+      "incident_id": 7,
+      "assignments": [
+        {
+          "volunteer_id": "vol-demo-4",
+          "volunteer_name": "Demo Responder",
+          "is_available": false,
+          "skills": "medical, rescue",
+          "required_skills": "medical",
+          "proposed_shift": {
+            "start": "2026-10-06T10:00:00Z",
+            "end": "2026-10-06T11:00:00Z"
+          },
+          "existing_shifts": []
+        }
+      ]
+    },
+    "checks": [
+      {
+        "path": "is_valid",
+        "op": "equals",
+        "value": false
+      },
+      {
+        "path": "recommendation",
+        "op": "equals",
+        "value": "REJECT"
+      },
+      {
+        "path": "violations.0.code",
+        "op": "equals",
+        "value": "V1_VOLUNTEER_UNAVAILABLE"
+      }
+    ]
+  },
+  {
+    "id": "M4-D03",
+    "title": "Overlapping shift requires revision",
+    "input": {
+      "dispatch_id": 42,
+      "incident_id": 7,
+      "assignments": [
+        {
+          "volunteer_id": "vol-demo-4",
+          "volunteer_name": "Demo Responder",
+          "is_available": true,
+          "skills": "medical, rescue",
+          "required_skills": "medical",
+          "proposed_shift": {
+            "start": "2026-10-06T09:30:00Z",
+            "end": "2026-10-06T11:00:00Z"
+          },
+          "existing_shifts": [
+            {
+              "id": "shift-existing",
+              "start": "2026-10-06T09:00:00Z",
+              "end": "2026-10-06T10:00:00Z",
+              "status": "Scheduled"
+            }
+          ]
+        }
+      ]
+    },
+    "checks": [
+      {
+        "path": "is_valid",
+        "op": "equals",
+        "value": false
+      },
+      {
+        "path": "recommendation",
+        "op": "equals",
+        "value": "REVISE"
+      },
+      {
+        "path": "violations.0.code",
+        "op": "equals",
+        "value": "V2_DOUBLE_BOOKING"
+      }
+    ]
+  },
+  {
+    "id": "M4-D04",
+    "title": "Adjacent shifts do not overlap",
+    "input": {
+      "dispatch_id": 42,
+      "incident_id": 7,
+      "assignments": [
+        {
+          "volunteer_id": "vol-demo-4",
+          "volunteer_name": "Demo Responder",
+          "is_available": true,
+          "skills": "medical, rescue",
+          "required_skills": "medical",
+          "proposed_shift": {
+            "start": "2026-10-06T10:00:00Z",
+            "end": "2026-10-06T11:00:00Z"
+          },
+          "existing_shifts": [
+            {
+              "id": "shift-existing",
+              "start": "2026-10-06T09:00:00Z",
+              "end": "2026-10-06T10:00:00Z",
+              "status": "Scheduled"
+            }
+          ]
+        }
+      ]
+    },
+    "checks": [
+      {
+        "path": "is_valid",
+        "op": "equals",
+        "value": true
+      },
+      {
+        "path": "recommendation",
+        "op": "equals",
+        "value": "APPROVE"
+      },
+      {
+        "path": "checks.1.passed",
+        "op": "equals",
+        "value": true
+      }
+    ]
+  }
+]

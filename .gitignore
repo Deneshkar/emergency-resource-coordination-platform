@@ -49,3 +49,4 @@ qms/evidence/ci/
 qms/*.zip
 **/.pytest_cache/
 !qms/evidence/**/*.log
+!qms/members/**/results/**/*.log

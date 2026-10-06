@@ -16,7 +16,12 @@
       "backend/Program.cs",
       "backend/Services/IncidentPlannerService.cs",
       "backend/appsettings.json"
-    ]
+    ],
+    "author_date": "2026-09-16T10:55:54+05:30",
+    "committer_date": "2026-09-21T12:29:48+05:30",
+    "message": "feat: complete student 1 incident intelligence and planner agent",
+    "testing_contribution": "Incident controller tests accompany incident input handling and coordinator/planner implementation. This is backend test authorship evidence.",
+    "metadata_source": "GitHub commit API verification on 6 October 2026; exact message and author/committer timestamps cross-checked against the same local Git object."
   },
   {
     "member": "M.Thanusikan",
@@ -31,7 +36,12 @@
       "backend-tests/GeolocationServiceTests.cs",
       "backend-tests/InventoryControllerTests.cs",
       "backend-tests/SheltersControllerTests.cs"
-    ]
+    ],
+    "author_date": "2026-09-16T08:24:46+05:30",
+    "committer_date": "2026-09-16T08:24:46+05:30",
+    "message": "test(backend): Add edge case unit tests for shelters, inventory, and geolocation",
+    "testing_contribution": "Backend edge-case tests cover shelters, inventory and geolocation. These committed tests are distinct from the later QMS PostgreSQL and migration regressions.",
+    "metadata_source": "GitHub commit API verification on 6 October 2026; exact message and author/committer timestamps cross-checked against the same local Git object."
   },
   {
     "member": "M.Thanusikan",
@@ -46,7 +56,12 @@
       "frontend-react/src/pages/__tests__/InventoryList.test.jsx",
       "frontend-react/src/pages/__tests__/ResourceList.test.jsx",
       "frontend-react/src/pages/__tests__/ShelterList.test.jsx"
-    ]
+    ],
+    "author_date": "2026-09-16T08:28:53+05:30",
+    "committer_date": "2026-09-16T08:28:53+05:30",
+    "message": "test(react): Add unit tests for ShelterList, ResourceList, and InventoryList pages",
+    "testing_contribution": "React page tests cover ShelterList, ResourceList and InventoryList. Existing component tests retain the scope and limitations described in the report.",
+    "metadata_source": "GitHub commit API verification on 6 October 2026; exact message and author/committer timestamps cross-checked against the same local Git object."
   },
   {
     "member": "Denesh N",
@@ -79,7 +94,12 @@
       "frontend-react/src/services/dispatchService.js",
       "frontend-react/src/services/validationService.js",
       "mobile-flutter/lib/models/dispatch.dart"
-    ]
+    ],
+    "author_date": "2026-09-26T12:35:36+05:30",
+    "committer_date": "2026-09-26T12:35:36+05:30",
+    "message": "Implement dispatch task allocation\n\nResolved resource ID consistency, secured the dispatch approval workflow, completed the coordinator dispatch UI flow and added allocation and validation tests.",
+    "testing_contribution": "Backend dispatch allocation, validation and controller tests, plus React dispatch-page and validation-service tests, accompany the dispatch implementation.",
+    "metadata_source": "GitHub commit API verification on 6 October 2026; exact message and author/committer timestamps cross-checked against the same local Git object."
   },
   {
     "member": "Denesh N",
@@ -93,7 +113,12 @@
     "changed_files": [
       "backend/ERCP.Api.csproj",
       "backend/Migrations/20260916110602_AddAffectedCountToIncidents.cs"
-    ]
+    ],
+    "author_date": "2026-10-05T12:30:00+05:30",
+    "committer_date": "2026-10-05T12:30:00+05:30",
+    "message": "fix: database migrations and prepare backend deployment\n\nMigration: EF Core database updates for safe schema changes.",
+    "testing_contribution": "Removed duplicate migration table operations and upgraded MailKit. This is a database repair contribution; this commit does not itself prove execution of the later QMS migration tests.",
+    "metadata_source": "GitHub commit API verification on 6 October 2026; exact message and author/committer timestamps cross-checked against the same local Git object."
   },
   {
     "member": "Deneshkar. P",
@@ -113,7 +138,12 @@
       "backend/Program.cs",
       "docs/AI_Usage_Log_Student4.md",
       "docs/Individual_Report_Student4.md"
-    ]
+    ],
+    "author_date": "2026-09-16T21:08:35+05:30",
+    "committer_date": "2026-09-21T12:29:49+05:30",
+    "message": "feat: add volunteer shift and API integration tests, and update documentation",
+    "testing_contribution": "Volunteer shift tests and volunteer API integration tests accompany responder validation and controller changes.",
+    "metadata_source": "GitHub commit API verification on 6 October 2026; exact message and author/committer timestamps cross-checked against the same local Git object."
   },
   {
     "member": "Deneshkar. P",
@@ -135,6 +165,11 @@
       "backend/DTOs/AuthDtos.cs",
       "frontend-react/src/components/__tests__/ProtectedRoute.test.jsx",
       "frontend-react/src/pages/__tests__/ResourceBehaviour.test.jsx"
-    ]
+    ],
+    "author_date": "2026-10-03T13:21:27+05:30",
+    "committer_date": "2026-10-03T13:21:27+05:30",
+    "message": "feat(security): restrict public registration to Citizen/Volunteer, lock dispatch writes to Coordinator/Admin",
+    "testing_contribution": "Committed public-role and dispatch authorization fixes, PostgreSQL/security regressions, and React protected-route/resource behaviour tests. QMS preparation and execution were AI-assisted.",
+    "metadata_source": "GitHub commit API verification on 6 October 2026; exact message and author/committer timestamps cross-checked against the same local Git object."
   }
 ]

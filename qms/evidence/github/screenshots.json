@@ -1,0 +1,58 @@
+[
+  {
+    "student_id": "IT24103355",
+    "member": "Jathurshy.S",
+    "sha": "50f9414e8ceeb8f287112bde2a81883fa9ba4245",
+    "url": "https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/50f9414e8ceeb8f287112bde2a81883fa9ba4245",
+    "file": "evidence/github/Jathurshy-50f9414.png",
+    "provided_on": "2026-10-06",
+    "captured_at": null,
+    "source_filename": "Screenshot 2026-10-06 150323.png",
+    "provenance": "User-supplied GitHub screenshot; original local PNG visually matched to the image supplied in chat. Copied byte-for-byte without editing. Capture time is not independently verified.",
+    "sha256": "f1f57e24da51b54b8427ee9f3c929de02e56267e8ad97ec412a109212b6f3a15",
+    "width": 1895,
+    "height": 932
+  },
+  {
+    "student_id": "IT24103609",
+    "member": "M.Thanusikan",
+    "sha": "25de8a92bee86fe982b6fdbbe65afdc35055ce43",
+    "url": "https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/25de8a92bee86fe982b6fdbbe65afdc35055ce43",
+    "file": "evidence/github/Thanusikan-25de8a9.png",
+    "provided_on": "2026-10-06",
+    "captured_at": null,
+    "source_filename": "Screenshot 2026-10-06 150337.png",
+    "provenance": "User-supplied GitHub screenshot; original local PNG visually matched to the image supplied in chat. Copied byte-for-byte without editing. Capture time is not independently verified.",
+    "sha256": "bbedd925c9f98404e13a013698cdf911eb381560ef114d823a8bf469c86e43a2",
+    "width": 1887,
+    "height": 932
+  },
+  {
+    "student_id": "IT24102826",
+    "member": "Denesh N",
+    "sha": "48a9c3b9cd87d67ce48b9c16aeb960be85baa266",
+    "url": "https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/48a9c3b9cd87d67ce48b9c16aeb960be85baa266",
+    "file": "evidence/github/Denesh-48a9c3b.png",
+    "provided_on": "2026-10-06",
+    "captured_at": null,
+    "source_filename": "Screenshot 2026-10-06 150500.png",
+    "provenance": "User-supplied GitHub screenshot; original local PNG visually matched to the image supplied in chat. Copied byte-for-byte without editing. Capture time is not independently verified.",
+    "sha256": "f0266232b8dbc7829a3a573cfbf58d19ea329d82f585f894f9832b05f2de53fd",
+    "width": 1895,
+    "height": 926
+  },
+  {
+    "student_id": "IT24103828",
+    "member": "Deneshkar. P",
+    "sha": "3c059a63c9093f6347de4fbef73f9b3e7164910a",
+    "url": "https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/3c059a63c9093f6347de4fbef73f9b3e7164910a",
+    "file": "evidence/github/Deneshkar-3c059a6.png",
+    "provided_on": "2026-10-06",
+    "captured_at": null,
+    "source_filename": "Screenshot 2026-10-06 150516.png",
+    "provenance": "User-supplied GitHub screenshot; original local PNG visually matched to the image supplied in chat. Copied byte-for-byte without editing. Capture time is not independently verified.",
+    "sha256": "b725cd8f891145f384fc32fe266f81d591c49fec7e92e950360046b43f1ada25",
+    "width": 1898,
+    "height": 927
+  }
+]

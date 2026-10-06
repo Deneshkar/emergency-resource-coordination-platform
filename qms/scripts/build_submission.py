@@ -10,11 +10,11 @@ AUTO = SUMMARY['automated']['total']
 TOTAL = SUMMARY['inventory_records']
 OUT = QMS / 'submission'
 sys.path.insert(0, str(QMS / '.tools/python'))
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether
+from reportlab.platypus import BaseDocTemplate, Frame, PageTemplate, NextPageTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether, Image
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_LEFT
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A4, landscape
 
 def read(path):
     data=Path(path).read_bytes()
@@ -262,7 +262,7 @@ p('Defect_Report.html records reproduction steps, expected/actual behaviour, roo
 
 nextpage(); head('Contribution evidence and viva preparation')
 p('Repository: <link href="https://github.com/Deneshkar/emergency-resource-coordination-platform" color="#12334b">github.com/Deneshkar/emergency-resource-coordination-platform</link>')
-p('Published source: <link href="https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/9226a56328c91a5a2e47557997d15786c7a15b71">9226a56</link>, based on main 054fce7. <link href="https://github.com/Deneshkar/emergency-resource-coordination-platform/pull/47">PR #47</link> preserves newer team changes, including the duplicate-table repair and MailKit update. Contribution_Record.md links verified GitHub test contributions from all four members; GitHub_Publication.md records publication and CI status.')
+p('Published source: <link href="https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/9226a56328c91a5a2e47557997d15786c7a15b71">9226a56</link>, based on main 054fce7. The published fix/qms-submission-readiness branch preserves newer team changes. <link href="https://github.com/Deneshkar/emergency-resource-coordination-platform/pull/47">PR #47</link> was closed without merging; the branch remains available. Appendix A provides exact commit messages, full hashes, author/committer dates and testing contributions for every member. GitHub_Publication.md records publication and CI status.')
 verified = [('Jathurshy.S - IT24103355','50f9414e8ceeb8f287112bde2a81883fa9ba4245','Incident controller tests and planner implementation. Demonstrate invalid input and approval requirements.'),('M.Thanusikan - IT24103609','25de8a92bee86fe982b6fdbbe65afdc35055ce43','Resource, shelter and inventory edge-case tests. Demonstrate a PostgreSQL constraint and migration regression.'),('Denesh N - IT24102826','48a9c3b9cd87d67ce48b9c16aeb960be85baa266','Dispatch allocation/controller and React tests. Explain authorization, allocation shortages and load thresholds.'),('Deneshkar. P - IT24103828','3c059a63c9093f6347de4fbef73f9b3e7164910a','Volunteer/shift HTTP tests. Demonstrate safety rejection and a Flutter widget case.')]
 table([['Member','Verified existing commit and suggested demonstration']]+[[name, f'<link href="https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/{sha}">{sha[:7]}</link>: {description}'] for name,sha,description in verified],[190,309])
 p('<b>Individual evidence status.</b> The group confirmed on 6 October that personal runs of the new QMS tests by Jathurshy.S, M.Thanusikan and Denesh N are not yet confirmed. Existing test authorship is verified separately. Current group execution and publication are AI-assisted; personal review and viva demonstrations remain each member\'s responsibility.')
@@ -274,15 +274,116 @@ p('The brief requires the module CLEAR framework but does not define its fields.
 nextpage(); head('Conclusion and evidence index')
 p('The tested incident-to-approved-dispatch workflow completes on the actual API and PostgreSQL, and selected resource, responder, client and agent behaviours pass their automated checks. The assessment corrected two authorization defects and the migration defect. The repaired schema passes clean installation, rollback/data-preservation and upgrade checks, and the workflow passes on that schema. The new local load test met its thresholds. The remaining security, coverage and deployment-adoption limits prevent a production-readiness conclusion.')
 table([['Submission item','Purpose'],['Software_Testing_Report.pdf','Test plan, scope, environment, results, defects and conclusion.'],['Test_Cases.html and test-cases.json',f'{TOTAL} completed, evidence-linked records with expected and actual results.'],['Defect_Report.html and defects.json','Three defects with severity, reproduction, evidence and retest status.'],['Contribution_Record.md, Contribution_and_Viva.md and GitHub_Publication.md','Verified commit links, publication/CI status, pending personal execution, viva guide and AI declaration.'],['Reproduction_Guide.md and scripts/run-tests.ps1','Dependencies, isolated environment setup and rerun commands.'],['evidence/baseline and evidence/security-before','Original suites and pre-fix security failures.'],['evidence/final/backend, react.json, flutter.jsonl, agents.xml, live-api.xml','Raw automated execution and backend coverage.'],['evidence/final/performance.json, workflow.json and migrations.log','Load metrics, migrated workflow evidence and passing CLI upgrade. Original failure and four regression retests are in evidence/migration-fix.'],['Application source and testing scripts','Reproducible implementation, configuration examples and test code.']],[221,278])
-p('<b>Submission checks.</b> Review member details; supply a group number if required; commit genuine member contributions and verify the repository link; transfer the AI declaration into the official CLEAR format; rehearse the individual demonstrations; upload through the correct CourseWeb entry. The QMS source is published in PR #47; CourseWeb upload has not been performed.')
+p('<b>Submission checks.</b> Review member details; supply a group number if required; complete genuine individual review/run evidence; transfer the AI declaration into the official CLEAR format; rehearse the individual demonstrations; upload through the correct CourseWeb entry. The QMS source is published on fix/qms-submission-readiness; PR #47 is closed without merging. CourseWeb upload has not been performed.')
 p('<b>Source basis.</b> The supplied four-page SE3110 Assignment.pdf, the ERCP repository at published source commit 9226a56 on top of main 054fce7, and the tool-generated evidence listed above. Historical report pass counts were not reused as fresh execution results.','SmallQ')
 
+commit_evidence = json.loads(read(QMS/'evidence/github/verified-member-commits.json'))
+screenshot_manifest_path = QMS/'evidence/github/screenshots.json'
+screenshot_manifest = json.loads(read(screenshot_manifest_path)) if screenshot_manifest_path.exists() else []
+personal_path = QMS/'evidence/individual/IT24103828/20261006-151749/personal-execution.json'
+personal = json.loads(read(personal_path)) if personal_path.exists() else None
+for index, (name, student_id, module) in enumerate(members, 1):
+    nextpage(); head(f'Appendix A.{index} - Individual contribution')
+    p(f'<b>{html.escape(name)} | {student_id}</b>')
+    p(f'<b>SEF responsibility:</b> {html.escape(module)}')
+    member_commits = [row for row in commit_evidence if row['student_id'] == student_id]
+    p(f'<b>Verified GitHub account:</b> {member_commits[0]["github_author"]}', 'SmallQ')
+    p('The following are historical contributions in the tested project. Dates are recorded in Sri Lanka time (UTC+05:30). Author and committer dates are shown separately because rebasing or integration can change the latter.', 'SmallQ')
+    for row in member_commits:
+        p(f'<b>Commit:</b> <link href="{row["url"]}" color="#12334b">{row["sha"]}</link>', 'SmallQ')
+        p('<b>Exact message:</b> '+html.escape(row['message']).replace('\n','<br/>'), 'SmallQ')
+        p(f'<b>Author date:</b> {row["author_date"]}<br/><b>Committer date:</b> {row["committer_date"]}', 'SmallQ')
+        p('<b>Testing / repair contribution:</b> '+html.escape(row['testing_contribution']), 'SmallQ')
+        files = [f for f in row['changed_files'] if 'tests/' in f or '__tests__/' in f]
+        if not files:
+            files = row['changed_files']
+        p('<b>Relevant committed files:</b><br/>'+ '<br/>'.join(html.escape(f) for f in files), 'SmallQ')
+        story.append(Spacer(1, 7))
+    p('<b>Individual summary.</b> '+ ('Contributed volunteer/shift API tests and published security/QMS changes. Group analysis, execution, integration and reporting used OpenAI Codex assistance under the repository owner\'s direction. Personal viva review and demonstrations must be recorded separately.' if student_id == 'IT24103828' else 'The Git history above supports the stated implementation/test contribution. Personal execution or review of the new QMS tests was not confirmed by the group on 6 October 2026. Assigned database, AI, workflow or performance review responsibilities are not claimed as completed personal work.'), 'SmallQ')
+    screenshots = [s for s in screenshot_manifest if s['student_id'] == student_id]
+    if student_id == 'IT24103828' and personal:
+        p('<b>Personal execution confirmed:</b> Four controller, five HTTP integration and three safety-agent tests passed during guided practice on 6 October. Six supplied screenshots and raw reports are in Appendix C. These are existing test reruns; own-word explanations and the boundary exercise remain unconfirmed.', 'SmallQ')
+    if screenshots:
+        p(f'<b>Screenshot evidence:</b> See Appendix B.{index} for the user-supplied actual GitHub commit page. The unchanged original PNG is included in evidence/github.', 'SmallQ')
+    else:
+        p('<b>Screenshot status:</b> Actual GitHub page capture is pending. Linked commits and verified metadata are supplied; no generated image is presented as a GitHub screenshot.', 'SmallQ')
+
+if screenshot_manifest:
+    import hashlib
+    story.append(NextPageTemplate('Screenshots'))
+    for index, (name, student_id, module) in enumerate(members, 1):
+        for shot in [s for s in screenshot_manifest if s['student_id'] == student_id]:
+            path = QMS / shot['file']
+            assert hashlib.sha256(path.read_bytes()).hexdigest() == shot['sha256'], f'Screenshot changed: {path}'
+            assert any(r['sha'] == shot['sha'] and r['student_id'] == student_id and r['url'] == shot['url'] for r in commit_evidence)
+            nextpage(); head(f'Appendix B.{index} - GitHub commit screenshot')
+            p(f'<b>{html.escape(name)} | {student_id}</b> - <link href="{shot["url"]}" color="#12334b">{shot["sha"]}</link>', 'SmallQ')
+            picture = Image(str(path))
+            scale = min((landscape(A4)[0] - 108) / picture.imageWidth, 367 / picture.imageHeight)
+            picture.drawWidth = picture.imageWidth * scale
+            picture.drawHeight = picture.imageHeight * scale
+            story.append(picture)
+            story.append(Spacer(1, 6))
+            p('Actual GitHub page screenshot supplied by the group on '+html.escape(shot['provided_on'])+'. Original PNG preserved unchanged; shown proportionally scaled. Full commit messages and exact dates are in Appendix A. Original: '+html.escape(shot['file'])+'.', 'SmallQ')
+            if student_id == 'IT24103828':
+                p('GitHub identifies Deneshkar as author and Jathurshy11 as committer. These are distinct Git roles; the volunteer contribution is attributed to the recorded author.', 'SmallQ')
+
+if personal:
+    import hashlib
+    story.append(NextPageTemplate('Report'))
+    nextpage(); head('Appendix C - Personal execution evidence')
+    p('<b>Deneshkar. P | IT24103828 | 6 October 2026</b>')
+    p('The student personally ran the commands during guided practice and supplied six terminal screenshots. OpenAI Codex assisted with command selection, explanations and evidence organization. Original screenshots are preserved unchanged, and saved TRX/XML reports independently confirm the results.')
+    table([['Personally executed area','Passed','Failed','Skipped']] + [[r['name'],r['passed'],r['failed'],r['skipped']] for r in personal['suites']], [300,65,65,69])
+    p('These 12 executions rerun existing cases. Group totals remain 270 automated cases and 272 inventory records. The 17 agent cases outside the selected filter were intentionally deselected, not skipped or failed.')
+    p('The controller and internal HTTP test-server fixtures use EF Core InMemory. They do not establish PostgreSQL constraints. The Python safety tests exercise deterministic rules without a live LLM.')
+    for run in personal['suites']:
+        assert hashlib.sha256((QMS/run['file']).read_bytes()).hexdigest() == run['sha256']
+        p('<b>'+html.escape(run['name'])+'</b><br/>Started: '+html.escape(run['started_at'])+'<br/>Raw report: '+html.escape(run['file']), 'SmallQ')
+    p(html.escape(personal['http_note']), 'SmallQ')
+    p('<b>Still to demonstrate:</b> Own-word explanations, the equal-time boundary exercise, defect/retest interpretation and viva understanding. Successful execution is recorded separately from these pending learning activities. The other three members\' new personal QMS runs remain unconfirmed.')
+    p('Individual_Evidence_IT24103828.md links all six PNGs, the raw results and personal-execution.json, which records their SHA-256 hashes. The following six pages reproduce every supplied personal test screenshot.', 'SmallQ')
+    for index, shot in enumerate(personal['screenshots'], 1):
+        nextpage(); head(f'Appendix C.{index} - '+shot['title'])
+        p('<b>Deneshkar. P | IT24103828</b> - Guided personal testing, 6 October 2026', 'SmallQ')
+        path = QMS/shot['file']
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == shot['sha256']
+        picture = Image(str(path))
+        scale = min((A4[0]-108)/picture.imageWidth, 540/picture.imageHeight)
+        picture.drawWidth=picture.imageWidth*scale
+        picture.drawHeight=picture.imageHeight*scale
+        story.append(picture); story.append(Spacer(1, 10))
+        p('User-supplied screenshot, preserved unchanged and scaled proportionally. Supporting raw report: '+html.escape(shot['report'])+'.', 'SmallQ')
+        p('Original PNG: '+html.escape(shot['file']), 'SmallQ')
+
+member_verification_path=QMS/'members/verification.json'
+if member_verification_path.exists():
+    packages=json.loads(read(member_verification_path))
+    assert len(packages['members'])==4 and all(r['passed'] for r in packages['members'])
+    story.append(NextPageTemplate('Report'))
+    nextpage(); head('Appendix D - Individual demo packages')
+    p('Open members/index.html in a local browser to choose a member. Each package contains a test-case document with original source links, a named PowerShell test runner, editable agent inputs, an actual agent output report and dated execution evidence. The complete source repository or assignment ZIP is required.')
+    table([['Member / ID','Business component and matching agent','Tests','Demos']]+[
+        [f'{r["name"]}<br/>{r["student_id"]}',members[r['member']-1][2],f'{r["backend"]} BE<br/>{r["agents"]} AI',r['demo_scenarios']]
+        for r in packages['members']],[128,247,70,54])
+    p(f'<b>Package verification.</b> Codex executed all four packages on 6 October: {packages["existing_test_passes"]} selected existing tests ({packages["backend_passes"]} backend and {packages["agent_passes"]} agent cases) and {packages["demo_scenarios"]} separately checked demonstration scenarios passed. Runs are labelled ai-assisted and linked by members/verification.json. An intentionally wrong safety expectation also returned failure while retaining the actual output.')
+    p('<b>Counts and scope.</b> These are reruns of selected group cases, not additional unique tests. The group totals remain 270 automated cases and 272 inventory records. Selected backend fixtures use InMemory/TestServer, while agent demonstrations call the actual Python classes in deterministic mode. The wider PostgreSQL, frontend, mobile, live API and performance evidence remains in the group suite.')
+    p('<b>Present each member\'s work.</b> Open that member\'s index.html, show Test_Cases.html, run run-memberN-tests.ps1 with -ExecutionKind personal and -Operator followed by the actual name, and open the new results.html. Then show agent-inputs.json and agent-demo.html, explain the returned decision/checks, change an input and predict the next output.')
+    p('<b>Business-specific agent outputs.</b> Member 1 demonstrates incident plans and mandatory human approval. Member 2 demonstrates urgency, inventory deficits and shelter capacity. Member 3 demonstrates covered/shortage allocation proposals. Member 4 demonstrates available/unavailable responders and overlapping/adjacent shifts. Recommendations do not themselves approve or execute dispatches. Situation analysis selects by available shelter capacity, not geographical distance.')
+    p('<b>Personal evidence remains separate.</b> Deneshkar\'s earlier 12-test personal practice and six screenshots remain in Appendix C. The full member-4 package selects 19 existing tests; its AI-assisted verification does not establish a personal 19-test run. Other members\' new personal executions, and individual explanations/boundary practice, remain unconfirmed.')
+    p('Member_Demonstrations.md provides the four package links and commands. The package scripts and presentation pages were prepared with OpenAI Codex assistance; member ownership labels do not reassign original Git authorship.', 'SmallQ')
+
 def footer(canvas,doc):
-    canvas.setStrokeColor(colors.HexColor('#ccd6de')); canvas.line(48,39,A4[0]-48,39)
+    page_width = doc.pageTemplate.pagesize[0]
+    canvas.setStrokeColor(colors.HexColor('#ccd6de')); canvas.line(48,39,page_width-48,39)
     canvas.setFont('Helvetica',8); canvas.setFillColor(colors.HexColor('#516574'))
     canvas.drawString(48,26,'ERCP | Group testing submission | Revised 6 October 2026')
-    canvas.drawRightString(A4[0]-48,26,str(doc.page))
-doc=SimpleDocTemplate(str(OUT/'Software_Testing_Report.pdf'),pagesize=A4,rightMargin=48,leftMargin=48,topMargin=44,bottomMargin=51,
+    canvas.drawRightString(page_width-48,26,str(doc.page))
+doc=BaseDocTemplate(str(OUT/'Software_Testing_Report.pdf'),pagesize=A4,rightMargin=48,leftMargin=48,topMargin=44,bottomMargin=51,
     title='ERCP Software Testing and Quality Evaluation',author='ERCP group')
-doc.build(story,onFirstPage=footer,onLaterPages=footer)
+doc.addPageTemplates([
+    PageTemplate(id='Report', frames=[Frame(48,51,A4[0]-96,A4[1]-95)], pagesize=A4, onPage=footer),
+    PageTemplate(id='Screenshots', frames=[Frame(48,51,landscape(A4)[0]-96,landscape(A4)[1]-95)], pagesize=landscape(A4), onPage=footer),
+])
+doc.build(story)
 print(json.dumps({'records':len(cases),'passed':sum(c['status']=='Passed' for c in cases),'failed':0,'pdf':str(OUT/'Software_Testing_Report.pdf')}))

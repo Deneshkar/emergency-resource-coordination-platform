@@ -1,0 +1,288 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Member 2 - Test cases</title>
+<style>body{font:16px/1.55 system-ui,sans-serif;color:#173247;background:#edf2f5;margin:0}
+main{max-width:1100px;margin:32px auto;padding:32px;background:white;border-radius:12px}
+h1{font-size:30px}h2{margin-top:28px}a{color:#145797}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f4f7;padding:18px;font:13px/1.5 Consolas,monospace}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{border:1px solid #c6d4df;padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#e4edf4}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.note{background:#eaf2f8;padding:16px}.pass{color:#14652e}.fail{color:#a31919}details{margin:12px 0}section{border-top:1px solid #c6d4df;margin-top:28px;padding-top:12px}
+@media(max-width:750px){main{margin:0;padding:18px}.grid{display:block}}
+@media print{body{background:white}main{margin:0;padding:0}pre{font-size:10px}section{break-inside:avoid}}</style>
+<main><h1>Member 2 - Test cases</h1><p><b>M.Thanusikan | IT24103609</b><br>Resource and Inventory Management + SituationAnalysisAgent</p><p class="note">12 backend cases + 5 agent cases. These are selections of canonical group tests, not duplicated implementations. Source and expected assertions are below. Results shown as historical are from the group run; open results/&lt;dated run&gt;/results.html for a separate execution.</p><section><h2>BE-034: ERCP.Api.Tests.GeolocationServiceTests.CalculateHaversineDistanceKm_ReturnsAccurateKmDistance</h2><p><a href="Source_Code.html#GeolocationServiceTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.GeolocationServiceTests.CalculateHaversineDistanceKm_ReturnsAccurateKmDistance&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.InRange(distance, 90.0, 110.0);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0019358; recorded 2026-10-06T00:15:35.2149616+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public void CalculateHaversineDistanceKm_ReturnsAccurateKmDistance()
+    {
+        // Colombo (6.9271, 79.8612) to Kandy (7.2906, 80.6337) is approx 95-100 km
+        double distance = GeolocationService.CalculateHaversineDistanceKm(6.9271, 79.8612, 7.2906, 80.6337);
+
+        Assert.InRange(distance, 90.0, 110.0);
+    }</pre></details></section><section><h2>BE-035: ERCP.Api.Tests.GeolocationServiceTests.GetNearestShelters_OrdersSheltersByProximity</h2><p><a href="Source_Code.html#GeolocationServiceTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.GeolocationServiceTests.GetNearestShelters_OrdersSheltersByProximity&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.Equal(2, nearest.Count);
+Assert.Equal(&quot;Near Shelter&quot;, nearest[0].Name);
+Assert.True(nearest[0].DistanceKm &lt; nearest[1].DistanceKm);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0241507; recorded 2026-10-06T00:15:35.2392406+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task GetNearestShelters_OrdersSheltersByProximity()
+    {
+        var context = GetInMemoryContext();
+        context.Shelters.Add(new Shelter
+        {
+            Name = &quot;Far Shelter&quot;,
+            Location = &quot;Kandy&quot;,
+            TotalCapacity = 200,
+            CurrentOccupancy = 10,
+            Status = &quot;Active&quot;,
+            Latitude = 7.2906,
+            Longitude = 80.6337
+        });
+
+        context.Shelters.Add(new Shelter
+        {
+            Name = &quot;Near Shelter&quot;,
+            Location = &quot;Colombo Fort&quot;,
+            TotalCapacity = 100,
+            CurrentOccupancy = 20,
+            Status = &quot;Active&quot;,
+            Latitude = 6.9344,
+            Longitude = 79.8428
+        });
+
+        await context.SaveChangesAsync();
+
+        var service = new GeolocationService(context);
+        var nearest = await service.GetNearestSheltersAsync(6.9271, 79.8612, limit: 2);
+
+        Assert.Equal(2, nearest.Count);
+        Assert.Equal(&quot;Near Shelter&quot;, nearest[0].Name);
+        Assert.True(nearest[0].DistanceKm &lt; nearest[1].DistanceKm);
+    }
+}</pre></details></section><section><h2>BE-045: ERCP.Api.Tests.InventoryControllerTests.AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative</h2><p><a href="Source_Code.html#InventoryControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.InventoryControllerTests.AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.IsType&lt;Microsoft.AspNetCore.Mvc.BadRequestObjectResult&gt;(result);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0193727; recorded 2026-10-06T00:15:35.1646322+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative()
+    {
+        var context = GetInMemoryContext();
+        var item = new InventoryItem
+        {
+            ItemName = &quot;Medical Bandages&quot;,
+            Category = &quot;Medical&quot;,
+            Quantity = 10,
+            MinimumThreshold = 5,
+            Status = &quot;InStock&quot;
+        };
+        context.InventoryItems.Add(item);
+        await context.SaveChangesAsync();
+
+        var controller = new InventoryController(context);
+        var dto = new AdjustStockDto { QuantityAdjustment = -20 };
+
+        var result = await controller.AdjustStock(item.Id, dto);
+
+        Assert.IsType&lt;Microsoft.AspNetCore.Mvc.BadRequestObjectResult&gt;(result);
+    }
+}</pre></details></section><section><h2>BE-046: ERCP.Api.Tests.InventoryControllerTests.AdjustStock_SubtractsQuantity_UpdatesStatus</h2><p><a href="Source_Code.html#InventoryControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.InventoryControllerTests.AdjustStock_SubtractsQuantity_UpdatesStatus&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.IsType&lt;Microsoft.AspNetCore.Mvc.OkObjectResult&gt;(result);
+Assert.Equal(10, updated!.Quantity);
+Assert.Equal(&quot;LowStock&quot;, updated.Status);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.7407788; recorded 2026-10-06T00:15:35.1570545+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task AdjustStock_SubtractsQuantity_UpdatesStatus()
+    {
+        var context = GetInMemoryContext();
+        var item = new InventoryItem
+        {
+            ItemName = &quot;Bottled Water&quot;,
+            Category = &quot;Water&quot;,
+            Quantity = 50,
+            MinimumThreshold = 20,
+            Status = &quot;InStock&quot;
+        };
+        context.InventoryItems.Add(item);
+        await context.SaveChangesAsync();
+
+        var controller = new InventoryController(context);
+        var dto = new AdjustStockDto { QuantityAdjustment = -40 };
+
+        var result = await controller.AdjustStock(item.Id, dto);
+
+        Assert.IsType&lt;Microsoft.AspNetCore.Mvc.OkObjectResult&gt;(result);
+        var updated = await context.InventoryItems.FindAsync(item.Id);
+        Assert.Equal(10, updated!.Quantity);
+        Assert.Equal(&quot;LowStock&quot;, updated.Status);
+    }</pre></details></section><section><h2>BE-047: ERCP.Api.Tests.InventoryControllerTests.CreateInventoryItem_SetsLowStock_WhenBelowThreshold</h2><p><a href="Source_Code.html#InventoryControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.InventoryControllerTests.CreateInventoryItem_SetsLowStock_WhenBelowThreshold&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>var createdResult = Assert.IsType&lt;Microsoft.AspNetCore.Mvc.CreatedAtActionResult&gt;(result.Result);
+var item = Assert.IsType&lt;InventoryItemResponseDto&gt;(createdResult.Value);
+Assert.Equal(&quot;LowStock&quot;, item.Status);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0064970; recorded 2026-10-06T00:15:35.1712625+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task CreateInventoryItem_SetsLowStock_WhenBelowThreshold()
+    {
+        var context = GetInMemoryContext();
+        var controller = new InventoryController(context);
+        var dto = new CreateInventoryItemDto
+        {
+            ItemName = &quot;First Aid Kit&quot;,
+            Category = &quot;Medical&quot;,
+            Quantity = 5,
+            MinimumThreshold = 10,
+            UnitOfMeasure = &quot;Kits&quot;
+        };
+
+        var result = await controller.Create(dto);
+
+        var createdResult = Assert.IsType&lt;Microsoft.AspNetCore.Mvc.CreatedAtActionResult&gt;(result.Result);
+        var item = Assert.IsType&lt;InventoryItemResponseDto&gt;(createdResult.Value);
+        Assert.Equal(&quot;LowStock&quot;, item.Status);
+    }</pre></details></section><section><h2>BE-055: ERCP.Api.Tests.ResourcesControllerTests.Create_AddsResource_ReturnsCreated</h2><p><a href="Source_Code.html#ResourcesControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.ResourcesControllerTests.Create_AddsResource_ReturnsCreated&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>var createdResult = Assert.IsType&lt;Microsoft.AspNetCore.Mvc.CreatedAtActionResult&gt;(result.Result);
+var resource = Assert.IsType&lt;ResourceResponseDto&gt;(createdResult.Value);
+Assert.Equal(&quot;Ambulance Unit 1&quot;, resource.Name);
+Assert.Equal(&quot;Available&quot;, resource.Status);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0038888; recorded 2026-10-06T00:15:35.2318110+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task Create_AddsResource_ReturnsCreated()
+    {
+        var context = GetInMemoryContext();
+        var controller = new ResourcesController(context);
+        var dto = new CreateResourceDto
+        {
+            Name = &quot;Ambulance Unit 1&quot;,
+            ResourceType = &quot;Vehicle&quot;,
+            Capacity = 4,
+            Location = &quot;Central Depot&quot;
+        };
+
+        var result = await controller.Create(dto);
+
+        var createdResult = Assert.IsType&lt;Microsoft.AspNetCore.Mvc.CreatedAtActionResult&gt;(result.Result);
+        var resource = Assert.IsType&lt;ResourceResponseDto&gt;(createdResult.Value);
+        Assert.Equal(&quot;Ambulance Unit 1&quot;, resource.Name);
+        Assert.Equal(&quot;Available&quot;, resource.Status);
+    }</pre></details></section><section><h2>BE-056: ERCP.Api.Tests.ResourcesControllerTests.GetAvailable_ReturnsOnlyAvailableResources</h2><p><a href="Source_Code.html#ResourcesControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.ResourcesControllerTests.GetAvailable_ReturnsOnlyAvailableResources&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>var okResult = Assert.IsType&lt;Microsoft.AspNetCore.Mvc.OkObjectResult&gt;(result.Result);
+var resources = Assert.IsAssignableFrom&lt;IEnumerable&lt;ResourceResponseDto&gt;&gt;(okResult.Value);
+Assert.Single(resources);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.8193368; recorded 2026-10-06T00:15:35.2243549+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task GetAvailable_ReturnsOnlyAvailableResources()
+    {
+        var context = GetInMemoryContext();
+        context.Resources.Add(new Resource { Name = &quot;R1&quot;, Status = &quot;Available&quot; });
+        context.Resources.Add(new Resource { Name = &quot;R2&quot;, Status = &quot;Dispatched&quot; });
+        context.Resources.Add(new Resource { Name = &quot;R3&quot;, Status = &quot;Maintenance&quot; });
+        await context.SaveChangesAsync();
+
+        var controller = new ResourcesController(context);
+
+        var result = await controller.GetAvailable();
+        var okResult = Assert.IsType&lt;Microsoft.AspNetCore.Mvc.OkObjectResult&gt;(result.Result);
+        var resources = Assert.IsAssignableFrom&lt;IEnumerable&lt;ResourceResponseDto&gt;&gt;(okResult.Value);
+
+        Assert.Single(resources);
+    }
+}</pre></details></section><section><h2>BE-057: ERCP.Api.Tests.ResourcesControllerTests.UpdateStatus_ChangesResourceStatus</h2><p><a href="Source_Code.html#ResourcesControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.ResourcesControllerTests.UpdateStatus_ChangesResourceStatus&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.IsType&lt;Microsoft.AspNetCore.Mvc.OkObjectResult&gt;(actionResult);
+Assert.Equal(&quot;Dispatched&quot;, updated!.Status);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0041384; recorded 2026-10-06T00:15:35.2281571+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task UpdateStatus_ChangesResourceStatus()
+    {
+        var context = GetInMemoryContext();
+        var resource = new Resource { Name = &quot;Truck 1&quot;, ResourceType = &quot;Vehicle&quot;, Status = &quot;Available&quot;, Capacity = 2, Location = &quot;North Station&quot; };
+        context.Resources.Add(resource);
+        await context.SaveChangesAsync();
+
+        var controller = new ResourcesController(context);
+        var statusDto = new UpdateResourceStatusDto { Status = &quot;Dispatched&quot; };
+
+        var actionResult = await controller.UpdateStatus(resource.Id, statusDto);
+
+        Assert.IsType&lt;Microsoft.AspNetCore.Mvc.OkObjectResult&gt;(actionResult);
+        var updated = await context.Resources.FindAsync(resource.Id);
+        Assert.Equal(&quot;Dispatched&quot;, updated!.Status);
+    }</pre></details></section><section><h2>BE-058: ERCP.Api.Tests.SheltersControllerTests.CreateShelter_ReturnsCreated</h2><p><a href="Source_Code.html#SheltersControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.SheltersControllerTests.CreateShelter_ReturnsCreated&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>var createdResult = Assert.IsType&lt;Microsoft.AspNetCore.Mvc.CreatedAtActionResult&gt;(result.Result);
+var shelter = Assert.IsType&lt;ShelterResponseDto&gt;(createdResult.Value);
+Assert.Equal(&quot;City Hall Shelter&quot;, shelter.Name);
+Assert.Equal(200, shelter.TotalCapacity);
+Assert.Equal(200, shelter.AvailableCapacity);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0203895; recorded 2026-10-06T00:15:35.1656205+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task CreateShelter_ReturnsCreated()
+    {
+        var context = GetInMemoryContext();
+        var controller = new SheltersController(context);
+        var dto = new CreateShelterDto
+        {
+            Name = &quot;City Hall Shelter&quot;,
+            Location = &quot;Downtown&quot;,
+            Address = &quot;123 Main St&quot;,
+            TotalCapacity = 200,
+            ContactNumber = &quot;0771234567&quot;
+        };
+
+        var result = await controller.Create(dto);
+
+        var createdResult = Assert.IsType&lt;Microsoft.AspNetCore.Mvc.CreatedAtActionResult&gt;(result.Result);
+        var shelter = Assert.IsType&lt;ShelterResponseDto&gt;(createdResult.Value);
+        Assert.Equal(&quot;City Hall Shelter&quot;, shelter.Name);
+        Assert.Equal(200, shelter.TotalCapacity);
+        Assert.Equal(200, shelter.AvailableCapacity);
+    }</pre></details></section><section><h2>BE-059: ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity</h2><p><a href="Source_Code.html#SheltersControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.IsType&lt;Microsoft.AspNetCore.Mvc.BadRequestObjectResult&gt;(result);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.0019175; recorded 2026-10-06T00:15:35.1676391+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity()
+    {
+        var context = GetInMemoryContext();
+        var shelter = new Shelter
+        {
+            Name = &quot;Community Center&quot;,
+            TotalCapacity = 100,
+            CurrentOccupancy = 50,
+            Status = &quot;Active&quot;
+        };
+        context.Shelters.Add(shelter);
+        await context.SaveChangesAsync();
+
+        var controller = new SheltersController(context);
+        var dto = new UpdateShelterOccupancyDto { CurrentOccupancy = 150 };
+
+        var result = await controller.UpdateOccupancy(shelter.Id, dto);
+
+        Assert.IsType&lt;Microsoft.AspNetCore.Mvc.BadRequestObjectResult&gt;(result);
+    }
+}</pre></details></section><section><h2>BE-060: ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached</h2><p><a href="Source_Code.html#SheltersControllerTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>Assert.IsType&lt;Microsoft.AspNetCore.Mvc.OkObjectResult&gt;(result);
+Assert.Equal(50, updated!.CurrentOccupancy);
+Assert.Equal(&quot;Full&quot;, updated.Status);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.7407427; recorded 2026-10-06T00:15:35.1568121+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached()
+    {
+        var context = GetInMemoryContext();
+        var shelter = new Shelter
+        {
+            Name = &quot;School Shelter&quot;,
+            TotalCapacity = 50,
+            CurrentOccupancy = 10,
+            Status = &quot;Active&quot;
+        };
+        context.Shelters.Add(shelter);
+        await context.SaveChangesAsync();
+
+        var controller = new SheltersController(context);
+        var dto = new UpdateShelterOccupancyDto { CurrentOccupancy = 50 };
+
+        var result = await controller.UpdateOccupancy(shelter.Id, dto);
+
+        Assert.IsType&lt;Microsoft.AspNetCore.Mvc.OkObjectResult&gt;(result);
+        var updated = await context.Shelters.FindAsync(shelter.Id);
+        Assert.Equal(50, updated!.CurrentOccupancy);
+        Assert.Equal(&quot;Full&quot;, updated.Status);
+    }</pre></details></section><section><h2>BE-061: ERCP.Api.Tests.SituationAnalysisAgentTests.AssessSituation_GeneratesValidAssessment</h2><p><a href="Source_Code.html#SituationAnalysisAgentTests.cs">Original test source</a></p><h3>Preconditions</h3><pre>Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.</pre><h3>Steps / input</h3><pre>From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter &quot;FullyQualifiedName~ERCP.Api.Tests.SituationAnalysisAgentTests.AssessSituation_GeneratesValidAssessment&quot;. Use the inline parameter shown in the case name when applicable.</pre><h3>Expected assertions</h3><pre>var okResult = Assert.IsType&lt;Microsoft.AspNetCore.Mvc.OkObjectResult&gt;(result.Result);
+var assessment = Assert.IsType&lt;SituationAssessmentResponseDto&gt;(okResult.Value);
+Assert.True(assessment.UrgencyScore &gt;= 85);
+Assert.Equal(&quot;Critical&quot;, assessment.UrgencyLevel);
+Assert.Contains(&quot;Nearest shelter identified&quot;, assessment.AnalysisSummary);
+Assert.NotNull(assessment.NearestShelterName);</pre><p>Historical group result: Passed - Passed; duration 00:00:00.8540789; recorded 2026-10-06T00:15:35.2585240+05:30</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>public async Task AssessSituation_GeneratesValidAssessment()
+    {
+        var context = GetInMemoryContext();
+        var incident = new Incident
+        {
+            Title = &quot;Major River Flood &amp; Medical Emergency&quot;,
+            Description = &quot;Rising water level and multiple casualties reported.&quot;,
+            Location = &quot;District 4&quot;,
+            Priority = &quot;Critical&quot;
+        };
+        context.Incidents.Add(incident);
+
+        context.Shelters.Add(new Shelter
+        {
+            Name = &quot;High School Evacuation Hub&quot;,
+            TotalCapacity = 300,
+            CurrentOccupancy = 50,
+            Status = &quot;Active&quot;
+        });
+
+        await context.SaveChangesAsync();
+
+        var service = new SituationAnalysisService(context);
+        var controller = new SituationAnalysisController(service);
+
+        var result = await controller.AssessSituation(new AssessSituationRequestDto { IncidentId = incident.Id });
+
+        var okResult = Assert.IsType&lt;Microsoft.AspNetCore.Mvc.OkObjectResult&gt;(result.Result);
+        var assessment = Assert.IsType&lt;SituationAssessmentResponseDto&gt;(okResult.Value);
+
+        Assert.True(assessment.UrgencyScore &gt;= 85);
+        Assert.Equal(&quot;Critical&quot;, assessment.UrgencyLevel);
+        Assert.Contains(&quot;Nearest shelter identified&quot;, assessment.AnalysisSummary);
+        Assert.NotNull(assessment.NearestShelterName);
+    }
+}</pre></details></section><section><h2>AI-006: test_AI04_urgency_score[Low-25]</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI04_urgency_score&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert SituationAnalysisAgent().calculate_urgency_score({&#x27;priority&#x27;: priority})[&#x27;urgency_score&#x27;] == expected</pre><p>Historical group result: Passed - JUnit records pass; 0.000 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI04_urgency_score(priority, expected):
+    assert SituationAnalysisAgent().calculate_urgency_score({&#x27;priority&#x27;: priority})[&#x27;urgency_score&#x27;] == expected</pre></details></section><section><h2>AI-007: test_AI04_urgency_score[Medium-50]</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI04_urgency_score&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert SituationAnalysisAgent().calculate_urgency_score({&#x27;priority&#x27;: priority})[&#x27;urgency_score&#x27;] == expected</pre><p>Historical group result: Passed - JUnit records pass; 0.000 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI04_urgency_score(priority, expected):
+    assert SituationAnalysisAgent().calculate_urgency_score({&#x27;priority&#x27;: priority})[&#x27;urgency_score&#x27;] == expected</pre></details></section><section><h2>AI-008: test_AI04_urgency_score[High-75]</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI04_urgency_score&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert SituationAnalysisAgent().calculate_urgency_score({&#x27;priority&#x27;: priority})[&#x27;urgency_score&#x27;] == expected</pre><p>Historical group result: Passed - JUnit records pass; 0.000 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI04_urgency_score(priority, expected):
+    assert SituationAnalysisAgent().calculate_urgency_score({&#x27;priority&#x27;: priority})[&#x27;urgency_score&#x27;] == expected</pre></details></section><section><h2>AI-009: test_AI04_urgency_score[Critical-90]</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI04_urgency_score&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert SituationAnalysisAgent().calculate_urgency_score({&#x27;priority&#x27;: priority})[&#x27;urgency_score&#x27;] == expected</pre><p>Historical group result: Passed - JUnit records pass; 0.000 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI04_urgency_score(priority, expected):
+    assert SituationAnalysisAgent().calculate_urgency_score({&#x27;priority&#x27;: priority})[&#x27;urgency_score&#x27;] == expected</pre></details></section><section><h2>AI-010: test_AI05_full_shelter_is_excluded</h2><p><a href="Source_Code.html#test_agents.py">Original test source</a></p><h3>Preconditions</h3><pre>Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.</pre><h3>Steps / input</h3><pre>From assignment root run python -m pytest QMS/scripts/test_agents.py -k &quot;test_AI05_full_shelter_is_excluded&quot; -v. Parameter values are included in the case name.</pre><h3>Expected assertions</h3><pre>assert SituationAnalysisAgent().find_nearest_available_shelter(shelters)[&#x27;id&#x27;] == 2</pre><p>Historical group result: Passed - JUnit records pass; 0.000 seconds.</p><p>See dated personal results; historical group success is not a personal execution claim.</p><details><summary>Test implementation and fixture inputs</summary><pre>def test_AI05_full_shelter_is_excluded():
+    shelters = [{&#x27;id&#x27;: 1, &#x27;name&#x27;: &#x27;Full&#x27;, &#x27;status&#x27;: &#x27;Active&#x27;, &#x27;totalCapacity&#x27;: 10, &#x27;currentOccupancy&#x27;: 10},
+                {&#x27;id&#x27;: 2, &#x27;name&#x27;: &#x27;Available&#x27;, &#x27;status&#x27;: &#x27;Active&#x27;, &#x27;totalCapacity&#x27;: 10, &#x27;currentOccupancy&#x27;: 5}]
+    assert SituationAnalysisAgent().find_nearest_available_shelter(shelters)[&#x27;id&#x27;] == 2</pre></details></section></main></html>

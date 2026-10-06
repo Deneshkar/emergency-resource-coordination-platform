@@ -1,0 +1,308 @@
+[
+  {
+    "id": "BE-034",
+    "feature": "ERCP.Api.Tests.GeolocationServiceTests.CalculateHaversineDistanceKm_ReturnsAccurateKmDistance",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/GeolocationServiceTests.cs",
+    "responsible_reviewer": "Jathurshy.S",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.GeolocationServiceTests.CalculateHaversineDistanceKm_ReturnsAccurateKmDistance\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.InRange(distance, 90.0, 110.0);",
+    "source_excerpt": "public void CalculateHaversineDistanceKm_ReturnsAccurateKmDistance()\n    {\n        // Colombo (6.9271, 79.8612) to Kandy (7.2906, 80.6337) is approx 95-100 km\n        double distance = GeolocationService.CalculateHaversineDistanceKm(6.9271, 79.8612, 7.2906, 80.6337);\n\n        Assert.InRange(distance, 90.0, 110.0);\n    }",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0019358; recorded 2026-10-06T00:15:35.2149616+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-035",
+    "feature": "ERCP.Api.Tests.GeolocationServiceTests.GetNearestShelters_OrdersSheltersByProximity",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/GeolocationServiceTests.cs",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.GeolocationServiceTests.GetNearestShelters_OrdersSheltersByProximity\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.Equal(2, nearest.Count);\nAssert.Equal(\"Near Shelter\", nearest[0].Name);\nAssert.True(nearest[0].DistanceKm < nearest[1].DistanceKm);",
+    "source_excerpt": "public async Task GetNearestShelters_OrdersSheltersByProximity()\n    {\n        var context = GetInMemoryContext();\n        context.Shelters.Add(new Shelter\n        {\n            Name = \"Far Shelter\",\n            Location = \"Kandy\",\n            TotalCapacity = 200,\n            CurrentOccupancy = 10,\n            Status = \"Active\",\n            Latitude = 7.2906,\n            Longitude = 80.6337\n        });\n\n        context.Shelters.Add(new Shelter\n        {\n            Name = \"Near Shelter\",\n            Location = \"Colombo Fort\",\n            TotalCapacity = 100,\n            CurrentOccupancy = 20,\n            Status = \"Active\",\n            Latitude = 6.9344,\n            Longitude = 79.8428\n        });\n\n        await context.SaveChangesAsync();\n\n        var service = new GeolocationService(context);\n        var nearest = await service.GetNearestSheltersAsync(6.9271, 79.8612, limit: 2);\n\n        Assert.Equal(2, nearest.Count);\n        Assert.Equal(\"Near Shelter\", nearest[0].Name);\n        Assert.True(nearest[0].DistanceKm < nearest[1].DistanceKm);\n    }\n}",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0241507; recorded 2026-10-06T00:15:35.2392406+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-045",
+    "feature": "ERCP.Api.Tests.InventoryControllerTests.AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/InventoryControllerTests.cs",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.InventoryControllerTests.AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.IsType<Microsoft.AspNetCore.Mvc.BadRequestObjectResult>(result);",
+    "source_excerpt": "public async Task AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative()\n    {\n        var context = GetInMemoryContext();\n        var item = new InventoryItem\n        {\n            ItemName = \"Medical Bandages\",\n            Category = \"Medical\",\n            Quantity = 10,\n            MinimumThreshold = 5,\n            Status = \"InStock\"\n        };\n        context.InventoryItems.Add(item);\n        await context.SaveChangesAsync();\n\n        var controller = new InventoryController(context);\n        var dto = new AdjustStockDto { QuantityAdjustment = -20 };\n\n        var result = await controller.AdjustStock(item.Id, dto);\n\n        Assert.IsType<Microsoft.AspNetCore.Mvc.BadRequestObjectResult>(result);\n    }\n}",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0193727; recorded 2026-10-06T00:15:35.1646322+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-046",
+    "feature": "ERCP.Api.Tests.InventoryControllerTests.AdjustStock_SubtractsQuantity_UpdatesStatus",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/InventoryControllerTests.cs",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.InventoryControllerTests.AdjustStock_SubtractsQuantity_UpdatesStatus\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(result);\nAssert.Equal(10, updated!.Quantity);\nAssert.Equal(\"LowStock\", updated.Status);",
+    "source_excerpt": "public async Task AdjustStock_SubtractsQuantity_UpdatesStatus()\n    {\n        var context = GetInMemoryContext();\n        var item = new InventoryItem\n        {\n            ItemName = \"Bottled Water\",\n            Category = \"Water\",\n            Quantity = 50,\n            MinimumThreshold = 20,\n            Status = \"InStock\"\n        };\n        context.InventoryItems.Add(item);\n        await context.SaveChangesAsync();\n\n        var controller = new InventoryController(context);\n        var dto = new AdjustStockDto { QuantityAdjustment = -40 };\n\n        var result = await controller.AdjustStock(item.Id, dto);\n\n        Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(result);\n        var updated = await context.InventoryItems.FindAsync(item.Id);\n        Assert.Equal(10, updated!.Quantity);\n        Assert.Equal(\"LowStock\", updated.Status);\n    }",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.7407788; recorded 2026-10-06T00:15:35.1570545+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-047",
+    "feature": "ERCP.Api.Tests.InventoryControllerTests.CreateInventoryItem_SetsLowStock_WhenBelowThreshold",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/InventoryControllerTests.cs",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.InventoryControllerTests.CreateInventoryItem_SetsLowStock_WhenBelowThreshold\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "var createdResult = Assert.IsType<Microsoft.AspNetCore.Mvc.CreatedAtActionResult>(result.Result);\nvar item = Assert.IsType<InventoryItemResponseDto>(createdResult.Value);\nAssert.Equal(\"LowStock\", item.Status);",
+    "source_excerpt": "public async Task CreateInventoryItem_SetsLowStock_WhenBelowThreshold()\n    {\n        var context = GetInMemoryContext();\n        var controller = new InventoryController(context);\n        var dto = new CreateInventoryItemDto\n        {\n            ItemName = \"First Aid Kit\",\n            Category = \"Medical\",\n            Quantity = 5,\n            MinimumThreshold = 10,\n            UnitOfMeasure = \"Kits\"\n        };\n\n        var result = await controller.Create(dto);\n\n        var createdResult = Assert.IsType<Microsoft.AspNetCore.Mvc.CreatedAtActionResult>(result.Result);\n        var item = Assert.IsType<InventoryItemResponseDto>(createdResult.Value);\n        Assert.Equal(\"LowStock\", item.Status);\n    }",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0064970; recorded 2026-10-06T00:15:35.1712625+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-055",
+    "feature": "ERCP.Api.Tests.ResourcesControllerTests.Create_AddsResource_ReturnsCreated",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/ResourcesControllerTests.cs",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.ResourcesControllerTests.Create_AddsResource_ReturnsCreated\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "var createdResult = Assert.IsType<Microsoft.AspNetCore.Mvc.CreatedAtActionResult>(result.Result);\nvar resource = Assert.IsType<ResourceResponseDto>(createdResult.Value);\nAssert.Equal(\"Ambulance Unit 1\", resource.Name);\nAssert.Equal(\"Available\", resource.Status);",
+    "source_excerpt": "public async Task Create_AddsResource_ReturnsCreated()\n    {\n        var context = GetInMemoryContext();\n        var controller = new ResourcesController(context);\n        var dto = new CreateResourceDto\n        {\n            Name = \"Ambulance Unit 1\",\n            ResourceType = \"Vehicle\",\n            Capacity = 4,\n            Location = \"Central Depot\"\n        };\n\n        var result = await controller.Create(dto);\n\n        var createdResult = Assert.IsType<Microsoft.AspNetCore.Mvc.CreatedAtActionResult>(result.Result);\n        var resource = Assert.IsType<ResourceResponseDto>(createdResult.Value);\n        Assert.Equal(\"Ambulance Unit 1\", resource.Name);\n        Assert.Equal(\"Available\", resource.Status);\n    }",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0038888; recorded 2026-10-06T00:15:35.2318110+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-056",
+    "feature": "ERCP.Api.Tests.ResourcesControllerTests.GetAvailable_ReturnsOnlyAvailableResources",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/ResourcesControllerTests.cs",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.ResourcesControllerTests.GetAvailable_ReturnsOnlyAvailableResources\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "var okResult = Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(result.Result);\nvar resources = Assert.IsAssignableFrom<IEnumerable<ResourceResponseDto>>(okResult.Value);\nAssert.Single(resources);",
+    "source_excerpt": "public async Task GetAvailable_ReturnsOnlyAvailableResources()\n    {\n        var context = GetInMemoryContext();\n        context.Resources.Add(new Resource { Name = \"R1\", Status = \"Available\" });\n        context.Resources.Add(new Resource { Name = \"R2\", Status = \"Dispatched\" });\n        context.Resources.Add(new Resource { Name = \"R3\", Status = \"Maintenance\" });\n        await context.SaveChangesAsync();\n\n        var controller = new ResourcesController(context);\n\n        var result = await controller.GetAvailable();\n        var okResult = Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(result.Result);\n        var resources = Assert.IsAssignableFrom<IEnumerable<ResourceResponseDto>>(okResult.Value);\n\n        Assert.Single(resources);\n    }\n}",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.8193368; recorded 2026-10-06T00:15:35.2243549+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-057",
+    "feature": "ERCP.Api.Tests.ResourcesControllerTests.UpdateStatus_ChangesResourceStatus",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/ResourcesControllerTests.cs",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.ResourcesControllerTests.UpdateStatus_ChangesResourceStatus\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(actionResult);\nAssert.Equal(\"Dispatched\", updated!.Status);",
+    "source_excerpt": "public async Task UpdateStatus_ChangesResourceStatus()\n    {\n        var context = GetInMemoryContext();\n        var resource = new Resource { Name = \"Truck 1\", ResourceType = \"Vehicle\", Status = \"Available\", Capacity = 2, Location = \"North Station\" };\n        context.Resources.Add(resource);\n        await context.SaveChangesAsync();\n\n        var controller = new ResourcesController(context);\n        var statusDto = new UpdateResourceStatusDto { Status = \"Dispatched\" };\n\n        var actionResult = await controller.UpdateStatus(resource.Id, statusDto);\n\n        Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(actionResult);\n        var updated = await context.Resources.FindAsync(resource.Id);\n        Assert.Equal(\"Dispatched\", updated!.Status);\n    }",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0041384; recorded 2026-10-06T00:15:35.2281571+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-058",
+    "feature": "ERCP.Api.Tests.SheltersControllerTests.CreateShelter_ReturnsCreated",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/SheltersControllerTests.cs",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.SheltersControllerTests.CreateShelter_ReturnsCreated\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "var createdResult = Assert.IsType<Microsoft.AspNetCore.Mvc.CreatedAtActionResult>(result.Result);\nvar shelter = Assert.IsType<ShelterResponseDto>(createdResult.Value);\nAssert.Equal(\"City Hall Shelter\", shelter.Name);\nAssert.Equal(200, shelter.TotalCapacity);\nAssert.Equal(200, shelter.AvailableCapacity);",
+    "source_excerpt": "public async Task CreateShelter_ReturnsCreated()\n    {\n        var context = GetInMemoryContext();\n        var controller = new SheltersController(context);\n        var dto = new CreateShelterDto\n        {\n            Name = \"City Hall Shelter\",\n            Location = \"Downtown\",\n            Address = \"123 Main St\",\n            TotalCapacity = 200,\n            ContactNumber = \"0771234567\"\n        };\n\n        var result = await controller.Create(dto);\n\n        var createdResult = Assert.IsType<Microsoft.AspNetCore.Mvc.CreatedAtActionResult>(result.Result);\n        var shelter = Assert.IsType<ShelterResponseDto>(createdResult.Value);\n        Assert.Equal(\"City Hall Shelter\", shelter.Name);\n        Assert.Equal(200, shelter.TotalCapacity);\n        Assert.Equal(200, shelter.AvailableCapacity);\n    }",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0203895; recorded 2026-10-06T00:15:35.1656205+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-059",
+    "feature": "ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/SheltersControllerTests.cs",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.IsType<Microsoft.AspNetCore.Mvc.BadRequestObjectResult>(result);",
+    "source_excerpt": "public async Task UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity()\n    {\n        var context = GetInMemoryContext();\n        var shelter = new Shelter\n        {\n            Name = \"Community Center\",\n            TotalCapacity = 100,\n            CurrentOccupancy = 50,\n            Status = \"Active\"\n        };\n        context.Shelters.Add(shelter);\n        await context.SaveChangesAsync();\n\n        var controller = new SheltersController(context);\n        var dto = new UpdateShelterOccupancyDto { CurrentOccupancy = 150 };\n\n        var result = await controller.UpdateOccupancy(shelter.Id, dto);\n\n        Assert.IsType<Microsoft.AspNetCore.Mvc.BadRequestObjectResult>(result);\n    }\n}",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0019175; recorded 2026-10-06T00:15:35.1676391+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-060",
+    "feature": "ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/SheltersControllerTests.cs",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(result);\nAssert.Equal(50, updated!.CurrentOccupancy);\nAssert.Equal(\"Full\", updated.Status);",
+    "source_excerpt": "public async Task UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached()\n    {\n        var context = GetInMemoryContext();\n        var shelter = new Shelter\n        {\n            Name = \"School Shelter\",\n            TotalCapacity = 50,\n            CurrentOccupancy = 10,\n            Status = \"Active\"\n        };\n        context.Shelters.Add(shelter);\n        await context.SaveChangesAsync();\n\n        var controller = new SheltersController(context);\n        var dto = new UpdateShelterOccupancyDto { CurrentOccupancy = 50 };\n\n        var result = await controller.UpdateOccupancy(shelter.Id, dto);\n\n        Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(result);\n        var updated = await context.Shelters.FindAsync(shelter.Id);\n        Assert.Equal(50, updated!.CurrentOccupancy);\n        Assert.Equal(\"Full\", updated.Status);\n    }",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.7407427; recorded 2026-10-06T00:15:35.1568121+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-061",
+    "feature": "ERCP.Api.Tests.SituationAnalysisAgentTests.AssessSituation_GeneratesValidAssessment",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/SituationAnalysisAgentTests.cs",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.SituationAnalysisAgentTests.AssessSituation_GeneratesValidAssessment\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "var okResult = Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(result.Result);\nvar assessment = Assert.IsType<SituationAssessmentResponseDto>(okResult.Value);\nAssert.True(assessment.UrgencyScore >= 85);\nAssert.Equal(\"Critical\", assessment.UrgencyLevel);\nAssert.Contains(\"Nearest shelter identified\", assessment.AnalysisSummary);\nAssert.NotNull(assessment.NearestShelterName);",
+    "source_excerpt": "public async Task AssessSituation_GeneratesValidAssessment()\n    {\n        var context = GetInMemoryContext();\n        var incident = new Incident\n        {\n            Title = \"Major River Flood & Medical Emergency\",\n            Description = \"Rising water level and multiple casualties reported.\",\n            Location = \"District 4\",\n            Priority = \"Critical\"\n        };\n        context.Incidents.Add(incident);\n\n        context.Shelters.Add(new Shelter\n        {\n            Name = \"High School Evacuation Hub\",\n            TotalCapacity = 300,\n            CurrentOccupancy = 50,\n            Status = \"Active\"\n        });\n\n        await context.SaveChangesAsync();\n\n        var service = new SituationAnalysisService(context);\n        var controller = new SituationAnalysisController(service);\n\n        var result = await controller.AssessSituation(new AssessSituationRequestDto { IncidentId = incident.Id });\n\n        var okResult = Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(result.Result);\n        var assessment = Assert.IsType<SituationAssessmentResponseDto>(okResult.Value);\n\n        Assert.True(assessment.UrgencyScore >= 85);\n        Assert.Equal(\"Critical\", assessment.UrgencyLevel);\n        Assert.Contains(\"Nearest shelter identified\", assessment.AnalysisSummary);\n        Assert.NotNull(assessment.NearestShelterName);\n    }\n}",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.8540789; recorded 2026-10-06T00:15:35.2585240+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-006",
+    "feature": "test_AI04_urgency_score[Low-25]",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI04_urgency_score\" -v. Parameter values are included in the case name.",
+    "expected": "assert SituationAnalysisAgent().calculate_urgency_score({'priority': priority})['urgency_score'] == expected",
+    "source_excerpt": "def test_AI04_urgency_score(priority, expected):\n    assert SituationAnalysisAgent().calculate_urgency_score({'priority': priority})['urgency_score'] == expected",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.000 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-007",
+    "feature": "test_AI04_urgency_score[Medium-50]",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI04_urgency_score\" -v. Parameter values are included in the case name.",
+    "expected": "assert SituationAnalysisAgent().calculate_urgency_score({'priority': priority})['urgency_score'] == expected",
+    "source_excerpt": "def test_AI04_urgency_score(priority, expected):\n    assert SituationAnalysisAgent().calculate_urgency_score({'priority': priority})['urgency_score'] == expected",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.000 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-008",
+    "feature": "test_AI04_urgency_score[High-75]",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI04_urgency_score\" -v. Parameter values are included in the case name.",
+    "expected": "assert SituationAnalysisAgent().calculate_urgency_score({'priority': priority})['urgency_score'] == expected",
+    "source_excerpt": "def test_AI04_urgency_score(priority, expected):\n    assert SituationAnalysisAgent().calculate_urgency_score({'priority': priority})['urgency_score'] == expected",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.000 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-009",
+    "feature": "test_AI04_urgency_score[Critical-90]",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI04_urgency_score\" -v. Parameter values are included in the case name.",
+    "expected": "assert SituationAnalysisAgent().calculate_urgency_score({'priority': priority})['urgency_score'] == expected",
+    "source_excerpt": "def test_AI04_urgency_score(priority, expected):\n    assert SituationAnalysisAgent().calculate_urgency_score({'priority': priority})['urgency_score'] == expected",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.000 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-010",
+    "feature": "test_AI05_full_shelter_is_excluded",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "M.Thanusikan",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI05_full_shelter_is_excluded\" -v. Parameter values are included in the case name.",
+    "expected": "assert SituationAnalysisAgent().find_nearest_available_shelter(shelters)['id'] == 2",
+    "source_excerpt": "def test_AI05_full_shelter_is_excluded():\n    shelters = [{'id': 1, 'name': 'Full', 'status': 'Active', 'totalCapacity': 10, 'currentOccupancy': 10},\n                {'id': 2, 'name': 'Available', 'status': 'Active', 'totalCapacity': 10, 'currentOccupancy': 5}]\n    assert SituationAnalysisAgent().find_nearest_available_shelter(shelters)['id'] == 2",
+    "package_member": "M.Thanusikan",
+    "package_student_id": "IT24103609",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.000 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  }
+]

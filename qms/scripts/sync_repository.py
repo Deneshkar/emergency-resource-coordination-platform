@@ -13,12 +13,12 @@ if target.resolve() == QMS.resolve():
     print('Already running from the repository QMS directory.')
 else:
     count = 0
-    for folder in ('scripts', 'submission', 'evidence'):
+    for folder in ('scripts', 'submission', 'evidence', 'members'):
         for path in (QMS / folder).rglob('*'):
             relative = path.relative_to(QMS)
             if not path.is_file() or any(p in ('__pycache__','.pytest_cache') or p.startswith('rerun-') for p in relative.parts): continue
             if folder == 'evidence':
-                if path.suffix.lower() not in ('.trx','.json','.jsonl','.log','.xml','.txt','.patch'): continue
+                if path.suffix.lower() not in ('.trx','.json','.jsonl','.log','.xml','.txt','.patch','.png'): continue
                 if relative.as_posix().startswith('evidence/final/backend/') and relative.as_posix() not in ('evidence/final/backend/backend.trx','evidence/final/backend/coverage.cobertura.xml'): continue
             destination = target / relative
             destination.parent.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,22 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.2, pytest-8.3.3, pluggy-1.6.0 -- C:\Users\USER\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Sliit Subjects\Y3 S1\SEF\Assignment\QMS\scripts
+configfile: pytest.ini
+plugins: anyio-4.8.0, asyncio-0.24.0
+asyncio: mode=Mode.STRICT, default_loop_scope=function
+collecting ... collected 10 items
+
+..\..\QMS\scripts\test_agents.py::test_AI01_unapproved_tool_is_rejected[ValidationSafetyAgent] PASSED [ 10%]
+..\..\QMS\scripts\test_agents.py::test_AI06_shelter_capacity_boundary[0-True] PASSED [ 20%]
+..\..\QMS\scripts\test_agents.py::test_AI06_shelter_capacity_boundary[5-True] PASSED [ 30%]
+..\..\QMS\scripts\test_agents.py::test_AI06_shelter_capacity_boundary[6-False] PASSED [ 40%]
+..\..\QMS\scripts\test_agents.py::test_AI07_stock_boundary[1-True] PASSED [ 50%]
+..\..\QMS\scripts\test_agents.py::test_AI07_stock_boundary[5-True] PASSED [ 60%]
+..\..\QMS\scripts\test_agents.py::test_AI07_stock_boundary[6-False] PASSED [ 70%]
+..\..\QMS\scripts\test_agents.py::test_AI08_unavailable_volunteer_is_rejected PASSED [ 80%]
+..\..\QMS\scripts\test_agents.py::test_AI09_malformed_payload_fails_safely PASSED [ 90%]
+..\..\QMS\scripts\test_agents.py::test_AI10_adjacent_shifts_do_not_overlap PASSED [100%]
+
+- generated xml file: D:\Sliit Subjects\Y3 S1\SEF\Assignment\QMS\members\member4-IT24103828\results\ai-assisted-20261006-173126-101472\agents.xml -
+============================= 10 passed in 0.20s ==============================

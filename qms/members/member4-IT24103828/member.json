@@ -1,0 +1,47 @@
+{
+  "number": 4,
+  "name": "Deneshkar. P",
+  "student_id": "IT24103828",
+  "component": "Volunteer/Responder Management",
+  "agent_module": "validation_safety_agent",
+  "agent_class": "ValidationSafetyAgent",
+  "agent_method": "validate_assignment",
+  "backend_classes": [
+    "VolunteerShiftTests",
+    "VolunteersApiIntegrationTests"
+  ],
+  "agent_codes": [
+    "AI06",
+    "AI07",
+    "AI08",
+    "AI09",
+    "AI10"
+  ],
+  "allowlist_agent": "ValidationSafetyAgent",
+  "demo_note": "Responder availability and shift windows produce a validation decision, individual checks and violation reasons. An overlapping assignment returns REVISE because it can be rescheduled. APPROVE is an agent recommendation; a coordinator still makes the actual approval.",
+  "backend_tests": [
+    "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_EndBeforeStart_ReturnsBadRequest",
+    "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_InvalidStatus_ReturnsBadRequest",
+    "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_UnknownVolunteer_ReturnsNotFound",
+    "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_ValidWindow_PersistsAndReturnsCreated",
+    "ERCP.Api.Tests.VolunteersApiIntegrationTests.CreateShift_InvalidWindow_OverHttp_Returns400",
+    "ERCP.Api.Tests.VolunteersApiIntegrationTests.GetVolunteers_Anonymous_Returns401",
+    "ERCP.Api.Tests.VolunteersApiIntegrationTests.RegisterAndLogin_Coordinator_ReturnsToken",
+    "ERCP.Api.Tests.VolunteersApiIntegrationTests.SeededDemoData_Exists",
+    "ERCP.Api.Tests.VolunteersApiIntegrationTests.VolunteerShiftLifecycle_OverHttp"
+  ],
+  "agent_tests": [
+    "test_AI01_unapproved_tool_is_rejected[ValidationSafetyAgent]",
+    "test_AI06_shelter_capacity_boundary[0-True]",
+    "test_AI06_shelter_capacity_boundary[5-True]",
+    "test_AI06_shelter_capacity_boundary[6-False]",
+    "test_AI07_stock_boundary[1-True]",
+    "test_AI07_stock_boundary[5-True]",
+    "test_AI07_stock_boundary[6-False]",
+    "test_AI08_unavailable_volunteer_is_rejected",
+    "test_AI09_malformed_payload_fails_safely",
+    "test_AI10_adjacent_shifts_do_not_overlap"
+  ],
+  "expected_backend_count": 9,
+  "expected_agent_count": 10
+}

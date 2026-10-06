@@ -1,0 +1,52 @@
+{
+  "number": 3,
+  "name": "Denesh N",
+  "student_id": "IT24102826",
+  "component": "Dispatch and Task Assignment",
+  "agent_module": "resource_allocation_agent",
+  "agent_class": "ResourceAllocationAgent",
+  "agent_method": "allocate_for_incident",
+  "backend_classes": [
+    "DispatchAllocationTests",
+    "DispatchesControllerTests",
+    "DispatchValidationServiceTests"
+  ],
+  "agent_codes": [
+    "AI03",
+    "AI11"
+  ],
+  "allowlist_agent": "ResourceAllocationAgent",
+  "demo_note": "A dispatch requirement, resource pool and available volunteers produce a proposed allocation and shortage list. Human approval is always required; the displayed proposal does not execute a dispatch.",
+  "backend_tests": [
+    "ERCP.Api.Tests.DispatchAllocationTests.DeletingResourceClearsDispatchTaskResourceId",
+    "ERCP.Api.Tests.DispatchAllocationTests.DispatchTask_ResourceRelationshipIsOptionalIntegerAndSetNullOnDelete",
+    "ERCP.Api.Tests.DispatchAllocationTests.ProposeAllocation_PersistsPlanAndReturnsAllocationResults",
+    "ERCP.Api.Tests.DispatchAllocationTests.ProposeAllocation_UnknownDispatchReturnsNotFound",
+    "ERCP.Api.Tests.DispatchAllocationTests.UpdateStatus_CannotApproveWithoutPassingValidationAudit",
+    "ERCP.Api.Tests.DispatchAllocationTests.ValidateDispatch_UnavailableResourceRejectsAllocation",
+    "ERCP.Api.Tests.DispatchAllocationTests.ValidateDispatch_UnavailableVolunteerRejectsAllocation",
+    "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_AvailableVolunteer_ReturnsApprove",
+    "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_EmitsTimelineEvent_WhenIncidentExists",
+    "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_InsufficientInventory_ReturnsRevise_WithI1",
+    "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_NoTasks_ReturnsRevise_WithW0",
+    "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_OverlappingShift_ReturnsRevise_WithV2",
+    "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_PersistsAudit_WithDurationAndHistory",
+    "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_ShelterOverAllocation_ReturnsRevise_WithS2",
+    "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_UnavailableLinkedResource_ReturnsReject_WithR1",
+    "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_UnavailableVolunteer_ReturnsReject_WithV1",
+    "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_UnknownDispatch_ThrowsNotFound",
+    "ERCP.Api.Tests.DispatchesControllerTests.ProposeAllocation_AttachesIncidentPlanAndMovesToPendingApproval",
+    "ERCP.Api.Tests.DispatchesControllerTests.UpdateStatus_ApprovalWithLatestPassingSafetyAudit_Succeeds",
+    "ERCP.Api.Tests.DispatchesControllerTests.UpdateStatus_ApprovalWithNewerFailedSafetyAudit_IsRejected",
+    "ERCP.Api.Tests.DispatchesControllerTests.UpdateStatus_ApprovalWithoutSafetyAudit_IsRejected",
+    "ERCP.Api.Tests.DispatchesControllerTests.UpdateTask_ChangesAssignmentAndRefreshesDispatchTimestamp",
+    "ERCP.Api.Tests.DispatchesControllerTests.UpdateTask_RejectsChangesAfterApproval"
+  ],
+  "agent_tests": [
+    "test_AI01_unapproved_tool_is_rejected[ResourceAllocationAgent]",
+    "test_AI03_allocation_shortage_is_explicit",
+    "test_AI11_injected_text_does_not_bypass_deterministic_approval"
+  ],
+  "expected_backend_count": 23,
+  "expected_agent_count": 3
+}

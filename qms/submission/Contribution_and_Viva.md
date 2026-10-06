@@ -15,6 +15,8 @@ This table allocates review and viva responsibilities according to the supplied 
 
 ## Demonstrations
 
+For separate member runners and presentable input/output examples, start with Member_Demonstrations.md or ../members/index.html. Each folder has a business-specific test selection and the corresponding actual Python agent. All four packages have AI-assisted verification results; members must personally run and explain their own package.
+
 1. Jathurshy.S: run the incident controller tests and AI02. Explain preconditions, meaningful invalid incident inputs and why a generated plan still needs human approval. Run test_E2E01 against the isolated API and show the saved workflow.json.
 2. M.Thanusikan: run QmsPostgresTests with QMS_POSTGRES set and QmsMigrationTests with QMS_MIGRATION_ADMIN set. Explain why EF InMemory does not establish PostgreSQL unique/foreign-key behaviour. Show the resource component interactions. Demonstrate BUG-03's original failure, repaired migrations and data-preserving rollback; distinguish real migration execution from startup schema creation.
 3. Denesh N: run QmsSecurityTests and live SEC05. Compare security-before.trx with the final backend TRX. Explain why hiding UI controls is insufficient authorization. Run k6 and explain virtual users, p95, errors and the limits of a local 40-second test.
@@ -33,5 +35,7 @@ The assignment requires declaration using the module's CLEAR framework but the p
 The application repository now includes qms/scripts, qms/submission and curated qms/evidence, mirrored byte-for-byte with the outer QMS export when packaging. CI provisions PostgreSQL and rejects skipped database tests. The source is now committed and pushed in PR #47. GitHub_Publication.md records the exact CI status and run link. Use Contribution_Record.md to record each member's real review, execution and commit/PR evidence.
 
 ## Verified individual history
+
+Deneshkar personally executed 4 volunteer controller tests, 5 volunteer HTTP integration tests and 3 deterministic safety-agent tests during guided practice on 6 October. All 12 passed. Six supplied screenshots and three raw reports are linked in Individual_Evidence_IT24103828.md. This confirms execution of existing tests; his own-word explanations and equal-time boundary exercise remain unconfirmed. It does not increase the group test count.
 
 Contribution_Record.md now links GitHub-verified testing commits for all four members. The group confirmed on 6 October that personal execution of the new QMS cases by Jathurshy.S, M.Thanusikan and Denesh N is not yet confirmed. Keep that follow-up distinct from the existing test-authorship evidence.

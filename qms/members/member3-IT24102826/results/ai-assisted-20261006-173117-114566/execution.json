@@ -1,0 +1,161 @@
+{
+  "member": "Denesh N",
+  "student_id": "IT24102826",
+  "execution_kind": "ai-assisted",
+  "operator": "OpenAI Codex",
+  "started_at": "2026-10-06T17:31:17.115008+05:30",
+  "note": "Runs existing selected tests. Personal label is the operator declaration, not proof of independent understanding.",
+  "commands": [
+    {
+      "name": "backend",
+      "args": [
+        "dotnet",
+        "test",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\SEF\\emergency-resource-coordination-platform\\backend-tests\\ERCP.Api.Tests.csproj",
+        "--filter",
+        "FullyQualifiedName~ERCP.Api.Tests.DispatchAllocationTests.|FullyQualifiedName~ERCP.Api.Tests.DispatchesControllerTests.|FullyQualifiedName~ERCP.Api.Tests.DispatchValidationServiceTests.",
+        "--logger",
+        "trx;LogFileName=backend.trx",
+        "--logger",
+        "console;verbosity=normal",
+        "--results-directory",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\members\\member3-IT24102826\\results\\ai-assisted-20261006-173117-114566"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "agents",
+      "args": [
+        "C:\\Users\\USER\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI01_unapproved_tool_is_rejected[ResourceAllocationAgent]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI03_allocation_shortage_is_explicit",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI11_injected_text_does_not_bypass_deterministic_approval",
+        "-v",
+        "--junitxml=D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\members\\member3-IT24102826\\results\\ai-assisted-20261006-173117-114566\\agents.xml"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "suites": {
+    "backend": [
+      {
+        "name": "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_OverlappingShift_ReturnsRevise_WithV2",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchesControllerTests.UpdateStatus_ApprovalWithLatestPassingSafetyAudit_Succeeds",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_UnavailableVolunteer_ReturnsReject_WithV1",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchAllocationTests.ValidateDispatch_UnavailableVolunteerRejectsAllocation",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchAllocationTests.DispatchTask_ResourceRelationshipIsOptionalIntegerAndSetNullOnDelete",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchAllocationTests.DeletingResourceClearsDispatchTaskResourceId",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchAllocationTests.ValidateDispatch_UnavailableResourceRejectsAllocation",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_ShelterOverAllocation_ReturnsRevise_WithS2",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchesControllerTests.UpdateTask_RejectsChangesAfterApproval",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchesControllerTests.UpdateTask_ChangesAssignmentAndRefreshesDispatchTimestamp",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchesControllerTests.ProposeAllocation_AttachesIncidentPlanAndMovesToPendingApproval",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_AvailableVolunteer_ReturnsApprove",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_PersistsAudit_WithDurationAndHistory",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_InsufficientInventory_ReturnsRevise_WithI1",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchAllocationTests.UpdateStatus_CannotApproveWithoutPassingValidationAudit",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_EmitsTimelineEvent_WhenIncidentExists",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchesControllerTests.UpdateStatus_ApprovalWithNewerFailedSafetyAudit_IsRejected",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_UnknownDispatch_ThrowsNotFound",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchesControllerTests.UpdateStatus_ApprovalWithoutSafetyAudit_IsRejected",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchAllocationTests.ProposeAllocation_PersistsPlanAndReturnsAllocationResults",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_NoTasks_ReturnsRevise_WithW0",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchAllocationTests.ProposeAllocation_UnknownDispatchReturnsNotFound",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.DispatchValidationServiceTests.ValidateDispatch_UnavailableLinkedResource_ReturnsReject_WithR1",
+        "status": "Passed"
+      }
+    ],
+    "agents": [
+      {
+        "name": "test_AI01_unapproved_tool_is_rejected[ResourceAllocationAgent]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI03_allocation_shortage_is_explicit",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI11_injected_text_does_not_bypass_deterministic_approval",
+        "status": "Passed"
+      }
+    ]
+  },
+  "passed": true,
+  "demo_scenarios": 2,
+  "finished_at": "2026-10-06T17:31:21.873462+05:30",
+  "source_hashes": {
+    "backend-tests/DispatchAllocationTests.cs": "2f73d4e1a847372decc93554f8bd455e51c54b7d6f87c052b6729ad26710dc15",
+    "backend-tests/DispatchesControllerTests.cs": "c0a830fbda9999138fff074b00b26c2c79240b851df4a0d961b9699b5aa88471",
+    "backend-tests/DispatchValidationServiceTests.cs": "55b2c9c5e35b6b1355581b1ba279ec2c2d48962bab1fdd75a53b773cde03bcee",
+    "ai-agents/resource_allocation_agent.py": "2d3ed493563d89d057417b2fc2bcc4697ccbfaf8cf3337ee6707e83f22a7d5a9"
+  },
+  "test_script_sha256": "e37929c0f1f72ea19c4320825d6c3e1e47aed79cad7a55986ff80c7ae4158dba"
+}
