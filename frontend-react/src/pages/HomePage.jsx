@@ -4,6 +4,14 @@ import { useAuth } from "../context/AuthContext";
 import { incidentService } from "../services/incidentService";
 import "./HomePage.css";
 
+const SRI_LANKA_EMERGENCY_NUMBERS = [
+  { icon: "🚑", label: "Ambulance / Suwa Seriya", number: "1990" },
+  { icon: "🚔", label: "Police Emergency", number: "119" },
+  { icon: "🚒", label: "Fire & Rescue", number: "110" },
+  { icon: "⚠️", label: "Disaster Management Centre", number: "117" },
+  { icon: "📞", label: "National Help Desk", number: "118" },
+];
+
 export default function HomePage() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -100,7 +108,7 @@ export default function HomePage() {
         <div className="navbar-actions-light desktop-only">
           {user ? (
             <Link to="/incidents" className="btn-light-primary">
-              ⚡ Open Command Portal
+               Open Command Portal
             </Link>
           ) : (
             <>
@@ -134,7 +142,7 @@ export default function HomePage() {
           <div className="mobile-drawer-actions">
             {user ? (
               <Link to="/incidents" className="btn-light-primary w-full" onClick={() => setMobileMenuOpen(false)}>
-                ⚡ Open Command Portal
+                 Open Command Portal
               </Link>
             ) : (
               <>
@@ -164,15 +172,15 @@ export default function HomePage() {
 
           <div className="hero-cta-group-light">
             <Link to="/incidents/new" className="btn-hero-red">
-              <span className="icon">🚨</span>
+              <span className="icon"></span>
               <span>Report Emergency Incident</span>
             </Link>
             <Link to="/incidents" className="btn-hero-blue">
-              <span className="icon">📊</span>
+              <span className="icon"></span>
               <span>Launch Operations Portal</span>
             </Link>
             <a href="#quick-report" className="btn-hero-slate">
-              <span className="icon">⚡</span>
+              <span className="icon"></span>
               <span>Instant SOS Triage</span>
             </a>
           </div>
@@ -224,6 +232,48 @@ export default function HomePage() {
                 <p>Auto-dispatching en route</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SRI LANKA EMERGENCY HOTLINES TICKER */}
+      <section className="hotline-ticker-section" aria-label="Sri Lanka Emergency Hotline Numbers">
+        <div className="hotline-ticker-header">
+          <span className="hotline-pulse-dot"></span>
+          <span className="hotline-header-title">🇱🇰 SRI LANKA 24/7 EMERGENCY HOTLINES</span>
+        </div>
+
+        <div className="hotline-ticker-viewport">
+          <div className="hotline-ticker-track">
+            {/* Set 1 */}
+            {SRI_LANKA_EMERGENCY_NUMBERS.map((item, idx) => (
+              <a
+                key={`set1-${idx}`}
+                href={`tel:${item.number}`}
+                className="hotline-item-link"
+                title={`Call ${item.label} (${item.number})`}
+              >
+                <span className="hotline-icon">{item.icon}</span>
+                <span className="hotline-label">{item.label}</span>
+                <span className="hotline-number">{item.number}</span>
+                <span className="hotline-bullet">•</span>
+              </a>
+            ))}
+
+            {/* Set 2 (Duplicate for smooth infinite loop) */}
+            {SRI_LANKA_EMERGENCY_NUMBERS.map((item, idx) => (
+              <a
+                key={`set2-${idx}`}
+                href={`tel:${item.number}`}
+                className="hotline-item-link"
+                title={`Call ${item.label} (${item.number})`}
+              >
+                <span className="hotline-icon">{item.icon}</span>
+                <span className="hotline-label">{item.label}</span>
+                <span className="hotline-number">{item.number}</span>
+                <span className="hotline-bullet">•</span>
+              </a>
+            ))}
           </div>
         </div>
       </section>
@@ -293,7 +343,7 @@ export default function HomePage() {
       <section id="quick-report" className="homepage-sos-light">
         <div className="sos-container-light">
           <div className="sos-info-light">
-            <span className="sos-badge-light">⚡ INSTANT EMERGENCY TRIAGE</span>
+            <span className="sos-badge-light"> INSTANT EMERGENCY TRIAGE</span>
             <h2>Need Immediate Emergency Assistance?</h2>
             <p>
               Submit a high-priority incident alert directly from this terminal. Our AI Coordinator instantly alerts nearby emergency responders and routes medical dispatches.
@@ -379,7 +429,7 @@ export default function HomePage() {
                 </div>
 
                 <button type="submit" disabled={isSubmittingQuick} className="btn-submit-sos-light">
-                  {isSubmittingQuick ? "Transmitting Alert..." : "🚨 Broadcast Emergency Alert"}
+                  {isSubmittingQuick ? "Transmitting Alert..." : " Broadcast Emergency Alert"}
                 </button>
               </form>
             )}

@@ -910,3 +910,159 @@
     padding: 3rem 1.2rem 1.5rem 1.2rem;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════
+   SRI LANKA EMERGENCY HOTLINES SCROLLING TICKER (LIGHT THEME)
+   ═══════════════════════════════════════════════════════ */
+.hotline-ticker-section {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, #faf8f8 0%, #ffffff 50%, #fbf9f9 100%);
+  border-top: 1px solid #f8f4f4;
+  border-bottom: 1px solid #f7f6f6;
+  padding: 0.75rem 0;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 0 15px rgba(239, 68, 68, 0.04), 0 4px 15px rgba(0, 0, 0, 0.02);
+  z-index: 20;
+}
+
+.hotline-ticker-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0 1.25rem 0 1.75rem;
+  background: #fbf9f9;
+  z-index: 10;
+  white-space: nowrap;
+  border-right: 2px solid #ef4444;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+.hotline-pulse-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+  animation: pulseRed 1.5s infinite;
+}
+
+.hotline-header-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #991b1b;
+  text-transform: uppercase;
+}
+
+.hotline-ticker-viewport {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  mask-image: linear-gradient(to right, transparent 0%, black 2%, black 98%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 2%, black 98%, transparent 100%);
+}
+
+.hotline-ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: max-content;
+  animation: hotlineScroll 25s linear infinite;
+  will-change: transform;
+}
+
+.hotline-ticker-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes hotlineScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.hotline-item-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  background: #ffffff;
+  padding: 0.45rem 1.15rem;
+  border-radius: 30px;
+  border: 1px solid #f9f6f6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.hotline-item-link:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
+}
+
+.hotline-icon {
+  font-size: 1.15rem;
+}
+
+.hotline-label {
+  color: #1e293b;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.hotline-number {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 0.2rem 0.7rem;
+  border-radius: 12px;
+  letter-spacing: 0.6px;
+  box-shadow: 0 2px 8px rgba(245, 242, 242, 0.3);
+}
+
+.hotline-bullet {
+  color: #cbd5e1;
+  font-size: 1.1rem;
+  margin-left: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .hotline-ticker-section {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.4rem 0;
+  }
+  .hotline-ticker-header {
+    border-right: none;
+    border-bottom: 1px solid #fecaca;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    box-shadow: none;
+  }
+  .hotline-ticker-track {
+    gap: 1.25rem;
+    animation-duration: 20s;
+  }
+  .hotline-item-link {
+    padding: 0.35rem 0.85rem;
+    font-size: 0.8rem;
+  }
+  .hotline-label {
+    font-size: 0.82rem;
+  }
+  .hotline-number {
+    font-size: 0.8rem;
+    padding: 0.15rem 0.55rem;
+  }
+}
