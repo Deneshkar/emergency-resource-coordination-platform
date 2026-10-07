@@ -729,6 +729,7 @@
   .main-content, .app-main-content { padding: 16px 10px 24px; }
   .topbar { padding: 0 10px; gap: 8px; }
   .topbar-hamburger { display: inline-flex; }
+  .topbar-collapse-btn { display: none; }
   .sidebar {
     position: fixed;
     left: 0;
