@@ -25,6 +25,7 @@ export default function ResourceList() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchResources(); }, []);
 
   const handleCreate = async (e) => {

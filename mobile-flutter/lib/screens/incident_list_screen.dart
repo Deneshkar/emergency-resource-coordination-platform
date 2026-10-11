@@ -4,6 +4,7 @@ import '../providers/auth_provider.dart';
 import '../models/incident.dart';
 import '../services/incident_service.dart';
 import 'incident_detail_screen.dart';
+import 'report_incident_screen.dart';
 
 class IncidentListScreen extends StatefulWidget {
   const IncidentListScreen({super.key});
@@ -178,6 +179,21 @@ class _IncidentListScreenState extends State<IncidentListScreen> {
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ReportIncidentScreen()),
+          );
+          if (result == true) {
+            _refreshIncidents();
+          }
+        },
+        icon: const Icon(Icons.add_alert),
+        label: const Text('Report Emergency'),
+        backgroundColor: Colors.red.shade800,
+        foregroundColor: Colors.white,
       ),
     );
   }

@@ -637,7 +637,10 @@ class _CoordinatorDashboardState extends State<_CoordinatorDashboard> {
                       ActionChip(
                         avatar: const Icon(Icons.add_alert, size: 16),
                         label: const Text("New Incident"),
-                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportIncidentScreen())),
+                        onPressed: () async {
+                          final res = await Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportIncidentScreen()));
+                          if (res == true) _loadData();
+                        },
                       ),
                       ActionChip(
                         avatar: const Icon(Icons.person_add, size: 16),

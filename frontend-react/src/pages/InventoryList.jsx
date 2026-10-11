@@ -40,6 +40,7 @@ export default function InventoryList() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchInventory(); }, []);
 
   const handleCreate = async (e) => {
