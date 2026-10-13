@@ -138,7 +138,14 @@ public class AuthController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        await _authService.GeneratePasswordResetOtpAsync(request.Email);
+        var sent = await _authService.GeneratePasswordResetOtpAsync(request.Email);
+        if (!sent)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new
+            {
+                message = "We couldn't send the OTP right now. Please try again later."
+            });
+        }
         
         return Ok(new { message = "If the email is registered, an OTP has been sent." });
     }

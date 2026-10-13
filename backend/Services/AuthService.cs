@@ -202,17 +202,18 @@ public class AuthService : IAuthService
             <p>If you did not request this reset, please ignore this email.</p>
         ";
 
-        // Send email in background (Fire and forget) to not block the API
-        _ = Task.Run(async () => {
-            try {
-                await _emailService.SendEmailAsync(user.Email, subject, htmlBody);
-                _logger.LogInformation("Password reset OTP sent to {Email}", user.Email);
-            } catch (Exception ex) {
-                _logger.LogError(ex, "Failed to send OTP email to {Email}", user.Email);
-            }
-        });
-
-        return true;
+        try
+        {
+            await _emailService.SendEmailAsync(user.Email, subject, htmlBody);
+            _logger.LogInformation("Password reset OTP sent to {Email}", user.Email);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send OTP email to {Email}", user.Email);
+            _otpStore.TryRemove(normalizedEmail, out _);
+            return false;
+        }
     }
 
     public async Task<(bool Success, string Message)> ResetPasswordWithOtpAsync(string email, string otp, string newPassword)
