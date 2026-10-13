@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner";
-
-const API_BASE_URL = "http://localhost:5009/api";
+import { apiPost } from "../services/api";
 
 function ForgotPassword() {
   const navigate = useNavigate();
@@ -21,16 +20,8 @@ function ForgotPassword() {
     setError("");
 
     try {
-      const res = await fetch(`${API_BASE_URL}/Auth/forgot-password`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to send OTP.");
-
-      toast.success(data.message || "OTP sent successfully!");
+      const data = await apiPost("/auth/forgot-password", { email });
+      toast.success(data?.message || "OTP sent successfully!");
       setStep(2);
     } catch (err) {
       setError(err.message);
@@ -48,16 +39,8 @@ function ForgotPassword() {
     setError("");
 
     try {
-      const res = await fetch(`${API_BASE_URL}/Auth/reset-password`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp, newPassword }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to reset password.");
-
-      toast.success(data.message || "Password reset successful! Please log in.");
+      const data = await apiPost("/auth/reset-password", { email, otp, newPassword });
+      toast.success(data?.message || "Password reset successful! Please log in.");
       
       // Navigate to login after 2 seconds
       setTimeout(() => navigate("/login"), 2000);

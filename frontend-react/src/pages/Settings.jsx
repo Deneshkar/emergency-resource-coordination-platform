@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useLanguage } from "../context/LanguageContext";
+import { sendWhatsAppTest } from "../services/emailNotificationService";
 import "./Settings.css";
 
 const DISPLAY_MODES = [
@@ -23,6 +24,8 @@ export default function Settings() {
   const [notifications, setNotifications] = useState(
     localStorage.getItem("ercp_notifications") === "true"
   );
+  const [waRecipient, setWaRecipient] = useState("+94 0711759718");
+  const [waTesting, setWaTesting] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", currentTheme);
@@ -57,6 +60,28 @@ export default function Settings() {
       toast.success(t("notif_enabled_toast"), {
         description: t("notif_enabled_toast_desc"),
       });
+    }
+  };
+
+  const handleSendWhatsAppTest = async () => {
+    try {
+      setWaTesting(true);
+      const res = await sendWhatsAppTest(waRecipient);
+      if (res && res.success) {
+        toast.success("WhatsApp Alert Sent!", {
+          description: `Message delivered to ${res.recipient || waRecipient} (ID: ${res.messageId || "OK"}).`,
+        });
+      } else {
+        toast.error("WhatsApp Send Failed", {
+          description: res?.error || "Could not deliver WhatsApp message. Check connection.",
+        });
+      }
+    } catch (err) {
+      toast.error("WhatsApp Send Error", {
+        description: err.message || "Failed to trigger test.",
+      });
+    } finally {
+      setWaTesting(false);
     }
   };
 
@@ -155,6 +180,81 @@ export default function Settings() {
               <p style={{ fontSize: "0.8rem", color: "var(--text-dim)", marginTop: "0.5rem" }}>
                 {notifications ? t("notifications_enabled_desc") : t("notifications_disabled_desc")}
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* WhatsApp Emergency Alerts Card */}
+        <div className="stat-card">
+          <div className="settings-section">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+              <h3 style={{ margin: 0, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "8px" }}>
+                <span>💬</span> WhatsApp Emergency Alerts
+              </h3>
+              <span style={{ fontSize: "0.75rem", background: "rgba(34, 197, 94, 0.15)", color: "#22c55e", padding: "3px 8px", borderRadius: "12px", fontWeight: 600, border: "1px solid rgba(34, 197, 94, 0.3)" }}>
+                ● Meta API Active
+              </span>
+            </div>
+            <p style={{ color: "var(--text-muted)", marginBottom: "1rem", fontSize: "0.9rem" }}>
+              Automated high-priority notifications delivered directly via WhatsApp Cloud API.
+            </p>
+
+            <div style={{ background: "rgba(255, 255, 255, 0.03)", border: "1px solid var(--border-color, #334155)", borderRadius: "8px", padding: "12px", marginBottom: "1rem" }}>
+              <div style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-primary)", marginBottom: "6px" }}>
+                Active Automated Alert Triggers:
+              </div>
+              <ul style={{ margin: 0, paddingLeft: "1.2rem", fontSize: "0.8rem", color: "var(--text-muted)", lineHeight: 1.6 }}>
+                <li>🚨 <strong>Critical Emergencies:</strong> Instant dispatch alert on High/Critical incident creation</li>
+                <li>⚠️ <strong>Inventory Low Stock:</strong> Immediate alert when supplies drop below safety threshold</li>
+                <li>❌ <strong>Out of Stock:</strong> Critical alert when emergency resources hit zero</li>
+                <li>🚛 <strong>Resource Dispatches:</strong> Real-time deployment alerts for ambulances & rescue units</li>
+              </ul>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <label style={{ fontSize: "0.85rem", fontWeight: 500, color: "var(--text-primary)" }}>
+                Alert Recipient Phone Number
+              </label>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <input
+                  type="text"
+                  value={waRecipient}
+                  onChange={(e) => setWaRecipient(e.target.value)}
+                  placeholder="+94 0711759718"
+                  style={{
+                    flex: 1,
+                    padding: "8px 12px",
+                    borderRadius: "6px",
+                    border: "1px solid var(--border-color, #334155)",
+                    background: "var(--bg-secondary, #1e293b)",
+                    color: "var(--text-primary, #fff)",
+                    fontSize: "0.9rem",
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={handleSendWhatsAppTest}
+                  disabled={waTesting}
+                  style={{
+                    padding: "8px 16px",
+                    borderRadius: "6px",
+                    background: "#22c55e",
+                    color: "#fff",
+                    border: "none",
+                    fontWeight: 600,
+                    fontSize: "0.85rem",
+                    cursor: waTesting ? "not-allowed" : "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  {waTesting ? "Sending..." : "📲 Test Alert"}
+                </button>
+              </div>
+              <span style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>
+                Configured with Meta WhatsApp Cloud API (Phone ID: 1298668496670646)
+              </span>
             </div>
           </div>
         </div>

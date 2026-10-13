@@ -69,6 +69,7 @@ builder.Services.AddScoped<SituationAnalysisService>();
 builder.Services.AddScoped<DispatchValidationService>();
 builder.Services.AddScoped<GeolocationService>();
 builder.Services.AddScoped<IEmailService, SmtpEmailService>();
+builder.Services.AddScoped<IWhatsAppService, WhatsAppService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

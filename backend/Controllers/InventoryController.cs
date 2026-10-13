@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ERCP.Api.Data;
 using ERCP.Api.DTOs;
 using ERCP.Api.Models;
+using ERCP.Api.Services;
 
 namespace ERCP.Api.Controllers;
 
@@ -11,10 +12,17 @@ namespace ERCP.Api.Controllers;
 public class InventoryController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly IWhatsAppService? _whatsAppService;
+    private readonly ILogger<InventoryController>? _logger;
 
-    public InventoryController(AppDbContext context)
+    public InventoryController(
+        AppDbContext context,
+        IWhatsAppService? whatsAppService = null,
+        ILogger<InventoryController>? logger = null)
     {
         _context = context;
+        _whatsAppService = whatsAppService;
+        _logger = logger;
     }
 
     // GET: api/Inventory
@@ -98,6 +106,8 @@ public class InventoryController : ControllerBase
         _context.InventoryItems.Add(item);
         await _context.SaveChangesAsync();
 
+        TriggerStockWhatsAppAlert(item.ItemName, item.Quantity, item.MinimumThreshold, item.UnitOfMeasure, item.Location);
+
         return CreatedAtAction(nameof(GetById), new { id = item.Id }, ToResponseDto(item));
     }
 
@@ -127,6 +137,9 @@ public class InventoryController : ControllerBase
         item.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
+
+        TriggerStockWhatsAppAlert(item.ItemName, item.Quantity, item.MinimumThreshold, item.UnitOfMeasure, item.Location);
+
         return NoContent();
     }
 
@@ -150,11 +163,38 @@ public class InventoryController : ControllerBase
 
         await _context.SaveChangesAsync();
 
+        TriggerStockWhatsAppAlert(item.ItemName, item.Quantity, item.MinimumThreshold, item.UnitOfMeasure, item.Location);
+
         return Ok(new
         {
             message = "Stock adjusted successfully.",
             quantity = item.Quantity,
             status = item.Status
+        });
+    }
+
+    private void TriggerStockWhatsAppAlert(string itemName, int quantity, int threshold, string? unit, string? location)
+    {
+        if (_whatsAppService == null) return;
+        if (quantity > threshold) return;
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                if (quantity == 0)
+                {
+                    await _whatsAppService.SendOutOfStockAlertAsync(itemName, location, unit);
+                }
+                else
+                {
+                    await _whatsAppService.SendLowStockAlertAsync(itemName, quantity, threshold, unit, location);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogWarning(ex, "[InventoryController] Background WhatsApp stock alert failed for {Item}", itemName);
+            }
         });
     }
 
