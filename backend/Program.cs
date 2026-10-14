@@ -20,9 +20,11 @@ static void LoadDotEnv()
 {
     var candidates = new[]
     {
+        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "backend", ".env"),
+        Path.Combine(Directory.GetCurrentDirectory(), ".env"),
+        Path.Combine(Directory.GetCurrentDirectory(), "backend", ".env"),
         Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".env"),
         Path.Combine(Directory.GetCurrentDirectory(), "..", ".env"),
-        Path.Combine(Directory.GetCurrentDirectory(), ".env"),
     };
     foreach (var path in candidates)
     {

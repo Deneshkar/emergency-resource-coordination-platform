@@ -36,29 +36,31 @@ public class NotificationsController : ControllerBase
     /// <summary>Send an alert email notification</summary>
     [HttpPost("email")]
     [Authorize]
-    public IActionResult SendEmailAlert([FromBody] EmailAlertRequest request)
+    public async Task<IActionResult> SendEmailAlert([FromBody] EmailAlertRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.AlertType) || string.IsNullOrWhiteSpace(request.Subject))
             return BadRequest(new { message = "alertType and subject are required." });
 
-        _ = Task.Run(async () =>
+        try
         {
-            try
-            {
-                await _emailService.SendAlertAsync(
-                    request.AlertType,
-                    request.Subject,
-                    request.Body ?? "",
-                    request.Priority ?? "High"
-                );
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "[Notifications] Background email alert failed");
-            }
-        });
+            await _emailService.SendAlertAsync(
+                request.AlertType,
+                request.Subject,
+                request.Body ?? "",
+                request.Priority ?? "High"
+            );
 
-        return Ok(new { success = true, queued = true, message = "Email notification queued." });
+            return Ok(new { success = true, message = "Email notification sent." });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "[Notifications] Email alert failed");
+            return StatusCode(StatusCodes.Status502BadGateway, new
+            {
+                success = false,
+                message = "Email notification could not be sent. Check SMTP configuration and credentials."
+            });
+        }
     }
 
     /// <summary>Send custom WhatsApp message</summary>
@@ -81,12 +83,22 @@ public class NotificationsController : ControllerBase
             request.Recipient
         );
 
+        if (!result.Success)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new
+            {
+                success = false,
+                message = result.Error ?? "WhatsApp notification could not be sent.",
+                recipient = result.Recipient
+            });
+        }
+
         return Ok(new
         {
-            success = result.Success,
+            success = true,
             messageId = result.MessageId,
             recipient = result.Recipient,
-            error = result.Error
+            message = "WhatsApp notification sent."
         });
     }
 
@@ -106,13 +118,22 @@ public class NotificationsController : ControllerBase
 
         var result = await _whatsAppService.SendTextMessageAsync(targetRecipient, customMsg);
 
+        if (!result.Success)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new
+            {
+                success = false,
+                message = result.Error ?? "WhatsApp test message could not be sent.",
+                recipient = result.Recipient
+            });
+        }
+
         return Ok(new
         {
-            success = result.Success,
+            success = true,
             messageId = result.MessageId,
             recipient = result.Recipient,
-            error = result.Error,
-            details = result.Success ? "Test message delivered to WhatsApp." : "Failed to deliver message."
+            details = "Test message delivered to WhatsApp."
         });
     }
 

@@ -60,7 +60,7 @@ public class WhatsAppServiceTests
     [InlineData("+94711759718", "94711759718")]
     [InlineData("711759718", "94711759718")]
     [InlineData("94711759718", "94711759718")]
-    [InlineData("+94 76 060 2620", "94711759718")]
+    [InlineData("+94 71 175 9718", "94711759718")]
     public void NormalizePhoneNumber_SanitizesSriLankaNumbersAccurately(string input, string expected)
     {
         var result = WhatsAppService.NormalizePhoneNumber(input);
