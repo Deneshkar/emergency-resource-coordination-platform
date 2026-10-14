@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useLanguage } from "../context/LanguageContext";
-import { sendWhatsAppTest } from "../services/emailNotificationService";
 import "./Settings.css";
 
 const DISPLAY_MODES = [
@@ -24,9 +23,6 @@ export default function Settings() {
   const [notifications, setNotifications] = useState(
     localStorage.getItem("ercp_notifications") === "true"
   );
-  const [waRecipient, setWaRecipient] = useState("+94 0711759718");
-  const [waTesting, setWaTesting] = useState(false);
-
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", currentTheme);
     localStorage.setItem("ercp_theme", currentTheme);
@@ -60,28 +56,6 @@ export default function Settings() {
       toast.success(t("notif_enabled_toast"), {
         description: t("notif_enabled_toast_desc"),
       });
-    }
-  };
-
-  const handleSendWhatsAppTest = async () => {
-    try {
-      setWaTesting(true);
-      const res = await sendWhatsAppTest(waRecipient);
-      if (res && res.success) {
-        toast.success("WhatsApp Alert Sent!", {
-          description: `Message delivered to ${res.recipient || waRecipient} (ID: ${res.messageId || "OK"}).`,
-        });
-      } else {
-        toast.error("WhatsApp Send Failed", {
-          description: res?.error || "Could not deliver WhatsApp message. Check connection.",
-        });
-      }
-    } catch (err) {
-      toast.error("WhatsApp Send Error", {
-        description: err.message || "Failed to trigger test.",
-      });
-    } finally {
-      setWaTesting(false);
     }
   };
 
