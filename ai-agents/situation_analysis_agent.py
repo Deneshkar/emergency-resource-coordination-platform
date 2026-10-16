@@ -50,6 +50,16 @@ class SituationAnalysisAgent:
             "find_nearest_available_shelter"
         ]
 
+    def execute_tool(self, tool_name: str, parameters: Dict[str, Any]):
+        if tool_name not in self.allowed_tools:
+            raise ValueError(f"Tool '{tool_name}' is not allowed for situation analysis.")
+        if tool_name == "calculate_urgency_score":
+            return self.calculate_urgency_score(parameters.get("incident", parameters))
+        if tool_name == "evaluate_inventory_deficiencies":
+            return self.evaluate_inventory_deficiencies(
+                parameters.get("inventory", []), parameters.get("resources", []))
+        return self.find_nearest_available_shelter(parameters.get("shelters", []))
+
     def calculate_urgency_score(self, incident: Dict[str, Any]) -> Dict[str, Any]:
         priority = incident.get("priority", "Medium").lower()
         title_desc = f"{incident.get('title', '')} {incident.get('description', '')}".lower()

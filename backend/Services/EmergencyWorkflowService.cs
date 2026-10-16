@@ -210,7 +210,9 @@ public class EmergencyWorkflowService
                     Status = "Proposed"
                 });
             }
-            gapCount += unpairedResources.Count;
+            var reportedVolunteerGaps = gapSummary.Where(g => g.kind == "VolunteerSkill")
+                .Sum(g => g.missing);
+            gapCount += Math.Max(0, unpairedResources.Count - reportedVolunteerGaps);
             await _db.SaveChangesAsync(cancellationToken);
             completed.Add(Steps[2]);
             toolResults.Add(new { agent = Steps[2], dispatchId = dispatch.Id,

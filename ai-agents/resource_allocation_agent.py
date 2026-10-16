@@ -245,7 +245,34 @@ class ResourceAllocationAgent:
             v for v in volunteers
             if bool(v.get("isAvailable", v.get("IsAvailable", True)))
         ]
-        for idx, volunteer in enumerate(volunteer_pool[: max(1, len(tasks))]):
+        remaining_volunteers = list(volunteer_pool)
+        selected_volunteers = []
+
+        def can_use(volunteer, resource):
+            skill = str(volunteer.get("skill", volunteer.get("skills", volunteer.get("Skills", "")))).lower()
+            resource_type = str(resource.get("resourceType", "")).lower()
+            if resource_type == "medical":
+                return any(term in skill for term in ("medical", "emt", "nurse", "paramedic", "first aid"))
+            if resource_type == "vehicle":
+                return any(term in skill for term in ("driver", "driving", "transport", "logistics"))
+            return True
+
+        # Reserve specialists before filling general response positions.
+        for resource in sorted(assigned_resources,
+                               key=lambda r: str(r.get("resourceType", "")).lower() == "personnel"):
+            volunteer = next((v for v in remaining_volunteers if can_use(v, resource)), None)
+            if volunteer is not None:
+                selected_volunteers.append(volunteer)
+                remaining_volunteers.remove(volunteer)
+            else:
+                resource_gaps.append({
+                    "kind": "VolunteerSkill",
+                    "resource_type": resource.get("resourceType", "Unknown"),
+                    "missing": 1,
+                    "message": f"No qualified volunteer for {resource.get('resourceType', 'resource')} assignment.",
+                })
+
+        for idx, volunteer in enumerate(selected_volunteers):
             assigned_volunteers.append({
                 "id": volunteer.get("id", volunteer.get("Id")),
                 "name": volunteer.get("name", volunteer.get("Name", f"Volunteer {idx + 1}")),
@@ -284,20 +311,21 @@ class ResourceAllocationAgent:
         volunteers = payload.get("available_volunteers", payload.get("volunteers", [])) or []
         required = payload.get("required_resources", payload.get("requirements", [])) or []
 
-        if not required:
-            required = [
-                {"resource_type": "Vehicle", "quantity": 1, "purpose": "Emergency response"},
-                {"resource_type": "Medical", "quantity": 1, "purpose": "Triage"},
-            ]
-        # Deterministic default estimate if the incident is high priority or large-scale.
+        # Estimate only when the planner did not supply requirements.
         priority = str(incident.get("priority", incident.get("Priority", "Medium")).upper())
         affected_count = int(incident.get("affected_count", incident.get("affectedCount", 0)))
-        if priority in {"HIGH", "CRITICAL"} or affected_count > 10:
-            required = [
-                {"resource_type": "Vehicle", "quantity": 2, "purpose": "Emergency response"},
-                {"resource_type": "Medical", "quantity": 2, "purpose": "Triage"},
-                {"resource_type": "Personnel", "quantity": max(2, affected_count // 10), "purpose": "On-ground support"},
-            ]
+        if not required:
+            if priority in {"HIGH", "CRITICAL"} or affected_count > 10:
+                required = [
+                    {"resource_type": "Vehicle", "quantity": 2, "purpose": "Emergency response"},
+                    {"resource_type": "Medical", "quantity": 2, "purpose": "Triage"},
+                    {"resource_type": "Personnel", "quantity": max(2, affected_count // 10), "purpose": "On-ground support"},
+                ]
+            else:
+                required = [
+                    {"resource_type": "Vehicle", "quantity": 1, "purpose": "Emergency response"},
+                    {"resource_type": "Medical", "quantity": 1, "purpose": "Triage"},
+                ]
 
         coverage = self.check_resource_coverage({
             "required_resources": required,
@@ -310,7 +338,8 @@ class ResourceAllocationAgent:
             "volunteers": volunteers,
         })
 
-        gaps = coverage.get("gaps", [])
+        gaps = list(coverage.get("gaps", []))
+        gaps.extend(g for g in proposal.get("resource_gaps", []) if g.get("kind") == "VolunteerSkill")
         warnings = proposal.get("warnings", [])
         constraints = proposal.get("constraints", [])
 

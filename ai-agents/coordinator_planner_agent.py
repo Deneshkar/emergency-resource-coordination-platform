@@ -89,12 +89,18 @@ class CoordinatorPlannerAgent:
         description = incident_data.get("description", "")
         location = incident_data.get("location", "Unknown Location")
         category = incident_data.get("category", "General Emergency")
-        priority = incident_data.get("priority", "Medium")
+        assessment = incident_data.get("situation_assessment") or {}
+        priority = assessment.get("urgency_level") or incident_data.get("urgency_level") or incident_data.get("priority", "Medium")
+        assessment_id = assessment.get("assessment_id", incident_data.get("situation_assessment_id"))
         affected_count = int(incident_data.get("affected_count", incident_data.get("affectedCount", 0)))
         custom_directives = incident_data.get("custom_directives", "")
         focus_phase = incident_data.get("focus_phase", "")
         resources = incident_data.get("resources", []) or []
         volunteers = incident_data.get("volunteers", []) or []
+        shelters = incident_data.get("shelters", []) or []
+        nearby_shelter_count = sum(1 for shelter in shelters
+                                   if str(shelter.get("status", "")).lower() == "active"
+                                   and int(shelter.get("totalCapacity", 0)) > int(shelter.get("currentOccupancy", 0)))
 
         # Reason & Plan (Agentic Step 2)
         reasoning_log = f"1. Observed {priority} priority {category} incident with {affected_count} affected.\n"
@@ -196,6 +202,9 @@ class CoordinatorPlannerAgent:
             "status": "Generated",
             # Additional detailed schema attributes for backend model mapping
             "incident_id": incident_id,
+            "situation_assessment_id": assessment_id,
+            "nearby_shelter_count": nearby_shelter_count,
+            "tool_calls": self.allowed_tools,
             "plan_title": f"Agentic Tactical Plan: {title}",
             "plan_description": f"Autonomous coordination strategy by {self.name}. Analyzed {len(resources)} resources.",
             "phase": "Immediate Containment",

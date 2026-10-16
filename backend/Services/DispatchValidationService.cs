@@ -222,6 +222,24 @@ public class DispatchValidationService
         if (dispatch == null)
             throw new KeyNotFoundException($"Dispatch with ID {dispatchId} not found.");
 
+        // A manual recheck must include the shelter proposal persisted by the
+        // workflow, even when the caller sends an empty request body.
+        var shelterAllocations = request?.ShelterAllocations;
+        if (shelterAllocations == null)
+        {
+            var workflow = await _context.WorkflowExecutions.AsNoTracking()
+                .Where(w => w.DispatchId == dispatchId)
+                .OrderByDescending(w => w.StartedAt)
+                .FirstOrDefaultAsync();
+            if (workflow != null)
+            {
+                using var validation = JsonDocument.Parse(workflow.ValidationJson);
+                if (validation.RootElement.TryGetProperty("shelterAllocations", out var stored) &&
+                    stored.ValueKind == JsonValueKind.Array)
+                    shelterAllocations = JsonSerializer.Deserialize<List<ShelterAllocationDto>>(stored.GetRawText());
+            }
+        }
+
         var violations = new List<ValidationViolationDto>();
         var warnings = new List<ValidationViolationDto>();
         var checks = new List<ValidationCheckDto>();
@@ -298,7 +316,7 @@ public class DispatchValidationService
         }
 
         // ---- Tool: check_shelter_capacity ----
-        foreach (var alloc in request?.ShelterAllocations ?? [])
+        foreach (var alloc in shelterAllocations ?? [])
         {
             var shelter = await _context.Shelters.FindAsync(alloc.ShelterId);
             if (shelter == null)
