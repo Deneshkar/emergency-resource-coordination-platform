@@ -23,6 +23,15 @@ public class QmsMigrationTests
     private const string IncidentMigration = "20260916110602_AddAffectedCountToIncidents";
     private const string PreviousMigration = "20260823065230_AddIncidentManagement";
 
+    [Fact]
+    public void MigrationSnapshot_MatchesCurrentModel()
+    {
+        using var db = new AppDbContext(new DbContextOptionsBuilder<AppDbContext>()
+            .UseNpgsql("Host=127.0.0.1;Database=ercp_qms_snapshot;Username=qms;Password=unused")
+            .Options);
+        Assert.False(db.Database.HasPendingModelChanges());
+    }
+
     // Each test owns unique databases. No shared/application database is reset.
     private sealed class TestDatabase : IAsyncDisposable
     {
