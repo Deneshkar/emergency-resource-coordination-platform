@@ -59,15 +59,9 @@ export default function ValidationPanel({ result, loading, error, history = [], 
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <span style={{ fontWeight: 700, fontSize: "13px" }}>🛡️ Safety Gate</span>
           <StatusBadge status={result.recommendation} size="md" />
-          {result.llmEnhanced ? (
-            <span className="badge" data-testid="validation-llm-badge" title="Final verdict decided by Gemini AI with rule fallback">
-              🤖 LLM
-            </span>
-          ) : (
-            <span className="badge badge-category" data-testid="validation-rules-badge" title="Decided by deterministic rules (no AI key or AI unavailable)">
-              Rule-based
-            </span>
-          )}
+          <span className="badge" data-testid="validation-llm-badge" title="AI-hybrid safety gate: Gemini verdict with deterministic rule fallback">
+            🤖 AI Safety Gate
+          </span>
           <span className="text-dim" style={{ fontSize: "12px" }}>
             {result.isValid ? "Valid" : "Blocked"} · {result.checks?.length ?? 0} checks
             {typeof result.durationMs === "number" ? ` · ${result.durationMs}ms` : ""}
