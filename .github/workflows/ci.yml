@@ -18,14 +18,11 @@ jobs:
           POSTGRES_PASSWORD: qms_ci_only
           POSTGRES_DB: ercp_qms_ci
         ports:
-          - 55432:5432
+          - 5432
         options: >-
           --health-cmd "pg_isready -U qms -d ercp_qms_ci"
           --health-interval 5s --health-timeout 5s --health-retries 12
     env:
-      QMS_POSTGRES: Host=127.0.0.1;Port=55432;Database=ercp_qms_ci;Username=qms;Password=qms_ci_only
-      QMS_MIGRATION_ADMIN: Host=127.0.0.1;Port=55432;Database=postgres;Username=qms;Password=qms_ci_only
-      ConnectionStrings__DefaultConnection: Host=127.0.0.1;Port=55432;Database=ercp_qms_ci;Username=qms;Password=qms_ci_only
       DATABASE_URL: ' '
       SMTP_USER: ' '
       SMTP_PASS: ' '
@@ -33,6 +30,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Configure PostgreSQL connection
+        env:
+          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+        run: |
+          test -n "$POSTGRES_PORT"
+          echo "QMS_POSTGRES=Host=127.0.0.1;Port=${POSTGRES_PORT};Database=ercp_qms_ci;Username=qms;Password=qms_ci_only" >> "$GITHUB_ENV"
+          echo "QMS_MIGRATION_ADMIN=Host=127.0.0.1;Port=${POSTGRES_PORT};Database=postgres;Username=qms;Password=qms_ci_only" >> "$GITHUB_ENV"
+          echo "ConnectionStrings__DefaultConnection=Host=127.0.0.1;Port=${POSTGRES_PORT};Database=ercp_qms_ci;Username=qms;Password=qms_ci_only" >> "$GITHUB_ENV"
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -59,7 +65,6 @@ jobs:
           DOTNET_ENVIRONMENT: Qms
           ASPNETCORE_ENVIRONMENT: Qms
           ASPNETCORE_URLS: http://127.0.0.1:5009
-          ConnectionStrings__DefaultConnection: ${{ env.QMS_POSTGRES }}
           DATABASE_URL: ' '
         run: |
           mkdir -p ../qms/evidence/ci/backend
