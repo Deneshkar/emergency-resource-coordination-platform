@@ -59,6 +59,15 @@ export default function ValidationPanel({ result, loading, error, history = [], 
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <span style={{ fontWeight: 700, fontSize: "13px" }}>🛡️ Safety Gate</span>
           <StatusBadge status={result.recommendation} size="md" />
+          {result.llmEnhanced ? (
+            <span className="badge" data-testid="validation-llm-badge" title="Final verdict decided by Gemini AI with rule fallback">
+              🤖 LLM
+            </span>
+          ) : (
+            <span className="badge badge-category" data-testid="validation-rules-badge" title="Decided by deterministic rules (no AI key or AI unavailable)">
+              Rule-based
+            </span>
+          )}
           <span className="text-dim" style={{ fontSize: "12px" }}>
             {result.isValid ? "Valid" : "Blocked"} · {result.checks?.length ?? 0} checks
             {typeof result.durationMs === "number" ? ` · ${result.durationMs}ms` : ""}
@@ -75,6 +84,13 @@ export default function ValidationPanel({ result, loading, error, history = [], 
           {result.auditId ? ` · audit #${result.auditId}` : ""}
         </div>
       </div>
+
+      {result.aiInsight && (
+        <div className="glass-card" style={{ marginTop: "10px", padding: "8px 12px", fontSize: "12px", borderLeft: "2px solid var(--blue)" }} data-testid="validation-ai-insight">
+          <span style={{ fontWeight: 700 }}>🤖 AI Insight</span>
+          <div style={{ marginTop: "2px" }}>{result.aiInsight}</div>
+        </div>
+      )}
 
       {result.violations?.length > 0 && (
         <div style={{ marginTop: "10px" }}>

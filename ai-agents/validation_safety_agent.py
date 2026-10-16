@@ -104,10 +104,38 @@ Rules:
 import sys
 import json
 import argparse
+import os
 import time
+import urllib.request
+import urllib.error
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
+
+def _load_dotenv():
+    """Load KEY=VALUE pairs from ai-agents/.env and repo root .env (stdlib only)."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    for _p in (os.path.join(here, ".env"), os.path.join(here, "..", ".env")):
+        try:
+            if os.path.isfile(_p):
+                with open(_p, encoding="utf-8") as _f:
+                    for _line in _f:
+                        _line = _line.strip()
+                        if not _line or _line.startswith("#") or "=" not in _line:
+                            continue
+                        _k, _v = _line.split("=", 1)
+                        _k = _k.strip()
+                        _v = _v.strip().strip('"').strip("'")
+                        if _k and _k not in os.environ:
+                            os.environ[_k] = _v
+        except Exception:
+            pass
+
+
+_load_dotenv()
+
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
 
 ALLOWED_TOOLS = [
     "check_volunteer_availability",
@@ -115,6 +143,128 @@ ALLOWED_TOOLS = [
     "check_shelter_capacity",
     "check_resource_stock",
 ]
+
+# Codes the Gemini verdict is allowed to return. Anything else is rejected
+# and the deterministic rule result is kept (safety fallback).
+GEMINI_ALLOWED_CODES = frozenset({
+    "V1_VOLUNTEER_UNAVAILABLE",
+    "V2_DOUBLE_BOOKING",
+    "V3_INVALID_SHIFT_WINDOW",
+    "V0_VOLUNTEER_NOT_FOUND",
+    "S0_SHELTER_NOT_FOUND",
+    "S1_SHELTER_NOT_ACTIVE",
+    "S2_SHELTER_OVER_ALLOCATION",
+    "R0_RESOURCE_NOT_FOUND",
+    "R1_RESOURCE_NOT_AVAILABLE",
+    "R2_RESOURCE_INSUFFICIENT",
+    "I0_ITEM_NOT_FOUND",
+    "I1_INVENTORY_INSUFFICIENT",
+    "E0_INVALID_PAYLOAD",
+})
+GEMINI_ALLOWED_RECOMMENDATIONS = frozenset({"APPROVE", "REVISE", "REJECT"})
+
+
+def _get_gemini_key() -> str:
+    """Read the Gemini key at call time (not import time).
+
+    Call-time read means tests that blank the env (or QMS runs) always get
+    the deterministic path even if the module was imported earlier.
+    """
+    key = os.environ.get("GEMINI_API_KEY", "")
+    qms = (os.environ.get("DOTNET_ENVIRONMENT", "")
+           or os.environ.get("ASPNETCORE_ENVIRONMENT", ""))
+    if qms.lower() == "qms":
+        return ""
+    return (key or "").strip()
+
+
+def _call_gemini_verdict(summary: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Ask Gemini for a final APPROVE/REVISE/REJECT verdict.
+
+    Returns the parsed verdict dict on success, or None when the key is
+    missing, the call fails, or the response is not valid strict JSON.
+    Uses stdlib urllib only (same pattern as situation_analysis_agent.py).
+    Diagnostics go to stderr so CLI JSON stdout stays parseable.
+    """
+    api_key = _get_gemini_key()
+    if not api_key:
+        return None
+    try:
+        url = (
+            "https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{GEMINI_MODEL}:generateContent?key={api_key}"
+        )
+        prompt = (
+            "You are the ERCP Validation/Safety Agent deciding a dispatch safety gate. "
+            "Given this deterministic rule summary, return the FINAL safety verdict. "
+            "Return ONLY a valid JSON object with exactly these keys: "
+            "'is_valid' (boolean), "
+            "'recommendation' (one of APPROVE, REVISE, REJECT), "
+            "'violations' (array of {code, message} using only known rule codes), "
+            "'ai_insight' (1-2 sentence plain-English explanation for a coordinator). "
+            "Rules: APPROVE only when no blockers. REVISE only for fixable capacity/double-booking "
+            "(S2, R2, I1, V2). Otherwise REJECT. "
+            f"Rule summary: {json.dumps(summary)[:4000]}"
+        )
+        payload = json.dumps({
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {"temperature": 0.0, "maxOutputTokens": 512},
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            url, data=payload, headers={"Content-Type": "application/json"}
+        )
+        with urllib.request.urlopen(req, timeout=10) as response:
+            res_body = response.read().decode("utf-8")
+        res_json = json.loads(res_body)
+        text_content = res_json["candidates"][0]["content"]["parts"][0]["text"]
+        text_content = text_content.strip()
+        if text_content.startswith("```json"):
+            text_content = text_content[7:]
+        if text_content.startswith("```"):
+            text_content = text_content[3:]
+        if text_content.endswith("```"):
+            text_content = text_content[:-3]
+        text_content = text_content.strip()
+        try:
+            parsed = json.loads(text_content)
+        except json.JSONDecodeError:
+            # Model sometimes wraps JSON with prose: extract first {...} block.
+            start = text_content.find("{")
+            end = text_content.rfind("}")
+            if start < 0 or end <= start:
+                return None
+            parsed = json.loads(text_content[start:end + 1])
+        if not isinstance(parsed, dict):
+            return None
+        if parsed.get("recommendation") not in GEMINI_ALLOWED_RECOMMENDATIONS:
+            return None
+        if not isinstance(parsed.get("is_valid"), bool):
+            return None
+        violations = parsed.get("violations", [])
+        if not isinstance(violations, list):
+            return None
+        cleaned = []
+        for v in violations:
+            if not isinstance(v, dict):
+                return None
+            code = str(v.get("code", ""))
+            if code not in GEMINI_ALLOWED_CODES:
+                return None
+            cleaned.append({
+                "code": code,
+                "message": str(v.get("message", code)),
+                "severity": "BLOCKER",
+            })
+        return {
+            "is_valid": parsed["is_valid"],
+            "recommendation": parsed["recommendation"],
+            "violations": cleaned,
+            "ai_insight": str(parsed.get("ai_insight", ""))[:500],
+        }
+    except Exception as e:
+        print(f"[Warning] Gemini verdict failed, falling back to deterministic rules. Error: {e}",
+              file=sys.stderr)
+        return None
 
 
 def _parse_dt(value: Any) -> Optional[datetime]:
@@ -252,6 +402,9 @@ class ValidationSafetyAgent:
                 "allowed_tools": self.allowed_tools,
                 "duration_ms": 0,
                 "status": "COMPLETED",
+                "llm_enhanced": False,
+                "ai_insight": None,
+                "deterministic_fallback": True,
             }
 
         # W0: an empty proposal (no assignments) must not read as a clean
@@ -414,6 +567,56 @@ class ValidationSafetyAgent:
             codes = {v["code"] for v in violations}
             recommendation = "REVISE" if codes and codes.issubset(revisable) else "REJECT"
 
+        # ---- Gemini full verdict (hybrid: rules always run first) ----
+        # Rules above are the safety ground truth. When GEMINI_API_KEY is set,
+        # Gemini may supply the FINAL verdict; invalid/missing/timeout responses
+        # fall back to the deterministic result so the gate never blanks.
+        llm_enhanced = False
+        ai_insight = None
+        deterministic_fallback = True
+        if _get_gemini_key():
+            summary = {
+                "dispatch_id": payload.get("dispatch_id", payload.get("dispatchId")),
+                "incident_id": payload.get("incident_id", payload.get("incidentId")),
+                "rule_is_valid": is_valid,
+                "rule_recommendation": recommendation,
+                "rule_violations": [v["code"] for v in violations],
+                "rule_warnings": [w["code"] for w in warnings],
+                "check_count": len(checks),
+            }
+            llm_verdict = _call_gemini_verdict(summary)
+            if llm_verdict is not None:
+                # Coherence guard: is_valid must match violations emptiness.
+                llm_violations = llm_verdict["violations"]
+                is_valid = llm_verdict["is_valid"] and len(llm_violations) == 0
+                if not is_valid and len(llm_violations) == 0:
+                    # LLM claimed invalid with no blockers -> keep rules instead.
+                    pass
+                else:
+                    violations = llm_violations
+                    recommendation = llm_verdict["recommendation"]
+                    # Enforce verdict/violation coherence.
+                    if violations and recommendation == "APPROVE":
+                        recommendation = "REJECT"
+                    if not violations:
+                        is_valid = True
+                        if recommendation not in ("APPROVE", "REVISE"):
+                            recommendation = "APPROVE" if not warnings else "REVISE"
+                    ai_insight = llm_verdict.get("ai_insight") or None
+                    llm_enhanced = True
+                    deterministic_fallback = False
+                    checks.append({
+                        "tool": "gemini_verdict",
+                        "passed": True,
+                        "detail": f"Gemini {GEMINI_MODEL} final verdict: {recommendation}.",
+                    })
+            if not llm_enhanced:
+                checks.append({
+                    "tool": "gemini_verdict",
+                    "passed": False,
+                    "detail": "Gemini verdict unavailable - deterministic rule result kept.",
+                })
+
         duration_ms = int((time.perf_counter() - started) * 1000)
         return {
             "agent_id": self.agent_id,
@@ -429,6 +632,9 @@ class ValidationSafetyAgent:
             "allowed_tools": self.allowed_tools,
             "duration_ms": duration_ms,
             "status": "COMPLETED",
+            "llm_enhanced": llm_enhanced,
+            "ai_insight": ai_insight,
+            "deterministic_fallback": deterministic_fallback,
         }
 
 

@@ -46,7 +46,9 @@ public record ValidationResultDto(
     DateTime ValidatedAt,
     int? AuditId = null,
     long DurationMs = 0,
-    string ValidatedBy = "System"
+    string ValidatedBy = "System",
+    bool LlmEnhanced = false,
+    string? AiInsight = null
 );
 
 public record ValidationHistoryDto(
@@ -60,5 +62,7 @@ public record ValidationHistoryDto(
     int CheckCount,
     string ValidatedBy,
     long DurationMs,
-    DateTime ValidatedAt
+    DateTime ValidatedAt,
+    bool LlmEnhanced = false,
+    string? AiInsight = null
 );

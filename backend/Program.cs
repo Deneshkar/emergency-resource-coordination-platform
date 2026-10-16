@@ -341,6 +341,9 @@ using (var scope = app.Services.CreateScope())
                     ""ValidatedAt"" timestamp with time zone NOT NULL
                 );
                 CREATE INDEX IF NOT EXISTS ""IX_ValidationAudits_DispatchId"" ON ""ValidationAudits"" (""DispatchId"");
+                -- Student 4 Gemini verdict columns (Oct 2026): older ValidationAudits tables lack them.
+                ALTER TABLE ""ValidationAudits"" ADD COLUMN IF NOT EXISTS ""LlmEnhanced"" boolean NOT NULL DEFAULT FALSE;
+                ALTER TABLE ""ValidationAudits"" ADD COLUMN IF NOT EXISTS ""AiInsight"" text NULL;
             ");
 
             // DispatchTasks.ResourceId changed uuid -> integer (UnifyDispatchTaskResourceId migration).

@@ -27,5 +27,11 @@ public class ValidationAudit
 
     public long DurationMs { get; set; }
 
+    // Student 4 — Gemini full-verdict fields. False/null means the deterministic
+    // rule result decided (no key, QMS run, or LLM failure/invalid response).
+    public bool LlmEnhanced { get; set; } = false;
+
+    public string? AiInsight { get; set; }
+
     public DateTime ValidatedAt { get; set; } = DateTime.UtcNow;
 }
