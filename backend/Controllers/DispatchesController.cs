@@ -117,6 +117,14 @@ public class DispatchesController : ControllerBase
 
         if (dto.Status == "Approved")
         {
+            var workflow = await _context.WorkflowExecutions
+                .Where(w => w.DispatchId == id)
+                .OrderByDescending(w => w.StartedAt)
+                .FirstOrDefaultAsync();
+            if (workflow != null &&
+                (workflow.Status != "AwaitingApproval" || workflow.ApprovalStatus != "PendingApproval"))
+                return BadRequest(new { message = "Workflow proposal requires revision before approval." });
+
             var latestAudit = await _context.ValidationAudits
                 .Where(a => a.DispatchId == id)
                 .OrderByDescending(a => a.ValidatedAt)
@@ -130,6 +138,16 @@ public class DispatchesController : ControllerBase
                 {
                     message = "Dispatch approval requires a passing safety validation."
                 });
+            }
+
+            if (workflow != null)
+            {
+                workflow.Status = "Completed";
+                workflow.ApprovalStatus = "Approved";
+                workflow.ApprovedBy = User?.Identity?.Name ?? "Coordinator";
+                workflow.ApprovedAt = DateTime.UtcNow;
+                workflow.CompletedAt = DateTime.UtcNow;
+                workflow.FinalOutcome = "Dispatch approved by coordinator.";
             }
         }
 

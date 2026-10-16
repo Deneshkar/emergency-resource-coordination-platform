@@ -74,7 +74,8 @@ public class EmergencyWorkflowServiceTests
         {
             ["Agents:Directory"] = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
                 "..", "..", "..", "..", "ai-agents")),
-            ["Agents:PythonExecutable"] = OperatingSystem.IsWindows() ? "py" : "python3"
+            ["Agents:PythonExecutable"] = Environment.GetEnvironmentVariable("ERCP_TEST_PYTHON")
+                ?? (OperatingSystem.IsWindows() ? "py" : "python3")
         }).Build();
         var workflowService = new EmergencyWorkflowService(db,
             new IncidentPlannerService(NullLogger<IncidentPlannerService>.Instance, db, config),
@@ -132,7 +133,8 @@ public class EmergencyWorkflowServiceTests
         {
             ["Agents:Directory"] = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
                 "..", "..", "..", "..", "ai-agents")),
-            ["Agents:PythonExecutable"] = OperatingSystem.IsWindows() ? "py" : "python3"
+            ["Agents:PythonExecutable"] = Environment.GetEnvironmentVariable("ERCP_TEST_PYTHON")
+                ?? (OperatingSystem.IsWindows() ? "py" : "python3")
         }).Build();
         var gate = new DispatchValidationService(db);
         var service = new EmergencyWorkflowService(db,

@@ -180,15 +180,27 @@ public class EmergencyWorkflowService
             await _db.SaveChangesAsync(cancellationToken);
             run.DispatchId = dispatch.Id;
 
-            var unpairedResources = resourceIds.Select(id => validResources[id]).ToList();
+            // Match specialist resources first so a general volunteer cannot
+            // consume a medical or vehicle assignment needed by a specialist.
+            var unpairedResources = new List<Resource>();
+            var unassignedVolunteers = volunteerIds.ToList();
+            var assignments = new Dictionary<Guid, Resource>();
+            foreach (var resource in resourceIds.Select(id => validResources[id])
+                .OrderBy(r => r.ResourceType.Equals("Personnel", StringComparison.OrdinalIgnoreCase) ? 1 : 0))
+            {
+                var volunteerId = unassignedVolunteers.FirstOrDefault(id =>
+                    CanUseResource(validVolunteers[id], resource));
+                if (volunteerId == Guid.Empty)
+                    unpairedResources.Add(resource);
+                else
+                {
+                    assignments[volunteerId] = resource;
+                    unassignedVolunteers.Remove(volunteerId);
+                }
+            }
             foreach (var volunteerId in volunteerIds)
             {
-                var volunteer = validVolunteers[volunteerId];
-                var matched = unpairedResources
-                    .Where(r => !r.ResourceType.Equals("Personnel", StringComparison.OrdinalIgnoreCase))
-                    .FirstOrDefault(r => CanUseResource(volunteer, r))
-                    ?? unpairedResources.FirstOrDefault(r => CanUseResource(volunteer, r));
-                if (matched != null) unpairedResources.Remove(matched);
+                assignments.TryGetValue(volunteerId, out var matched);
                 _db.DispatchTasks.Add(new DispatchTask
                 {
                     DispatchId = dispatch.Id,

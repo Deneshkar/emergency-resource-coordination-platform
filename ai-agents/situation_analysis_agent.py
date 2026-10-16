@@ -9,6 +9,8 @@ Output: Structured Urgency Assessment & Gap Analysis JSON
 
 import json
 import os
+import argparse
+import sys
 import urllib.request
 import urllib.error
 from typing import Dict, List, Any
@@ -166,6 +168,7 @@ class SituationAnalysisAgent:
         return {
             "agent_id": self.agent_id,
             "incident_id": incident.get("id"),
+            "tool_calls": self.allowed_tools,
             "urgency_score": score_res["urgency_score"],
             "urgency_level": score_res["urgency_level"],
             "analysis_summary": summary,
@@ -176,6 +179,9 @@ class SituationAnalysisAgent:
         }
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="ERCP Situation Analysis Agent")
+    parser.add_argument("--stdin", action="store_true", help="Read one JSON payload from stdin")
+    args = parser.parse_args()
     agent = SituationAnalysisAgent()
     sample_payload = {
         "incident": {"id": 1, "title": "Flash Flood in Sector 2", "description": "Severe flooding with trapped citizens", "priority": "High"},
@@ -183,5 +189,5 @@ if __name__ == "__main__":
         "resources": [{"resourceType": "Vehicle", "status": "Available"}],
         "shelters": [{"id": 101, "name": "Community Gym", "status": "Active", "totalCapacity": 100, "currentOccupancy": 30}]
     }
-    output = agent.run_assessment(sample_payload)
+    output = agent.run_assessment(json.load(sys.stdin) if args.stdin else sample_payload)
     print(json.dumps(output, indent=2))

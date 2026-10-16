@@ -645,11 +645,14 @@ class ValidationSafetyAgent:
 def main():
     parser = argparse.ArgumentParser(description="ERCP Validation / Safety Agent (deterministic pre-approval gate)")
     parser.add_argument("--json", type=str, help="Input JSON payload (assignment proposal)")
+    parser.add_argument("--stdin", action="store_true", help="Read one JSON payload from stdin")
     parser.add_argument("--dispatch-id", type=int, default=None)
     parser.add_argument("--incident-id", type=int, default=None)
     args = parser.parse_args()
 
-    if args.json:
+    if args.stdin:
+        payload = json.load(sys.stdin)
+    elif args.json:
         try:
             payload = json.loads(args.json)
         except Exception as e:

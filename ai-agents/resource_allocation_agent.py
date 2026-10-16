@@ -334,6 +334,11 @@ class ResourceAllocationAgent:
             "assignments": proposal.get("tasks", []),
             "assigned_resources": proposal.get("assigned_resources", []),
             "assigned_volunteers": proposal.get("assigned_volunteers", []),
+            "shelter_allocations": ([{
+                "shelter_id": int(payload["nearest_shelter"]["id"]),
+                "incoming_count": affected_count,
+            }] if payload.get("nearest_shelter") and affected_count > 0 and
+                int(payload["nearest_shelter"].get("available_capacity", 0)) > 0 else []),
             "warnings": warnings,
             "constraints": constraints,
             "recommendation": "REVISE" if gaps else "APPROVE",
@@ -344,6 +349,9 @@ class ResourceAllocationAgent:
             "agent_id": self.agent_id,
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "incident_id": incident.get("incident_id", incident.get("incidentId", None)),
+            "plan_id": payload.get("plan_id"),
+            "situation_assessment_id": payload.get("situation_assessment_id"),
+            "tool_calls": self.allowed_tools,
             "status": "COMPLETED",
             "allocation_plan": plan,
             "allocated_resources": proposal.get("assigned_resources", []),
@@ -358,11 +366,14 @@ class ResourceAllocationAgent:
 def main():
     parser = argparse.ArgumentParser(description="Resource Allocation Agent for ERCP")
     parser.add_argument("--json", type=str, help="Input JSON payload")
+    parser.add_argument("--stdin", action="store_true", help="Read one JSON payload from stdin")
     parser.add_argument("--task", type=str, default="allocate", help="Task to execute: allocate")
     args = parser.parse_args()
 
     payload = {}
-    if args.json:
+    if args.stdin:
+        payload = json.load(sys.stdin)
+    elif args.json:
         try:
             payload = json.loads(args.json)
         except Exception as exc:
