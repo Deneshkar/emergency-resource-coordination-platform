@@ -99,16 +99,22 @@ public class DispatchValidationService
             request.Content = new StringContent(JsonSerializer.Serialize(new
             {
                 contents = new[] { new { parts = new[] { new { text = prompt } } } },
-                generationConfig = new { temperature = 0.0, maxOutputTokens = 512 },
+                generationConfig = new { temperature = 0.0, maxOutputTokens = 512, responseMimeType = "application/json" },
             }), Encoding.UTF8, "application/json");
 
             using var response = await _httpClient.SendAsync(request, cancellationToken);
             if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"[ValidationSafetyAgent] Gemini verdict skipped: HTTP {(int)response.StatusCode}. Rule result kept.");
                 return null;
+            }
 
             using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync(cancellationToken));
             if (!doc.RootElement.TryGetProperty("candidates", out var candidates) || candidates.GetArrayLength() == 0)
+            {
+                Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: empty candidates. Rule result kept.");
                 return null;
+            }
             var text = candidates[0].GetProperty("content").GetProperty("parts")[0].GetProperty("text").GetString() ?? string.Empty;
             text = text.Trim();
             if (text.StartsWith("```json", StringComparison.Ordinal)) text = text["```json".Length..];
@@ -124,31 +130,53 @@ public class DispatchValidationService
                 var start = text.IndexOf('{');
                 var end = text.LastIndexOf('}');
                 if (start < 0 || end <= start)
+                {
+                    Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: no JSON object in response. Rule result kept.");
                     return null;
+                }
                 try { parsed = JsonDocument.Parse(text[start..(end + 1)]); }
-                catch (JsonException) { return null; }
+                catch (JsonException)
+                {
+                    Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: unparseable JSON. Rule result kept.");
+                    return null;
+                }
             }
             using (parsed)
             {
                 var root = parsed.RootElement;
                 if (!root.TryGetProperty("is_valid", out var isValidEl)
                     || (isValidEl.ValueKind != JsonValueKind.True && isValidEl.ValueKind != JsonValueKind.False))
+                {
+                    Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: missing/invalid is_valid. Rule result kept.");
                     return null;
+                }
                 if (!root.TryGetProperty("recommendation", out var recEl)
                     || !GeminiAllowedRecommendations.Contains(recEl.GetString() ?? string.Empty))
+                {
+                    Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: invalid recommendation. Rule result kept.");
                     return null;
+                }
                 if (!root.TryGetProperty("violations", out var violsEl) || violsEl.ValueKind != JsonValueKind.Array)
+                {
+                    Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: violations not an array. Rule result kept.");
                     return null;
+                }
 
                 var llmViolations = new List<ValidationViolationDto>();
                 foreach (var v in violsEl.EnumerateArray())
                 {
                     if (v.ValueKind != JsonValueKind.Object
                         || !v.TryGetProperty("code", out var codeEl))
+                    {
+                        Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: malformed violation entry. Rule result kept.");
                         return null;
+                    }
                     var code = codeEl.GetString() ?? string.Empty;
                     if (!GeminiAllowedCodes.Contains(code))
+                    {
+                        Console.WriteLine($"[ValidationSafetyAgent] Gemini verdict skipped: unknown code '{code}'. Rule result kept.");
                         return null;
+                    }
                     var message = v.TryGetProperty("message", out var msgEl) ? msgEl.GetString() ?? code : code;
                     llmViolations.Add(new ValidationViolationDto(code, message, "BLOCKER"));
                 }
@@ -176,9 +204,10 @@ public class DispatchValidationService
                 return (isValid, recommendation, llmViolations, insight);
             }
         }
-        catch (Exception) when (cancellationToken.IsCancellationRequested == false)
+        catch (Exception ex) when (cancellationToken.IsCancellationRequested == false)
         {
             // Any LLM failure (network, timeout, parse) falls back to rules.
+            Console.WriteLine($"[ValidationSafetyAgent] Gemini verdict skipped: {ex.GetType().Name}. Rule result kept.");
             return null;
         }
     }

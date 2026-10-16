@@ -208,7 +208,11 @@ def _call_gemini_verdict(summary: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         )
         payload = json.dumps({
             "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"temperature": 0.0, "maxOutputTokens": 512},
+            "generationConfig": {
+                "temperature": 0.0,
+                "maxOutputTokens": 512,
+                "responseMimeType": "application/json",
+            },
         }).encode("utf-8")
         req = urllib.request.Request(
             url, data=payload, headers={"Content-Type": "application/json"}
