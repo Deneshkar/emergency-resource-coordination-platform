@@ -16,7 +16,20 @@ def backend_counts(path):
     result = tally('passed' if x.get('outcome') == 'Passed' else 'skipped' if x.get('outcome') == 'NotExecuted' else 'failed' for x in rows)
     assert int(root.find('.//{*}Counters').get('total')) == result['total'], 'TRX counters disagree with records'
     database = [x for x in rows if 'QmsPostgresTests.' in x.get('testName','') or 'QmsMigrationTests.' in x.get('testName','')]
-    assert len(database) == 8 and all(x.get('outcome') == 'Passed' for x in database), 'All eight PostgreSQL/migration tests must execute and pass'
+    required = {
+        'QmsPostgresTests.DB01_DuplicateEmail_IsRejectedByPostgres',
+        'QmsPostgresTests.DB02_OrphanShift_IsRejectedByForeignKey',
+        'QmsPostgresTests.DB03_DeletingVolunteer_CascadesShift',
+        'QmsPostgresTests.DB04_Rollback_DoesNotPersistResource',
+        'QmsMigrationTests.MIG01_CleanMigration_MatchesCurrentModelSchema',
+        'QmsMigrationTests.MIG02_IncidentMigration_RollbackPreservesResourceData',
+        'QmsMigrationTests.MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData',
+        'QmsMigrationTests.MIG04_ReapplyAndFullRollback_AreConsistent',
+    }
+    observed = {'.'.join(x.get('testName', '').rsplit('.', 2)[-2:]) for x in database}
+    assert required <= observed and len(observed) == len(database) and all(
+        x.get('outcome') == 'Passed' for x in database
+    ), 'Every required PostgreSQL/migration test and additional QMS test must execute and pass'
     return result
 
 
@@ -41,7 +54,11 @@ def summarize(directory):
     thresholds = [v['ok'] for m in perf['metrics'].values() for v in m.get('thresholds',{}).values()]
     performance_passed = len(thresholds) >= 3 and all(thresholds) and perf['metrics']['http_reqs']['values']['count'] > 0
     migration = json.loads((directory / 'migration-check.json').read_text(encoding='utf-8-sig'))
-    migration_passed = migration['status'] == 'Passed' and len(migration['applied_migrations']) == 8 and migration['pending_migrations'] == 0
+    health = json.loads((directory / 'health.json').read_text(encoding='utf-8-sig'))
+    migration_passed = (migration['status'] == 'Passed' and
+        len(migration['applied_migrations']) >= 8 and
+        len(migration['applied_migrations']) == health['appliedMigrations'] and
+        migration['pending_migrations'] == health['pendingMigrations'] == 0)
     totals = {key: sum(s[key] for s in suites.values()) for key in ('total','passed','failed','skipped')}
     extras = {'performance_scenario': 'Passed' if performance_passed else 'Failed', 'migration_cli_check': 'Passed' if migration_passed else 'Failed'}
     return {'automated_suites': suites, 'automated': totals, 'additional_checks': extras,

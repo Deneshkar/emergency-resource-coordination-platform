@@ -20,7 +20,9 @@ def query(sql):
     return subprocess.check_output(command + [sql], env=env, text=True).strip()
 history = query('SELECT "MigrationId" FROM "__EFMigrationsHistory" ORDER BY "MigrationId"').splitlines()
 health = json.loads((args.directory / 'health.json').read_text(encoding='utf-8-sig'))
-record = {'status': 'Passed' if args.cli_exit == 0 and len(history) == 8 else 'Failed',
+record = {'status': 'Passed' if args.cli_exit == 0 and len(history) >= 8
+    and len(history) == health['appliedMigrations']
+    and health['pendingMigrations'] == 0 else 'Failed',
     'applied_migrations': history, 'pending_migrations': health['pendingMigrations'],
     'database': config['database'], 'checked_at': datetime.now().astimezone().isoformat(), 'cli_exit': args.cli_exit}
 (args.directory / 'migration-check.json').write_text(json.dumps(record, indent=2), encoding='utf-8')
