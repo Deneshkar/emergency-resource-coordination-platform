@@ -94,7 +94,7 @@ if ($InputFile) {{ $demoArgs += @('--samples', $InputFile) }}
 if ($LASTEXITCODE -ne 0) {{ throw 'Agent demonstration failed. Read the actual output and check results.' }}
 '''
         (folder/f'demo-member{number}-agent.ps1').write_text(demo,encoding='utf-8',newline='\n')
-        personal=('Your earlier guided personal runs (4 controller + 5 HTTP + 3 safety cases) and six screenshots are preserved in [Individual_Evidence_IT24103828.md](../../submission/Individual_Evidence_IT24103828.md). This full package adds the existing safety-agent tool, shelter and stock cases, so its selected count is higher than that earlier 12-case practice. The boundary exercise and own-word answers remain unconfirmed.' if number==4 else 'Your new personal QMS execution is not yet confirmed. AI-assisted verification results demonstrate that the package works, not that you personally ran it.')
+        personal=('Your earlier guided personal runs (4 controller + 5 HTTP + 3 safety cases) and six screenshots are preserved in [Individual_Evidence_IT24103828.md](../../submission/Individual_Evidence_IT24103828.md). This full package adds the existing safety-agent tool, shelter and stock cases, so its selected count is higher than that earlier 12-case practice. The boundary exercise and own-word answers remain unconfirmed.' if number==4 else 'Your submitted 7 October personal execution is supported by two terminal screenshots and matching raw reports. See [Personal_Execution_Evidence.md](../../submission/Personal_Execution_Evidence.md). Own-word explanations and a changed-input exercise remain pending.')
         readme=f'''# Member {number}: {config['name']} - {config['student_id']}
 
 Business component: **{config['component']}**. Agent: **{config['agent_class']}**.

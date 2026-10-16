@@ -1,6 +1,6 @@
 # Actual GitHub screenshot evidence
 
-Completed on 6 October 2026: the group supplied all four actual GitHub screenshots. The original local PNGs were visually matched to the supplied images and copied byte-for-byte into evidence/github. Appendix A (pages 9-12) contains the member metadata, full messages, dates and contribution summaries. Appendix B (pages 13-16) embeds the four screenshots on landscape pages.
+Completed on 6 October 2026: the group supplied all four actual GitHub screenshots. The original local PNGs were visually matched to the supplied images and copied byte-for-byte into evidence/github. Appendix A contains the member metadata, full messages, dates and contribution summaries. Appendix B embeds the four screenshots on landscape pages.
 
 Each supplied image shows the repository, commit message, account, short commit hash and changed files. Screenshots remain unedited; the PDF scales them proportionally. Exact author/committer timestamps are separately recorded in Appendix A. Screenshot capture times were not independently verified and are not invented; the manifest records the date supplied and original filenames.
 
@@ -23,4 +23,4 @@ python QMS/scripts/sync_repository.py
 python QMS/scripts/package_submission.py
 ```
 
-Inspect the rendered PDF after adding screenshots. Actual personal execution/review records remain separate from both Git authorship and screenshots. The three unconfirmed members must supply their real test names, date, result and evidence after performing the work.
+Inspect the rendered PDF after adding screenshots. Actual personal execution/review records remain separate from both Git authorship and screenshots. Members 1 to 3 supplied personal testing screenshots on 7 October; Personal_Execution_Evidence.md links their raw results. Own-word explanations and changed-input exercises remain pending.

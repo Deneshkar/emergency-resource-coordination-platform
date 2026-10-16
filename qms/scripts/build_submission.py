@@ -9,7 +9,8 @@ assert SUMMARY['passed_gate'], 'Cannot publish failed, skipped or incomplete evi
 AUTO = SUMMARY['automated']['total']
 TOTAL = SUMMARY['inventory_records']
 OUT = QMS / 'submission'
-sys.path.insert(0, str(QMS / '.tools/python'))
+PERSONAL_MEMBERS = json.loads((QMS/'members/personal-evidence.json').read_text())['members']
+sys.path.append(str(QMS / '.tools/python'))
 from reportlab.platypus import BaseDocTemplate, Frame, PageTemplate, NextPageTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether, Image
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -212,12 +213,12 @@ def nextpage(): story.append(PageBreak())
 
 p('Software Testing and Quality Evaluation','TitleQ')
 p('Emergency Resource Coordination Platform','HeadQ')
-p('Group submission | SE3090 Assignment 2 | Revised 6 October 2026')
+p('SE3110 - Quality Management in Software Engineering | Assignment 2')
 p(f'This report evaluates the existing ASP.NET Core, PostgreSQL, React, Flutter and agentic subsystem developed for the SEF assignment. The verified aggregate is {AUTO} passing automated cases, a passing local load scenario and a passing migration CLI check. Two security defects and the migration defect were corrected and retested. All current suites and the load scenario were rerun on 6 October. Counts reconcile automatically with the raw reports; no tests were skipped. The evidence supports the tested workflows; it does not establish production readiness.')
 table([['Member','Student ID','SEF module']]+[list(m) for m in members],[92,80,327])
 labels={'backend':'Backend including PostgreSQL and migrations','react':'React components and services','flutter':'Flutter units and widgets','agents':'Python deterministic agents','http':'Live HTTP workflow and security'}
 table([['Executed area','Passed','Failed','Skipped']] + [[labels[k],v['passed'],v['failed'],v['skipped']] for k,v in SUMMARY['automated_suites'].items()] + [['k6 load scenario',1,0,0],['Migration CLI check',1,0,0]],[300,65,65,69])
-p('Assessment brief: Software Testing and Quality Evaluation of the SE3090 Integrated System. Deadline: 5 October 2026. The source filename is SE3110 Assignment.pdf, while its internal module heading is SE3090; the group should confirm the CourseWeb location.','SmallQ')
+p('Submission module confirmed by the repository owner: SE3110 - Quality Management in Software Engineering. The supplied brief internally refers to SE3090 and the SEF integrated system; that source wording is retained for traceability. Its stated deadline is 5 October 2026. Later evidence dates are retained accurately; no extension or CourseWeb upload is claimed.','SmallQ')
 
 nextpage(); head('Test plan and environment')
 p('<b>Objectives.</b> Verify important implemented behaviour, demonstrate cross-component execution, measure a bounded performance workload, check authorization and safety controls, and preserve traceable defect/retest evidence. The same ERCP source is used throughout.')
@@ -226,6 +227,18 @@ table([['Area and tools','Reason for selection'],['xUnit, WebApplicationFactory,
 p('<b>Environment.</b> Windows 11; .NET SDK 10.0.401 (net8.0 target); Node 22.15.0; Python 3.13.2; pytest 8.3.3; Requests 2.34.2; PostgreSQL 17.10 on 127.0.0.1:55432; API on 127.0.0.1:5009. Frontend build reported Vite 8.2.1. Flutter 3.44.9 uses its resolved lockfile; CI is pinned to that tested SDK. QMS mode requires PostgreSQL and applies EF migrations before accepting requests. Evidence records the actual tool outputs.')
 p('<b>Isolation.</b> A fresh ercp_qms_github database supports this full rerun. QMS startup rejects legacy tables without migration history and disables in-memory fallback. Earlier test databases are preserved. Migration tests create and remove only their own isolated databases. Most original backend tests still use EF InMemory. SMTP and Gemini credentials are disabled for live tests. No external messages or live model calls are required.')
 p('<b>Schedule.</b> Original analysis and testing were performed on 3 October. BUG-03 reproduction, repair, migration/backend/live workflow retesting followed by a complete reproducibility rerun and report revision were completed on 5 October. Integration with current main, publication and a full rerun were completed on 6 October. The brief states a 5 October deadline.')
+
+import test_plan
+nextpage(); head('Consolidated Test Plan')
+p('<b>Scope.</b> '+test_plan.SCOPE,'SmallQ')
+p('<b>Objectives.</b> '+test_plan.OBJECTIVES,'SmallQ')
+table([test_plan.HEADERS]+test_plan.ROWS,[77,102,80,80,92,68])
+p(test_plan.RESPONSIBILITIES,'SmallQ')
+nextpage(); head('Recorded testing schedule')
+table([test_plan.SCHEDULE_HEADERS]+test_plan.SCHEDULE,[110,389])
+p(test_plan.ACCEPTANCE)
+p('Member reruns and demonstration scenarios do not increase the 270 unique automated tests or 272 inventory records. Deneshkar supplied a written explanation on 8 October. The new comparisons were technically executed by Codex; all four personal comparison runs are supported by screenshots in Appendix I; all four explanations are received; evidence-aligned summaries and corrections are retained in Member_Explanations.md.')
+p('Test_Plan.md provides the consolidated plan and evidence paths. Changed_Input_Demonstrations.md provides runnable practice instructions and a record template; it is not completed personal evidence.','SmallQ')
 
 nextpage(); head('Risk based test design and responsibilities')
 table([['Risk','Normal and failure or boundary coverage','Reviewer'],['Incorrect incident data or unsafe plans','Meaningful incident creation; invalid title/address/email and negative affected count; generated plan output and approval flag.','Jathurshy.S'],['Invalid resource or database state','Resource render/empty/error/status interaction; urgency levels; full shelter; exact capacity and stock limits; database unique/FK/cascade/rollback.','M.Thanusikan'],['Unauthorized dispatch or approval','Citizen/Volunteer mutation denial; invalid JWT; no approval before safety validation; immutable approved tasks; allocation shortages.','Denesh N'],['Unavailable or conflicting responders','Volunteer HTTP lifecycle; shift windows; adjacent shifts; unavailable volunteer rejection; malformed safety payload; mobile form/state tests.','Deneshkar. P']],[110,297,92])
@@ -265,7 +278,7 @@ p('Repository: <link href="https://github.com/Deneshkar/emergency-resource-coord
 p('Published source: <link href="https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/9226a56328c91a5a2e47557997d15786c7a15b71">9226a56</link>, based on main 054fce7. The published fix/qms-submission-readiness branch preserves newer team changes. <link href="https://github.com/Deneshkar/emergency-resource-coordination-platform/pull/47">PR #47</link> was closed without merging; the branch remains available. Appendix A provides exact commit messages, full hashes, author/committer dates and testing contributions for every member. GitHub_Publication.md records publication and CI status.')
 verified = [('Jathurshy.S - IT24103355','50f9414e8ceeb8f287112bde2a81883fa9ba4245','Incident controller tests and planner implementation. Demonstrate invalid input and approval requirements.'),('M.Thanusikan - IT24103609','25de8a92bee86fe982b6fdbbe65afdc35055ce43','Resource, shelter and inventory edge-case tests. Demonstrate a PostgreSQL constraint and migration regression.'),('Denesh N - IT24102826','48a9c3b9cd87d67ce48b9c16aeb960be85baa266','Dispatch allocation/controller and React tests. Explain authorization, allocation shortages and load thresholds.'),('Deneshkar. P - IT24103828','3c059a63c9093f6347de4fbef73f9b3e7164910a','Volunteer/shift HTTP tests. Demonstrate safety rejection and a Flutter widget case.')]
 table([['Member','Verified existing commit and suggested demonstration']]+[[name, f'<link href="https://github.com/Deneshkar/emergency-resource-coordination-platform/commit/{sha}">{sha[:7]}</link>: {description}'] for name,sha,description in verified],[190,309])
-p('<b>Individual evidence status.</b> The group confirmed on 6 October that personal runs of the new QMS tests by Jathurshy.S, M.Thanusikan and Denesh N are not yet confirmed. Existing test authorship is verified separately. Current group execution and publication are AI-assisted; personal review and viva demonstrations remain each member\'s responsibility.')
+p('<b>Individual evidence status.</b> On 7 October, Jathurshy.S, M.Thanusikan and Denesh N supplied personal-run screenshots matched to raw reports: 11, 17 and 26 tests passed, plus two agent scenarios each. Appendix G retains all six images. Deneshkar\'s earlier personal screenshots remain in Appendix C; his 8 October written explanation is in Appendix H. All four personal comparison runs are supported by screenshots in Appendix I; all four explanations are received; evidence-aligned summaries and corrections are retained in Member_Explanations.md.')
 
 p('Each member should run and explain the fixture, assertion, tool setup and result; modify an input and predict the outcome; locate one defect and its retest evidence. The marking scheme assigns 40 group marks and 60 individual marks, so reading the report alone is insufficient preparation.')
 p('<b>AI declaration.</b> OpenAI Codex assisted repository analysis, test ideas and implementation, security fixes, execution, evidence reconciliation and report generation on 3 October, with migration repair on 5 October and integration, publication and full retesting on 6 October 2026. Generated tests were checked against the actual source and executed. Deterministic AI paths were used with live Gemini disabled. Members must review and understand all submitted work and record their genuine contribution.')
@@ -273,7 +286,7 @@ p('The brief requires the module CLEAR framework but does not define its fields.
 
 nextpage(); head('Conclusion and evidence index')
 p('The tested incident-to-approved-dispatch workflow completes on the actual API and PostgreSQL, and selected resource, responder, client and agent behaviours pass their automated checks. The assessment corrected two authorization defects and the migration defect. The repaired schema passes clean installation, rollback/data-preservation and upgrade checks, and the workflow passes on that schema. The new local load test met its thresholds. The remaining security, coverage and deployment-adoption limits prevent a production-readiness conclusion.')
-table([['Submission item','Purpose'],['Software_Testing_Report.pdf','Test plan, scope, environment, results, defects and conclusion.'],['Test_Cases.html and test-cases.json',f'{TOTAL} completed, evidence-linked records with expected and actual results.'],['Defect_Report.html and defects.json','Three defects with severity, reproduction, evidence and retest status.'],['Contribution_Record.md, Contribution_and_Viva.md and GitHub_Publication.md','Verified commit links, publication/CI status, pending personal execution, viva guide and AI declaration.'],['Reproduction_Guide.md and scripts/run-tests.ps1','Dependencies, isolated environment setup and rerun commands.'],['evidence/baseline and evidence/security-before','Original suites and pre-fix security failures.'],['evidence/final/backend, react.json, flutter.jsonl, agents.xml, live-api.xml','Raw automated execution and backend coverage.'],['evidence/final/performance.json, workflow.json and migrations.log','Load metrics, migrated workflow evidence and passing CLI upgrade. Original failure and four regression retests are in evidence/migration-fix.'],['Application source and testing scripts','Reproducible implementation, configuration examples and test code.']],[221,278])
+table([['Submission item','Purpose'],['Software_Testing_Report.pdf','Test plan, scope, environment, results, defects and conclusion.'],['Test_Cases.html and test-cases.json',f'{TOTAL} completed, evidence-linked records with expected and actual results.'],['Defect_Report.html and defects.json','Three defects with severity, reproduction, evidence and retest status.'],['Contribution_Record.md, Contribution_and_Viva.md and GitHub_Publication.md','Verified commit links, publication/CI status, personal execution evidence, viva guide and AI declaration.'],['Reproduction_Guide.md and scripts/run-tests.ps1','Dependencies, isolated environment setup and rerun commands.'],['evidence/baseline and evidence/security-before','Original suites and pre-fix security failures.'],['evidence/final/backend, react.json, flutter.jsonl, agents.xml, live-api.xml','Raw automated execution and backend coverage.'],['evidence/final/performance.json, workflow.json and migrations.log','Load metrics, migrated workflow evidence and passing CLI upgrade. Original failure and four regression retests are in evidence/migration-fix.'],['Application source and testing scripts','Reproducible implementation, configuration examples and test code.']],[221,278])
 p('<b>Submission checks.</b> Review member details; supply a group number if required; complete genuine individual review/run evidence; transfer the AI declaration into the official CLEAR format; rehearse the individual demonstrations; upload through the correct CourseWeb entry. The QMS source is published on fix/qms-submission-readiness; PR #47 is closed without merging. CourseWeb upload has not been performed.')
 p('<b>Source basis.</b> The supplied four-page SE3110 Assignment.pdf, the ERCP repository at published source commit 9226a56 on top of main 054fce7, and the tool-generated evidence listed above. Historical report pass counts were not reused as fresh execution results.','SmallQ')
 
@@ -299,7 +312,7 @@ for index, (name, student_id, module) in enumerate(members, 1):
             files = row['changed_files']
         p('<b>Relevant committed files:</b><br/>'+ '<br/>'.join(html.escape(f) for f in files), 'SmallQ')
         story.append(Spacer(1, 7))
-    p('<b>Individual summary.</b> '+ ('Contributed volunteer/shift API tests and published security/QMS changes. Group analysis, execution, integration and reporting used OpenAI Codex assistance under the repository owner\'s direction. Personal viva review and demonstrations must be recorded separately.' if student_id == 'IT24103828' else 'The Git history above supports the stated implementation/test contribution. Personal execution or review of the new QMS tests was not confirmed by the group on 6 October 2026. Assigned database, AI, workflow or performance review responsibilities are not claimed as completed personal work.'), 'SmallQ')
+    p('<b>Individual summary.</b> '+ ('Contributed volunteer/shift API tests and published security/QMS changes. Group analysis, execution, integration and reporting used OpenAI Codex assistance under the repository owner\'s direction. Personal viva review and demonstrations must be recorded separately.' if student_id == 'IT24103828' else 'The Git history above supports implementation/test authorship. A submitted personal run on 7 October is supported by terminal screenshots and matching raw reports in Appendix G. Personal changed-input screenshots and raw reports are now supplied in Appendix I. Written explanations are received; the reconciled summaries are retained in Member_Explanations.md. Wider database, live workflow and performance review is not inferred from this focused run.'), 'SmallQ')
     screenshots = [s for s in screenshot_manifest if s['student_id'] == student_id]
     if student_id == 'IT24103828' and personal:
         p('<b>Personal execution confirmed:</b> Four controller, five HTTP integration and three safety-agent tests passed during guided practice on 6 October. Six supplied screenshots and raw reports are in Appendix C. These are existing test reruns; own-word explanations and the boundary exercise remain unconfirmed.', 'SmallQ')
@@ -341,7 +354,7 @@ if personal:
         assert hashlib.sha256((QMS/run['file']).read_bytes()).hexdigest() == run['sha256']
         p('<b>'+html.escape(run['name'])+'</b><br/>Started: '+html.escape(run['started_at'])+'<br/>Raw report: '+html.escape(run['file']), 'SmallQ')
     p(html.escape(personal['http_note']), 'SmallQ')
-    p('<b>Still to demonstrate:</b> Own-word explanations, the equal-time boundary exercise, defect/retest interpretation and viva understanding. Successful execution is recorded separately from these pending learning activities. The other three members\' new personal QMS runs remain unconfirmed.')
+    p('<b>8 October update:</b> Deneshkar supplied a written boundary/overlap explanation in Appendix H and a personal changed-input terminal screenshot with matching reports in Appendix I. His new comparison passed both scenarios. Defect/retest interpretation and the assessed viva remain separate preparation tasks. The other three members\' submitted 7 October personal runs are recorded in Appendix G.')
     p('Individual_Evidence_IT24103828.md links all six PNGs, the raw results and personal-execution.json, which records their SHA-256 hashes. The following six pages reproduce every supplied personal test screenshot.', 'SmallQ')
     for index, shot in enumerate(personal['screenshots'], 1):
         nextpage(); head(f'Appendix C.{index} - '+shot['title'])
@@ -370,14 +383,208 @@ if member_verification_path.exists():
     p('<b>Counts and scope.</b> These are reruns of selected group cases, not additional unique tests. The group totals remain 270 automated cases and 272 inventory records. Selected backend fixtures use InMemory/TestServer, while agent demonstrations call the actual Python classes in deterministic mode. The wider PostgreSQL, frontend, mobile, live API and performance evidence remains in the group suite.')
     p('<b>Present each member\'s work.</b> Open that member\'s index.html, show Test_Cases.html, run run-memberN-tests.ps1 with -ExecutionKind personal and -Operator followed by the actual name, and open the new results.html. Then show agent-inputs.json and agent-demo.html, explain the returned decision/checks, change an input and predict the next output.')
     p('<b>Business-specific agent outputs.</b> Member 1 demonstrates incident plans and mandatory human approval. Member 2 demonstrates urgency, inventory deficits and shelter capacity. Member 3 demonstrates covered/shortage allocation proposals. Member 4 demonstrates available/unavailable responders and overlapping/adjacent shifts. Recommendations do not themselves approve or execute dispatches. Situation analysis selects by available shelter capacity, not geographical distance.')
-    p('<b>Personal evidence remains separate.</b> Deneshkar\'s earlier 12-test personal practice and six screenshots remain in Appendix C. The full member-4 package selects 19 existing tests; its AI-assisted verification does not establish a personal 19-test run. Other members\' new personal executions, and individual explanations/boundary practice, remain unconfirmed.')
+    p('<b>Personal evidence remains separate.</b> Deneshkar\'s earlier 12-test personal practice and six screenshots remain in Appendix C. The full member-4 package selects 19 existing tests; its technical verification does not establish a personal 19-test run. Members 1 to 3 submitted personal execution screenshots on 7 October. Deneshkar supplied a written explanation on 8 October; all four personal comparison runs are supported by screenshots in Appendix I; all four explanations are received; evidence-aligned summaries and corrections are retained in Member_Explanations.md.')
     p('Member_Demonstrations.md provides the four package links and commands. The package scripts and presentation pages were prepared with OpenAI Codex assistance; member ownership labels do not reassign original Git authorship.', 'SmallQ')
+
+member4_runs = sorted((QMS/'members/member4-IT24103828/results').glob('ai-assisted-*/execution.json'))
+assisted_runs = [(path, json.loads(read(path))) for path in member4_runs]
+assisted_runs = [(path, record) for path, record in assisted_runs
+                 if record.get('operator') == 'OpenAI Codex (on behalf of Deneshkar. P)']
+if assisted_runs:
+    from datetime import datetime, timezone, timedelta
+    run_path, run = assisted_runs[-1]
+    demo = json.loads(read(run_path.parent/'agent-output.json'))
+    assert run['execution_kind'] == 'ai-assisted' and run['passed'] and demo['passed']
+    started = datetime.fromisoformat(run['started_at']).astimezone(timezone(timedelta(hours=5, minutes=30)))
+    story.append(NextPageTemplate('Report'))
+    nextpage(); head('Appendix E - Member 4 assisted execution')
+    p('<b>Deneshkar. P | IT24103828</b><br/>Volunteer/Responder Management and Validation/Safety Agent')
+    p('<b>Actual operator:</b> OpenAI Codex, on behalf of Deneshkar. P, at the student\'s request.<br/>'
+      '<b>Started:</b> '+started.strftime('%d %B %Y, %H:%M:%S')+' (Asia/Colombo, UTC+05:30). '
+      'This is an AI-assisted technical run, not a newly confirmed personal execution or assessment of understanding.')
+    p('<b>Executed command from the member folder:</b><br/>'
+      '.\\run-member4-tests.ps1 -ExecutionKind ai-assisted<br/>'
+      '-Operator &quot;OpenAI Codex (on behalf of Deneshkar. P)&quot;', 'SmallQ')
+    areas = [('Volunteer shift controller', [r for r in run['suites']['backend'] if '.VolunteerShiftTests.' in r['name']]),
+             ('Volunteer HTTP integration', [r for r in run['suites']['backend'] if '.VolunteersApiIntegrationTests.' in r['name']]),
+             ('Deterministic safety-agent tests', run['suites']['agents'])]
+    assert all(r['status'] == 'Passed' for _, cases_in_area in areas for r in cases_in_area)
+    table([['Executed area','Passed','Failed','Skipped']]+
+          [[name,len(rows),0,0] for name,rows in areas]+
+          [['Separate agent demonstration scenarios',len(demo['scenarios']),0,0]], [300,65,65,69])
+    p('<b>Actual agent input and output.</b> The runner calls ValidationSafetyAgent.validate_assignment. '
+      'All shift times below are UTC on 6 October 2026; scenario inputs and complete outputs are preserved as JSON.')
+    demo_rows = [['Scenario input','Observed output','Check']]
+    for scenario in demo['scenarios']:
+        assignment = scenario['input']['assignments'][0]
+        proposed = assignment['proposed_shift']
+        time_range = proposed['start'][11:16]+'-'+proposed['end'][11:16]
+        existing = assignment['existing_shifts']
+        prior = ', '.join(s['start'][11:16]+'-'+s['end'][11:16] for s in existing) or 'none'
+        observed = scenario['output']
+        demo_rows.append([scenario['id']+'<br/>Available: '+str(assignment['is_available']).lower()+
+                          '; proposed '+time_range+'; existing '+prior,
+                          'is_valid='+str(observed['is_valid']).lower()+'<br/>'+observed['recommendation'],
+                          'PASS' if scenario['passed'] else 'FAIL'])
+    table(demo_rows,[290,145,64])
+    p('<b>Evidence folder:</b> '+html.escape(run_path.parent.relative_to(QMS).as_posix())+
+      '<br/>results.html, backend.trx, agents.xml, execution.json, agent-inputs.json, agent-output.json and agent-demo.html.', 'SmallQ')
+    p('<b>Scope.</b> Nineteen selected existing tests passed, with four demo scenarios checked separately. '
+      'Group totals remain 270 automated cases and 272 inventory records. Backend fixtures use InMemory/TestServer; '
+      'the Python agent uses deterministic rules, with no live LLM. APPROVE is a recommendation, not a saved dispatch approval.', 'SmallQ')
+    p('<b>Personal evidence and understanding.</b> Appendix C retains the student\'s earlier 12 personally executed tests '
+      'and six supplied screenshots. The 19-test run above was executed by Codex. The student supplied a written '
+      'boundary/overlap explanation on 8 October, retained in Appendix H. His personal changed-input run is supported by a supplied screenshot and matching reports in Appendix I.', 'SmallQ')
+    declared_run_path = QMS/'members/member4-IT24103828/results/personal-20261006-223824-403789/execution.json'
+    if declared_run_path.exists():
+        p('<b>Separate declared-personal record.</b> The results folder personal-20261006-223824-403789 '
+          'records Deneshkar. P as operator at 22:38 Asia/Colombo. Its raw reports confirm 19 passing tests '
+          'and four passing demos. This run was found separately from the Codex run above; confirmation '
+          'of who operated it is pending. The personal label alone does not establish understanding.', 'SmallQ')
+
+technical_manifest = QMS/'members/technical-executions.json'
+if technical_manifest.exists():
+    from datetime import datetime, timezone, timedelta
+    technical = json.loads(read(technical_manifest))
+    for entry in technical['members']:
+        import hashlib
+        number = entry['member']
+        run_path = QMS/entry['execution']
+        assert hashlib.sha256(run_path.read_bytes()).hexdigest() == entry['sha256']
+        record = json.loads(read(run_path))
+        agent_record = json.loads(read(run_path.parent/'agent-output.json'))
+        config = json.loads(read(run_path.parent.parent.parent/'member.json'))
+        assert record['operator'] == technical['operator'] and record['passed'] and agent_record['passed']
+        assert len(record['suites']['backend']) == config['expected_backend_count']
+        assert len(record['suites']['agents']) == config['expected_agent_count']
+        started = datetime.fromisoformat(record['started_at']).astimezone(timezone(timedelta(hours=5, minutes=30)))
+        story.append(NextPageTemplate('Report'))
+        nextpage(); head(f'Appendix F.{number} - Member {number} technical execution')
+        p('<b>'+html.escape(config['name'])+' | '+config['student_id']+'</b><br/>'+html.escape(config['component'])+' and '+html.escape(config['agent_class']))
+        p('<b>Historical technical execution - run by Codex; later personal evidence and explanations are recorded separately.</b><br/>'
+          'Operator: OpenAI Codex. Started '+started.strftime('%d %B %Y, %H:%M:%S')+' (Asia/Colombo, UTC+05:30). '
+          'This historical record documents component tests and actual agent behaviour. Later submitted personal runs appear in Appendix G; written explanations are now recorded in Member_Explanations.md; viva assessment remains separate.')
+        p(f'<b>Runner:</b> run-member{number}-tests.ps1. Exact commands, operator and timestamps are retained in execution.json.', 'SmallQ')
+        rows = [['Test area','Passed','Failed','Skipped']]
+        for cls in config['backend_classes']:
+            selected = [r for r in record['suites']['backend'] if '.'+cls+'.' in r['name']]
+            assert selected and all(r['status']=='Passed' for r in selected)
+            rows.append([cls,len(selected),0,0])
+        assert all(r['status']=='Passed' for r in record['suites']['agents'])
+        rows += [['Python agent tests',len(record['suites']['agents']),0,0],
+                 ['Total selected existing tests',sum(len(r) for r in record['suites'].values()),0,0],
+                 ['Separate agent demonstration scenarios',len(agent_record['scenarios']),0,0]]
+        table(rows,[300,65,65,69])
+        for scenario in agent_record['scenarios']:
+            data = scenario['input']
+            if number == 1:
+                detail = f"Incident {data['incident_id']}; priority {data['priority']}; resources {len(data['resources'])}; volunteers {len(data['volunteers'])}."
+            elif number == 2:
+                stock = ', '.join(str(i['category'])+'='+str(i['quantity']) for i in data['inventory'])
+                shelters = ', '.join(str(s['id'])+': '+str(s['currentOccupancy'])+'/'+str(s['totalCapacity'])+' occupied' for s in data['shelters'])
+                detail = f"{data['incident']['title']}; priority {data['incident']['priority']}; inventory {stock}; resources {len(data['resources'])}; shelters {shelters}."
+            else:
+                requirements = ', '.join(str(r['quantity'])+' '+r['resource_type'] for r in data.get('required_resources',[])) or 'default requirements for priority'
+                detail = f"Incident {data['incident_id']}; priority {data['priority']}; requirement {requirements}; available resources {len(data['available_resources'])}; volunteers {len(data['available_volunteers'])}."
+            p('<b>'+html.escape(scenario['id']+' - '+scenario['title'])+'</b>', 'SmallQ')
+            p('<b>Input:</b> '+html.escape(detail), 'SmallQ')
+            actual_fields = {c['expected']['path']:c['actual'] for c in scenario['checks']}
+            observed = '; '.join(key+' = '+(value if isinstance(value,str) else json.dumps(value)) for key,value in actual_fields.items())
+            p('<b>Observed:</b> '+html.escape(observed).replace('\n','<br/>')+'<br/><b>Scenario result:</b> '+('PASS' if scenario['passed'] else 'FAIL'), 'SmallQ')
+        p('<b>Evidence folder:</b> '+html.escape(run_path.parent.relative_to(QMS).as_posix())+
+          '<br/>Open results.html for named test outcomes and agent-demo.html for full inputs and actual outputs. '
+          'Raw backend.trx, agents.xml, logs, source hashes and JSON records are included.', 'SmallQ')
+        p('<b>Scope.</b> These are reruns of existing cases, not additional unique tests; group totals remain 270 automated cases and 272 inventory records. '
+          'Selected backend fixtures use InMemory/TestServer and agent demos use the real Python classes in deterministic mode, without live LLM calls.', 'SmallQ')
+        p(html.escape(config['demo_note']), 'SmallQ')
+        p('<b>Explanation received:</b> see Appendix J. Personal comparison evidence is in Appendix I. Review the reconciled summary and prepare for the viva.', 'SmallQ')
+
+story.append(NextPageTemplate('Report'))
+nextpage(); head('Appendix G - Member personal testing screenshots')
+p('Six terminal screenshots supplied on 7 October 2026 are matched to the existing dated runs for members 1 to 3. The commands declare each named operator and personal execution. Raw TRX/XML reports and agent JSON outputs confirm the recorded results. The original PNGs are preserved unchanged.')
+table([['Member','Backend','Agent','Total tests','Demos']]+[[e['name'],e['backend'],e['agents'],e['backend']+e['agents'],e['demo_scenarios']] for e in PERSONAL_MEMBERS],[199,75,75,80,70])
+p('These are 54 passing existing tests and six separately checked demonstrations, not additional unique group cases. Group totals remain 270 automated cases and 272 inventory records. No selected tests failed or were skipped.')
+p('The screenshots show terminal execution. Generated results.html and agent-demo.html pages and their raw inputs/outputs are included in each run folder; browser screenshots of those pages were not supplied. Personal changed-input screenshots are now included in Appendix I; all four explanations are now recorded in Member_Explanations.md.')
+for entry in PERSONAL_MEMBERS:
+    p('<b>'+html.escape(entry['name'])+' | '+entry['student_id']+'</b><br/>Started: '+html.escape(entry['started_at'])+'<br/>Evidence: '+html.escape(str(Path(entry['execution']).parent).replace('\\','/')), 'SmallQ')
+p('Personal_Execution_Evidence.md links each report and screenshot gallery. members/personal-evidence.json retains screenshot and raw-report SHA-256 hashes.', 'SmallQ')
+for entry in PERSONAL_MEMBERS:
+    for i,shot in enumerate(entry['screenshots'],1):
+        nextpage(); head(f'Appendix G.{entry["member"]}.{i} - '+shot['title'])
+        p('<b>'+html.escape(entry['name'])+' | '+entry['student_id']+'</b><br/>Declared operator: '+html.escape(entry['operator'])+'; started '+html.escape(entry['started_at']), 'SmallQ')
+        image_path=QMS/shot['file']
+        assert hashlib.sha256(image_path.read_bytes()).hexdigest()==shot['sha256']
+        picture=Image(str(image_path))
+        scale=min((A4[0]-108)/picture.imageWidth, 510/picture.imageHeight)
+        picture.drawWidth=picture.imageWidth*scale; picture.drawHeight=picture.imageHeight*scale
+        story.append(picture); story.append(Spacer(1,10))
+        p(f"Raw reports confirm {entry['backend']} backend and {entry['agents']} agent tests passed, with no failures or skips; {entry['demo_scenarios']} separate demonstrations passed.", 'SmallQ')
+        p('Original PNG: '+html.escape(shot['file'])+'<br/>The image is unchanged and scaled proportionally.', 'SmallQ')
+
+changed=json.loads((QMS/'members/changed-input-evidence.json').read_text())
+nextpage(); head('Appendix H - Changed-input comparisons')
+p('On 8 October 2026, OpenAI Codex ran two scenarios per member against the actual Python agents. All eight scenarios passed. These are separate technical demonstrations of existing behaviour; group totals remain 270 automated tests and 272 inventory records.')
+p('The exact command, prepared prediction saved before execution, full JSON inputs, observed outputs and agent source hash are retained for each run. Later supplied personal terminal screenshots are retained in Appendix I, with matching dated records. These are separate from the technical runs below.')
+head('Deneshkar submitted written explanation')
+p('Received in the conversation on 8 October 2026 and reproduced verbatim below. This is a written explanation, not confirmation of a new personal execution or completion of the viva.','SmallQ')
+for text in changed['deneshkar_explanation']['text'].split('\n'):p(html.escape(text))
+p('Source: '+html.escape(changed['deneshkar_explanation']['file']),'SmallQ')
+p('All four explanations are now recorded in Member_Explanations.md. All four supplied personal comparison execution screenshots, retained in Appendix I. Changed_Input_Results.md links the recorded technical reports; each member folder contains Viva_Changed_Input_Guide.md and run-memberN-changed-input.ps1.','SmallQ')
+for entry in changed['members']:
+    nextpage(); head(f"Appendix H.{entry['member']} - {entry['name']}")
+    record=json.loads((QMS/entry['run']).read_text())
+    p(html.escape(entry['component']+' + '+entry['agent'])+'<br/>Operator: '+html.escape(entry['operator'])+'; '+html.escape(entry['started_at']),'SmallQ')
+    p('<b>Command actually executed:</b> '+html.escape(record['command']),'SmallQ')
+    p('<b>Input change:</b> '+html.escape(entry['change']))
+    p('<b>Expected before execution:</b> '+html.escape(entry['prediction']),'SmallQ')
+    rows=[['Scenario','Expected check','Observed result']]
+    for scenario in record['scenarios']:
+        for c in scenario['checks']:
+            value=c['actual']; expected=c['expected']
+            if expected['op']=='contains':seen='Contains '+json.dumps(expected['value'])+'; PASS'
+            elif expected['op'] in ('empty','nonempty'):seen=str(len(value))+' item(s); PASS'
+            else:seen=json.dumps(value)+'; PASS'
+            expected_text=expected['path']+' '+expected['op']
+            if expected['op'] not in ('empty','nonempty'):expected_text+=' '+json.dumps(expected['value'])
+            rows.append([scenario['id'],html.escape(expected_text),html.escape(seen)])
+    table(rows,[65,275,159])
+    p(html.escape(entry['interpretation']),'SmallQ')
+    p('<b>Saved evidence:</b> '+html.escape(str(Path(entry['run']).parent).replace('\\','/'))+'<br/>comparison.html, comparison.json, execution.log, prediction-before-run.json and agent-demo.html. Full input/output is preserved; the table summarizes the observed checks.','SmallQ')
+    p('Result: 2/2 scenarios PASS. This is the earlier Codex-operated technical run. The later supplied personal run appears in Appendix I.','SmallQ')
+
+personal_changes=json.loads((QMS/'members/personal-changed-input-evidence.json').read_text())
+for entry in personal_changes['members']:
+    nextpage(); head(f"Appendix I.{entry['member']} - Personal changed-input evidence")
+    p('<b>'+html.escape(entry['name'])+' | '+entry['student_id']+'</b><br/>Declared operator: '+html.escape(entry['operator'])+'<br/>Started: '+html.escape(entry['started_at']),'SmallQ')
+    p('The supplied terminal screenshot matches the saved personal run. Both original and changed scenarios passed. The command, input summaries and actual results are visible; full input/output and the transcript remain in the dated results folder.')
+    shot=entry['screenshot'];assert hashlib.sha256((QMS/shot['file']).read_bytes()).hexdigest()==shot['sha256']
+    picture=Image(str(QMS/shot['file']))
+    scale=min(499/picture.imageWidth,330/picture.imageHeight)
+    picture.drawWidth=picture.imageWidth*scale;picture.drawHeight=picture.imageHeight*scale
+    story.append(picture);story.append(Spacer(1,12))
+    technical=next(e for e in changed['members'] if e['member']==entry['member'])
+    p('<b>Observed result:</b> '+html.escape(technical['interpretation']),'SmallQ')
+    p('<b>Written explanation:</b> '+html.escape(entry['written_explanation'])+'. The runner\'s prepared prediction is supplied guidance, not evidence of an independently authored pre-run prediction. Viva understanding is assessed separately.','SmallQ')
+    p('<b>Evidence:</b> '+html.escape(str(Path(entry['run']).parent).replace('\\','/'))+'<br/>personal-terminal-results.png, comparison.html, comparison.json, execution.log and Screenshot_Evidence.md. Original image preserved unchanged.','SmallQ')
+    p('These personal reruns do not increase the 270 unique group tests or 272 inventory records. Personal_Changed_Input_Evidence.md links all four evidence sets.','SmallQ')
+
+explanations=json.loads((QMS/'members/member-explanations.json').read_text())
+for entry in explanations['members']:
+    nextpage();head(f"Appendix J.{entry['member']} - Member {entry['member']} explanation")
+    p('<b>'+html.escape(entry['name'])+' | '+entry['student_id']+'</b><br/>'+html.escape(entry['component']+' + '+entry['agent']),'SmallQ')
+    p('Received via the group representative on 8 October 2026. This is an evidence-aligned editorial summary; the original wording is preserved separately. Assessed viva completion is not claimed.','SmallQ')
+    p('<b>Evidence reconciliation:</b> '+html.escape(entry['reconciliation']),'SmallQ')
+    for question,answer in entry['answers'].items():
+        p('<b>'+html.escape(question)+'</b>')
+        p(html.escape(answer))
+    p('Personal scenario IDs: '+', '.join(entry['scenario_ids'])+'. Both passed. Personal screenshot and dated raw results: Appendix I.'+str(entry['member'])+'.','SmallQ')
+    p('Original statement: '+html.escape(entry['original']['file'])+'<br/>Evidence-aligned summary: '+html.escape(entry['summary']['file']),'SmallQ')
 
 def footer(canvas,doc):
     page_width = doc.pageTemplate.pagesize[0]
     canvas.setStrokeColor(colors.HexColor('#ccd6de')); canvas.line(48,39,page_width-48,39)
     canvas.setFont('Helvetica',8); canvas.setFillColor(colors.HexColor('#516574'))
-    canvas.drawString(48,26,'ERCP | Group testing submission | Revised 6 October 2026')
+    canvas.drawString(48,26,'ERCP | Group testing submission | Evidence recorded 3-8 October 2026')
     canvas.drawRightString(page_width-48,26,str(doc.page))
 doc=BaseDocTemplate(str(OUT/'Software_Testing_Report.pdf'),pagesize=A4,rightMargin=48,leftMargin=48,topMargin=44,bottomMargin=51,
     title='ERCP Software Testing and Quality Evaluation',author='ERCP group')

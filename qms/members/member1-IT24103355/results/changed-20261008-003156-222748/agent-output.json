@@ -1,0 +1,333 @@
+{
+  "member": "Jathurshy.S",
+  "student_id": "IT24103355",
+  "component": "Incident Management",
+  "agent": "CoordinatorPlannerAgent",
+  "method": "analyze_and_plan",
+  "generated_at": "2026-10-08T00:31:56.250103+05:30",
+  "execution_kind": "ai-assisted",
+  "operator": "OpenAI Codex",
+  "live_llm": false,
+  "agent_sha256": "299b66f90a9b309e8020f6d55b6f4c1be83773dd9ab3137551e1f5b2f83cae17",
+  "scenarios": [
+    {
+      "id": "M1-C01",
+      "title": "Original input",
+      "input": {
+        "incident_id": 7,
+        "title": "Building fire",
+        "category": "Fire",
+        "priority": "High",
+        "location": "Demo Sector",
+        "affected_count": 5,
+        "resources": [
+          {
+            "id": 1,
+            "name": "Rescue vehicle",
+            "resourceType": "Vehicle",
+            "status": "Available"
+          }
+        ],
+        "volunteers": [
+          {
+            "id": "v1",
+            "name": "Responder",
+            "isAvailable": true
+          }
+        ]
+      },
+      "output": {
+        "agent_id": "AI-Coordinator-Alpha",
+        "timestamp": "2026-10-07T19:01:56.249972+00:00",
+        "incidentId": 7,
+        "priority": "High",
+        "objective": "Contain Fire emergency and protect 5 civilians.",
+        "actions": [
+          "Secure perimeter at Demo Sector",
+          "Deploy allocated resources and volunteers"
+        ],
+        "requiredResources": [
+          {
+            "resource_type": "Personnel",
+            "quantity": 6,
+            "unit": "Emergency Responders"
+          },
+          {
+            "resource_type": "Vehicle",
+            "quantity": 4,
+            "unit": "Emergency Response Vehicles"
+          },
+          {
+            "resource_type": "Medical",
+            "quantity": 10,
+            "unit": "Field Medical Kits"
+          }
+        ],
+        "status": "Generated",
+        "incident_id": 7,
+        "plan_title": "Agentic Tactical Plan: Building fire",
+        "plan_description": "Autonomous coordination strategy by AI-Coordinator-Alpha. Analyzed 1 resources.",
+        "phase": "Immediate Containment",
+        "action_steps": [
+          {
+            "step_number": 1,
+            "task": "Secure perimeter at Demo Sector",
+            "responsible_team": "First Responders",
+            "priority": "Critical",
+            "estimated_minutes": 15,
+            "is_completed": false
+          },
+          {
+            "step_number": 2,
+            "task": "Deploy allocated resources and volunteers",
+            "responsible_team": "Dispatch",
+            "priority": "High",
+            "estimated_minutes": 30,
+            "is_completed": false
+          }
+        ],
+        "estimated_resources": [
+          {
+            "resource_type": "Personnel",
+            "quantity": 6,
+            "unit": "Emergency Responders",
+            "description": "First responders, paramedics, and rescue personnel."
+          },
+          {
+            "resource_type": "Vehicle",
+            "quantity": 4,
+            "unit": "Emergency Response Vehicles",
+            "description": "Primary suppression, ambulance, or mobile command units."
+          },
+          {
+            "resource_type": "Medical",
+            "quantity": 10,
+            "unit": "Field Medical Kits",
+            "description": "Trauma kits, oxygen, burn care, and IV fluids."
+          }
+        ],
+        "risk_assessment": "[CRITICAL THREAT] High hazard severity detected for Fire. Risk of rapid escalation, mass casualty potential, or severe infrastructural failure. Immediate intervention required.",
+        "reasoning": "1. Observed High priority Fire incident with 5 affected.\n2. Gathered real data: 1 resources available.\n3. Gathered real data: 1 volunteers available.\n4. Identified constraint: Lack of required vehicles.\n5. Identified constraint: Lack of required volunteers.\n6. Formulating safe dispatch plan. Requires human validation before execution.",
+        "risks": [
+          "High risk of escalation. Rapid deployment required."
+        ],
+        "constraints": [
+          "Insufficient vehicles. Need 2, but only 1 available.",
+          "Insufficient volunteers. Need 2, but only 1 available."
+        ],
+        "requiresHumanApproval": true,
+        "suggestedAssignments": [
+          {
+            "Role": "Field Support - Fire",
+            "EntityName": "Responder",
+            "Reason": "Assigned based on availability and incident priority."
+          }
+        ],
+        "dispatchPlan": [
+          {
+            "Action": "Deploy Vehicle",
+            "Resource": "Rescue vehicle",
+            "Location": "Demo Sector",
+            "Reason": "Primary response unit"
+          }
+        ],
+        "subagent_directives": {
+          "SituationAnalysisAgent": "Request real-time weather and spatial hazard overlay for Demo Sector.",
+          "ResourceAllocationAgent": "Lock reserve inventory for Fire response with High priority level.",
+          "ValidationSafetyAgent": "Verify responder safety protocols and structural integrity prior to team entry."
+        },
+        "allowed_tools": [
+          "get_incident",
+          "get_available_resources",
+          "get_available_volunteers",
+          "get_nearby_shelters",
+          "create_response_plan"
+        ]
+      },
+      "checks": [
+        {
+          "expected": {
+            "path": "incidentId",
+            "op": "equals",
+            "value": 7
+          },
+          "actual": 7,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "requiresHumanApproval",
+            "op": "equals",
+            "value": true
+          },
+          "actual": true,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "actions",
+            "op": "nonempty",
+            "value": null
+          },
+          "actual": [
+            "Secure perimeter at Demo Sector",
+            "Deploy allocated resources and volunteers"
+          ],
+          "passed": true
+        }
+      ],
+      "error": null,
+      "passed": true
+    },
+    {
+      "id": "M1-C02",
+      "title": "Changed input",
+      "input": {
+        "incident_id": 7,
+        "title": "Building fire",
+        "category": "Fire",
+        "priority": "High",
+        "location": "Demo Sector",
+        "affected_count": 5,
+        "resources": [],
+        "volunteers": []
+      },
+      "output": {
+        "agent_id": "AI-Coordinator-Alpha",
+        "timestamp": "2026-10-07T19:01:56.250071+00:00",
+        "incidentId": 7,
+        "priority": "High",
+        "objective": "Contain Fire emergency and protect 5 civilians.",
+        "actions": [
+          "Secure perimeter at Demo Sector",
+          "Deploy allocated resources and volunteers"
+        ],
+        "requiredResources": [
+          {
+            "resource_type": "Personnel",
+            "quantity": 6,
+            "unit": "Emergency Responders"
+          },
+          {
+            "resource_type": "Vehicle",
+            "quantity": 4,
+            "unit": "Emergency Response Vehicles"
+          },
+          {
+            "resource_type": "Medical",
+            "quantity": 10,
+            "unit": "Field Medical Kits"
+          }
+        ],
+        "status": "Generated",
+        "incident_id": 7,
+        "plan_title": "Agentic Tactical Plan: Building fire",
+        "plan_description": "Autonomous coordination strategy by AI-Coordinator-Alpha. Analyzed 0 resources.",
+        "phase": "Immediate Containment",
+        "action_steps": [
+          {
+            "step_number": 1,
+            "task": "Secure perimeter at Demo Sector",
+            "responsible_team": "First Responders",
+            "priority": "Critical",
+            "estimated_minutes": 15,
+            "is_completed": false
+          },
+          {
+            "step_number": 2,
+            "task": "Deploy allocated resources and volunteers",
+            "responsible_team": "Dispatch",
+            "priority": "High",
+            "estimated_minutes": 30,
+            "is_completed": false
+          }
+        ],
+        "estimated_resources": [
+          {
+            "resource_type": "Personnel",
+            "quantity": 6,
+            "unit": "Emergency Responders",
+            "description": "First responders, paramedics, and rescue personnel."
+          },
+          {
+            "resource_type": "Vehicle",
+            "quantity": 4,
+            "unit": "Emergency Response Vehicles",
+            "description": "Primary suppression, ambulance, or mobile command units."
+          },
+          {
+            "resource_type": "Medical",
+            "quantity": 10,
+            "unit": "Field Medical Kits",
+            "description": "Trauma kits, oxygen, burn care, and IV fluids."
+          }
+        ],
+        "risk_assessment": "[CRITICAL THREAT] High hazard severity detected for Fire. Risk of rapid escalation, mass casualty potential, or severe infrastructural failure. Immediate intervention required.",
+        "reasoning": "1. Observed High priority Fire incident with 5 affected.\n2. Gathered real data: No available resources found.\n3. Gathered real data: No available volunteers found.\n4. Identified constraint: Lack of required vehicles.\n5. Identified constraint: Lack of required volunteers.\n6. Formulating safe dispatch plan. Requires human validation before execution.",
+        "risks": [
+          "High risk of escalation. Rapid deployment required."
+        ],
+        "constraints": [
+          "Insufficient vehicles. Need 2, but only 0 available.",
+          "Insufficient volunteers. Need 2, but only 0 available."
+        ],
+        "requiresHumanApproval": true,
+        "suggestedAssignments": [],
+        "dispatchPlan": [],
+        "subagent_directives": {
+          "SituationAnalysisAgent": "Request real-time weather and spatial hazard overlay for Demo Sector.",
+          "ResourceAllocationAgent": "Lock reserve inventory for Fire response with High priority level.",
+          "ValidationSafetyAgent": "Verify responder safety protocols and structural integrity prior to team entry."
+        },
+        "allowed_tools": [
+          "get_incident",
+          "get_available_resources",
+          "get_available_volunteers",
+          "get_nearby_shelters",
+          "create_response_plan"
+        ]
+      },
+      "checks": [
+        {
+          "expected": {
+            "path": "incidentId",
+            "op": "equals",
+            "value": 7
+          },
+          "actual": 7,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "requiresHumanApproval",
+            "op": "equals",
+            "value": true
+          },
+          "actual": true,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "reasoning",
+            "op": "contains",
+            "value": "No available resources found"
+          },
+          "actual": "1. Observed High priority Fire incident with 5 affected.\n2. Gathered real data: No available resources found.\n3. Gathered real data: No available volunteers found.\n4. Identified constraint: Lack of required vehicles.\n5. Identified constraint: Lack of required volunteers.\n6. Formulating safe dispatch plan. Requires human validation before execution.",
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "reasoning",
+            "op": "contains",
+            "value": "No available volunteers found"
+          },
+          "actual": "1. Observed High priority Fire incident with 5 affected.\n2. Gathered real data: No available resources found.\n3. Gathered real data: No available volunteers found.\n4. Identified constraint: Lack of required vehicles.\n5. Identified constraint: Lack of required volunteers.\n6. Formulating safe dispatch plan. Requires human validation before execution.",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

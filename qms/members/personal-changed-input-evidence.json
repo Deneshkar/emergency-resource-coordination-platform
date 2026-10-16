@@ -1,0 +1,224 @@
+{
+  "provided_on": "2026-10-08",
+  "timezone": "Asia/Colombo",
+  "members": [
+    {
+      "member": 1,
+      "name": "Jathurshy.S",
+      "student_id": "IT24103355",
+      "operator": "Jathurshy.S",
+      "started_at": "2026-10-08T10:52:02.730954+05:30",
+      "run": "members/member1-IT24103355/results/changed-20261008-105202-730954/comparison.json",
+      "screenshot": {
+        "file": "members/member1-IT24103355/results/changed-20261008-105202-730954/personal-terminal-results.png",
+        "sha256": "b2e188f2623adca951c634cd98a66233e2f9905f8dfd800e7bd2f1489fc73855"
+      },
+      "files": {
+        "agent-demo.html": {
+          "file": "members/member1-IT24103355/results/changed-20261008-105202-730954/agent-demo.html",
+          "sha256": "05541d12c4bf6d1affd466a950546e0b6bc431d216b485724aa0d0e54513f9c2"
+        },
+        "agent-inputs.json": {
+          "file": "members/member1-IT24103355/results/changed-20261008-105202-730954/agent-inputs.json",
+          "sha256": "95bf041516a1ce0f0de6200349b0348e67780ad3d966edc85f3f44a9000ef508"
+        },
+        "agent-output.json": {
+          "file": "members/member1-IT24103355/results/changed-20261008-105202-730954/agent-output.json",
+          "sha256": "8a2f02d5a702ff17f01ea2718ab70238a5bd1f26ed037f004b0e95ea4df1ca73"
+        },
+        "changed-input-plan.json": {
+          "file": "members/member1-IT24103355/results/changed-20261008-105202-730954/changed-input-plan.json",
+          "sha256": "9f60ed58c09687d98c7302fd61a461f2d7a68b3b3cd14bbf08880d5f2de3f51c"
+        },
+        "comparison.html": {
+          "file": "members/member1-IT24103355/results/changed-20261008-105202-730954/comparison.html",
+          "sha256": "650abd1c9a8bb45fc902c52cceccc8f51ae3c1ac188f4f63c732720b32b1d2d9"
+        },
+        "comparison.json": {
+          "file": "members/member1-IT24103355/results/changed-20261008-105202-730954/comparison.json",
+          "sha256": "ff6501068dd0e122168753f579700acc2a58908995882eb7abae8e2b2ef3c297"
+        },
+        "execution.log": {
+          "file": "members/member1-IT24103355/results/changed-20261008-105202-730954/execution.log",
+          "sha256": "b7d8ec78dba228614e968f79ac5e8681555421ea49e459545d12c1b53425965b"
+        },
+        "personal-terminal-results.png": {
+          "file": "members/member1-IT24103355/results/changed-20261008-105202-730954/personal-terminal-results.png",
+          "sha256": "b2e188f2623adca951c634cd98a66233e2f9905f8dfd800e7bd2f1489fc73855"
+        },
+        "prediction-before-run.json": {
+          "file": "members/member1-IT24103355/results/changed-20261008-105202-730954/prediction-before-run.json",
+          "sha256": "2bd0ef7ede7fe0febd33a47f3469aee54883c4b134070113f2aa48c5276f9f87"
+        }
+      },
+      "passed": 2,
+      "failed": 0,
+      "status": "Submitted personal execution supported by supplied terminal screenshot and matching raw records",
+      "written_explanation": "Received via group representative; evidence-aligned summary retained in Member_Explanations.md; scenario corrections documented"
+    },
+    {
+      "member": 2,
+      "name": "M.Thanusikan",
+      "student_id": "IT24103609",
+      "operator": "M.Thanusikan",
+      "started_at": "2026-10-08T10:52:29.627673+05:30",
+      "run": "members/member2-IT24103609/results/changed-20261008-105229-627673/comparison.json",
+      "screenshot": {
+        "file": "members/member2-IT24103609/results/changed-20261008-105229-627673/personal-terminal-results.png",
+        "sha256": "b490e728ccf6c66a15e4ae16ee64fda0d185016ad5826aeb2bff44799928b51b"
+      },
+      "files": {
+        "agent-demo.html": {
+          "file": "members/member2-IT24103609/results/changed-20261008-105229-627673/agent-demo.html",
+          "sha256": "d345a7ab2391f990e33e09ac621e555a081e1bca224ab721874505d7f5d5f5c5"
+        },
+        "agent-inputs.json": {
+          "file": "members/member2-IT24103609/results/changed-20261008-105229-627673/agent-inputs.json",
+          "sha256": "c398a526a6237b941740d44e00d49d4e2620a99ed5f00b6941381a37e19db451"
+        },
+        "agent-output.json": {
+          "file": "members/member2-IT24103609/results/changed-20261008-105229-627673/agent-output.json",
+          "sha256": "0f4a985ce8f139de202a1e20cd1e1c6900413c22cab8e4c47c9acff73e96a056"
+        },
+        "changed-input-plan.json": {
+          "file": "members/member2-IT24103609/results/changed-20261008-105229-627673/changed-input-plan.json",
+          "sha256": "d9ce6813085be5056afcbc1f69485cc48cc66504081d3defe409766177069353"
+        },
+        "comparison.html": {
+          "file": "members/member2-IT24103609/results/changed-20261008-105229-627673/comparison.html",
+          "sha256": "4f275b5db4fc362c7cb8405dbdd1ac4ede6fe063b0d6f38b8e9e59035153b9b3"
+        },
+        "comparison.json": {
+          "file": "members/member2-IT24103609/results/changed-20261008-105229-627673/comparison.json",
+          "sha256": "ed80107306e2919089d35294f307c217218319dac835d7edc1ce2c7e35cd65ca"
+        },
+        "execution.log": {
+          "file": "members/member2-IT24103609/results/changed-20261008-105229-627673/execution.log",
+          "sha256": "029190f22905432c6c2030e03094961222d0576bb7bbd09e87ce3d6cae352d15"
+        },
+        "personal-terminal-results.png": {
+          "file": "members/member2-IT24103609/results/changed-20261008-105229-627673/personal-terminal-results.png",
+          "sha256": "b490e728ccf6c66a15e4ae16ee64fda0d185016ad5826aeb2bff44799928b51b"
+        },
+        "prediction-before-run.json": {
+          "file": "members/member2-IT24103609/results/changed-20261008-105229-627673/prediction-before-run.json",
+          "sha256": "9e80828f9e7ea77a8da70cc733549ddd33b683c8674a55f1d56524bf456c1c18"
+        }
+      },
+      "passed": 2,
+      "failed": 0,
+      "status": "Submitted personal execution supported by supplied terminal screenshot and matching raw records",
+      "written_explanation": "Received via group representative; evidence-aligned summary retained in Member_Explanations.md; scenario corrections documented"
+    },
+    {
+      "member": 3,
+      "name": "Denesh N",
+      "student_id": "IT24102826",
+      "operator": "Denesh N",
+      "started_at": "2026-10-08T10:52:50.078618+05:30",
+      "run": "members/member3-IT24102826/results/changed-20261008-105250-078618/comparison.json",
+      "screenshot": {
+        "file": "members/member3-IT24102826/results/changed-20261008-105250-078618/personal-terminal-results.png",
+        "sha256": "eb2c7dbad32caf8459ca7199ae68c44685e1510e21c2d6c34b87030590b70d30"
+      },
+      "files": {
+        "agent-demo.html": {
+          "file": "members/member3-IT24102826/results/changed-20261008-105250-078618/agent-demo.html",
+          "sha256": "3a21daba44ec31416bc088cc74fb49af4a701d2a055199e345c423c69707f3da"
+        },
+        "agent-inputs.json": {
+          "file": "members/member3-IT24102826/results/changed-20261008-105250-078618/agent-inputs.json",
+          "sha256": "49d2dcfd4b3ca533a8369f58d9ae9dd5cd5f8ccea202f5f9736c488129a17370"
+        },
+        "agent-output.json": {
+          "file": "members/member3-IT24102826/results/changed-20261008-105250-078618/agent-output.json",
+          "sha256": "e16858b5d3df38215729b53b4f9d18602ee27555450d39b7c394f21d111d3f0e"
+        },
+        "changed-input-plan.json": {
+          "file": "members/member3-IT24102826/results/changed-20261008-105250-078618/changed-input-plan.json",
+          "sha256": "f02189b453cae5917f29e9b40021b4c6a0baad9a74bede859f7d81a4840d4d1c"
+        },
+        "comparison.html": {
+          "file": "members/member3-IT24102826/results/changed-20261008-105250-078618/comparison.html",
+          "sha256": "edf6d0a8560a27ab330d6f45a8493ef8c11d5fa03e672bbc85894b953c06797e"
+        },
+        "comparison.json": {
+          "file": "members/member3-IT24102826/results/changed-20261008-105250-078618/comparison.json",
+          "sha256": "a8c2b792e69362af39af2def05f4053a249050beb1f421b788605d8986d016bf"
+        },
+        "execution.log": {
+          "file": "members/member3-IT24102826/results/changed-20261008-105250-078618/execution.log",
+          "sha256": "eee242365a2cec386b8d62e2e553d85fbfc6f1212840f47fb035b3606f4a81f8"
+        },
+        "personal-terminal-results.png": {
+          "file": "members/member3-IT24102826/results/changed-20261008-105250-078618/personal-terminal-results.png",
+          "sha256": "eb2c7dbad32caf8459ca7199ae68c44685e1510e21c2d6c34b87030590b70d30"
+        },
+        "prediction-before-run.json": {
+          "file": "members/member3-IT24102826/results/changed-20261008-105250-078618/prediction-before-run.json",
+          "sha256": "bc7f69c0c96586ab4c59955429cc1758871b09349fad845252e38268cdb8649d"
+        }
+      },
+      "passed": 2,
+      "failed": 0,
+      "status": "Submitted personal execution supported by supplied terminal screenshot and matching raw records",
+      "written_explanation": "Received via group representative; evidence-aligned summary retained in Member_Explanations.md"
+    },
+    {
+      "member": 4,
+      "name": "Deneshkar. P",
+      "student_id": "IT24103828",
+      "operator": "Deneshkar. P",
+      "started_at": "2026-10-08T10:51:28.171178+05:30",
+      "run": "members/member4-IT24103828/results/changed-20261008-105128-171178/comparison.json",
+      "screenshot": {
+        "file": "members/member4-IT24103828/results/changed-20261008-105128-171178/personal-terminal-results.png",
+        "sha256": "69860f90b93b126b7a77a14358ae6517311c13b1a55b228c2d4abfd6d3007283"
+      },
+      "files": {
+        "agent-demo.html": {
+          "file": "members/member4-IT24103828/results/changed-20261008-105128-171178/agent-demo.html",
+          "sha256": "b56cf084c9144b78cf393b919837d6d39252efe45b062b5c915fa4cc85cda91c"
+        },
+        "agent-inputs.json": {
+          "file": "members/member4-IT24103828/results/changed-20261008-105128-171178/agent-inputs.json",
+          "sha256": "b65db0eb097b62a3e7e80e394ae3f0e6f660f67346c274f2aa7ffcd32150707d"
+        },
+        "agent-output.json": {
+          "file": "members/member4-IT24103828/results/changed-20261008-105128-171178/agent-output.json",
+          "sha256": "4dcddeec76d0c41c0f781e0aea8489ed0780f3924f7aca5a4e2d021d54bda6c7"
+        },
+        "changed-input-plan.json": {
+          "file": "members/member4-IT24103828/results/changed-20261008-105128-171178/changed-input-plan.json",
+          "sha256": "095624e2b94328be8a9c375a32cc16564a37f8bc0b670aadff675a7870da11d4"
+        },
+        "comparison.html": {
+          "file": "members/member4-IT24103828/results/changed-20261008-105128-171178/comparison.html",
+          "sha256": "d43940b2bef10e247bc0862a174a2cc5c78251afe9c661caf50f0e2a23dfa8aa"
+        },
+        "comparison.json": {
+          "file": "members/member4-IT24103828/results/changed-20261008-105128-171178/comparison.json",
+          "sha256": "8987caa6042fa8789bf33fd803f0f68d3e2dece4125cb02bbe4b901dda7fd8da"
+        },
+        "execution.log": {
+          "file": "members/member4-IT24103828/results/changed-20261008-105128-171178/execution.log",
+          "sha256": "fee5834cb7a350f1fbb47cf17f018205675df4851be1282ee5759237239fe5eb"
+        },
+        "personal-terminal-results.png": {
+          "file": "members/member4-IT24103828/results/changed-20261008-105128-171178/personal-terminal-results.png",
+          "sha256": "69860f90b93b126b7a77a14358ae6517311c13b1a55b228c2d4abfd6d3007283"
+        },
+        "prediction-before-run.json": {
+          "file": "members/member4-IT24103828/results/changed-20261008-105128-171178/prediction-before-run.json",
+          "sha256": "c186ce27fbe2a0cae5bd9a2728b823816c968732f7f1d68f6a35a43dffd4bd8e"
+        }
+      },
+      "passed": 2,
+      "failed": 0,
+      "status": "Submitted personal execution supported by supplied terminal screenshot and matching raw records",
+      "written_explanation": "Received via group representative; evidence-aligned summary retained in Member_Explanations.md"
+    }
+  ],
+  "scenarios_passed": 8,
+  "provenance": "User-supplied screenshots visually matched to original local PNGs and dated raw personal execution reports. Operator identities are declared in the commands and records. Written explanations and viva assessment are separate."
+}

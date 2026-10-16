@@ -1,5 +1,9 @@
 # Group contribution and viva guide
 
+**Latest explanation status:** All four explanations are received and organized in Member 1-4 order in [Member_Explanations.md](Member_Explanations.md). The supplied Member 1-2 statements describe earlier D-series examples; corrected summaries distinguish these from the personal C-series runs. Original statements are retained. Members should review the corrections and prepare for the viva.
+
+**8 October evidence update:** All four supplied personal changed-input terminal screenshots match saved reports: 2/2 scenarios passed per member. Deneshkar's written explanation is recorded. All four explanations have now been supplied; all members prepare for the viva. See [Personal_Changed_Input_Evidence.md](Personal_Changed_Input_Evidence.md).
+
 Repository: https://github.com/Deneshkar/emergency-resource-coordination-platform
 
 Original baseline commit: fc73d857f5fa7dd12279c7463e759a637d8dffda. The 5 October migration repair starts from fea099acd24db060505335cb5de23440de7c29a6. Supplied histories record intervening team commits, including the security changes. The repair was integrated with main 054fce7 and published as AI-assisted commit 9226a56 on fix/qms-submission-readiness (PR #47). Original member authorship is preserved.
@@ -38,4 +42,9 @@ The application repository now includes qms/scripts, qms/submission and curated 
 
 Deneshkar personally executed 4 volunteer controller tests, 5 volunteer HTTP integration tests and 3 deterministic safety-agent tests during guided practice on 6 October. All 12 passed. Six supplied screenshots and three raw reports are linked in Individual_Evidence_IT24103828.md. This confirms execution of existing tests; his own-word explanations and equal-time boundary exercise remain unconfirmed. It does not increase the group test count.
 
-Contribution_Record.md now links GitHub-verified testing commits for all four members. The group confirmed on 6 October that personal execution of the new QMS cases by Jathurshy.S, M.Thanusikan and Denesh N is not yet confirmed. Keep that follow-up distinct from the existing test-authorship evidence.
+Contribution_Record.md now links GitHub-verified testing commits for all four members. On 7 October, Jathurshy.S, M.Thanusikan and Denesh N supplied terminal screenshots matched to 11, 17 and 26 passing tests respectively, plus two separate agent demonstrations each. Personal_Execution_Evidence.md links the reports and screenshots. Own-word explanations and changed-input exercises remain pending; test authorship is documented separately.
+
+
+## 8 October changed-input update
+
+OpenAI Codex executed four before/after comparisons against the actual agents: eight scenarios passed. Exact commands, original and modified inputs, expectations and observed outputs are in [Changed_Input_Results.md](Changed_Input_Results.md). Deneshkar supplied a written boundary/overlap explanation, retained verbatim. These technical runs do not establish personal execution. All four personal comparison runs are now supported by screenshots and raw reports. All four explanations are now supplied; see Member_Explanations.md for evidence corrections. Group totals stay 270 automated tests and 272 inventory records.

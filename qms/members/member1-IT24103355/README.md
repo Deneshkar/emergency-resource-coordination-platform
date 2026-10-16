@@ -40,6 +40,6 @@ The scenarios are editable in agent-inputs.json. To rehearse a change, copy that
 
 ## Evidence status
 
-Your new personal QMS execution is not yet confirmed. AI-assisted verification results demonstrate that the package works, not that you personally ran it.
+Your submitted 7 October personal execution is supported by two terminal screenshots and matching raw reports. See [Personal_Execution_Evidence.md](../../submission/Personal_Execution_Evidence.md). Own-word explanations and a changed-input exercise remain pending.
 
 Verification labelled ai-assisted was run by Codex to check the package. It is separate from your own results. Member packages are focused demonstrations, not replacements for all 270 automated group cases. Additional scenario checks are not added to the report's 272-record inventory.

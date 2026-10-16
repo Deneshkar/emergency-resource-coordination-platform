@@ -17,7 +17,7 @@ The current local evidence is a complete 6 October rerun: 95 backend, 47 React, 
 
 PR #47 was closed without merging at 2026-10-05T18:57:50Z (6 October 00:27:50 in Sri Lanka). The published branch remains available. This documentation update does not reopen the PR or merge it.
 
-Contribution_Record.md links verified existing test commits by all four members. The group explicitly confirmed that new personal QMS runs by Jathurshy.S, M.Thanusikan and Denesh N are not yet confirmed. Those records remain pending rather than being invented. No CourseWeb upload was performed.
+Contribution_Record.md links verified existing test commits by all four members. The 6 October personal-run gap was followed by six supplied screenshots on 7 October. Personal_Execution_Evidence.md links the matching reports for Jathurshy.S, M.Thanusikan and Denesh N. Understanding exercises remain pending. This local evidence update does not itself establish a new GitHub push. No CourseWeb upload was performed.
 
 The individual demonstration update adds four named member packages, readable test cases and source snapshots, independent PowerShell runners, and actual agent input/output reports. AI-assisted verification passed 73 selected existing tests and 10 separate demonstration scenarios. These reruns do not increase the 270-test group total. The CI result above applies specifically to 61f3c06; it is not a claim that CI has already verified this later update.
 

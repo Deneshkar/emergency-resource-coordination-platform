@@ -1,5 +1,9 @@
 # Genuine individual contribution record
 
+**Latest explanation status:** All four explanations are received and organized in Member 1-4 order in [Member_Explanations.md](Member_Explanations.md). The supplied Member 1-2 statements describe earlier D-series examples; corrected summaries distinguish these from the personal C-series runs. Original statements are retained. Members should review the corrections and prepare for the viva.
+
+**8 October evidence update:** All four supplied personal changed-input terminal screenshots match saved reports: 2/2 scenarios passed per member. Deneshkar's written explanation is recorded. All four explanations have now been supplied; all members prepare for the viva. See [Personal_Changed_Input_Evidence.md](Personal_Changed_Input_Evidence.md).
+
 Repository: https://github.com/Deneshkar/emergency-resource-coordination-platform
 
 Verified against GitHub commit API responses and changed-file lists on 6 October 2026. These records demonstrate existing contributions to the tested SEF project. Git author/account attribution does not prove who personally executed a later QMS rerun.
@@ -20,16 +24,16 @@ Machine-readable verification: ../evidence/github/verified-member-commits.json r
 
 ## New QMS work
 
-On 6 October the group confirmed that there are no confirmed personal runs of the new QMS tests by Jathurshy.S, M.Thanusikan or Denesh N. Their new execution/review evidence remains pending. Current group tests and documentation were prepared and executed with OpenAI Codex assistance, under the repository owner's direction.
+On 7 October, six supplied terminal screenshots were matched to members 1 to 3's declared-personal runs and raw reports. These establish recorded execution outcomes; own-word explanations and changed-input exercises remain pending. Historical group execution and report preparation remain recorded separately.
 
-| Member | Follow-up evidence needed | Status |
+| Member | Submitted personal testing | Remaining work |
 |---|---|---|
-| Jathurshy.S / IT24103355 | Incident/planner/workflow cases personally reviewed or run, date, actual result and review/commit link | Not yet confirmed |
-| M.Thanusikan / IT24103609 | Resource/database/migration cases personally reviewed or run, date, actual result and review/commit link | Not yet confirmed |
-| Denesh N / IT24102826 | Dispatch/allocation/performance cases personally reviewed or run, date, actual result and review/commit link | Not yet confirmed |
-| Deneshkar. P / IT24103828 | Personally reran 4 controller, 5 HTTP integration and 3 safety-agent tests during guided practice on 6 October; six supplied screenshots and TRX/XML reports retained | 12 passed; understanding and boundary exercise still pending |
+| Jathurshy.S / IT24103355 | 9 backend + 2 agent tests; 2 separate demos passed on 7 October | Own-word explanation and changed-input exercise |
+| M.Thanusikan / IT24103609 | 12 backend + 5 agent tests; 2 separate demos passed on 7 October | Own-word explanation and changed-input exercise |
+| Denesh N / IT24102826 | 23 backend + 3 agent tests; 2 separate demos passed on 7 October | Own-word explanation and changed-input exercise |
+| Deneshkar. P / IT24103828 | Earlier guided personal run: 4 controller + 5 HTTP + 3 safety tests passed on 6 October | Own-word explanation and boundary exercise; later full-package personal operator confirmation |
 
-Detailed personal execution evidence: [Individual_Evidence_IT24103828.md](Individual_Evidence_IT24103828.md). These reruns do not increase the group's unique test count.
+See [Personal_Execution_Evidence.md](Personal_Execution_Evidence.md) for the new screenshots and raw reports, and [Individual_Evidence_IT24103828.md](Individual_Evidence_IT24103828.md) for Deneshkar's earlier evidence. Reruns do not increase the unique group-test count.
 
 Do not re-author or split generated changes to simulate four individual histories. Each member can add genuine review notes, fixture improvements, tests and results after doing the work. Existing test-authorship evidence above is already useful and should not be left blank.
 
@@ -166,8 +170,13 @@ Relevant files: `backend-tests/AuthControllerTests.cs`, `backend-tests/QmsPostgr
 
 ## Individual testing status
 
-Backend and React test authorship is supported by the commits above. Denesh N also has a verified database repair commit. Later QMS database, deterministic AI, live HTTP and performance runs are recorded as AI-assisted group execution. They are not allocated to individual members as personally executed work without confirmation.
+Backend and React test authorship is supported by the commits above. Denesh N also has a verified database repair commit. Later QMS database, deterministic AI, live HTTP and performance runs are recorded as AI-assisted group execution. The narrower member 1 to 3 personal selections submitted on 7 October are now separately supported by screenshots and raw reports in Personal_Execution_Evidence.md; they do not establish personal execution of the wider group suites.
 
 Deneshkar subsequently supplied six screenshots of his guided personal execution on 6 October: four controller, five HTTP integration and three safety-agent tests passed. Raw reports confirm these 12 existing test reruns. See Individual_Evidence_IT24103828.md and PDF Appendix C. Own-word explanations and the boundary exercise remain unconfirmed.
 
-Appendix A (pages 9-12) contains each member's responsibility and contribution summary. The group supplied four actual GitHub screenshots on 6 October 2026; Appendix B (pages 13-16) embeds them. The unchanged originals and their SHA-256 checksums are recorded in `../evidence/github/screenshots.json`. For volunteer commit 3c059a6, GitHub identifies Deneshkar as author and Jathurshy11 as committer; authorship and commit integration are distinct roles.
+Appendix A contains each member's responsibility and contribution summary. The group supplied four actual GitHub screenshots on 6 October 2026; Appendix B embeds them. The unchanged originals and their SHA-256 checksums are recorded in `../evidence/github/screenshots.json`. For volunteer commit 3c059a6, GitHub identifies Deneshkar as author and Jathurshy11 as committer; authorship and commit integration are distinct roles.
+
+
+## 8 October changed-input update
+
+OpenAI Codex executed four before/after comparisons against the actual agents: eight scenarios passed. Exact commands, original and modified inputs, expectations and observed outputs are in [Changed_Input_Results.md](Changed_Input_Results.md). Deneshkar supplied a written boundary/overlap explanation, retained verbatim. These technical runs do not establish personal execution. All four personal comparison runs are now supported by screenshots and raw reports. All four explanations are now supplied; see Member_Explanations.md for evidence corrections. Group totals stay 270 automated tests and 272 inventory records.

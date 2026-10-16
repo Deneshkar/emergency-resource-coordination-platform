@@ -1,0 +1,388 @@
+{
+  "member": "Denesh N",
+  "student_id": "IT24102826",
+  "component": "Dispatch and Task Assignment",
+  "agent": "ResourceAllocationAgent",
+  "method": "allocate_for_incident",
+  "generated_at": "2026-10-06T22:57:00.109008+05:30",
+  "execution_kind": "ai-assisted",
+  "operator": "OpenAI Codex (technical execution; member review pending)",
+  "live_llm": false,
+  "agent_sha256": "2d3ed493563d89d057417b2fc2bcc4697ccbfaf8cf3337ee6707e83f22a7d5a9",
+  "scenarios": [
+    {
+      "id": "M3-D01",
+      "title": "Covered dispatch requirement",
+      "input": {
+        "incident_id": 7,
+        "title": "Transport request",
+        "priority": "Medium",
+        "required_resources": [
+          {
+            "resource_type": "Vehicle",
+            "quantity": 1,
+            "purpose": "Transport"
+          }
+        ],
+        "available_resources": [
+          {
+            "id": 1,
+            "name": "Response van",
+            "resourceType": "Vehicle",
+            "status": "Available"
+          }
+        ],
+        "available_volunteers": [
+          {
+            "id": 101,
+            "name": "Demo driver",
+            "skills": "driving",
+            "isAvailable": true
+          }
+        ]
+      },
+      "output": {
+        "agent_id": "agent-resource-allocation-03",
+        "timestamp": "2026-10-06T17:27:00.108892+00:00",
+        "incident_id": 7,
+        "status": "COMPLETED",
+        "allocation_plan": {
+          "plan_title": "Resource Allocation Plan for Transport request",
+          "phase": "Dispatch Readiness",
+          "requires_human_approval": true,
+          "incident_id": 7,
+          "priority": "Medium",
+          "location": "Unknown Location",
+          "required_resources": [
+            {
+              "resource_type": "Vehicle",
+              "quantity": 1,
+              "purpose": "Transport"
+            }
+          ],
+          "resource_coverage": [
+            {
+              "resource_type": "Vehicle",
+              "required": 1,
+              "available": 1,
+              "shortage": 0,
+              "passed": true
+            }
+          ],
+          "resource_gaps": [],
+          "assignments": [
+            {
+              "task_type": "Resource Deployment",
+              "resource_id": 1,
+              "resource_name": "Response van",
+              "resource_type": "Vehicle",
+              "purpose": "Transport",
+              "location": "Unknown Location"
+            },
+            {
+              "task_type": "Volunteer Support",
+              "volunteer_id": 101,
+              "volunteer_name": "Demo driver",
+              "skill": "General",
+              "location": "Unknown Location"
+            }
+          ],
+          "assigned_resources": [
+            {
+              "id": 1,
+              "name": "Response van",
+              "resourceType": "Vehicle",
+              "status": "Available",
+              "purpose": "Transport"
+            }
+          ],
+          "assigned_volunteers": [
+            {
+              "id": 101,
+              "name": "Demo driver",
+              "skill": "General"
+            }
+          ],
+          "warnings": [],
+          "constraints": [],
+          "recommendation": "APPROVE",
+          "status": "COMPLETED"
+        },
+        "allocated_resources": [
+          {
+            "id": 1,
+            "name": "Response van",
+            "resourceType": "Vehicle",
+            "status": "Available",
+            "purpose": "Transport"
+          }
+        ],
+        "allocated_volunteers": [
+          {
+            "id": 101,
+            "name": "Demo driver",
+            "skill": "General"
+          }
+        ],
+        "resource_gaps": [],
+        "warnings": [],
+        "constraints": [],
+        "allowed_tools": [
+          "get_available_resources",
+          "get_available_volunteers",
+          "check_resource_coverage",
+          "propose_task_assignment"
+        ]
+      },
+      "checks": [
+        {
+          "expected": {
+            "path": "resource_gaps",
+            "op": "empty",
+            "value": null
+          },
+          "actual": [],
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "allocated_resources",
+            "op": "nonempty",
+            "value": null
+          },
+          "actual": [
+            {
+              "id": 1,
+              "name": "Response van",
+              "resourceType": "Vehicle",
+              "status": "Available",
+              "purpose": "Transport"
+            }
+          ],
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "allocation_plan.requires_human_approval",
+            "op": "equals",
+            "value": true
+          },
+          "actual": true,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "allocation_plan.recommendation",
+            "op": "equals",
+            "value": "APPROVE"
+          },
+          "actual": "APPROVE",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "passed": true
+    },
+    {
+      "id": "M3-D02",
+      "title": "Insufficient resources for high-priority dispatch",
+      "input": {
+        "incident_id": 8,
+        "title": "Emergency response",
+        "priority": "High",
+        "available_resources": [],
+        "available_volunteers": []
+      },
+      "output": {
+        "agent_id": "agent-resource-allocation-03",
+        "timestamp": "2026-10-06T17:27:00.108988+00:00",
+        "incident_id": 8,
+        "status": "COMPLETED",
+        "allocation_plan": {
+          "plan_title": "Resource Allocation Plan for Emergency response",
+          "phase": "Dispatch Readiness",
+          "requires_human_approval": true,
+          "incident_id": 8,
+          "priority": "High",
+          "location": "Unknown Location",
+          "required_resources": [
+            {
+              "resource_type": "Vehicle",
+              "quantity": 2,
+              "purpose": "Emergency response"
+            },
+            {
+              "resource_type": "Medical",
+              "quantity": 2,
+              "purpose": "Triage"
+            },
+            {
+              "resource_type": "Personnel",
+              "quantity": 2,
+              "purpose": "On-ground support"
+            }
+          ],
+          "resource_coverage": [
+            {
+              "resource_type": "Vehicle",
+              "required": 2,
+              "available": 0,
+              "shortage": 2,
+              "passed": false
+            },
+            {
+              "resource_type": "Medical",
+              "required": 2,
+              "available": 0,
+              "shortage": 2,
+              "passed": false
+            },
+            {
+              "resource_type": "Personnel",
+              "required": 2,
+              "available": 0,
+              "shortage": 2,
+              "passed": false
+            }
+          ],
+          "resource_gaps": [
+            {
+              "resource_type": "Vehicle",
+              "missing_qty": 2,
+              "message": "Need 2 more Vehicle resources to meet the requirement."
+            },
+            {
+              "resource_type": "Medical",
+              "missing_qty": 2,
+              "message": "Need 2 more Medical resources to meet the requirement."
+            },
+            {
+              "resource_type": "Personnel",
+              "missing_qty": 2,
+              "message": "Need 2 more Personnel resources to meet the requirement."
+            }
+          ],
+          "assignments": [],
+          "assigned_resources": [],
+          "assigned_volunteers": [],
+          "warnings": [
+            {
+              "code": "W0_NO_ASSIGNMENTS",
+              "message": "No resource or volunteer assignments were recommended because the input pool is empty."
+            },
+            {
+              "code": "W1_RESOURCE_SHORTAGE",
+              "message": "The resource pool does not fully cover the estimated requirement. Partial allocation is proposed for review."
+            }
+          ],
+          "constraints": [
+            "Resource shortage: 2 Vehicle unavailable.",
+            "Resource shortage: 2 Medical unavailable.",
+            "Resource shortage: 2 Personnel unavailable.",
+            "No suitable resources or volunteers currently available."
+          ],
+          "recommendation": "REVISE",
+          "status": "COMPLETED"
+        },
+        "allocated_resources": [],
+        "allocated_volunteers": [],
+        "resource_gaps": [
+          {
+            "resource_type": "Vehicle",
+            "missing_qty": 2,
+            "message": "Need 2 more Vehicle resources to meet the requirement."
+          },
+          {
+            "resource_type": "Medical",
+            "missing_qty": 2,
+            "message": "Need 2 more Medical resources to meet the requirement."
+          },
+          {
+            "resource_type": "Personnel",
+            "missing_qty": 2,
+            "message": "Need 2 more Personnel resources to meet the requirement."
+          }
+        ],
+        "warnings": [
+          {
+            "code": "W0_NO_ASSIGNMENTS",
+            "message": "No resource or volunteer assignments were recommended because the input pool is empty."
+          },
+          {
+            "code": "W1_RESOURCE_SHORTAGE",
+            "message": "The resource pool does not fully cover the estimated requirement. Partial allocation is proposed for review."
+          }
+        ],
+        "constraints": [
+          "Resource shortage: 2 Vehicle unavailable.",
+          "Resource shortage: 2 Medical unavailable.",
+          "Resource shortage: 2 Personnel unavailable.",
+          "No suitable resources or volunteers currently available."
+        ],
+        "allowed_tools": [
+          "get_available_resources",
+          "get_available_volunteers",
+          "check_resource_coverage",
+          "propose_task_assignment"
+        ]
+      },
+      "checks": [
+        {
+          "expected": {
+            "path": "resource_gaps",
+            "op": "nonempty",
+            "value": null
+          },
+          "actual": [
+            {
+              "resource_type": "Vehicle",
+              "missing_qty": 2,
+              "message": "Need 2 more Vehicle resources to meet the requirement."
+            },
+            {
+              "resource_type": "Medical",
+              "missing_qty": 2,
+              "message": "Need 2 more Medical resources to meet the requirement."
+            },
+            {
+              "resource_type": "Personnel",
+              "missing_qty": 2,
+              "message": "Need 2 more Personnel resources to meet the requirement."
+            }
+          ],
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "allocated_resources",
+            "op": "empty",
+            "value": null
+          },
+          "actual": [],
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "allocation_plan.requires_human_approval",
+            "op": "equals",
+            "value": true
+          },
+          "actual": true,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "allocation_plan.recommendation",
+            "op": "equals",
+            "value": "REVISE"
+          },
+          "actual": "REVISE",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,246 @@
+{
+  "member": "M.Thanusikan",
+  "student_id": "IT24103609",
+  "component": "Resource and Inventory Management",
+  "agent": "SituationAnalysisAgent",
+  "method": "run_assessment",
+  "generated_at": "2026-10-06T22:56:54.355380+05:30",
+  "execution_kind": "ai-assisted",
+  "operator": "OpenAI Codex (technical execution; member review pending)",
+  "live_llm": false,
+  "agent_sha256": "6cce3d985cdf84f19e20c7dd12154dba3e58069b1b83cbbf80e60302d40cc969",
+  "scenarios": [
+    {
+      "id": "M2-D01",
+      "title": "Flood with inventory shortages",
+      "input": {
+        "incident": {
+          "id": 7,
+          "title": "Flood emergency",
+          "priority": "High"
+        },
+        "inventory": [
+          {
+            "category": "Medical",
+            "quantity": 20
+          },
+          {
+            "category": "Food",
+            "quantity": 100
+          }
+        ],
+        "resources": [
+          {
+            "resourceType": "Vehicle",
+            "status": "Available"
+          }
+        ],
+        "shelters": [
+          {
+            "id": 1,
+            "name": "Full shelter",
+            "status": "Active",
+            "totalCapacity": 10,
+            "currentOccupancy": 10
+          },
+          {
+            "id": 2,
+            "name": "Available shelter",
+            "status": "Active",
+            "totalCapacity": 100,
+            "currentOccupancy": 30
+          }
+        ]
+      },
+      "output": {
+        "agent_id": "agent-situation-analysis-02",
+        "incident_id": 7,
+        "urgency_score": 85,
+        "urgency_level": "Critical",
+        "analysis_summary": "[Situation Analysis Agent] Objective #7: Assessed urgency as Critical (85/100). Resource deficit in: Medical Supplies, Transport Vehicles. Nearest available shelter: Available shelter (Cap: 70)",
+        "nearest_shelter": {
+          "id": 2,
+          "name": "Available shelter",
+          "availableCapacity": 70
+        },
+        "resource_deficiencies": [
+          {
+            "category": "Medical Supplies",
+            "available": 20,
+            "recommended": 50,
+            "isDeficit": true
+          },
+          {
+            "category": "Food & Water Rations",
+            "available": 100,
+            "recommended": 100,
+            "isDeficit": false
+          },
+          {
+            "category": "Transport Vehicles",
+            "available": 1,
+            "recommended": 3,
+            "isDeficit": true
+          }
+        ],
+        "llm_enhanced": false,
+        "status": "COMPLETED"
+      },
+      "checks": [
+        {
+          "expected": {
+            "path": "urgency_score",
+            "op": "equals",
+            "value": 85
+          },
+          "actual": 85,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "nearest_shelter.id",
+            "op": "equals",
+            "value": 2
+          },
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "resource_deficiencies.0.isDeficit",
+            "op": "equals",
+            "value": true
+          },
+          "actual": true,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "llm_enhanced",
+            "op": "equals",
+            "value": false
+          },
+          "actual": false,
+          "passed": true
+        }
+      ],
+      "error": null,
+      "passed": true
+    },
+    {
+      "id": "M2-D02",
+      "title": "Adequate stock but no shelter capacity",
+      "input": {
+        "incident": {
+          "id": 8,
+          "title": "Routine assistance",
+          "priority": "Low"
+        },
+        "inventory": [
+          {
+            "category": "Medical",
+            "quantity": 50
+          },
+          {
+            "category": "Food",
+            "quantity": 100
+          }
+        ],
+        "resources": [
+          {
+            "resourceType": "Vehicle",
+            "status": "Available"
+          },
+          {
+            "resourceType": "Vehicle",
+            "status": "Available"
+          },
+          {
+            "resourceType": "Vehicle",
+            "status": "Available"
+          }
+        ],
+        "shelters": [
+          {
+            "id": 1,
+            "name": "Full shelter",
+            "status": "Active",
+            "totalCapacity": 10,
+            "currentOccupancy": 10
+          }
+        ]
+      },
+      "output": {
+        "agent_id": "agent-situation-analysis-02",
+        "incident_id": 8,
+        "urgency_score": 25,
+        "urgency_level": "Low",
+        "analysis_summary": "[Situation Analysis Agent] Objective #8: Assessed urgency as Low (25/100). Inventory meets baseline requirements. No shelter capacity available.",
+        "nearest_shelter": null,
+        "resource_deficiencies": [
+          {
+            "category": "Medical Supplies",
+            "available": 50,
+            "recommended": 50,
+            "isDeficit": false
+          },
+          {
+            "category": "Food & Water Rations",
+            "available": 100,
+            "recommended": 100,
+            "isDeficit": false
+          },
+          {
+            "category": "Transport Vehicles",
+            "available": 3,
+            "recommended": 3,
+            "isDeficit": false
+          }
+        ],
+        "llm_enhanced": false,
+        "status": "COMPLETED"
+      },
+      "checks": [
+        {
+          "expected": {
+            "path": "urgency_score",
+            "op": "equals",
+            "value": 25
+          },
+          "actual": 25,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "nearest_shelter",
+            "op": "equals",
+            "value": null
+          },
+          "actual": null,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "resource_deficiencies.0.isDeficit",
+            "op": "equals",
+            "value": false
+          },
+          "actual": false,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "resource_deficiencies.2.isDeficit",
+            "op": "equals",
+            "value": false
+          },
+          "actual": false,
+          "passed": true
+        }
+      ],
+      "error": null,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

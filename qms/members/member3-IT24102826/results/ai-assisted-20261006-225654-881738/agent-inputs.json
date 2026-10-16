@@ -1,0 +1,89 @@
+[
+  {
+    "id": "M3-D01",
+    "title": "Covered dispatch requirement",
+    "input": {
+      "incident_id": 7,
+      "title": "Transport request",
+      "priority": "Medium",
+      "required_resources": [
+        {
+          "resource_type": "Vehicle",
+          "quantity": 1,
+          "purpose": "Transport"
+        }
+      ],
+      "available_resources": [
+        {
+          "id": 1,
+          "name": "Response van",
+          "resourceType": "Vehicle",
+          "status": "Available"
+        }
+      ],
+      "available_volunteers": [
+        {
+          "id": 101,
+          "name": "Demo driver",
+          "skills": "driving",
+          "isAvailable": true
+        }
+      ]
+    },
+    "checks": [
+      {
+        "path": "resource_gaps",
+        "op": "empty",
+        "value": null
+      },
+      {
+        "path": "allocated_resources",
+        "op": "nonempty",
+        "value": null
+      },
+      {
+        "path": "allocation_plan.requires_human_approval",
+        "op": "equals",
+        "value": true
+      },
+      {
+        "path": "allocation_plan.recommendation",
+        "op": "equals",
+        "value": "APPROVE"
+      }
+    ]
+  },
+  {
+    "id": "M3-D02",
+    "title": "Insufficient resources for high-priority dispatch",
+    "input": {
+      "incident_id": 8,
+      "title": "Emergency response",
+      "priority": "High",
+      "available_resources": [],
+      "available_volunteers": []
+    },
+    "checks": [
+      {
+        "path": "resource_gaps",
+        "op": "nonempty",
+        "value": null
+      },
+      {
+        "path": "allocated_resources",
+        "op": "empty",
+        "value": null
+      },
+      {
+        "path": "allocation_plan.requires_human_approval",
+        "op": "equals",
+        "value": true
+      },
+      {
+        "path": "allocation_plan.recommendation",
+        "op": "equals",
+        "value": "REVISE"
+      }
+    ]
+  }
+]

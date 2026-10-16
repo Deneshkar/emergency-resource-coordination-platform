@@ -1,0 +1,212 @@
+{
+  "recorded_date": "2026-10-08",
+  "timezone": "Asia/Colombo",
+  "members": [
+    {
+      "member": 1,
+      "name": "Jathurshy.S",
+      "student_id": "IT24103355",
+      "component": "Incident Management",
+      "agent": "CoordinatorPlannerAgent",
+      "run": "members/member1-IT24103355/results/changed-20261008-003156-222748/comparison.json",
+      "operator": "OpenAI Codex",
+      "started_at": "2026-10-08T00:31:56.222748+05:30",
+      "change": "resources: 1 to 0; volunteers: 1 to 0. The incident, High priority and affected count stay unchanged.",
+      "prediction": "With resources and volunteers removed, reasoning should report both shortages while requiresHumanApproval remains true.",
+      "interpretation": "Removing resources and volunteers causes the planner to report both shortages. Human approval remains true in both outputs. The plan is a proposal, not an independently executed emergency response.",
+      "passed": 2,
+      "personal_execution_confirmed": false,
+      "files": {
+        "agent-demo.html": {
+          "file": "members/member1-IT24103355/results/changed-20261008-003156-222748/agent-demo.html",
+          "sha256": "664af9bd10a6a86bc21ab19af6799410bcea7ba178259e32a9db201a8ce50564"
+        },
+        "agent-inputs.json": {
+          "file": "members/member1-IT24103355/results/changed-20261008-003156-222748/agent-inputs.json",
+          "sha256": "95bf041516a1ce0f0de6200349b0348e67780ad3d966edc85f3f44a9000ef508"
+        },
+        "agent-output.json": {
+          "file": "members/member1-IT24103355/results/changed-20261008-003156-222748/agent-output.json",
+          "sha256": "af286f73d8354565d93de5d5a401e49aefa82adfb54cb65d4981076df8b96e84"
+        },
+        "changed-input-plan.json": {
+          "file": "members/member1-IT24103355/results/changed-20261008-003156-222748/changed-input-plan.json",
+          "sha256": "9f60ed58c09687d98c7302fd61a461f2d7a68b3b3cd14bbf08880d5f2de3f51c"
+        },
+        "comparison.html": {
+          "file": "members/member1-IT24103355/results/changed-20261008-003156-222748/comparison.html",
+          "sha256": "8df2b526b7f41fef6bcbbb4953bacefd8e9a230231f5dcdf4863f35a1c331677"
+        },
+        "comparison.json": {
+          "file": "members/member1-IT24103355/results/changed-20261008-003156-222748/comparison.json",
+          "sha256": "9ee93000de99df1f3b96ac5625c25405be85df0ba67f620613f281f1d136b792"
+        },
+        "execution.log": {
+          "file": "members/member1-IT24103355/results/changed-20261008-003156-222748/execution.log",
+          "sha256": "0484153cff2f6d6964c7d0586a2f9f63721827cffead6a483e2d7988a948a6ef"
+        },
+        "prediction-before-run.json": {
+          "file": "members/member1-IT24103355/results/changed-20261008-003156-222748/prediction-before-run.json",
+          "sha256": "5873a9f57b90efcac713f429dea51ed12722c67e0ade2a3b8e279200ea3f7616"
+        }
+      }
+    },
+    {
+      "member": 2,
+      "name": "M.Thanusikan",
+      "student_id": "IT24103609",
+      "component": "Resource and Inventory Management",
+      "agent": "SituationAnalysisAgent",
+      "run": "members/member2-IT24103609/results/changed-20261008-003156-384058/comparison.json",
+      "operator": "OpenAI Codex",
+      "started_at": "2026-10-08T00:31:56.384058+05:30",
+      "change": "Medical stock: 20 to 50; available vehicles: 1 to 3; shelter 2 occupancy: 30/100 to 100/100. Food stays 100; shelter 1 stays 10/10; incident and High priority unchanged.",
+      "prediction": "Medical and vehicle deficits should clear; no shelter should be selected because both are full. Urgency remains 85 because the incident is unchanged.",
+      "interpretation": "Medical stock of 50, food stock of 100 and three available vehicles meet the current fixed baselines. With both shelters full, nearest_shelter is null. Despite its name, this field selects the active shelter with greatest available capacity, not geographic distance. Urgency stays 85 because the High-priority flood incident did not change.",
+      "passed": 2,
+      "personal_execution_confirmed": false,
+      "files": {
+        "agent-demo.html": {
+          "file": "members/member2-IT24103609/results/changed-20261008-003156-384058/agent-demo.html",
+          "sha256": "e3023738205c30fcb157df3b089aae976dfec21ef67d2e14f0f1bc2e643f7591"
+        },
+        "agent-inputs.json": {
+          "file": "members/member2-IT24103609/results/changed-20261008-003156-384058/agent-inputs.json",
+          "sha256": "c398a526a6237b941740d44e00d49d4e2620a99ed5f00b6941381a37e19db451"
+        },
+        "agent-output.json": {
+          "file": "members/member2-IT24103609/results/changed-20261008-003156-384058/agent-output.json",
+          "sha256": "f9165bf3a8b1b873fef8619b8d1a0854068353930135f52257cdc144f5230c32"
+        },
+        "changed-input-plan.json": {
+          "file": "members/member2-IT24103609/results/changed-20261008-003156-384058/changed-input-plan.json",
+          "sha256": "d9ce6813085be5056afcbc1f69485cc48cc66504081d3defe409766177069353"
+        },
+        "comparison.html": {
+          "file": "members/member2-IT24103609/results/changed-20261008-003156-384058/comparison.html",
+          "sha256": "01f6b488a802a55b7825b3b8591d9630c2c5e387f7db6a4c7e2d283501dad1b4"
+        },
+        "comparison.json": {
+          "file": "members/member2-IT24103609/results/changed-20261008-003156-384058/comparison.json",
+          "sha256": "539d7ba7b5f86fd87e0020e1bd4f5f3880080111e9523fcce957410831a10dcc"
+        },
+        "execution.log": {
+          "file": "members/member2-IT24103609/results/changed-20261008-003156-384058/execution.log",
+          "sha256": "72457f516d9d6d7514ee3a467e1b3bea289e561dce7ebed0eafb8a4b2faf75bb"
+        },
+        "prediction-before-run.json": {
+          "file": "members/member2-IT24103609/results/changed-20261008-003156-384058/prediction-before-run.json",
+          "sha256": "058601a48dbc3f147d07360ed489cf8b91bc560b8b75a10773caf2989b3b7c46"
+        }
+      }
+    },
+    {
+      "member": 3,
+      "name": "Denesh N",
+      "student_id": "IT24102826",
+      "component": "Dispatch and Task Assignment",
+      "agent": "ResourceAllocationAgent",
+      "run": "members/member3-IT24102826/results/changed-20261008-003156-602167/comparison.json",
+      "operator": "OpenAI Codex",
+      "started_at": "2026-10-08T00:31:56.602167+05:30",
+      "change": "Priority: Medium to High; resources: 1 to 0; volunteers: 1 to 0. The explicit one-vehicle requirement and incident ID stay unchanged.",
+      "prediction": "The missing vehicle should produce a resource gap and REVISE; human approval remains required.",
+      "interpretation": "The Medium case allocates the available vehicle and has no gaps. The High case uses the current priority-based estimate, replacing the explicit one-vehicle input requirement with two vehicles, two medical resources and two personnel resources. With no resources, each category has a gap of two and the recommendation is REVISE. Human approval remains true. This comparison changes priority and availability together; it does not isolate the effect of each change.",
+      "passed": 2,
+      "personal_execution_confirmed": false,
+      "files": {
+        "agent-demo.html": {
+          "file": "members/member3-IT24102826/results/changed-20261008-003156-602167/agent-demo.html",
+          "sha256": "b01264eb60a05245de8093b3bce65d4ef19a770a3eeb6ef08f170ba45b5f9381"
+        },
+        "agent-inputs.json": {
+          "file": "members/member3-IT24102826/results/changed-20261008-003156-602167/agent-inputs.json",
+          "sha256": "49d2dcfd4b3ca533a8369f58d9ae9dd5cd5f8ccea202f5f9736c488129a17370"
+        },
+        "agent-output.json": {
+          "file": "members/member3-IT24102826/results/changed-20261008-003156-602167/agent-output.json",
+          "sha256": "f71f74ec2b711e32bc3dfbd45e1809e8cdd6010109717afe95b1649a2ad286ed"
+        },
+        "changed-input-plan.json": {
+          "file": "members/member3-IT24102826/results/changed-20261008-003156-602167/changed-input-plan.json",
+          "sha256": "f02189b453cae5917f29e9b40021b4c6a0baad9a74bede859f7d81a4840d4d1c"
+        },
+        "comparison.html": {
+          "file": "members/member3-IT24102826/results/changed-20261008-003156-602167/comparison.html",
+          "sha256": "123b33dccad3a185ed2ec1a42410b0cadf58670760caa417cfa585e45a1f4cb2"
+        },
+        "comparison.json": {
+          "file": "members/member3-IT24102826/results/changed-20261008-003156-602167/comparison.json",
+          "sha256": "6ee37516f2eb14e6461001da7ee7540a8658bb440d674a16935ccaa011222aa5"
+        },
+        "execution.log": {
+          "file": "members/member3-IT24102826/results/changed-20261008-003156-602167/execution.log",
+          "sha256": "126e607569aefa2e4c13ec24f68b146c2c539a2f10140c57231a8aac37d570dd"
+        },
+        "prediction-before-run.json": {
+          "file": "members/member3-IT24102826/results/changed-20261008-003156-602167/prediction-before-run.json",
+          "sha256": "40de8519a22641ee77a40baf5efedd235fbb5f92732fca2490c289810683539b"
+        }
+      }
+    },
+    {
+      "member": 4,
+      "name": "Deneshkar. P",
+      "student_id": "IT24103828",
+      "component": "Volunteer/Responder Management",
+      "agent": "ValidationSafetyAgent",
+      "run": "members/member4-IT24103828/results/changed-20261008-003156-747636/comparison.json",
+      "operator": "OpenAI Codex",
+      "started_at": "2026-10-08T00:31:56.747636+05:30",
+      "change": "Only proposed_shift.start changes: 10:00 to 09:30 UTC. Existing shift remains 09:00-10:00, end remains 11:00, volunteer remains available.",
+      "prediction": "The original adjacent 10:00-11:00 shift should be valid and APPROVE. Changing only its start to 09:30 should produce is_valid=false, REVISE and V2_DOUBLE_BOOKING.",
+      "interpretation": "The overlap predicate uses half-open intervals: new_start < existing_end and existing_start < new_end. At 10:00 the first comparison is false; at 09:30 both are true. V2_DOUBLE_BOOKING is in the agent's revisable violation set, so this available volunteer receives REVISE. Availability alone is not sufficient for approval. APPROVE is only a recommendation; coordinator approval is a separate API operation.",
+      "passed": 2,
+      "personal_execution_confirmed": false,
+      "files": {
+        "agent-demo.html": {
+          "file": "members/member4-IT24103828/results/changed-20261008-003156-747636/agent-demo.html",
+          "sha256": "d862906740a4bf72a4e3bbb527a7088cec9e51176c5224085a5a5a1fda8c9cd2"
+        },
+        "agent-inputs.json": {
+          "file": "members/member4-IT24103828/results/changed-20261008-003156-747636/agent-inputs.json",
+          "sha256": "b65db0eb097b62a3e7e80e394ae3f0e6f660f67346c274f2aa7ffcd32150707d"
+        },
+        "agent-output.json": {
+          "file": "members/member4-IT24103828/results/changed-20261008-003156-747636/agent-output.json",
+          "sha256": "000975faa77e4fa3794c786ff96d6e5195b4b39143706ca7a390a0f9a332ebd9"
+        },
+        "changed-input-plan.json": {
+          "file": "members/member4-IT24103828/results/changed-20261008-003156-747636/changed-input-plan.json",
+          "sha256": "095624e2b94328be8a9c375a32cc16564a37f8bc0b670aadff675a7870da11d4"
+        },
+        "comparison.html": {
+          "file": "members/member4-IT24103828/results/changed-20261008-003156-747636/comparison.html",
+          "sha256": "4f4890a7444d75d820e6b004d1ac50be0f7bda9aa73a21ca934547b3a786179d"
+        },
+        "comparison.json": {
+          "file": "members/member4-IT24103828/results/changed-20261008-003156-747636/comparison.json",
+          "sha256": "bb4ec32d01918757c95664437d57364ae4621f09e0ca67d5389f36dadf8ae7aa"
+        },
+        "execution.log": {
+          "file": "members/member4-IT24103828/results/changed-20261008-003156-747636/execution.log",
+          "sha256": "fed507ce6bf4ecbed8a3173f6215cfead93ccb519a006b915d3c09282591e865"
+        },
+        "prediction-before-run.json": {
+          "file": "members/member4-IT24103828/results/changed-20261008-003156-747636/prediction-before-run.json",
+          "sha256": "077c3f22dae216aef7f1eec450968d9d4b39b3247b2a589d14a8132079831546"
+        }
+      }
+    }
+  ],
+  "deneshkar_explanation": {
+    "file": "members/member4-IT24103828/Understanding_Submitted_20261008.md",
+    "sha256": "3c95c9a3eb7b13e0b35278526e053beedb70aab4920297d9c3db90a32f02c879",
+    "text": "The 10:00\u201311:00 shift passes because the existing shift finishes exactly at 10:00. The new shift starts at 10:00, so the two shifts only touch at the boundary; their working times do not overlap. Therefore, the agent returns APPROVE.\nWhen I change the new shift's start time to 09:30, it overlaps the existing 09:00\u201310:00 shift for 30 minutes, from 09:30 to 10:00. The agent detects this as double booking. Because the problem can be fixed by changing the shift time, it returns REVISE instead of APPROVE."
+  },
+  "unique_group_tests_unchanged": 270,
+  "inventory_records_unchanged": 272,
+  "technical_scenarios_passed": 8,
+  "personal_changed_input_completion_confirmed": false,
+  "new_terminal_screenshots": "Not captured. Browser capture unavailable; actual commands, input, output and logs are retained."
+}

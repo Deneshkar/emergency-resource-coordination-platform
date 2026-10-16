@@ -35,6 +35,8 @@ def refresh_member_index(number):
     folder, config = member_config(number)
     body=f'<p><b>{esc(config["name"])} | {config["student_id"]}</b><br>{esc(config["component"])} + {esc(config["agent_class"])}</p>'
     body+='<p><a href="Test_Cases.html">My test cases and source links</a> | <a href="README.md">Run instructions</a> | <a href="agent-inputs.json">Editable agent inputs</a></p>'
+    if (folder/'Viva_Changed_Input_Guide.md').exists():
+        body+='<p><a href="Viva_Changed_Input_Guide.md">Changed-input command and viva guide</a></p>'
     body+='<p class="note">Run run-member'+str(number)+'-tests.ps1 to create new results. AI-assisted entries verify the package; they are not personal execution evidence. Prior group results remain historical. Explain your own fixtures, assertions and agent decisions.</p>'
     body+='<h2>Saved executions and actual agent outputs</h2><table><tr><th>Run folder</th><th>Execution label / operator</th><th>Evidence</th></tr>'
     for directory in sorted((folder/'results').glob('*'), reverse=True):
@@ -44,7 +46,7 @@ def refresh_member_index(number):
         if not record_path.exists(): continue
         record=json.loads(record_path.read_text(encoding='utf-8'))
         links=[]
-        for filename,label in [('results.html','Test results'),('agent-demo.html','Agent input and output')]:
+        for filename,label in [('results.html','Test results'),('comparison.html','Changed-input comparison'),('agent-demo.html','Agent input and output'),('Screenshot_Evidence.md','Supplied screenshots')]:
             if (directory/filename).exists(): links.append(f'<a href="results/{esc(directory.name)}/{filename}">{label}</a>')
         body+='<tr><td>'+esc(directory.name)+'</td><td>'+esc(record['execution_kind'])+' / '+esc(record['operator'])+'<br>'+('PASS' if record['passed'] else 'FAIL')+'</td><td>'+' | '.join(links)+'</td></tr>'
     body+='</table>'

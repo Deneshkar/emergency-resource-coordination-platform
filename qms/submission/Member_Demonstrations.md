@@ -1,5 +1,9 @@
 # Four individual testing and agent demonstrations
 
+**Latest explanation status:** All four explanations are received and organized in Member 1-4 order in [Member_Explanations.md](Member_Explanations.md). The supplied Member 1-2 statements describe earlier D-series examples; corrected summaries distinguish these from the personal C-series runs. Original statements are retained. Members should review the corrections and prepare for the viva.
+
+**8 October evidence update:** All four supplied personal changed-input terminal screenshots match saved reports: 2/2 scenarios passed per member. Deneshkar's written explanation is recorded. All four explanations have now been supplied; all members prepare for the viva. See [Personal_Changed_Input_Evidence.md](Personal_Changed_Input_Evidence.md).
+
 Open [the member presentation index](../members/index.html) in a local browser. Keep the complete repository or assignment ZIP: the packages call the actual SEF source and canonical tests.
 
 | Member | Package | Selected existing tests | Agent scenarios |
@@ -21,8 +25,15 @@ Situation analysis reports the eligible shelter with the largest available capac
 
 ## Personal demonstration
 
+The latest member 1-3 technical runs are documented in [Technical_Execution_Members_1_to_3.md](Technical_Execution_Members_1_to_3.md) and PDF Appendix F. They use the label "Technical execution - run by Codex; member review pending" and include actual agent inputs and outputs. The component owners' personal review and explanations remain pending.
+
 Open your folder in PowerShell and run its named script with -ExecutionKind personal -Operator followed by your name. Record only work you actually performed. Each run creates a fresh dated results folder. Open results.html and agent-demo.html, show the input and output, explain one assertion and one failure/boundary scenario, and save your screenshot and own-word notes beside the reports.
 
-Deneshkar's earlier 12 personally executed cases and six screenshots remain in Individual_Evidence_IT24103828.md and PDF Appendix C. His full new package includes seven additional existing safety cases, so it selects 19 tests. The new package verification is AI-assisted; it does not confirm a new personal 19-test run. His boundary exercise and explanations remain unconfirmed. The other three members' new personal QMS runs remain unconfirmed.
+Deneshkar's earlier 12 personally executed cases and six screenshots remain in Individual_Evidence_IT24103828.md and PDF Appendix C. His full new package includes seven additional existing safety cases, so it selects 19 tests. The new package verification is AI-assisted; it does not confirm a new personal 19-test run. His boundary exercise and explanations remain unconfirmed. The other three members submitted personal-run screenshots on 7 October, matched to the raw reports in [Personal_Execution_Evidence.md](Personal_Execution_Evidence.md). Their explanations and changed-input exercises remain pending.
 
 Publication uses the existing fix/qms-submission-readiness branch. PR #47 remains closed; no merge, deployment or CourseWeb upload is performed by this update.
+
+
+## 8 October changed-input update
+
+OpenAI Codex executed four before/after comparisons against the actual agents: eight scenarios passed. Exact commands, original and modified inputs, expectations and observed outputs are in [Changed_Input_Results.md](Changed_Input_Results.md). Deneshkar supplied a written boundary/overlap explanation, retained verbatim. These technical runs do not establish personal execution. All four personal comparison runs are now supported by screenshots and raw reports. All four explanations are now supplied; see Member_Explanations.md for evidence corrections. Group totals stay 270 automated tests and 272 inventory records.

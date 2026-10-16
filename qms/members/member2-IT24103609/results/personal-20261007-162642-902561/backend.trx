@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="deb16e36-ee43-4513-a053-9388f26787b7" name="USER@DESKTOP-HUE8OII 2026-10-07 16:26:46" runUser="DESKTOP-HUE8OII\USER" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-07T16:26:46.1500107+05:30" queuing="2026-10-07T16:26:46.1500111+05:30" start="2026-10-07T16:26:45.1846971+05:30" finish="2026-10-07T16:26:46.2317139+05:30" />
+  <TestSettings name="default" id="c63e11c3-e791-4916-b13d-3381ed53100c">
+    <Deployment runDeploymentRoot="USER_DESKTOP-HUE8OII_2026-10-07_16_26_46" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="1dffcd5a-0857-49c2-b31e-cba42a1ed09e" testId="4ef2cbcb-4747-2870-1b91-6b6740ca7ae0" testName="ERCP.Api.Tests.InventoryControllerTests.CreateInventoryItem_SetsLowStock_WhenBelowThreshold" computerName="DESKTOP-HUE8OII" duration="00:00:00.0027960" startTime="2026-10-07T16:26:46.1257071+05:30" endTime="2026-10-07T16:26:46.1257072+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1dffcd5a-0857-49c2-b31e-cba42a1ed09e" />
+    <UnitTestResult executionId="6dd9033d-9e2e-48cf-a4b1-673b679378c3" testId="f9fb1257-844c-9348-1ac8-12d577033abe" testName="ERCP.Api.Tests.GeolocationServiceTests.GetNearestShelters_OrdersSheltersByProximity" computerName="DESKTOP-HUE8OII" duration="00:00:00.4628686" startTime="2026-10-07T16:26:46.1338618+05:30" endTime="2026-10-07T16:26:46.1338620+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6dd9033d-9e2e-48cf-a4b1-673b679378c3" />
+    <UnitTestResult executionId="3bacb0b4-5865-418d-a745-2e7ff6332560" testId="3422bf5e-772b-0e6f-6ade-12960d4ed980" testName="ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached" computerName="DESKTOP-HUE8OII" duration="00:00:00.4150819" startTime="2026-10-07T16:26:46.0810127+05:30" endTime="2026-10-07T16:26:46.0810128+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3bacb0b4-5865-418d-a745-2e7ff6332560" />
+    <UnitTestResult executionId="86240074-3f97-4157-82bc-73c82de167d8" testId="5679c413-3ccb-3fae-87ef-dd43bd8fba1a" testName="ERCP.Api.Tests.ResourcesControllerTests.Create_AddsResource_ReturnsCreated" computerName="DESKTOP-HUE8OII" duration="00:00:00.0016432" startTime="2026-10-07T16:26:46.1545679+05:30" endTime="2026-10-07T16:26:46.1545680+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86240074-3f97-4157-82bc-73c82de167d8" />
+    <UnitTestResult executionId="ae5dc5c8-2a30-49cc-b516-94cdc8567a73" testId="511d6634-0b78-3d76-537f-c0731aaa1cdd" testName="ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity" computerName="DESKTOP-HUE8OII" duration="00:00:00.0008003" startTime="2026-10-07T16:26:46.1255876+05:30" endTime="2026-10-07T16:26:46.1255878+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ae5dc5c8-2a30-49cc-b516-94cdc8567a73" />
+    <UnitTestResult executionId="2dd07dd0-86e6-4fdf-8eb3-2985241aff40" testId="f74bbcd2-17a4-59ff-3e6e-2ca1f8f97904" testName="ERCP.Api.Tests.GeolocationServiceTests.CalculateHaversineDistanceKm_ReturnsAccurateKmDistance" computerName="DESKTOP-HUE8OII" duration="00:00:00.0037393" startTime="2026-10-07T16:26:45.6714171+05:30" endTime="2026-10-07T16:26:45.6714569+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2dd07dd0-86e6-4fdf-8eb3-2985241aff40" />
+    <UnitTestResult executionId="a57f981c-6c60-45d8-af48-05b30179c9b2" testId="107a1baa-6d67-7d8b-879a-2b5c4b25c87f" testName="ERCP.Api.Tests.InventoryControllerTests.AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative" computerName="DESKTOP-HUE8OII" duration="00:00:00.0234387" startTime="2026-10-07T16:26:46.1041998+05:30" endTime="2026-10-07T16:26:46.1042009+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a57f981c-6c60-45d8-af48-05b30179c9b2" />
+    <UnitTestResult executionId="c0aeb4c2-e36a-4813-9c4f-e5c85968cb9e" testId="ebd750fb-e8bf-f714-0405-010f93d0027e" testName="ERCP.Api.Tests.SituationAnalysisAgentTests.AssessSituation_GeneratesValidAssessment" computerName="DESKTOP-HUE8OII" duration="00:00:00.5111574" startTime="2026-10-07T16:26:46.1767265+05:30" endTime="2026-10-07T16:26:46.1767268+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c0aeb4c2-e36a-4813-9c4f-e5c85968cb9e" />
+    <UnitTestResult executionId="f5ca8400-e4bd-4422-93fb-47108e40f40b" testId="fa2dd6dc-ae67-eb02-fbc3-6cc630103dae" testName="ERCP.Api.Tests.ResourcesControllerTests.GetAvailable_ReturnsOnlyAvailableResources" computerName="DESKTOP-HUE8OII" duration="00:00:00.4850311" startTime="2026-10-07T16:26:46.1505851+05:30" endTime="2026-10-07T16:26:46.1505853+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f5ca8400-e4bd-4422-93fb-47108e40f40b" />
+    <UnitTestResult executionId="34cac528-aa0e-43b7-890e-d0cb10bebc21" testId="fa614e2c-7f65-d129-8a58-cadd5934ff06" testName="ERCP.Api.Tests.InventoryControllerTests.AdjustStock_SubtractsQuantity_UpdatesStatus" computerName="DESKTOP-HUE8OII" duration="00:00:00.4150905" startTime="2026-10-07T16:26:46.0806914+05:30" endTime="2026-10-07T16:26:46.0806917+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="34cac528-aa0e-43b7-890e-d0cb10bebc21" />
+    <UnitTestResult executionId="c923d4d8-a145-43a1-a6f3-bf54dba1dba4" testId="81514c45-6f58-0ddb-9e1b-efa02422b4bd" testName="ERCP.Api.Tests.SheltersControllerTests.CreateShelter_ReturnsCreated" computerName="DESKTOP-HUE8OII" duration="00:00:00.0250855" startTime="2026-10-07T16:26:46.1058052+05:30" endTime="2026-10-07T16:26:46.1058058+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c923d4d8-a145-43a1-a6f3-bf54dba1dba4" />
+    <UnitTestResult executionId="cdad1002-c9d6-4715-a9a0-dc49b5b2adac" testId="e0088677-0ac2-f8f3-e588-28182b3f95e6" testName="ERCP.Api.Tests.ResourcesControllerTests.UpdateStatus_ChangesResourceStatus" computerName="DESKTOP-HUE8OII" duration="00:00:00.0022198" startTime="2026-10-07T16:26:46.1528862+05:30" endTime="2026-10-07T16:26:46.1528864+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cdad1002-c9d6-4715-a9a0-dc49b5b2adac" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ERCP.Api.Tests.SituationAnalysisAgentTests.AssessSituation_GeneratesValidAssessment" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="ebd750fb-e8bf-f714-0405-010f93d0027e">
+      <Execution id="c0aeb4c2-e36a-4813-9c4f-e5c85968cb9e" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.SituationAnalysisAgentTests" name="AssessSituation_GeneratesValidAssessment" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="511d6634-0b78-3d76-537f-c0731aaa1cdd">
+      <Execution id="ae5dc5c8-2a30-49cc-b516-94cdc8567a73" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.SheltersControllerTests" name="UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.InventoryControllerTests.AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="107a1baa-6d67-7d8b-879a-2b5c4b25c87f">
+      <Execution id="a57f981c-6c60-45d8-af48-05b30179c9b2" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.InventoryControllerTests" name="AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.SheltersControllerTests.CreateShelter_ReturnsCreated" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="81514c45-6f58-0ddb-9e1b-efa02422b4bd">
+      <Execution id="c923d4d8-a145-43a1-a6f3-bf54dba1dba4" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.SheltersControllerTests" name="CreateShelter_ReturnsCreated" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.ResourcesControllerTests.GetAvailable_ReturnsOnlyAvailableResources" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="fa2dd6dc-ae67-eb02-fbc3-6cc630103dae">
+      <Execution id="f5ca8400-e4bd-4422-93fb-47108e40f40b" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.ResourcesControllerTests" name="GetAvailable_ReturnsOnlyAvailableResources" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.ResourcesControllerTests.Create_AddsResource_ReturnsCreated" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="5679c413-3ccb-3fae-87ef-dd43bd8fba1a">
+      <Execution id="86240074-3f97-4157-82bc-73c82de167d8" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.ResourcesControllerTests" name="Create_AddsResource_ReturnsCreated" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.GeolocationServiceTests.CalculateHaversineDistanceKm_ReturnsAccurateKmDistance" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="f74bbcd2-17a4-59ff-3e6e-2ca1f8f97904">
+      <Execution id="2dd07dd0-86e6-4fdf-8eb3-2985241aff40" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.GeolocationServiceTests" name="CalculateHaversineDistanceKm_ReturnsAccurateKmDistance" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.GeolocationServiceTests.GetNearestShelters_OrdersSheltersByProximity" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="f9fb1257-844c-9348-1ac8-12d577033abe">
+      <Execution id="6dd9033d-9e2e-48cf-a4b1-673b679378c3" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.GeolocationServiceTests" name="GetNearestShelters_OrdersSheltersByProximity" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.ResourcesControllerTests.UpdateStatus_ChangesResourceStatus" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="e0088677-0ac2-f8f3-e588-28182b3f95e6">
+      <Execution id="cdad1002-c9d6-4715-a9a0-dc49b5b2adac" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.ResourcesControllerTests" name="UpdateStatus_ChangesResourceStatus" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="3422bf5e-772b-0e6f-6ade-12960d4ed980">
+      <Execution id="3bacb0b4-5865-418d-a745-2e7ff6332560" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.SheltersControllerTests" name="UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.InventoryControllerTests.AdjustStock_SubtractsQuantity_UpdatesStatus" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="fa614e2c-7f65-d129-8a58-cadd5934ff06">
+      <Execution id="34cac528-aa0e-43b7-890e-d0cb10bebc21" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.InventoryControllerTests" name="AdjustStock_SubtractsQuantity_UpdatesStatus" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.InventoryControllerTests.CreateInventoryItem_SetsLowStock_WhenBelowThreshold" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="4ef2cbcb-4747-2870-1b91-6b6740ca7ae0">
+      <Execution id="1dffcd5a-0857-49c2-b31e-cba42a1ed09e" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.InventoryControllerTests" name="CreateInventoryItem_SetsLowStock_WhenBelowThreshold" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="4ef2cbcb-4747-2870-1b91-6b6740ca7ae0" executionId="1dffcd5a-0857-49c2-b31e-cba42a1ed09e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f9fb1257-844c-9348-1ac8-12d577033abe" executionId="6dd9033d-9e2e-48cf-a4b1-673b679378c3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3422bf5e-772b-0e6f-6ade-12960d4ed980" executionId="3bacb0b4-5865-418d-a745-2e7ff6332560" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5679c413-3ccb-3fae-87ef-dd43bd8fba1a" executionId="86240074-3f97-4157-82bc-73c82de167d8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="511d6634-0b78-3d76-537f-c0731aaa1cdd" executionId="ae5dc5c8-2a30-49cc-b516-94cdc8567a73" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f74bbcd2-17a4-59ff-3e6e-2ca1f8f97904" executionId="2dd07dd0-86e6-4fdf-8eb3-2985241aff40" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="107a1baa-6d67-7d8b-879a-2b5c4b25c87f" executionId="a57f981c-6c60-45d8-af48-05b30179c9b2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ebd750fb-e8bf-f714-0405-010f93d0027e" executionId="c0aeb4c2-e36a-4813-9c4f-e5c85968cb9e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fa2dd6dc-ae67-eb02-fbc3-6cc630103dae" executionId="f5ca8400-e4bd-4422-93fb-47108e40f40b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fa614e2c-7f65-d129-8a58-cadd5934ff06" executionId="34cac528-aa0e-43b7-890e-d0cb10bebc21" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="81514c45-6f58-0ddb-9e1b-efa02422b4bd" executionId="c923d4d8-a145-43a1-a6f3-bf54dba1dba4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e0088677-0ac2-f8f3-e588-28182b3f95e6" executionId="cdad1002-c9d6-4715-a9a0-dc49b5b2adac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="12" executed="12" passed="12" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.29)&#xD;
+[xUnit.net 00:00:00.07]   Discovering: ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:00.11]   Discovered:  ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:00.12]   Starting:    ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:00.66]   Finished:    ERCP.Api.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

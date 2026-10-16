@@ -14,10 +14,10 @@ def include(path,arc=None):
 
 for folder in [qms/'submission',qms/'scripts',qms/'members']:
     for path in folder.rglob('*'):
-        if path.is_file() and not any(p in ('__pycache__','.pytest_cache') for p in path.parts):
+        if path.is_file() and not path.name.startswith('~$') and not any(p in ('__pycache__','.pytest_cache') for p in path.parts):
             include(path)
 for path in (qms/'evidence').rglob('*'):
-    if not path.is_file(): continue
+    if not path.is_file() or path.name.startswith('~$'): continue
     relative=path.relative_to(qms/'evidence').as_posix()
     if relative.startswith('rerun-'): continue
     if relative.startswith('final/backend/') and relative not in ['final/backend/backend.trx','final/backend/coverage.cobertura.xml']:
@@ -28,7 +28,7 @@ for path in (qms/'evidence').rglob('*'):
 files=subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard'],cwd=repo,text=True).splitlines()
 for name in files:
     path=repo/name
-    if not path.is_file(): continue
+    if not path.is_file() or path.name.startswith('~$'): continue
     if path.name.startswith('.env') or path.suffix.lower() in ['.pfx','.key','.pem']:
         continue
     if any(x in path.parts for x in ['node_modules','bin','obj','dist','.git','.dart_tool','build','__pycache__','.pytest_cache']):

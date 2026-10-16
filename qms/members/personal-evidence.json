@@ -1,0 +1,199 @@
+{
+  "provided_on": "2026-10-07",
+  "timezone": "Asia/Colombo",
+  "provenance": "User-supplied terminal screenshots, visually matched to local original PNGs and copied unchanged. Operator names are declared in the commands and execution records. Understanding is recorded separately.",
+  "members": [
+    {
+      "member": 1,
+      "name": "Jathurshy.S",
+      "student_id": "IT24103355",
+      "execution": "members/member1-IT24103355/results/personal-20261007-162459-058365/execution.json",
+      "started_at": "2026-10-07T16:24:59.058648+05:30",
+      "operator": "Jathurshy.S",
+      "backend": 9,
+      "agents": 2,
+      "demo_scenarios": 2,
+      "status": "Submitted personal execution supported by screenshots and raw reports; understanding pending",
+      "screenshots": [
+        {
+          "file": "members/member1-IT24103355/results/personal-20261007-162459-058365/01-backend-tests.png",
+          "source_filename": "Screenshot 2026-10-07 162521.png",
+          "title": "Backend command and passing cases",
+          "sha256": "69dade69fb6cdaea22258c861f0cdf4d335c5567205ac3ba6b35af8112a0ad35"
+        },
+        {
+          "file": "members/member1-IT24103355/results/personal-20261007-162459-058365/02-agent-tests-and-summary.png",
+          "source_filename": "Screenshot 2026-10-07 162536.png",
+          "title": "Agent tests and completed run summary",
+          "sha256": "9e3d1a69f9d012c90ca6c09829bc971c33e82732b0ea478130541ab5835ed3ea"
+        }
+      ],
+      "reports": {
+        "execution.json": {
+          "file": "members/member1-IT24103355/results/personal-20261007-162459-058365/execution.json",
+          "sha256": "c3f589982ccdb49bc5811d3a7de51733a61623b5983be65d8c33f31dde2b6bac"
+        },
+        "backend.trx": {
+          "file": "members/member1-IT24103355/results/personal-20261007-162459-058365/backend.trx",
+          "sha256": "6fe1f09a5cdbd94a50ab4759c802d9facc9771395aec6abcc6877e27cbb143fe"
+        },
+        "agents.xml": {
+          "file": "members/member1-IT24103355/results/personal-20261007-162459-058365/agents.xml",
+          "sha256": "2a21a2953eea22bc9a869dad2c8c4446ef93d4d41ba7852380b44e10b52e5948"
+        },
+        "backend.log": {
+          "file": "members/member1-IT24103355/results/personal-20261007-162459-058365/backend.log",
+          "sha256": "0f6160bd1bbf47ec6a15b2c955fc0cdf3c4cc2058106d939876c732fcb4314eb"
+        },
+        "agents.log": {
+          "file": "members/member1-IT24103355/results/personal-20261007-162459-058365/agents.log",
+          "sha256": "cd94186566ac9c346c67a7a91eb53bccf526703938b1a73a9b3b5db2af8cc4fe"
+        },
+        "agent-inputs.json": {
+          "file": "members/member1-IT24103355/results/personal-20261007-162459-058365/agent-inputs.json",
+          "sha256": "50036cce625f4e849a9c1db570519b16cc9556949da6f7e8d944dab043644f03"
+        },
+        "agent-output.json": {
+          "file": "members/member1-IT24103355/results/personal-20261007-162459-058365/agent-output.json",
+          "sha256": "3c59ae3dda06ce900a812b46cc1daca727830c99f560f00caf63d6aabfd197dc"
+        },
+        "agent-demo.html": {
+          "file": "members/member1-IT24103355/results/personal-20261007-162459-058365/agent-demo.html",
+          "sha256": "c71cc27de5229d55a9072c3086ad89befbdb97ecfd843cf77ae0bfb7a804784b"
+        },
+        "results.html": {
+          "file": "members/member1-IT24103355/results/personal-20261007-162459-058365/results.html",
+          "sha256": "1216d827b6991e63a6a9d6384d7458c04360f2cbb79085bb584d94e2cae042dc"
+        }
+      }
+    },
+    {
+      "member": 2,
+      "name": "M.Thanusikan",
+      "student_id": "IT24103609",
+      "execution": "members/member2-IT24103609/results/personal-20261007-162642-902561/execution.json",
+      "started_at": "2026-10-07T16:26:42.902996+05:30",
+      "operator": "M.Thanusikan",
+      "backend": 12,
+      "agents": 5,
+      "demo_scenarios": 2,
+      "status": "Submitted personal execution supported by screenshots and raw reports; understanding pending",
+      "screenshots": [
+        {
+          "file": "members/member2-IT24103609/results/personal-20261007-162642-902561/01-backend-tests.png",
+          "source_filename": "Screenshot 2026-10-07 162652.png",
+          "title": "Backend command and passing cases",
+          "sha256": "5a547b68d67972c56af3f2b5679917dd98cbb89c5a00db418c21a5f6c2376a1c"
+        },
+        {
+          "file": "members/member2-IT24103609/results/personal-20261007-162642-902561/02-agent-tests-and-summary.png",
+          "source_filename": "Screenshot 2026-10-07 162745.png",
+          "title": "Agent tests and completed run summary",
+          "sha256": "a1d402b5b147b726128851ae19b796b363c13b9a017158ad3df24b4232d7100c"
+        }
+      ],
+      "reports": {
+        "execution.json": {
+          "file": "members/member2-IT24103609/results/personal-20261007-162642-902561/execution.json",
+          "sha256": "f83687216f9ea3c3412eb9c0bb66e97ab487354524295196b512aafc38801331"
+        },
+        "backend.trx": {
+          "file": "members/member2-IT24103609/results/personal-20261007-162642-902561/backend.trx",
+          "sha256": "1420e591647c0700c6e97a09957ab0a9231f05492fd1b6111ec25c5ba8977ee9"
+        },
+        "agents.xml": {
+          "file": "members/member2-IT24103609/results/personal-20261007-162642-902561/agents.xml",
+          "sha256": "3d6df48081738834f7780e4b7602f247d33607cada32bb1261c8198e8bf8d562"
+        },
+        "backend.log": {
+          "file": "members/member2-IT24103609/results/personal-20261007-162642-902561/backend.log",
+          "sha256": "493ce4f3f0887fb31b8082a52cba3482f50ee36b0789405629db83d20d42f184"
+        },
+        "agents.log": {
+          "file": "members/member2-IT24103609/results/personal-20261007-162642-902561/agents.log",
+          "sha256": "c698bcd4b7e33892fd26f7ad031ef4fd2e6e9651555fec45f90ec0703134513a"
+        },
+        "agent-inputs.json": {
+          "file": "members/member2-IT24103609/results/personal-20261007-162642-902561/agent-inputs.json",
+          "sha256": "16eebaa0d3afa4cc6b00b822d16b7434be9171d96a933bb4d3b72b49066e1847"
+        },
+        "agent-output.json": {
+          "file": "members/member2-IT24103609/results/personal-20261007-162642-902561/agent-output.json",
+          "sha256": "24c92304adde5fbc971a055d0fe7b0cace9c311bafeb3a3021a0a5384051de9a"
+        },
+        "agent-demo.html": {
+          "file": "members/member2-IT24103609/results/personal-20261007-162642-902561/agent-demo.html",
+          "sha256": "afa4812a848f392817ebb93c19cfff8648ff972e9066a65d12cf27cf9fcf11d7"
+        },
+        "results.html": {
+          "file": "members/member2-IT24103609/results/personal-20261007-162642-902561/results.html",
+          "sha256": "6a5369b817c0ec9654e39161831750e15150e5b580ec95e77ce5c3eb9cfaf1e9"
+        }
+      }
+    },
+    {
+      "member": 3,
+      "name": "Denesh N",
+      "student_id": "IT24102826",
+      "execution": "members/member3-IT24102826/results/personal-20261007-162757-690323/execution.json",
+      "started_at": "2026-10-07T16:27:57.690871+05:30",
+      "operator": "Denesh N",
+      "backend": 23,
+      "agents": 3,
+      "demo_scenarios": 2,
+      "status": "Submitted personal execution supported by screenshots and raw reports; understanding pending",
+      "screenshots": [
+        {
+          "file": "members/member3-IT24102826/results/personal-20261007-162757-690323/01-backend-tests.png",
+          "source_filename": "Screenshot 2026-10-07 162808.png",
+          "title": "Backend command and passing cases",
+          "sha256": "10491813b13fd88b08e48c39dc4cea9a06cd47bbe371678045e163b07a38bde6"
+        },
+        {
+          "file": "members/member3-IT24102826/results/personal-20261007-162757-690323/02-agent-tests-and-summary.png",
+          "source_filename": "Screenshot 2026-10-07 162821.png",
+          "title": "Agent tests and completed run summary",
+          "sha256": "078e85ec6ed5ccad8aedc5b97b4406eab6a4cf1fb95e127dd724213e16bf5f49"
+        }
+      ],
+      "reports": {
+        "execution.json": {
+          "file": "members/member3-IT24102826/results/personal-20261007-162757-690323/execution.json",
+          "sha256": "6c6ced5bec8d230b768c5afbb8d36ebef80bba863ca1b977c8e3897622edb4a2"
+        },
+        "backend.trx": {
+          "file": "members/member3-IT24102826/results/personal-20261007-162757-690323/backend.trx",
+          "sha256": "9a8158cd2c23718b66547feab17337bdaa7e8f661eb111a9f296c18073739db6"
+        },
+        "agents.xml": {
+          "file": "members/member3-IT24102826/results/personal-20261007-162757-690323/agents.xml",
+          "sha256": "b3835507b1c07b7309ef123fb4e30598cce24dfaf5ffa227160ed34c5c745607"
+        },
+        "backend.log": {
+          "file": "members/member3-IT24102826/results/personal-20261007-162757-690323/backend.log",
+          "sha256": "2357edfe352cb754e99890cc703ccd0aa615b17e8ba0984ef10d1f80b40cd693"
+        },
+        "agents.log": {
+          "file": "members/member3-IT24102826/results/personal-20261007-162757-690323/agents.log",
+          "sha256": "1b4ae2a2100b46fa85845c2927c628eae440b8130564323983a70f700bc19414"
+        },
+        "agent-inputs.json": {
+          "file": "members/member3-IT24102826/results/personal-20261007-162757-690323/agent-inputs.json",
+          "sha256": "c5cff9801fcd721b1a6c3af42be77338bb0fcc752c8370c1f7787b29c8eef90b"
+        },
+        "agent-output.json": {
+          "file": "members/member3-IT24102826/results/personal-20261007-162757-690323/agent-output.json",
+          "sha256": "478bf2298956c3bed4f7bb9792d1a67aa477303812dd0b49977f840a7e29dc0c"
+        },
+        "agent-demo.html": {
+          "file": "members/member3-IT24102826/results/personal-20261007-162757-690323/agent-demo.html",
+          "sha256": "35952dcfb19f6af0fdf5efb633700ef05209d0dd5819e90349cda16faeaaf374"
+        },
+        "results.html": {
+          "file": "members/member3-IT24102826/results/personal-20261007-162757-690323/results.html",
+          "sha256": "89b0577a9fbf817bc91d8de17e38dad736e6b625b6e2876969e9831027e7e26e"
+        }
+      }
+    }
+  ]
+}

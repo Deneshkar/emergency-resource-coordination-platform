@@ -1,0 +1,129 @@
+{
+  "member": "M.Thanusikan",
+  "student_id": "IT24103609",
+  "execution_kind": "personal",
+  "operator": "M.Thanusikan",
+  "started_at": "2026-10-07T16:26:28.737199+05:30",
+  "note": "Runs existing selected tests. Personal label is the operator declaration, not proof of independent understanding.",
+  "commands": [
+    {
+      "name": "backend",
+      "args": [
+        "dotnet",
+        "test",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\SEF\\emergency-resource-coordination-platform\\backend-tests\\ERCP.Api.Tests.csproj",
+        "--filter",
+        "FullyQualifiedName~ERCP.Api.Tests.ResourcesControllerTests.|FullyQualifiedName~ERCP.Api.Tests.InventoryControllerTests.|FullyQualifiedName~ERCP.Api.Tests.SheltersControllerTests.|FullyQualifiedName~ERCP.Api.Tests.GeolocationServiceTests.|FullyQualifiedName~ERCP.Api.Tests.SituationAnalysisAgentTests.",
+        "--logger",
+        "trx;LogFileName=backend.trx",
+        "--logger",
+        "console;verbosity=normal",
+        "--results-directory",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\members\\member2-IT24103609\\results\\personal-20261007-162628-736764"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "agents",
+      "args": [
+        "C:\\Users\\USER\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI04_urgency_score[Low-25]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI04_urgency_score[Medium-50]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI04_urgency_score[High-75]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI04_urgency_score[Critical-90]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI05_full_shelter_is_excluded",
+        "-v",
+        "--junitxml=D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\members\\member2-IT24103609\\results\\personal-20261007-162628-736764\\agents.xml"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "suites": {
+    "backend": [
+      {
+        "name": "ERCP.Api.Tests.SituationAnalysisAgentTests.AssessSituation_GeneratesValidAssessment",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.ResourcesControllerTests.UpdateStatus_ChangesResourceStatus",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.ResourcesControllerTests.Create_AddsResource_ReturnsCreated",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.GeolocationServiceTests.GetNearestShelters_OrdersSheltersByProximity",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.InventoryControllerTests.CreateInventoryItem_SetsLowStock_WhenBelowThreshold",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.SheltersControllerTests.CreateShelter_ReturnsCreated",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.InventoryControllerTests.AdjustStock_SubtractsQuantity_UpdatesStatus",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.ResourcesControllerTests.GetAvailable_ReturnsOnlyAvailableResources",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.InventoryControllerTests.AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.GeolocationServiceTests.CalculateHaversineDistanceKm_ReturnsAccurateKmDistance",
+        "status": "Passed"
+      }
+    ],
+    "agents": [
+      {
+        "name": "test_AI04_urgency_score[Low-25]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI04_urgency_score[Medium-50]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI04_urgency_score[High-75]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI04_urgency_score[Critical-90]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI05_full_shelter_is_excluded",
+        "status": "Passed"
+      }
+    ]
+  },
+  "passed": true,
+  "demo_scenarios": 2,
+  "finished_at": "2026-10-07T16:26:32.831611+05:30",
+  "source_hashes": {
+    "backend-tests/ResourcesControllerTests.cs": "1843d6ef9a3f17d10f2ac7bf9dd01330dd9a2b431885a4b5f15ae02a3e0bb7e1",
+    "backend-tests/InventoryControllerTests.cs": "d7b1e416fdb730f02d886ba557bac2409bc082be5e77be957370cb66c96bb922",
+    "backend-tests/SheltersControllerTests.cs": "392fcf8098753f6a2b083f4f81b88b81e300d8f52f2bb5e02e879e6550c18142",
+    "backend-tests/GeolocationServiceTests.cs": "8d58b1f00ad310f24b07afe7851a945a799904f88f616571c44498dacddc8561",
+    "backend-tests/SituationAnalysisAgentTests.cs": "580c2bd67b59f32f300fe26d826880c87da84702da7bf0771a515fdcf8749694",
+    "ai-agents/situation_analysis_agent.py": "6cce3d985cdf84f19e20c7dd12154dba3e58069b1b83cbbf80e60302d40cc969"
+  },
+  "test_script_sha256": "e37929c0f1f72ea19c4320825d6c3e1e47aed79cad7a55986ff80c7ae4158dba"
+}

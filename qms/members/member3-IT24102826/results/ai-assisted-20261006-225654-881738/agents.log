@@ -1,0 +1,15 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.2, pytest-8.3.3, pluggy-1.6.0 -- C:\Users\USER\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Sliit Subjects\Y3 S1\SEF\Assignment\QMS\scripts
+configfile: pytest.ini
+plugins: anyio-4.8.0, asyncio-0.24.0
+asyncio: mode=Mode.STRICT, default_loop_scope=function
+collecting ... collected 3 items
+
+..\..\QMS\scripts\test_agents.py::test_AI01_unapproved_tool_is_rejected[ResourceAllocationAgent] PASSED [ 33%]
+..\..\QMS\scripts\test_agents.py::test_AI03_allocation_shortage_is_explicit PASSED [ 66%]
+..\..\QMS\scripts\test_agents.py::test_AI11_injected_text_does_not_bypass_deterministic_approval PASSED [100%]
+
+- generated xml file: D:\Sliit Subjects\Y3 S1\SEF\Assignment\QMS\members\member3-IT24102826\results\ai-assisted-20261006-225654-881738\agents.xml -
+============================== 3 passed in 0.12s ==============================

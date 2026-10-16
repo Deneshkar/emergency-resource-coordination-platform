@@ -16,7 +16,7 @@ else:
     for folder in ('scripts', 'submission', 'evidence', 'members'):
         for path in (QMS / folder).rglob('*'):
             relative = path.relative_to(QMS)
-            if not path.is_file() or any(p in ('__pycache__','.pytest_cache') or p.startswith('rerun-') for p in relative.parts): continue
+            if not path.is_file() or path.name.startswith('~$') or any(p in ('__pycache__','.pytest_cache') or p.startswith('rerun-') for p in relative.parts): continue
             if folder == 'evidence':
                 if path.suffix.lower() not in ('.trx','.json','.jsonl','.log','.xml','.txt','.patch','.png'): continue
                 if relative.as_posix().startswith('evidence/final/backend/') and relative.as_posix() not in ('evidence/final/backend/backend.trx','evidence/final/backend/coverage.cobertura.xml'): continue
