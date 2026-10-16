@@ -1,0 +1,377 @@
+{
+  "member": "Deneshkar. P",
+  "student_id": "IT24103828",
+  "component": "Volunteer/Responder Management",
+  "agent": "ValidationSafetyAgent",
+  "method": "validate_assignment",
+  "generated_at": "2026-10-06T17:32:32.252673+05:30",
+  "execution_kind": "ai-assisted",
+  "operator": "OpenAI Codex",
+  "live_llm": false,
+  "agent_sha256": "8cbe95a440e3fd688fbe58a97f49742f8603889a410d7997c07c00b2b2c6ee1f",
+  "scenarios": [
+    {
+      "id": "M4-D01",
+      "title": "Available volunteer with valid shift",
+      "input": {
+        "dispatch_id": 42,
+        "incident_id": 7,
+        "assignments": [
+          {
+            "volunteer_id": "vol-demo-4",
+            "volunteer_name": "Demo Responder",
+            "is_available": true,
+            "skills": "medical, rescue",
+            "required_skills": "medical",
+            "proposed_shift": {
+              "start": "2026-10-06T10:00:00Z",
+              "end": "2026-10-06T11:00:00Z"
+            },
+            "existing_shifts": []
+          }
+        ]
+      },
+      "output": {
+        "agent_id": "agent-validation-safety-04",
+        "timestamp": "2026-10-06T12:02:32.252357+00:00",
+        "dispatch_id": 42,
+        "incident_id": 7,
+        "is_valid": true,
+        "recommendation": "APPROVE",
+        "violations": [],
+        "warnings": [],
+        "checks": [
+          {
+            "tool": "check_volunteer_availability",
+            "passed": true,
+            "detail": "Volunteer Demo Responder (vol-demo-4) available=True"
+          },
+          {
+            "tool": "check_shift_overlap",
+            "passed": true,
+            "detail": "Volunteer Demo Responder: 0 overlapping shift(s)."
+          }
+        ],
+        "errors": [],
+        "allowed_tools": [
+          "check_volunteer_availability",
+          "check_shift_overlap",
+          "check_shelter_capacity",
+          "check_resource_stock"
+        ],
+        "duration_ms": 0,
+        "status": "COMPLETED"
+      },
+      "checks": [
+        {
+          "expected": {
+            "path": "is_valid",
+            "op": "equals",
+            "value": true
+          },
+          "actual": true,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "recommendation",
+            "op": "equals",
+            "value": "APPROVE"
+          },
+          "actual": "APPROVE",
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "checks.1.passed",
+            "op": "equals",
+            "value": true
+          },
+          "actual": true,
+          "passed": true
+        }
+      ],
+      "error": null,
+      "passed": true
+    },
+    {
+      "id": "M4-D02",
+      "title": "Unavailable volunteer",
+      "input": {
+        "dispatch_id": 42,
+        "incident_id": 7,
+        "assignments": [
+          {
+            "volunteer_id": "vol-demo-4",
+            "volunteer_name": "Demo Responder",
+            "is_available": false,
+            "skills": "medical, rescue",
+            "required_skills": "medical",
+            "proposed_shift": {
+              "start": "2026-10-06T10:00:00Z",
+              "end": "2026-10-06T11:00:00Z"
+            },
+            "existing_shifts": []
+          }
+        ]
+      },
+      "output": {
+        "agent_id": "agent-validation-safety-04",
+        "timestamp": "2026-10-06T12:02:32.252503+00:00",
+        "dispatch_id": 42,
+        "incident_id": 7,
+        "is_valid": false,
+        "recommendation": "REJECT",
+        "violations": [
+          {
+            "code": "V1_VOLUNTEER_UNAVAILABLE",
+            "message": "Volunteer Demo Responder is marked unavailable/off-duty and cannot be dispatched.",
+            "severity": "BLOCKER"
+          }
+        ],
+        "warnings": [],
+        "checks": [
+          {
+            "tool": "check_volunteer_availability",
+            "passed": false,
+            "detail": "Volunteer Demo Responder (vol-demo-4) available=False"
+          },
+          {
+            "tool": "check_shift_overlap",
+            "passed": true,
+            "detail": "Volunteer Demo Responder: 0 overlapping shift(s)."
+          }
+        ],
+        "errors": [],
+        "allowed_tools": [
+          "check_volunteer_availability",
+          "check_shift_overlap",
+          "check_shelter_capacity",
+          "check_resource_stock"
+        ],
+        "duration_ms": 0,
+        "status": "COMPLETED"
+      },
+      "checks": [
+        {
+          "expected": {
+            "path": "is_valid",
+            "op": "equals",
+            "value": false
+          },
+          "actual": false,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "recommendation",
+            "op": "equals",
+            "value": "REJECT"
+          },
+          "actual": "REJECT",
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "violations.0.code",
+            "op": "equals",
+            "value": "V1_VOLUNTEER_UNAVAILABLE"
+          },
+          "actual": "V1_VOLUNTEER_UNAVAILABLE",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "passed": true
+    },
+    {
+      "id": "M4-D03",
+      "title": "Overlapping shift requires revision",
+      "input": {
+        "dispatch_id": 42,
+        "incident_id": 7,
+        "assignments": [
+          {
+            "volunteer_id": "vol-demo-4",
+            "volunteer_name": "Demo Responder",
+            "is_available": true,
+            "skills": "medical, rescue",
+            "required_skills": "medical",
+            "proposed_shift": {
+              "start": "2026-10-06T09:30:00Z",
+              "end": "2026-10-06T11:00:00Z"
+            },
+            "existing_shifts": [
+              {
+                "id": "shift-existing",
+                "start": "2026-10-06T09:00:00Z",
+                "end": "2026-10-06T10:00:00Z",
+                "status": "Scheduled"
+              }
+            ]
+          }
+        ]
+      },
+      "output": {
+        "agent_id": "agent-validation-safety-04",
+        "timestamp": "2026-10-06T12:02:32.252594+00:00",
+        "dispatch_id": 42,
+        "incident_id": 7,
+        "is_valid": false,
+        "recommendation": "REVISE",
+        "violations": [
+          {
+            "code": "V2_DOUBLE_BOOKING",
+            "message": "Volunteer Demo Responder is already booked on overlapping shift(s): shift-existing.",
+            "severity": "BLOCKER"
+          }
+        ],
+        "warnings": [],
+        "checks": [
+          {
+            "tool": "check_volunteer_availability",
+            "passed": true,
+            "detail": "Volunteer Demo Responder (vol-demo-4) available=True"
+          },
+          {
+            "tool": "check_shift_overlap",
+            "passed": false,
+            "detail": "Volunteer Demo Responder: 1 overlapping shift(s)."
+          }
+        ],
+        "errors": [],
+        "allowed_tools": [
+          "check_volunteer_availability",
+          "check_shift_overlap",
+          "check_shelter_capacity",
+          "check_resource_stock"
+        ],
+        "duration_ms": 0,
+        "status": "COMPLETED"
+      },
+      "checks": [
+        {
+          "expected": {
+            "path": "is_valid",
+            "op": "equals",
+            "value": false
+          },
+          "actual": false,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "recommendation",
+            "op": "equals",
+            "value": "REVISE"
+          },
+          "actual": "REVISE",
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "violations.0.code",
+            "op": "equals",
+            "value": "V2_DOUBLE_BOOKING"
+          },
+          "actual": "V2_DOUBLE_BOOKING",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "passed": true
+    },
+    {
+      "id": "M4-D04",
+      "title": "Adjacent shifts do not overlap",
+      "input": {
+        "dispatch_id": 42,
+        "incident_id": 7,
+        "assignments": [
+          {
+            "volunteer_id": "vol-demo-4",
+            "volunteer_name": "Demo Responder",
+            "is_available": true,
+            "skills": "medical, rescue",
+            "required_skills": "medical",
+            "proposed_shift": {
+              "start": "2026-10-06T10:00:00Z",
+              "end": "2026-10-06T11:00:00Z"
+            },
+            "existing_shifts": [
+              {
+                "id": "shift-existing",
+                "start": "2026-10-06T09:00:00Z",
+                "end": "2026-10-06T10:00:00Z",
+                "status": "Scheduled"
+              }
+            ]
+          }
+        ]
+      },
+      "output": {
+        "agent_id": "agent-validation-safety-04",
+        "timestamp": "2026-10-06T12:02:32.252656+00:00",
+        "dispatch_id": 42,
+        "incident_id": 7,
+        "is_valid": true,
+        "recommendation": "APPROVE",
+        "violations": [],
+        "warnings": [],
+        "checks": [
+          {
+            "tool": "check_volunteer_availability",
+            "passed": true,
+            "detail": "Volunteer Demo Responder (vol-demo-4) available=True"
+          },
+          {
+            "tool": "check_shift_overlap",
+            "passed": true,
+            "detail": "Volunteer Demo Responder: 0 overlapping shift(s)."
+          }
+        ],
+        "errors": [],
+        "allowed_tools": [
+          "check_volunteer_availability",
+          "check_shift_overlap",
+          "check_shelter_capacity",
+          "check_resource_stock"
+        ],
+        "duration_ms": 0,
+        "status": "COMPLETED"
+      },
+      "checks": [
+        {
+          "expected": {
+            "path": "is_valid",
+            "op": "equals",
+            "value": true
+          },
+          "actual": true,
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "recommendation",
+            "op": "equals",
+            "value": "APPROVE"
+          },
+          "actual": "APPROVE",
+          "passed": true
+        },
+        {
+          "expected": {
+            "path": "checks.1.passed",
+            "op": "equals",
+            "value": true
+          },
+          "actual": true,
+          "passed": true
+        }
+      ],
+      "error": null,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

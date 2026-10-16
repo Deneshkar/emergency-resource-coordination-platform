@@ -1,0 +1,13 @@
+[
+  {
+    "check": "unavailable-postgres",
+    "status": "Passed",
+    "process_exit": 3762504530
+  },
+  {
+    "check": "legacy-schema-rejected",
+    "status": "Passed",
+    "process_exit": 3762504530,
+    "existing_row_preserved": true
+  }
+]

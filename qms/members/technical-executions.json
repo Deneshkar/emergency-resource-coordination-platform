@@ -1,0 +1,24 @@
+{
+  "label": "Technical execution - run by Codex; member review pending",
+  "operator": "OpenAI Codex (technical execution; member review pending)",
+  "members": [
+    {
+      "member": 1,
+      "student_id": "IT24103355",
+      "execution": "members/member1-IT24103355/results/ai-assisted-20261006-225642-874010/execution.json",
+      "sha256": "48fb3d97c284f414680dd419d788b3cc7673fb36cb1873f4f0cd366425980d1d"
+    },
+    {
+      "member": 2,
+      "student_id": "IT24103609",
+      "execution": "members/member2-IT24103609/results/ai-assisted-20261006-225649-753197/execution.json",
+      "sha256": "7fad37112a16a524bbb80b86648a09e0c81c9e229ed070bb607427ce95d9c2a7"
+    },
+    {
+      "member": 3,
+      "student_id": "IT24102826",
+      "execution": "members/member3-IT24102826/results/ai-assisted-20261006-225654-881738/execution.json",
+      "sha256": "456e1a1dd4104fe144bf9ecd2ce4952a495717a7befeaa1cee4b8f4beb600450"
+    }
+  ]
+}

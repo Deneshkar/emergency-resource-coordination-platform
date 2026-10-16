@@ -1,0 +1,29 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ERCP.Api -> D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend\bin\Debug\net8.0\ERCP.Api.dll
+  ERCP.Api.Tests -> D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll
+Test run for D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll (.NETCoreApp,Version=v8.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.29)
+[xUnit.net 00:00:00.08]   Discovering: ERCP.Api.Tests
+[xUnit.net 00:00:00.14]   Discovered:  ERCP.Api.Tests
+[xUnit.net 00:00:00.14]   Starting:    ERCP.Api.Tests
+  Passed ERCP.Api.Tests.GeolocationServiceTests.CalculateHaversineDistanceKm_ReturnsAccurateKmDistance [5 ms]
+  Passed ERCP.Api.Tests.InventoryControllerTests.AdjustStock_SubtractsQuantity_UpdatesStatus [464 ms]
+  Passed ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_UpdatesStatusToFull_WhenCapacityReached [464 ms]
+  Passed ERCP.Api.Tests.InventoryControllerTests.AdjustStock_ReturnsBadRequest_WhenResultingQuantityIsNegative [29 ms]
+  Passed ERCP.Api.Tests.SheltersControllerTests.CreateShelter_ReturnsCreated [30 ms]
+[xUnit.net 00:00:00.76]   Finished:    ERCP.Api.Tests
+  Passed ERCP.Api.Tests.SheltersControllerTests.UpdateOccupancy_ReturnsBadRequest_WhenOccupancyExceedsTotalCapacity [1 ms]
+  Passed ERCP.Api.Tests.InventoryControllerTests.CreateInventoryItem_SetsLowStock_WhenBelowThreshold [3 ms]
+  Passed ERCP.Api.Tests.GeolocationServiceTests.GetNearestShelters_OrdersSheltersByProximity [526 ms]
+  Passed ERCP.Api.Tests.ResourcesControllerTests.GetAvailable_ReturnsOnlyAvailableResources [553 ms]
+  Passed ERCP.Api.Tests.ResourcesControllerTests.UpdateStatus_ChangesResourceStatus [2 ms]
+  Passed ERCP.Api.Tests.ResourcesControllerTests.Create_AddsResource_ReturnsCreated [2 ms]
+  Passed ERCP.Api.Tests.SituationAnalysisAgentTests.AssessSituation_GeneratesValidAssessment [581 ms]
+Results File: D:\Sliit Subjects\Y3 S1\SEF\Assignment\QMS\members\member2-IT24103609\results\ai-assisted-20261006-225649-753197\backend.trx
+
+Test Run Successful.
+Total tests: 12
+     Passed: 12
+ Total time: 1.2462 Seconds

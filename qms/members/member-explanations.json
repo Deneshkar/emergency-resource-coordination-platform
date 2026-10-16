@@ -1,0 +1,114 @@
+{
+  "received_on": "2026-10-08",
+  "members": [
+    {
+      "member": 1,
+      "name": "Jathurshy.S",
+      "student_id": "IT24103355",
+      "component": "Incident Management",
+      "agent": "CoordinatorPlannerAgent",
+      "scenario_ids": [
+        "M1-C01",
+        "M1-C02"
+      ],
+      "run": "members/member1-IT24103355/results/changed-20261008-105202-730954/comparison.json",
+      "reconciliation": "The submitted High-to-Medium description matches the older M1-D01/M1-D02 examples. The supplied 8 October screenshot and raw personal run use M1-C01/M1-C02 and keep High priority. The summary below corrects that distinction; it is an edited evidence summary, not a verbatim member statement.",
+      "answers": {
+        "What input changed?": "Available resources changed from one to zero and volunteers from one to zero. Priority remained High, with the same incident ID, title, category and affected count.",
+        "What was expected?": "The supplied explanation expects the plan to identify resource and volunteer shortages while retaining human approval. That expectation matches the executed comparison.",
+        "What actually happened?": "Both scenarios passed. The changed plan reports no available resources and no available volunteers, identifies the missing vehicles and volunteers as constraints, and returns requiresHumanApproval=true.",
+        "Which assertion or business rule explains the result?": "The checks assert incidentId=7, requiresHumanApproval=true, and reasoning containing both shortage messages. The planner exposes constraints and proposes a response; it does not independently execute the plan."
+      },
+      "original": {
+        "file": "members/member1-IT24103355/Explanation_As_Submitted_20261008.md",
+        "sha256": "9d207200a12bb7bca15696b8929d4f23af7ea110b8426355f6bf0041ad8cff46"
+      },
+      "summary": {
+        "file": "members/member1-IT24103355/Written_Explanation.md",
+        "sha256": "b818ca13acde6b3ddcbc9282726c22ffd477d13aea9ccaa02d8a4304d27f3804"
+      }
+    },
+    {
+      "member": 2,
+      "name": "M.Thanusikan",
+      "student_id": "IT24103609",
+      "component": "Resource and Inventory Management",
+      "agent": "SituationAnalysisAgent",
+      "scenario_ids": [
+        "M2-C01",
+        "M2-C02"
+      ],
+      "run": "members/member2-IT24103609/results/changed-20261008-105229-627673/comparison.json",
+      "reconciliation": "The submitted routine-assistance description and 85-to-25 urgency change match the older M2-D01/M2-D02 examples. The supplied personal run uses M2-C01/M2-C02: both incidents are the same High-priority flood, both scores are 85, and two shelters remain. The summary below corrects the distinction; the member should review these corrections before the viva.",
+      "answers": {
+        "What input changed?": "Medical stock increased from 20 to 50 and available vehicles from one to three. Food stayed at 100. Shelter 1 remained 10/10; shelter 2 changed from 30/100 to 100/100. The same High-priority flood incident remained in both inputs.",
+        "What was expected?": "For this executed pair, the evidence-aligned expectation is that stock deficits clear and no shelter is selected, while urgency stays 85. The supplied expectation of lower urgency belongs to the older D-series pair, not this C-series run.",
+        "What actually happened?": "Both scenarios passed. Urgency was 85 in both. The original output selected shelter 2 and showed a medical deficit. The changed output returned nearest_shelter=null and all three resource-deficiency flags false.",
+        "Which assertion or business rule explains the result?": "The checks assert urgency_score=85, nearest_shelter=null, and false deficit flags after the change. Medical 50, food 100 and three vehicles meet the current baselines. Full shelters are excluded; eligible shelters are ranked by available capacity, not geographic distance."
+      },
+      "original": {
+        "file": "members/member2-IT24103609/Explanation_As_Submitted_20261008.md",
+        "sha256": "af80373be507c08198c0655d7c43c29f5a710e8c791ecf4d98c1b9de227277e3"
+      },
+      "summary": {
+        "file": "members/member2-IT24103609/Written_Explanation.md",
+        "sha256": "b2f29baf576fdb0d30287001003c6058898ffc7333c3debad835c81ab761ca50"
+      }
+    },
+    {
+      "member": 3,
+      "name": "Denesh N",
+      "student_id": "IT24102826",
+      "component": "Dispatch and Task Assignment",
+      "agent": "ResourceAllocationAgent",
+      "scenario_ids": [
+        "M3-C01",
+        "M3-C02"
+      ],
+      "run": "members/member3-IT24102826/results/changed-20261008-105250-078618/comparison.json",
+      "reconciliation": "The supplied explanation matches the personal run. Its submitted table labels D-series examples; the screenshot and dated comparison use M3-C01/M3-C02. The summary adds the observed High-priority requirement rule for clarity.",
+      "answers": {
+        "What input changed?": "Priority changed from Medium to High, with available resources and volunteers each changing from one to zero. The input retained its explicit one-vehicle requirement.",
+        "What was expected?": "The supplied expectation is an empty allocation, reported shortages and REVISE, while human approval remains required.",
+        "What actually happened?": "Both scenarios passed. The original output allocated a response van, returned no gaps and APPROVE. The changed output allocated nothing, reported gaps of two Vehicles, two Medical resources and two Personnel, and returned REVISE. Human approval remained true.",
+        "Which assertion or business rule explains the result?": "The checks assert empty/nonempty allocation and gap lists, requires_human_approval=true, and APPROVE/REVISE. In the current implementation, High priority replaces the explicit input requirement with the priority-based estimate. This comparison changes both priority and availability; it does not isolate their individual effects."
+      },
+      "original": {
+        "file": "members/member3-IT24102826/Explanation_As_Submitted_20261008.md",
+        "sha256": "0bb87511d4e87487cde756d5c9c394f7d4f31a50a245c3e99c9457693b55d936"
+      },
+      "summary": {
+        "file": "members/member3-IT24102826/Written_Explanation.md",
+        "sha256": "a9cc9d7d2478d3d7613af5a52f77e7775e3bfb4195db559a0a8e2c83073534cd"
+      }
+    },
+    {
+      "member": 4,
+      "name": "Deneshkar. P",
+      "student_id": "IT24103828",
+      "component": "Volunteer/Responder Management",
+      "agent": "ValidationSafetyAgent",
+      "scenario_ids": [
+        "M4-C01",
+        "M4-C02"
+      ],
+      "run": "members/member4-IT24103828/results/changed-20261008-105128-171178/comparison.json",
+      "reconciliation": "The prior supplied explanation is preserved verbatim in Understanding_Submitted_20261008.md. The following four-part summary combines it with the verified M4-C01/M4-C02 personal run. It is not a new verbatim statement.",
+      "answers": {
+        "What input changed?": "Only the proposed shift start changed, from 10:00 to 09:30 UTC. The existing shift stayed 09:00-10:00, the proposed end stayed 11:00 and the volunteer remained available.",
+        "What was expected?": "The previously supplied explanation identifies adjacent shifts as non-overlapping and the 09:30 start as a 30-minute conflict requiring revision.",
+        "What actually happened?": "Both personal scenarios passed. The adjacent case returned is_valid=true and APPROVE. The changed case returned is_valid=false, REVISE and V2_DOUBLE_BOOKING.",
+        "Which assertion or business rule explains the result?": "The checks assert those returned fields. Half-open intervals overlap when new_start < existing_end and existing_start < new_end. Equality at 10:00 is allowed. V2_DOUBLE_BOOKING is revisable; an agent recommendation does not itself approve the dispatch."
+      },
+      "original": {
+        "file": "members/member4-IT24103828/Understanding_Submitted_20261008.md",
+        "sha256": "3c95c9a3eb7b13e0b35278526e053beedb70aab4920297d9c3db90a32f02c879"
+      },
+      "summary": {
+        "file": "members/member4-IT24103828/Written_Explanation.md",
+        "sha256": "c370e6236a3d990e56da60fe9e3a16c7dc8d7d323cb4ce596253fdc2da55cf64"
+      }
+    }
+  ],
+  "viva_completed": false
+}

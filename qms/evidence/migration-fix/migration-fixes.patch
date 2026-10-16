@@ -1,0 +1,1230 @@
+diff --git a/backend/Migrations/20260910131851_AddResourceAndShelterManagement.cs b/backend/Migrations/20260910131851_AddResourceAndShelterManagement.cs
+index 0283c11..eb7671a 100644
+--- a/backend/Migrations/20260910131851_AddResourceAndShelterManagement.cs
++++ b/backend/Migrations/20260910131851_AddResourceAndShelterManagement.cs
+@@ -123,9 +123,6 @@ namespace ERCP.Api.Migrations
+         /// <inheritdoc />
+         protected override void Down(MigrationBuilder migrationBuilder)
+         {
+-            migrationBuilder.DropTable(
+-                name: "IncidentPlans");
+-
+             migrationBuilder.DropTable(
+                 name: "InventoryItems");
+ 
+@@ -135,9 +132,6 @@ namespace ERCP.Api.Migrations
+             migrationBuilder.DropTable(
+                 name: "SituationAssessments");
+ 
+-            migrationBuilder.DropTable(
+-                name: "Incidents");
+-
+             migrationBuilder.DropTable(
+                 name: "Shelters");
+         }
+diff --git a/backend/Migrations/20260916110602_AddAffectedCountToIncidents.cs b/backend/Migrations/20260916110602_AddAffectedCountToIncidents.cs
+index 09e3b1b..3b0eb61 100644
+--- a/backend/Migrations/20260916110602_AddAffectedCountToIncidents.cs
++++ b/backend/Migrations/20260916110602_AddAffectedCountToIncidents.cs
+@@ -1,4 +1,4 @@
+-﻿using System;
++using System;
+ using Microsoft.EntityFrameworkCore.Migrations;
+ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+ 
+@@ -117,111 +117,33 @@ namespace ERCP.Api.Migrations
+                         onDelete: ReferentialAction.Cascade);
+                 });
+ 
+-            migrationBuilder.CreateTable(
+-                name: "Shelters",
+-                columns: table => new
+-                {
+-                    Id = table.Column<int>(type: "integer", nullable: false)
+-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+-                    Name = table.Column<string>(type: "text", nullable: false),
+-                    Location = table.Column<string>(type: "text", nullable: false),
+-                    Address = table.Column<string>(type: "text", nullable: false),
+-                    TotalCapacity = table.Column<int>(type: "integer", nullable: false),
+-                    CurrentOccupancy = table.Column<int>(type: "integer", nullable: false),
+-                    Status = table.Column<string>(type: "text", nullable: false),
+-                    ContactNumber = table.Column<string>(type: "text", nullable: false),
+-                    Latitude = table.Column<double>(type: "double precision", nullable: true),
+-                    Longitude = table.Column<double>(type: "double precision", nullable: true),
+-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+-                },
+-                constraints: table =>
+-                {
+-                    table.PrimaryKey("PK_Shelters", x => x.Id);
+-                });
+-
+-            migrationBuilder.CreateTable(
+-                name: "InventoryItems",
+-                columns: table => new
+-                {
+-                    Id = table.Column<int>(type: "integer", nullable: false)
+-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+-                    ItemName = table.Column<string>(type: "text", nullable: false),
+-                    Category = table.Column<string>(type: "text", nullable: false),
+-                    Quantity = table.Column<int>(type: "integer", nullable: false),
+-                    UnitOfMeasure = table.Column<string>(type: "text", nullable: false),
+-                    MinimumThreshold = table.Column<int>(type: "integer", nullable: false),
+-                    ShelterId = table.Column<int>(type: "integer", nullable: true),
+-                    Location = table.Column<string>(type: "text", nullable: false),
+-                    Status = table.Column<string>(type: "text", nullable: false),
+-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+-                },
+-                constraints: table =>
+-                {
+-                    table.PrimaryKey("PK_InventoryItems", x => x.Id);
+-                    table.ForeignKey(
+-                        name: "FK_InventoryItems_Shelters_ShelterId",
+-                        column: x => x.ShelterId,
+-                        principalTable: "Shelters",
+-                        principalColumn: "Id");
+-                });
+-
+-            migrationBuilder.CreateTable(
+-                name: "Resources",
+-                columns: table => new
+-                {
+-                    Id = table.Column<int>(type: "integer", nullable: false)
+-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+-                    Name = table.Column<string>(type: "text", nullable: false),
+-                    ResourceType = table.Column<string>(type: "text", nullable: false),
+-                    Status = table.Column<string>(type: "text", nullable: false),
+-                    Capacity = table.Column<int>(type: "integer", nullable: false),
+-                    Location = table.Column<string>(type: "text", nullable: false),
+-                    ShelterId = table.Column<int>(type: "integer", nullable: true),
+-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+-                },
+-                constraints: table =>
+-                {
+-                    table.PrimaryKey("PK_Resources", x => x.Id);
+-                    table.ForeignKey(
+-                        name: "FK_Resources_Shelters_ShelterId",
+-                        column: x => x.ShelterId,
+-                        principalTable: "Shelters",
+-                        principalColumn: "Id");
+-                });
+-
+             migrationBuilder.CreateIndex(
+                 name: "IX_IncidentTimelineEvents_IncidentId",
+                 table: "IncidentTimelineEvents",
+                 column: "IncidentId");
+ 
+-            migrationBuilder.CreateIndex(
+-                name: "IX_InventoryItems_ShelterId",
+-                table: "InventoryItems",
+-                column: "ShelterId");
++            // Resource tables belong to AddResourceAndShelterManagement.
++            // Align their existing foreign keys with the current optional relationship model.
++            migrationBuilder.DropForeignKey("FK_InventoryItems_Shelters_ShelterId", "InventoryItems");
++            migrationBuilder.DropForeignKey("FK_Resources_Shelters_ShelterId", "Resources");
++            migrationBuilder.AddForeignKey("FK_InventoryItems_Shelters_ShelterId", "InventoryItems", "ShelterId", "Shelters", principalColumn: "Id");
++            migrationBuilder.AddForeignKey("FK_Resources_Shelters_ShelterId", "Resources", "ShelterId", "Shelters", principalColumn: "Id");
++
++
+ 
+-            migrationBuilder.CreateIndex(
+-                name: "IX_Resources_ShelterId",
+-                table: "Resources",
+-                column: "ShelterId");
+         }
+ 
+         /// <inheritdoc />
+         protected override void Down(MigrationBuilder migrationBuilder)
+         {
+-            migrationBuilder.DropTable(
+-                name: "IncidentTimelineEvents");
++            // Restore the preceding migration's SetNull relationships on rollback.
++            migrationBuilder.DropForeignKey("FK_InventoryItems_Shelters_ShelterId", "InventoryItems");
++            migrationBuilder.DropForeignKey("FK_Resources_Shelters_ShelterId", "Resources");
++            migrationBuilder.AddForeignKey("FK_InventoryItems_Shelters_ShelterId", "InventoryItems", "ShelterId", "Shelters", principalColumn: "Id", onDelete: ReferentialAction.SetNull);
++            migrationBuilder.AddForeignKey("FK_Resources_Shelters_ShelterId", "Resources", "ShelterId", "Shelters", principalColumn: "Id", onDelete: ReferentialAction.SetNull);
+ 
+             migrationBuilder.DropTable(
+-                name: "InventoryItems");
+-
+-            migrationBuilder.DropTable(
+-                name: "Resources");
+-
+-            migrationBuilder.DropTable(
+-                name: "Shelters");
++                name: "IncidentTimelineEvents");
+ 
+             migrationBuilder.DropColumn(
+                 name: "AffectedCount",
+diff --git a/backend-tests/QmsMigrationTests.cs b/backend-tests/QmsMigrationTests.cs
+new file mode 100644
+index 0000000..c980201
+--- /dev/null
++++ b/backend-tests/QmsMigrationTests.cs
+@@ -0,0 +1,164 @@
++using ERCP.Api.Data;
++using ERCP.Api.Models;
++using Microsoft.EntityFrameworkCore;
++using Microsoft.EntityFrameworkCore.Infrastructure;
++using Microsoft.EntityFrameworkCore.Migrations;
++using Npgsql;
++using Xunit;
++
++namespace ERCP.Api.Tests;
++
++public class MigrationFactAttribute : FactAttribute
++{
++    public MigrationFactAttribute()
++    {
++        if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("QMS_MIGRATION_ADMIN")))
++            Skip = "Set QMS_MIGRATION_ADMIN to the isolated localhost PostgreSQL admin connection.";
++    }
++}
++
++public class QmsMigrationTests
++{
++    private const string ResourceMigration = "20260910131851_AddResourceAndShelterManagement";
++    private const string IncidentMigration = "20260916110602_AddAffectedCountToIncidents";
++    private const string PreviousMigration = "20260823065230_AddIncidentManagement";
++
++    // Each test owns unique databases. No shared/application database is reset.
++    private sealed class TestDatabase : IAsyncDisposable
++    {
++        private readonly string admin;
++        private readonly string name;
++        public AppDbContext Db { get; }
++        private TestDatabase(string admin, string name, string connection)
++        {
++            this.admin = admin; this.name = name;
++            Db = new AppDbContext(new DbContextOptionsBuilder<AppDbContext>().UseNpgsql(connection).Options);
++        }
++        public static async Task<TestDatabase> Create()
++        {
++            var config = new NpgsqlConnectionStringBuilder(Environment.GetEnvironmentVariable("QMS_MIGRATION_ADMIN"));
++            if (config.Host is not ("127.0.0.1" or "localhost") || config.Database != "postgres")
++                throw new InvalidOperationException("Migration tests require a localhost postgres administrative database.");
++            var admin = config.ConnectionString;
++            var name = "qms_migration_" + Guid.NewGuid().ToString("N");
++            await using var connection = new NpgsqlConnection(admin);
++            await connection.OpenAsync();
++            await using var command = new NpgsqlCommand($"CREATE DATABASE \"{name}\"", connection);
++            await command.ExecuteNonQueryAsync();
++            config.Database = name;
++            return new TestDatabase(admin, name, config.ConnectionString);
++        }
++        public async ValueTask DisposeAsync()
++        {
++            await Db.DisposeAsync();
++            // Only delete the exact random database created by this fixture.
++            if (!System.Text.RegularExpressions.Regex.IsMatch(name, "^qms_migration_[a-f0-9]{32}$"))
++                throw new InvalidOperationException("Unexpected test database name.");
++            await using var connection = new NpgsqlConnection(admin);
++            await connection.OpenAsync();
++            await using var command = new NpgsqlCommand($"DROP DATABASE \"{name}\" WITH (FORCE)", connection);
++            await command.ExecuteNonQueryAsync();
++        }
++    }
++
++    private static async Task<string[]> Schema(AppDbContext db)
++    {
++        // Compare columns, lengths, nullability, foreign keys, primary keys and indexes.
++        // Defaults used to backfill added columns need not match a fresh EnsureCreated schema.
++        var rows = new List<string>();
++        await db.Database.OpenConnectionAsync();
++        await using var command = db.Database.GetDbConnection().CreateCommand();
++        command.CommandText = """
++            SELECT 'column|' || table_name || '|' || column_name || '|' || udt_name || '|' || is_nullable || '|' || coalesce(character_maximum_length::text, '') AS value
++            FROM information_schema.columns WHERE table_schema = 'public' AND table_name <> '__EFMigrationsHistory'
++            UNION ALL
++            SELECT 'constraint|' || t.relname || '|' || c.conname || '|' || pg_get_constraintdef(c.oid)
++            FROM pg_constraint c JOIN pg_class t ON t.oid = c.conrelid JOIN pg_namespace n ON n.oid=t.relnamespace
++            WHERE n.nspname='public' AND t.relname <> '__EFMigrationsHistory'
++            UNION ALL
++            SELECT 'index|' || tablename || '|' || indexdef FROM pg_indexes
++            WHERE schemaname='public' AND tablename <> '__EFMigrationsHistory'
++            ORDER BY value;
++            """;
++        await using var reader = await command.ExecuteReaderAsync();
++        while (await reader.ReadAsync()) rows.Add(reader.GetString(0));
++        return rows.ToArray();
++    }
++
++    [MigrationFact]
++    public async Task MIG01_CleanMigration_MatchesCurrentModelSchema()
++    {
++        await using var migrated = await TestDatabase.Create();
++        await migrated.Db.Database.MigrateAsync();
++        Assert.Empty(await migrated.Db.Database.GetPendingMigrationsAsync());
++        Assert.False(migrated.Db.Database.HasPendingModelChanges());
++        await using var expected = await TestDatabase.Create();
++        await expected.Db.Database.EnsureCreatedAsync();
++        Assert.Equal(await Schema(expected.Db), await Schema(migrated.Db));
++    }
++
++    [MigrationFact]
++    public async Task MIG02_IncidentMigration_RollbackPreservesResourceData()
++    {
++        await using var test = await TestDatabase.Create();
++        var migrator = test.Db.GetService<IMigrator>();
++        await migrator.MigrateAsync(ResourceMigration);
++        var shelter = new Shelter { Name = "Migration Shelter", TotalCapacity = 10 };
++        test.Db.Shelters.Add(shelter); await test.Db.SaveChangesAsync();
++        test.Db.Resources.Add(new Resource { Name = "Keep Resource", ShelterId = shelter.Id });
++        test.Db.InventoryItems.Add(new InventoryItem { ItemName = "Keep Inventory", ShelterId = shelter.Id });
++        await test.Db.SaveChangesAsync();
++        var before = await Schema(test.Db);
++        await migrator.MigrateAsync(IncidentMigration);
++        await migrator.MigrateAsync(ResourceMigration);
++        Assert.Equal(before, await Schema(test.Db));
++        test.Db.ChangeTracker.Clear();
++        Assert.Equal("Migration Shelter", (await test.Db.Shelters.SingleAsync()).Name);
++        Assert.Equal(shelter.Id, (await test.Db.Resources.SingleAsync()).ShelterId);
++        Assert.Equal(shelter.Id, (await test.Db.InventoryItems.SingleAsync()).ShelterId);
++        await migrator.MigrateAsync();
++        Assert.Equal(1, await test.Db.Resources.CountAsync());
++        Assert.Equal(1, await test.Db.InventoryItems.CountAsync());
++    }
++
++    [MigrationFact]
++    public async Task MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData()
++    {
++        await using var test = await TestDatabase.Create();
++        var migrator = test.Db.GetService<IMigrator>();
++        await migrator.MigrateAsync(PreviousMigration);
++        await test.Db.Database.ExecuteSqlRawAsync("""
++            INSERT INTO "Incidents" ("Title","Description","Location","Status","Priority","CreatedAt","UpdatedAt")
++            VALUES ('Preserved incident','Sample data','Colombo','Reported','High',NOW(),NOW());
++            INSERT INTO "IncidentPlans" ("IncidentId","PlanTitle","PlanDescription","Status","CreatedAt")
++            SELECT "Id",'Preserved plan','Plan description','Draft',NOW() FROM "Incidents";
++            """);
++        var before = await Schema(test.Db);
++        await migrator.MigrateAsync(ResourceMigration);
++        await migrator.MigrateAsync(PreviousMigration);
++        Assert.Equal(before, await Schema(test.Db));
++        await migrator.MigrateAsync();
++        Assert.Equal("Preserved incident", (await test.Db.Incidents.SingleAsync()).Title);
++        Assert.Equal("Preserved plan", (await test.Db.IncidentPlans.SingleAsync()).PlanTitle);
++    }
++
++    [MigrationFact]
++    public async Task MIG04_ReapplyAndFullRollback_AreConsistent()
++    {
++        await using var test = await TestDatabase.Create();
++        var migrator = test.Db.GetService<IMigrator>();
++        await migrator.MigrateAsync();
++        test.Db.Users.Add(new User { FullName = "Migration User", Email = "migration@test.local", PasswordHash = "fixture" });
++        await test.Db.SaveChangesAsync();
++        await migrator.MigrateAsync();
++        test.Db.ChangeTracker.Clear();
++        Assert.Equal("migration@test.local", (await test.Db.Users.SingleAsync()).Email);
++        // The database is disposable and explicitly owned by this fixture.
++        await migrator.MigrateAsync("0");
++        Assert.Empty(await test.Db.Database.GetAppliedMigrationsAsync());
++        Assert.Empty(await Schema(test.Db));
++        await migrator.MigrateAsync();
++        Assert.Empty(await test.Db.Database.GetPendingMigrationsAsync());
++        Assert.False(await test.Db.Users.AnyAsync());
++    }
++}
+diff --git a/backend/Migrations/20261005091547_CompleteAuthenticationAndPlanningSchema.cs b/backend/Migrations/20261005091547_CompleteAuthenticationAndPlanningSchema.cs
+new file mode 100644
+index 0000000..3b5ffd9
+--- /dev/null
++++ b/backend/Migrations/20261005091547_CompleteAuthenticationAndPlanningSchema.cs
+@@ -0,0 +1,80 @@
++﻿using Microsoft.EntityFrameworkCore.Migrations;
++
++#nullable disable
++
++using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
++
++namespace ERCP.Api.Migrations
++{
++    /// <inheritdoc />
++    public partial class CompleteAuthenticationAndPlanningSchema : Migration
++    {
++        /// <inheritdoc />
++        protected override void Up(MigrationBuilder migrationBuilder)
++        {
++            // These objects existed in the snapshot/startup repair SQL but not the migration chain.
++            migrationBuilder.CreateTable(
++                name: "Users",
++                columns: table => new
++                {
++                    Id = table.Column<int>(type: "integer", nullable: false)
++                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
++                    FullName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
++                    Email = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
++                    PasswordHash = table.Column<string>(type: "text", nullable: false),
++                    Role = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
++                    PhoneNumber = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
++                    Skills = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
++                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
++                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
++                },
++                constraints: table => table.PrimaryKey("PK_Users", x => x.Id));
++            migrationBuilder.CreateIndex("IX_Users_Email", "Users", "Email", unique: true);
++
++            migrationBuilder.CreateTable(
++                name: "ValidationAudits",
++                columns: table => new
++                {
++                    Id = table.Column<int>(type: "integer", nullable: false)
++                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
++                    DispatchId = table.Column<int>(type: "integer", nullable: false),
++                    IncidentId = table.Column<int>(type: "integer", nullable: true),
++                    IsValid = table.Column<bool>(type: "boolean", nullable: false),
++                    Recommendation = table.Column<string>(type: "text", nullable: false),
++                    ViolationsJson = table.Column<string>(type: "text", nullable: false),
++                    WarningsJson = table.Column<string>(type: "text", nullable: false),
++                    ChecksJson = table.Column<string>(type: "text", nullable: false),
++                    ValidatedBy = table.Column<string>(type: "text", nullable: false),
++                    DurationMs = table.Column<long>(type: "bigint", nullable: false),
++                    ValidatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
++                },
++                constraints: table =>
++                {
++                    table.PrimaryKey("PK_ValidationAudits", x => x.Id);
++                    table.ForeignKey("FK_ValidationAudits_Dispatches_DispatchId", x => x.DispatchId,
++                        "Dispatches", "Id", onDelete: ReferentialAction.Cascade);
++                });
++            migrationBuilder.CreateIndex("IX_ValidationAudits_DispatchId", "ValidationAudits", "DispatchId");
++
++            migrationBuilder.AddColumn<string>("Reasoning", "IncidentPlans", type: "text", nullable: false, defaultValue: "");
++            migrationBuilder.AddColumn<string>("RisksJson", "IncidentPlans", type: "text", nullable: false, defaultValue: "[]");
++            migrationBuilder.AddColumn<string>("ConstraintsJson", "IncidentPlans", type: "text", nullable: false, defaultValue: "[]");
++            migrationBuilder.AddColumn<bool>("RequiresHumanApproval", "IncidentPlans", type: "boolean", nullable: false, defaultValue: true);
++            migrationBuilder.AddColumn<string>("SuggestedAssignmentsJson", "IncidentPlans", type: "text", nullable: false, defaultValue: "[]");
++            migrationBuilder.AddColumn<string>("DispatchPlanJson", "IncidentPlans", type: "text", nullable: false, defaultValue: "[]");
++        }
++
++        /// <inheritdoc />
++        protected override void Down(MigrationBuilder migrationBuilder)
++        {
++            migrationBuilder.DropTable("ValidationAudits");
++            migrationBuilder.DropTable("Users");
++            migrationBuilder.DropColumn("Reasoning", "IncidentPlans");
++            migrationBuilder.DropColumn("RisksJson", "IncidentPlans");
++            migrationBuilder.DropColumn("ConstraintsJson", "IncidentPlans");
++            migrationBuilder.DropColumn("RequiresHumanApproval", "IncidentPlans");
++            migrationBuilder.DropColumn("SuggestedAssignmentsJson", "IncidentPlans");
++            migrationBuilder.DropColumn("DispatchPlanJson", "IncidentPlans");
++        }
++    }
++}
+diff --git a/backend/Migrations/20261005091547_CompleteAuthenticationAndPlanningSchema.Designer.cs b/backend/Migrations/20261005091547_CompleteAuthenticationAndPlanningSchema.Designer.cs
+new file mode 100644
+index 0000000..1086c7d
+--- /dev/null
++++ b/backend/Migrations/20261005091547_CompleteAuthenticationAndPlanningSchema.Designer.cs
+@@ -0,0 +1,768 @@
++﻿// <auto-generated />
++using System;
++using ERCP.Api.Data;
++using Microsoft.EntityFrameworkCore;
++using Microsoft.EntityFrameworkCore.Infrastructure;
++using Microsoft.EntityFrameworkCore.Migrations;
++using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
++using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
++
++#nullable disable
++
++namespace ERCP.Api.Migrations
++{
++    [DbContext(typeof(AppDbContext))]
++    [Migration("20261005091547_CompleteAuthenticationAndPlanningSchema")]
++    partial class CompleteAuthenticationAndPlanningSchema
++    {
++        /// <inheritdoc />
++        protected override void BuildTargetModel(ModelBuilder modelBuilder)
++        {
++#pragma warning disable 612, 618
++            modelBuilder
++                .HasAnnotation("ProductVersion", "8.0.10")
++                .HasAnnotation("Relational:MaxIdentifierLength", 63);
++
++            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
++
++            modelBuilder.Entity("ERCP.Api.Models.Dispatch", b =>
++                {
++                    b.Property<int>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("integer");
++
++                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
++
++                    b.Property<int?>("AllocationPlanId")
++                        .HasColumnType("integer");
++
++                    b.Property<DateTime?>("ApprovedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<string>("ApprovedBy")
++                        .HasColumnType("text");
++
++                    b.Property<DateTime>("CreatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<int>("IncidentId")
++                        .HasColumnType("integer");
++
++                    b.Property<string>("Priority")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("Status")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<DateTime>("UpdatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.HasKey("Id");
++
++                    b.HasIndex("AllocationPlanId");
++
++                    b.ToTable("Dispatches");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.DispatchTask", b =>
++                {
++                    b.Property<int>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("integer");
++
++                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
++
++                    b.Property<DateTime?>("AcceptedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<DateTime?>("AssignedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<DateTime?>("CompletedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<int>("DispatchId")
++                        .HasColumnType("integer");
++
++                    b.Property<int?>("ResourceId")
++                        .HasColumnType("integer");
++
++                    b.Property<string>("Status")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("TaskType")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<Guid>("VolunteerId")
++                        .HasColumnType("uuid");
++
++                    b.HasKey("Id");
++
++                    b.HasIndex("DispatchId");
++
++                    b.HasIndex("ResourceId");
++
++                    b.HasIndex("VolunteerId");
++
++                    b.ToTable("DispatchTasks");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.Incident", b =>
++                {
++                    b.Property<int>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("integer");
++
++                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
++
++                    b.Property<int>("AffectedCount")
++                        .HasColumnType("integer");
++
++                    b.Property<string>("AssignedCoordinator")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("Category")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<DateTime>("CreatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<string>("Description")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<double?>("Latitude")
++                        .HasColumnType("double precision");
++
++                    b.Property<string>("Location")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<double?>("Longitude")
++                        .HasColumnType("double precision");
++
++                    b.Property<string>("Priority")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("ReporterContact")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("Status")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("Title")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<DateTime>("UpdatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.HasKey("Id");
++
++                    b.ToTable("Incidents");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.IncidentPlan", b =>
++                {
++                    b.Property<int>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("integer");
++
++                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
++
++                    b.Property<string>("ActionStepsJson")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<DateTime?>("ApprovedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<string>("ApprovedBy")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("ConstraintsJson")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<DateTime>("CreatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<string>("DispatchPlanJson")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("EstimatedResourcesJson")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<int>("IncidentId")
++                        .HasColumnType("integer");
++
++                    b.Property<string>("Phase")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("PlanDescription")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("PlanTitle")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("Reasoning")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<bool>("RequiresHumanApproval")
++                        .HasColumnType("boolean");
++
++                    b.Property<string>("RiskAssessment")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("RisksJson")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("Status")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("SuggestedAssignmentsJson")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.HasKey("Id");
++
++                    b.HasIndex("IncidentId");
++
++                    b.ToTable("IncidentPlans");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.IncidentTimelineEvent", b =>
++                {
++                    b.Property<int>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("integer");
++
++                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
++
++                    b.Property<string>("CreatedBy")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("Description")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("EventType")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<int>("IncidentId")
++                        .HasColumnType("integer");
++
++                    b.Property<DateTime>("Timestamp")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<string>("Title")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.HasKey("Id");
++
++                    b.HasIndex("IncidentId");
++
++                    b.ToTable("IncidentTimelineEvents");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.InventoryItem", b =>
++                {
++                    b.Property<int>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("integer");
++
++                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
++
++                    b.Property<string>("Category")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<DateTime>("CreatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<string>("ItemName")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("Location")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<int>("MinimumThreshold")
++                        .HasColumnType("integer");
++
++                    b.Property<int>("Quantity")
++                        .HasColumnType("integer");
++
++                    b.Property<int?>("ShelterId")
++                        .HasColumnType("integer");
++
++                    b.Property<string>("Status")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("UnitOfMeasure")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<DateTime>("UpdatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.HasKey("Id");
++
++                    b.HasIndex("ShelterId");
++
++                    b.ToTable("InventoryItems");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.Resource", b =>
++                {
++                    b.Property<int>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("integer");
++
++                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
++
++                    b.Property<int>("Capacity")
++                        .HasColumnType("integer");
++
++                    b.Property<DateTime>("CreatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<string>("Location")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("Name")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("ResourceType")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<int?>("ShelterId")
++                        .HasColumnType("integer");
++
++                    b.Property<string>("Status")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<DateTime>("UpdatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.HasKey("Id");
++
++                    b.HasIndex("ShelterId");
++
++                    b.ToTable("Resources");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.Shelter", b =>
++                {
++                    b.Property<int>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("integer");
++
++                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
++
++                    b.Property<string>("Address")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("ContactNumber")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<DateTime>("CreatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<int>("CurrentOccupancy")
++                        .HasColumnType("integer");
++
++                    b.Property<double?>("Latitude")
++                        .HasColumnType("double precision");
++
++                    b.Property<string>("Location")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<double?>("Longitude")
++                        .HasColumnType("double precision");
++
++                    b.Property<string>("Name")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("Status")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<int>("TotalCapacity")
++                        .HasColumnType("integer");
++
++                    b.Property<DateTime>("UpdatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.HasKey("Id");
++
++                    b.ToTable("Shelters");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.Shift", b =>
++                {
++                    b.Property<Guid>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("uuid");
++
++                    b.Property<DateTime>("CreatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<DateTime>("EndTime")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<DateTime>("StartTime")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<int>("Status")
++                        .HasColumnType("integer");
++
++                    b.Property<DateTime>("UpdatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<Guid>("VolunteerId")
++                        .HasColumnType("uuid");
++
++                    b.HasKey("Id");
++
++                    b.HasIndex("VolunteerId");
++
++                    b.ToTable("Shifts");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.SituationAssessment", b =>
++                {
++                    b.Property<int>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("integer");
++
++                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
++
++                    b.Property<string>("AnalysisSummary")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<DateTime>("CreatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<int>("IncidentId")
++                        .HasColumnType("integer");
++
++                    b.Property<int?>("NearestShelterId")
++                        .HasColumnType("integer");
++
++                    b.Property<string>("RecommendedResourceTypes")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("ResourceDeficiencyJson")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("UrgencyLevel")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<int>("UrgencyScore")
++                        .HasColumnType("integer");
++
++                    b.HasKey("Id");
++
++                    b.ToTable("SituationAssessments");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.User", b =>
++                {
++                    b.Property<int>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("integer");
++
++                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
++
++                    b.Property<DateTime>("CreatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<string>("Email")
++                        .IsRequired()
++                        .HasMaxLength(150)
++                        .HasColumnType("character varying(150)");
++
++                    b.Property<string>("FullName")
++                        .IsRequired()
++                        .HasMaxLength(100)
++                        .HasColumnType("character varying(100)");
++
++                    b.Property<string>("PasswordHash")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("PhoneNumber")
++                        .HasMaxLength(30)
++                        .HasColumnType("character varying(30)");
++
++                    b.Property<string>("Role")
++                        .IsRequired()
++                        .HasMaxLength(30)
++                        .HasColumnType("character varying(30)");
++
++                    b.Property<string>("Skills")
++                        .HasMaxLength(200)
++                        .HasColumnType("character varying(200)");
++
++                    b.Property<DateTime>("UpdatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.HasKey("Id");
++
++                    b.HasIndex("Email")
++                        .IsUnique();
++
++                    b.ToTable("Users");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.ValidationAudit", b =>
++                {
++                    b.Property<int>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("integer");
++
++                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
++
++                    b.Property<string>("ChecksJson")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<int>("DispatchId")
++                        .HasColumnType("integer");
++
++                    b.Property<long>("DurationMs")
++                        .HasColumnType("bigint");
++
++                    b.Property<int?>("IncidentId")
++                        .HasColumnType("integer");
++
++                    b.Property<bool>("IsValid")
++                        .HasColumnType("boolean");
++
++                    b.Property<string>("Recommendation")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<DateTime>("ValidatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<string>("ValidatedBy")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("ViolationsJson")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("WarningsJson")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.HasKey("Id");
++
++                    b.HasIndex("DispatchId");
++
++                    b.ToTable("ValidationAudits");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.Volunteer", b =>
++                {
++                    b.Property<Guid>("Id")
++                        .ValueGeneratedOnAdd()
++                        .HasColumnType("uuid");
++
++                    b.Property<DateTime>("CreatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.Property<string>("Email")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<bool>("IsAvailable")
++                        .HasColumnType("boolean");
++
++                    b.Property<string>("Name")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<string>("Phone")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<double>("Rating")
++                        .HasColumnType("double precision");
++
++                    b.Property<string>("Skills")
++                        .IsRequired()
++                        .HasColumnType("text");
++
++                    b.Property<DateTime>("UpdatedAt")
++                        .HasColumnType("timestamp with time zone");
++
++                    b.HasKey("Id");
++
++                    b.ToTable("Volunteers");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.Dispatch", b =>
++                {
++                    b.HasOne("ERCP.Api.Models.IncidentPlan", "AllocationPlan")
++                        .WithMany()
++                        .HasForeignKey("AllocationPlanId")
++                        .OnDelete(DeleteBehavior.SetNull);
++
++                    b.Navigation("AllocationPlan");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.DispatchTask", b =>
++                {
++                    b.HasOne("ERCP.Api.Models.Dispatch", "Dispatch")
++                        .WithMany("Tasks")
++                        .HasForeignKey("DispatchId")
++                        .OnDelete(DeleteBehavior.Cascade)
++                        .IsRequired();
++
++                    b.HasOne("ERCP.Api.Models.Resource", "Resource")
++                        .WithMany()
++                        .HasForeignKey("ResourceId")
++                        .OnDelete(DeleteBehavior.SetNull);
++
++                    b.HasOne("ERCP.Api.Models.Volunteer", "Volunteer")
++                        .WithMany()
++                        .HasForeignKey("VolunteerId")
++                        .OnDelete(DeleteBehavior.Restrict)
++                        .IsRequired();
++
++                    b.Navigation("Dispatch");
++
++                    b.Navigation("Resource");
++
++                    b.Navigation("Volunteer");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.IncidentPlan", b =>
++                {
++                    b.HasOne("ERCP.Api.Models.Incident", "Incident")
++                        .WithMany("Plans")
++                        .HasForeignKey("IncidentId")
++                        .OnDelete(DeleteBehavior.Cascade)
++                        .IsRequired();
++
++                    b.Navigation("Incident");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.IncidentTimelineEvent", b =>
++                {
++                    b.HasOne("ERCP.Api.Models.Incident", "Incident")
++                        .WithMany("TimelineEvents")
++                        .HasForeignKey("IncidentId")
++                        .OnDelete(DeleteBehavior.Cascade)
++                        .IsRequired();
++
++                    b.Navigation("Incident");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.InventoryItem", b =>
++                {
++                    b.HasOne("ERCP.Api.Models.Shelter", "Shelter")
++                        .WithMany("InventoryItems")
++                        .HasForeignKey("ShelterId");
++
++                    b.Navigation("Shelter");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.Resource", b =>
++                {
++                    b.HasOne("ERCP.Api.Models.Shelter", "Shelter")
++                        .WithMany("Resources")
++                        .HasForeignKey("ShelterId");
++
++                    b.Navigation("Shelter");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.Shift", b =>
++                {
++                    b.HasOne("ERCP.Api.Models.Volunteer", "Volunteer")
++                        .WithMany("Shifts")
++                        .HasForeignKey("VolunteerId")
++                        .OnDelete(DeleteBehavior.Cascade)
++                        .IsRequired();
++
++                    b.Navigation("Volunteer");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.ValidationAudit", b =>
++                {
++                    b.HasOne("ERCP.Api.Models.Dispatch", "Dispatch")
++                        .WithMany()
++                        .HasForeignKey("DispatchId")
++                        .OnDelete(DeleteBehavior.Cascade)
++                        .IsRequired();
++
++                    b.Navigation("Dispatch");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.Dispatch", b =>
++                {
++                    b.Navigation("Tasks");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.Incident", b =>
++                {
++                    b.Navigation("Plans");
++
++                    b.Navigation("TimelineEvents");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.Shelter", b =>
++                {
++                    b.Navigation("InventoryItems");
++
++                    b.Navigation("Resources");
++                });
++
++            modelBuilder.Entity("ERCP.Api.Models.Volunteer", b =>
++                {
++                    b.Navigation("Shifts");
++                });
++#pragma warning restore 612, 618
++        }
++    }
++}
+diff --git a/docs/BUG03_Migration_Repair.md b/docs/BUG03_Migration_Repair.md
+new file mode 100644
+index 0000000..a43357e
+--- /dev/null
++++ b/docs/BUG03_Migration_Repair.md
+@@ -0,0 +1,34 @@
++# BUG-03 migration repair
++
++Verified on 5 October 2026 against an isolated PostgreSQL 17 instance.
++
++## Changes
++
++1. Keep shelter, resource and inventory table/index creation in `20260910131851_AddResourceAndShelterManagement` only. Its rollback no longer drops the earlier `Incidents` and `IncidentPlans` tables.
++2. Remove duplicate table/index creation and corresponding table drops from `20260916110602_AddAffectedCountToIncidents`. Preserve its incident/plan columns and timeline table. Alter the existing shelter foreign keys from SetNull to NoAction, matching that migration's target model and the current snapshot. Its rollback restores SetNull and preserves resource/inventory/shelter rows.
++3. Add `20261005091547_CompleteAuthenticationAndPlanningSchema`. The current model/snapshot already contained `Users`, `ValidationAudits` and six planner columns, but no earlier migration created them. The new migration supplies those objects with reversible operations and safe default values for existing plan rows.
++4. The final snapshot already matches the current model, so no artificial model or snapshot changes were needed. EF reports no pending model changes.
++
++## Database applicability
++
++The repaired chain was tested from empty databases and from the original failed test database, whose history stopped at `20260910131851_AddResourceAndShelterManagement`. Its eight migrations now apply successfully.
++
++An existing application database created through `EnsureCreated`, `CreateTables` or startup repair SQL is a different case: it may contain tables without matching EF migration history. Do not blindly apply the repaired chain, delete the database, or insert migration-history rows to make the error disappear. Inspect its schema/history and back it up before a separate adoption plan. This repair did not modify any shared or production database, and it does not automatically adopt such a database.
++
++Historical migration IDs are retained. No operation was added to drop and recreate the three duplicated resource tables. The older ResourceId UUID-to-integer migration is unchanged; this repair does not claim to preserve legacy UUID resource links through that pre-existing conversion.
++
++## Regression tests
++
++Set `QMS_MIGRATION_ADMIN` to the administrative connection for a disposable localhost PostgreSQL instance. The tests require `Database=postgres`, create uniquely named `qms_migration_<guid>` databases, and clean up only their own databases. They never reset the database specified by QMS_POSTGRES.
++
++```powershell
++$env:QMS_MIGRATION_ADMIN='Host=127.0.0.1;Port=55432;Database=postgres;Username=qms'
++dotnet test backend-tests/ERCP.Api.Tests.csproj --filter FullyQualifiedName~QmsMigrationTests
++```
++
++- MIG01: migrate from empty and compare columns, types, nullability, lengths, keys and indexes with a separate database generated from the current model. Assert no pending migrations/model changes. Backfill defaults are intentionally excluded from the schema comparison.
++- MIG02: upgrade/rollback the incident migration, preserving sample shelter, resource and inventory rows and foreign-key behaviour; then upgrade to latest.
++- MIG03: rollback the resource migration while preserving earlier incident tables and sample incident/plan rows; then upgrade to latest.
++- MIG04: repeated update preserves a user; full rollback to zero followed by reapply succeeds on a disposable database.
++
++Before repair: all four tests failed. After repair: all four passed. The full backend suite passed 95/95 and the live API workflow/security suite passed 17/17 on the migrated schema. Tool reports are under `QMS/evidence/migration-fix` in the assignment package.

@@ -1,0 +1,133 @@
+[
+  {
+    "id": "M2-D01",
+    "title": "Flood with inventory shortages",
+    "input": {
+      "incident": {
+        "id": 7,
+        "title": "Flood emergency",
+        "priority": "High"
+      },
+      "inventory": [
+        {
+          "category": "Medical",
+          "quantity": 20
+        },
+        {
+          "category": "Food",
+          "quantity": 100
+        }
+      ],
+      "resources": [
+        {
+          "resourceType": "Vehicle",
+          "status": "Available"
+        }
+      ],
+      "shelters": [
+        {
+          "id": 1,
+          "name": "Full shelter",
+          "status": "Active",
+          "totalCapacity": 10,
+          "currentOccupancy": 10
+        },
+        {
+          "id": 2,
+          "name": "Available shelter",
+          "status": "Active",
+          "totalCapacity": 100,
+          "currentOccupancy": 30
+        }
+      ]
+    },
+    "checks": [
+      {
+        "path": "urgency_score",
+        "op": "equals",
+        "value": 85
+      },
+      {
+        "path": "nearest_shelter.id",
+        "op": "equals",
+        "value": 2
+      },
+      {
+        "path": "resource_deficiencies.0.isDeficit",
+        "op": "equals",
+        "value": true
+      },
+      {
+        "path": "llm_enhanced",
+        "op": "equals",
+        "value": false
+      }
+    ]
+  },
+  {
+    "id": "M2-D02",
+    "title": "Adequate stock but no shelter capacity",
+    "input": {
+      "incident": {
+        "id": 8,
+        "title": "Routine assistance",
+        "priority": "Low"
+      },
+      "inventory": [
+        {
+          "category": "Medical",
+          "quantity": 50
+        },
+        {
+          "category": "Food",
+          "quantity": 100
+        }
+      ],
+      "resources": [
+        {
+          "resourceType": "Vehicle",
+          "status": "Available"
+        },
+        {
+          "resourceType": "Vehicle",
+          "status": "Available"
+        },
+        {
+          "resourceType": "Vehicle",
+          "status": "Available"
+        }
+      ],
+      "shelters": [
+        {
+          "id": 1,
+          "name": "Full shelter",
+          "status": "Active",
+          "totalCapacity": 10,
+          "currentOccupancy": 10
+        }
+      ]
+    },
+    "checks": [
+      {
+        "path": "urgency_score",
+        "op": "equals",
+        "value": 25
+      },
+      {
+        "path": "nearest_shelter",
+        "op": "equals",
+        "value": null
+      },
+      {
+        "path": "resource_deficiencies.0.isDeficit",
+        "op": "equals",
+        "value": false
+      },
+      {
+        "path": "resource_deficiencies.2.isDeficit",
+        "op": "equals",
+        "value": false
+      }
+    ]
+  }
+]

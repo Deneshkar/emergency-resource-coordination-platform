@@ -1,0 +1,14 @@
+  Determining projects to restore...
+C:\Users\USER\AppData\Local\Temp\qms_zip_u5plfvp8\SEF\emergency-resource-coordination-platform\backend\ERCP.Api.csproj : warning NU1902: Package 'MailKit' 4.7.1.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+  Restored C:\Users\USER\AppData\Local\Temp\qms_zip_u5plfvp8\SEF\emergency-resource-coordination-platform\backend\ERCP.Api.csproj (in 3.04 sec).
+C:\Users\USER\AppData\Local\Temp\qms_zip_u5plfvp8\SEF\emergency-resource-coordination-platform\backend\ERCP.Api.csproj : warning NU1902: Package 'MailKit' 4.7.1.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+  ERCP.Api -> C:\Users\USER\AppData\Local\Temp\qms_zip_u5plfvp8\SEF\emergency-resource-coordination-platform\backend\bin\Debug\net8.0\ERCP.Api.dll
+
+Build succeeded.
+
+C:\Users\USER\AppData\Local\Temp\qms_zip_u5plfvp8\SEF\emergency-resource-coordination-platform\backend\ERCP.Api.csproj : warning NU1902: Package 'MailKit' 4.7.1.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+C:\Users\USER\AppData\Local\Temp\qms_zip_u5plfvp8\SEF\emergency-resource-coordination-platform\backend\ERCP.Api.csproj : warning NU1902: Package 'MailKit' 4.7.1.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+    2 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:08.75

@@ -1,0 +1,14 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.2, pytest-8.3.3, pluggy-1.6.0 -- C:\Users\USER\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Sliit Subjects\Y3 S1\SEF\Assignment\QMS\scripts
+configfile: pytest.ini
+plugins: anyio-4.8.0, asyncio-0.24.0
+asyncio: mode=Mode.STRICT, default_loop_scope=function
+collecting ... collected 2 items
+
+..\..\QMS\scripts\test_agents.py::test_AI01_unapproved_tool_is_rejected[CoordinatorPlannerAgent] PASSED [ 50%]
+..\..\QMS\scripts\test_agents.py::test_AI02_coordinator_output_requires_human_approval PASSED [100%]
+
+- generated xml file: D:\Sliit Subjects\Y3 S1\SEF\Assignment\QMS\members\member1-IT24103355\results\ai-assisted-20261006-225642-874010\agents.xml -
+============================== 2 passed in 0.17s ==============================

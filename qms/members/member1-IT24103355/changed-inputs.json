@@ -1,0 +1,82 @@
+[
+  {
+    "id": "M1-C01",
+    "title": "Original input",
+    "input": {
+      "incident_id": 7,
+      "title": "Building fire",
+      "category": "Fire",
+      "priority": "High",
+      "location": "Demo Sector",
+      "affected_count": 5,
+      "resources": [
+        {
+          "id": 1,
+          "name": "Rescue vehicle",
+          "resourceType": "Vehicle",
+          "status": "Available"
+        }
+      ],
+      "volunteers": [
+        {
+          "id": "v1",
+          "name": "Responder",
+          "isAvailable": true
+        }
+      ]
+    },
+    "checks": [
+      {
+        "path": "incidentId",
+        "op": "equals",
+        "value": 7
+      },
+      {
+        "path": "requiresHumanApproval",
+        "op": "equals",
+        "value": true
+      },
+      {
+        "path": "actions",
+        "op": "nonempty",
+        "value": null
+      }
+    ]
+  },
+  {
+    "id": "M1-C02",
+    "title": "Changed input",
+    "input": {
+      "incident_id": 7,
+      "title": "Building fire",
+      "category": "Fire",
+      "priority": "High",
+      "location": "Demo Sector",
+      "affected_count": 5,
+      "resources": [],
+      "volunteers": []
+    },
+    "checks": [
+      {
+        "path": "incidentId",
+        "op": "equals",
+        "value": 7
+      },
+      {
+        "path": "requiresHumanApproval",
+        "op": "equals",
+        "value": true
+      },
+      {
+        "path": "reasoning",
+        "op": "contains",
+        "value": "No available resources found"
+      },
+      {
+        "path": "reasoning",
+        "op": "contains",
+        "value": "No available volunteers found"
+      }
+    ]
+  }
+]

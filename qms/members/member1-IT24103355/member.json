@@ -1,0 +1,35 @@
+{
+  "number": 1,
+  "name": "Jathurshy.S",
+  "student_id": "IT24103355",
+  "component": "Incident Management",
+  "agent_module": "coordinator_planner_agent",
+  "agent_class": "CoordinatorPlannerAgent",
+  "agent_method": "analyze_and_plan",
+  "backend_classes": [
+    "IncidentControllerTests",
+    "IncidentPlannerServiceTests"
+  ],
+  "agent_codes": [
+    "AI02"
+  ],
+  "allowlist_agent": "CoordinatorPlannerAgent",
+  "demo_note": "Incident details and supplied resources produce a response plan with actions, reasoning and required human approval. This deterministic demonstration does not call Gemini or save a plan to the database.",
+  "backend_tests": [
+    "ERCP.Api.Tests.IncidentControllerTests.CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent",
+    "ERCP.Api.Tests.IncidentControllerTests.GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent",
+    "ERCP.Api.Tests.IncidentControllerTests.GetIncident_NonExistingId_ReturnsNotFound",
+    "ERCP.Api.Tests.IncidentControllerTests.GetTimeline_ReturnsEventsInChronologicalOrder",
+    "ERCP.Api.Tests.IncidentControllerTests.UpdatePriority_CreatesPriorityChangedTimelineEvent",
+    "ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest",
+    "ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_ValidTransition_ReportedToVerified_Succeeds",
+    "ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData",
+    "ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable"
+  ],
+  "agent_tests": [
+    "test_AI01_unapproved_tool_is_rejected[CoordinatorPlannerAgent]",
+    "test_AI02_coordinator_output_requires_human_approval"
+  ],
+  "expected_backend_count": 9,
+  "expected_agent_count": 2
+}

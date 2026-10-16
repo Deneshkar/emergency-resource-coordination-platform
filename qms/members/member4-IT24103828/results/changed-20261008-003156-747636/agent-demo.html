@@ -1,0 +1,124 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Member 4 - Agent demonstration</title>
+<style>body{font:16px/1.55 system-ui,sans-serif;color:#173247;background:#edf2f5;margin:0}
+main{max-width:1100px;margin:32px auto;padding:32px;background:white;border-radius:12px}
+h1{font-size:30px}h2{margin-top:28px}a{color:#145797}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f4f7;padding:18px;font:13px/1.5 Consolas,monospace}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{border:1px solid #c6d4df;padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#e4edf4}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.note{background:#eaf2f8;padding:16px}.pass{color:#14652e}.fail{color:#a31919}details{margin:12px 0}section{border-top:1px solid #c6d4df;margin-top:28px;padding-top:12px}
+@media(max-width:750px){main{margin:0;padding:18px}.grid{display:block}}
+@media print{body{background:white}main{margin:0;padding:0}pre{font-size:10px}section{break-inside:avoid}}</style>
+<main><h1>Member 4 - Agent demonstration</h1><p><b>Deneshkar. P | IT24103828</b><br>Volunteer/Responder Management &rarr; ValidationSafetyAgent</p><p class="note">Execution: ai-assisted. Operator: OpenAI Codex. Time: 2026-10-08T00:31:56.776702+05:30.<br>Actual Python agent method: validate_assignment. Deterministic mode; no live LLM calls. A recommendation does not itself approve or save a dispatch.</p><p>Responder availability and shift windows produce a validation decision, individual checks and violation reasons. An overlapping assignment returns REVISE because it can be rescheduled. APPROVE is an agent recommendation; a coordinator still makes the actual approval.</p><p><a href="agent-output.json">Raw output</a> | <a href="agent-inputs.json">Saved input</a></p><section><h2>M4-C01: Original input <span class="pass">PASS</span></h2><table><tr><th>Expected check</th><th>Observed value</th><th>Result</th></tr><tr><td>{&quot;path&quot;: &quot;is_valid&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: true}</td><td>true</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;recommendation&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: &quot;APPROVE&quot;}</td><td>&quot;APPROVE&quot;</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;checks.1.passed&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: true}</td><td>true</td><td>PASS</td></tr></table><div class="grid"><div><h3>Input</h3><pre>{
+  &quot;dispatch_id&quot;: 42,
+  &quot;incident_id&quot;: 7,
+  &quot;assignments&quot;: [
+    {
+      &quot;volunteer_id&quot;: &quot;vol-demo-4&quot;,
+      &quot;volunteer_name&quot;: &quot;Demo Responder&quot;,
+      &quot;is_available&quot;: true,
+      &quot;skills&quot;: &quot;medical, rescue&quot;,
+      &quot;required_skills&quot;: &quot;medical&quot;,
+      &quot;proposed_shift&quot;: {
+        &quot;start&quot;: &quot;2026-10-06T10:00:00Z&quot;,
+        &quot;end&quot;: &quot;2026-10-06T11:00:00Z&quot;
+      },
+      &quot;existing_shifts&quot;: [
+        {
+          &quot;id&quot;: &quot;shift-existing&quot;,
+          &quot;start&quot;: &quot;2026-10-06T09:00:00Z&quot;,
+          &quot;end&quot;: &quot;2026-10-06T10:00:00Z&quot;,
+          &quot;status&quot;: &quot;Scheduled&quot;
+        }
+      ]
+    }
+  ]
+}</pre></div><div><h3>Actual output</h3><pre>{
+  &quot;agent_id&quot;: &quot;agent-validation-safety-04&quot;,
+  &quot;timestamp&quot;: &quot;2026-10-07T19:01:56.776578+00:00&quot;,
+  &quot;dispatch_id&quot;: 42,
+  &quot;incident_id&quot;: 7,
+  &quot;is_valid&quot;: true,
+  &quot;recommendation&quot;: &quot;APPROVE&quot;,
+  &quot;violations&quot;: [],
+  &quot;warnings&quot;: [],
+  &quot;checks&quot;: [
+    {
+      &quot;tool&quot;: &quot;check_volunteer_availability&quot;,
+      &quot;passed&quot;: true,
+      &quot;detail&quot;: &quot;Volunteer Demo Responder (vol-demo-4) available=True&quot;
+    },
+    {
+      &quot;tool&quot;: &quot;check_shift_overlap&quot;,
+      &quot;passed&quot;: true,
+      &quot;detail&quot;: &quot;Volunteer Demo Responder: 0 overlapping shift(s).&quot;
+    }
+  ],
+  &quot;errors&quot;: [],
+  &quot;allowed_tools&quot;: [
+    &quot;check_volunteer_availability&quot;,
+    &quot;check_shift_overlap&quot;,
+    &quot;check_shelter_capacity&quot;,
+    &quot;check_resource_stock&quot;
+  ],
+  &quot;duration_ms&quot;: 1,
+  &quot;status&quot;: &quot;COMPLETED&quot;
+}</pre></div></div></section><section><h2>M4-C02: Changed input <span class="pass">PASS</span></h2><table><tr><th>Expected check</th><th>Observed value</th><th>Result</th></tr><tr><td>{&quot;path&quot;: &quot;is_valid&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: false}</td><td>false</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;recommendation&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: &quot;REVISE&quot;}</td><td>&quot;REVISE&quot;</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;violations.0.code&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: &quot;V2_DOUBLE_BOOKING&quot;}</td><td>&quot;V2_DOUBLE_BOOKING&quot;</td><td>PASS</td></tr></table><div class="grid"><div><h3>Input</h3><pre>{
+  &quot;dispatch_id&quot;: 42,
+  &quot;incident_id&quot;: 7,
+  &quot;assignments&quot;: [
+    {
+      &quot;volunteer_id&quot;: &quot;vol-demo-4&quot;,
+      &quot;volunteer_name&quot;: &quot;Demo Responder&quot;,
+      &quot;is_available&quot;: true,
+      &quot;skills&quot;: &quot;medical, rescue&quot;,
+      &quot;required_skills&quot;: &quot;medical&quot;,
+      &quot;proposed_shift&quot;: {
+        &quot;start&quot;: &quot;2026-10-06T09:30:00Z&quot;,
+        &quot;end&quot;: &quot;2026-10-06T11:00:00Z&quot;
+      },
+      &quot;existing_shifts&quot;: [
+        {
+          &quot;id&quot;: &quot;shift-existing&quot;,
+          &quot;start&quot;: &quot;2026-10-06T09:00:00Z&quot;,
+          &quot;end&quot;: &quot;2026-10-06T10:00:00Z&quot;,
+          &quot;status&quot;: &quot;Scheduled&quot;
+        }
+      ]
+    }
+  ]
+}</pre></div><div><h3>Actual output</h3><pre>{
+  &quot;agent_id&quot;: &quot;agent-validation-safety-04&quot;,
+  &quot;timestamp&quot;: &quot;2026-10-07T19:01:56.776680+00:00&quot;,
+  &quot;dispatch_id&quot;: 42,
+  &quot;incident_id&quot;: 7,
+  &quot;is_valid&quot;: false,
+  &quot;recommendation&quot;: &quot;REVISE&quot;,
+  &quot;violations&quot;: [
+    {
+      &quot;code&quot;: &quot;V2_DOUBLE_BOOKING&quot;,
+      &quot;message&quot;: &quot;Volunteer Demo Responder is already booked on overlapping shift(s): shift-existing.&quot;,
+      &quot;severity&quot;: &quot;BLOCKER&quot;
+    }
+  ],
+  &quot;warnings&quot;: [],
+  &quot;checks&quot;: [
+    {
+      &quot;tool&quot;: &quot;check_volunteer_availability&quot;,
+      &quot;passed&quot;: true,
+      &quot;detail&quot;: &quot;Volunteer Demo Responder (vol-demo-4) available=True&quot;
+    },
+    {
+      &quot;tool&quot;: &quot;check_shift_overlap&quot;,
+      &quot;passed&quot;: false,
+      &quot;detail&quot;: &quot;Volunteer Demo Responder: 1 overlapping shift(s).&quot;
+    }
+  ],
+  &quot;errors&quot;: [],
+  &quot;allowed_tools&quot;: [
+    &quot;check_volunteer_availability&quot;,
+    &quot;check_shift_overlap&quot;,
+    &quot;check_shelter_capacity&quot;,
+    &quot;check_resource_stock&quot;
+  ],
+  &quot;duration_ms&quot;: 0,
+  &quot;status&quot;: &quot;COMPLETED&quot;
+}</pre></div></div></section></main></html>

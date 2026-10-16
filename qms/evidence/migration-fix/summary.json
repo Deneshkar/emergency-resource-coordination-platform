@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-05",
+  "timezone": "Asia/Colombo",
+  "backend": {
+    "passed": 95,
+    "failed": 0,
+    "skipped": 0
+  },
+  "migration_regression": {
+    "before_failed": 4,
+    "after_passed": 4
+  },
+  "live_api": {
+    "passed": 17,
+    "failed": 0
+  },
+  "migration_cli": "Passed",
+  "model_snapshot": "No pending changes",
+  "applied_migrations": [
+    "20260810011821_InitVolunteerAndShift",
+    "20260816095524_AddDispatchAndTaskAssignment",
+    "20260823065230_AddIncidentManagement",
+    "20260910131851_AddResourceAndShelterManagement",
+    "20260916110602_AddAffectedCountToIncidents",
+    "20260926062717_UnifyDispatchTaskResourceId",
+    "20260926063743_AddAllocationPlanToDispatch",
+    "20261005091547_CompleteAuthenticationAndPlanningSchema"
+  ],
+  "coverage": {
+    "line-rate": "0.7812",
+    "branch-rate": "0.3193",
+    "version": "1.9",
+    "timestamp": "1791191981",
+    "lines-covered": "7527",
+    "lines-valid": "9635",
+    "branches-covered": "442",
+    "branches-valid": "1384"
+  },
+  "database": "Isolated localhost:55432 ercp_qms_migrations",
+  "scope": "Clean migration schema parity, resource and incident rollback preservation, repeated update, full down/up, API workflow. Shared databases not modified."
+}

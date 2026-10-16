@@ -1,0 +1,9 @@
+{
+  "recorded_before_execution": "2026-10-08T00:31:56.747636+05:30",
+  "operator": "OpenAI Codex",
+  "execution_kind": "ai-assisted",
+  "expected_prediction": "The original adjacent 10:00-11:00 shift should be valid and APPROVE. Changing only its start to 09:30 should produce is_valid=false, REVISE and V2_DOUBLE_BOOKING.",
+  "prediction_author": "OpenAI Codex; prepared from existing source and fixtures",
+  "command": "C:\\Users\\USER\\AppData\\Local\\Programs\\Python\\Python313\\python.exe QMS/scripts/run_changed_input.py --member 4 --operator \"OpenAI Codex\" --execution-kind ai-assisted",
+  "input_sha256": "b65db0eb097b62a3e7e80e394ae3f0e6f660f67346c274f2aa7ffcd32150707d"
+}

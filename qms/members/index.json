@@ -1,0 +1,38 @@
+[
+  {
+    "member": 1,
+    "name": "Jathurshy.S",
+    "student_id": "IT24103355",
+    "folder": "members/member1-IT24103355",
+    "backend": 9,
+    "agents": 2,
+    "demo_scenarios": 2
+  },
+  {
+    "member": 2,
+    "name": "M.Thanusikan",
+    "student_id": "IT24103609",
+    "folder": "members/member2-IT24103609",
+    "backend": 12,
+    "agents": 5,
+    "demo_scenarios": 2
+  },
+  {
+    "member": 3,
+    "name": "Denesh N",
+    "student_id": "IT24102826",
+    "folder": "members/member3-IT24102826",
+    "backend": 23,
+    "agents": 3,
+    "demo_scenarios": 2
+  },
+  {
+    "member": 4,
+    "name": "Deneshkar. P",
+    "student_id": "IT24103828",
+    "folder": "members/member4-IT24103828",
+    "backend": 9,
+    "agents": 10,
+    "demo_scenarios": 4
+  }
+]

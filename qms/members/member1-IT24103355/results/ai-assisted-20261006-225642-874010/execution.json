@@ -1,0 +1,99 @@
+{
+  "member": "Jathurshy.S",
+  "student_id": "IT24103355",
+  "execution_kind": "ai-assisted",
+  "operator": "OpenAI Codex (technical execution; member review pending)",
+  "started_at": "2026-10-06T22:56:42.874521+05:30",
+  "note": "Runs existing selected tests. Personal label is the operator declaration, not proof of independent understanding.",
+  "commands": [
+    {
+      "name": "backend",
+      "args": [
+        "dotnet",
+        "test",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\SEF\\emergency-resource-coordination-platform\\backend-tests\\ERCP.Api.Tests.csproj",
+        "--filter",
+        "FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.|FullyQualifiedName~ERCP.Api.Tests.IncidentPlannerServiceTests.",
+        "--logger",
+        "trx;LogFileName=backend.trx",
+        "--logger",
+        "console;verbosity=normal",
+        "--results-directory",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\members\\member1-IT24103355\\results\\ai-assisted-20261006-225642-874010"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "agents",
+      "args": [
+        "C:\\Users\\USER\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI01_unapproved_tool_is_rejected[CoordinatorPlannerAgent]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI02_coordinator_output_requires_human_approval",
+        "-v",
+        "--junitxml=D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\members\\member1-IT24103355\\results\\ai-assisted-20261006-225642-874010\\agents.xml"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "suites": {
+    "backend": [
+      {
+        "name": "ERCP.Api.Tests.IncidentControllerTests.GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_ValidTransition_ReportedToVerified_Succeeds",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.IncidentControllerTests.CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.IncidentControllerTests.GetTimeline_ReturnsEventsInChronologicalOrder",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.IncidentControllerTests.GetIncident_NonExistingId_ReturnsNotFound",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.IncidentControllerTests.UpdatePriority_CreatesPriorityChangedTimelineEvent",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData",
+        "status": "Passed"
+      }
+    ],
+    "agents": [
+      {
+        "name": "test_AI01_unapproved_tool_is_rejected[CoordinatorPlannerAgent]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI02_coordinator_output_requires_human_approval",
+        "status": "Passed"
+      }
+    ]
+  },
+  "passed": true,
+  "demo_scenarios": 2,
+  "finished_at": "2026-10-06T22:56:49.262846+05:30",
+  "source_hashes": {
+    "backend-tests/IncidentControllerTests.cs": "9fd404595aeba912a6b4179ff508ae3d81c7a159f327e204e34b4aa808718f97",
+    "backend-tests/IncidentPlannerServiceTests.cs": "ef52edc118b1c0eba4fe4d4d8b4d7d3e59618cacef8fd9f9e40c6bbdee2ad6d1",
+    "ai-agents/coordinator_planner_agent.py": "299b66f90a9b309e8020f6d55b6f4c1be83773dd9ab3137551e1f5b2f83cae17"
+  },
+  "test_script_sha256": "e37929c0f1f72ea19c4320825d6c3e1e47aed79cad7a55986ff80c7ae4158dba"
+}

@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="e922cdfc-a2a5-4ecb-8cc5-70f41d73eb35" name="USER@DESKTOP-HUE8OII 2026-10-06 22:38:37" runUser="DESKTOP-HUE8OII\USER" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-06T22:38:37.9200550+05:30" queuing="2026-10-06T22:38:37.9200553+05:30" start="2026-10-06T22:38:35.5544275+05:30" finish="2026-10-06T22:38:39.2407038+05:30" />
+  <TestSettings name="default" id="88efdf12-6e93-48e0-80f8-e03691497d97">
+    <Deployment runDeploymentRoot="USER_DESKTOP-HUE8OII_2026-10-06_22_38_37" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="17359dfc-9893-4e64-ac2e-c7c55449a7f8" testId="c40acdb8-e199-cef2-1513-7b8c8fc58fa8" testName="ERCP.Api.Tests.VolunteersApiIntegrationTests.RegisterAndLogin_Coordinator_ReturnsToken" computerName="DESKTOP-HUE8OII" duration="00:00:00.3141766" startTime="2026-10-06T22:38:38.8382163+05:30" endTime="2026-10-06T22:38:38.8382168+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="17359dfc-9893-4e64-ac2e-c7c55449a7f8" />
+    <UnitTestResult executionId="14891e78-8d96-4490-8a07-a6ff66199255" testId="79c5f4de-66f3-b076-6241-4a55d5a8b707" testName="ERCP.Api.Tests.VolunteersApiIntegrationTests.VolunteerShiftLifecycle_OverHttp" computerName="DESKTOP-HUE8OII" duration="00:00:00.1854383" startTime="2026-10-06T22:38:39.1597203+05:30" endTime="2026-10-06T22:38:39.1597204+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="14891e78-8d96-4490-8a07-a6ff66199255" />
+    <UnitTestResult executionId="1c3bd9ca-585b-4880-a40d-34e9a37cedc4" testId="17a269c4-8c20-dfda-0d71-707e0d36e8db" testName="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_EndBeforeStart_ReturnsBadRequest" computerName="DESKTOP-HUE8OII" duration="00:00:00.6618865" startTime="2026-10-06T22:38:37.3986323+05:30" endTime="2026-10-06T22:38:37.3986465+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1c3bd9ca-585b-4880-a40d-34e9a37cedc4" />
+    <UnitTestResult executionId="700014cc-b965-4d81-8a65-5ea2f9ea65b7" testId="0f881778-f42c-12df-16b2-5f15c933f30e" testName="ERCP.Api.Tests.VolunteersApiIntegrationTests.CreateShift_InvalidWindow_OverHttp_Returns400" computerName="DESKTOP-HUE8OII" duration="00:00:00.1358171" startTime="2026-10-06T22:38:38.9741634+05:30" endTime="2026-10-06T22:38:38.9741636+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="700014cc-b965-4d81-8a65-5ea2f9ea65b7" />
+    <UnitTestResult executionId="ff37971f-10da-4a56-ae2d-4927550e11a2" testId="952d57dd-5d9d-e739-41e3-73bad8193313" testName="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_InvalidStatus_ReturnsBadRequest" computerName="DESKTOP-HUE8OII" duration="00:00:00.0199780" startTime="2026-10-06T22:38:37.4178851+05:30" endTime="2026-10-06T22:38:37.4178853+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff37971f-10da-4a56-ae2d-4927550e11a2" />
+    <UnitTestResult executionId="e09ace36-1b10-4384-9339-95d808253594" testId="9cc471d6-aa9e-bc16-3ae6-bce9f2fb553b" testName="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_UnknownVolunteer_ReturnsNotFound" computerName="DESKTOP-HUE8OII" duration="00:00:00.0095230" startTime="2026-10-06T22:38:37.4277392+05:30" endTime="2026-10-06T22:38:37.4277394+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e09ace36-1b10-4384-9339-95d808253594" />
+    <UnitTestResult executionId="0ae0916c-ea20-423d-9b9c-812edd2d871a" testId="1d9678ad-cd14-2188-46d9-0f1120e6134f" testName="ERCP.Api.Tests.VolunteersApiIntegrationTests.GetVolunteers_Anonymous_Returns401" computerName="DESKTOP-HUE8OII" duration="00:00:00.1110279" startTime="2026-10-06T22:38:38.5221727+05:30" endTime="2026-10-06T22:38:38.5221730+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0ae0916c-ea20-423d-9b9c-812edd2d871a" />
+    <UnitTestResult executionId="e4005ca2-18d8-4006-8858-c1d6ece2e1e7" testId="9d576504-98b4-bea6-d135-f8f561668f61" testName="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_ValidWindow_PersistsAndReturnsCreated" computerName="DESKTOP-HUE8OII" duration="00:00:00.0318528" startTime="2026-10-06T22:38:37.4596787+05:30" endTime="2026-10-06T22:38:37.4596793+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e4005ca2-18d8-4006-8858-c1d6ece2e1e7" />
+    <UnitTestResult executionId="dfaaf8f1-11f0-42aa-82e6-4f1d7f62a5a9" testId="2efeba62-dd3e-0b3a-2f50-99fe7f9c42cd" testName="ERCP.Api.Tests.VolunteersApiIntegrationTests.SeededDemoData_Exists" computerName="DESKTOP-HUE8OII" duration="00:00:01.6750604" startTime="2026-10-06T22:38:38.4092531+05:30" endTime="2026-10-06T22:38:38.4092535+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dfaaf8f1-11f0-42aa-82e6-4f1d7f62a5a9" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_InvalidStatus_ReturnsBadRequest" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="952d57dd-5d9d-e739-41e3-73bad8193313">
+      <Execution id="ff37971f-10da-4a56-ae2d-4927550e11a2" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerShiftTests" name="CreateShift_InvalidStatus_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersApiIntegrationTests.VolunteerShiftLifecycle_OverHttp" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="79c5f4de-66f3-b076-6241-4a55d5a8b707">
+      <Execution id="14891e78-8d96-4490-8a07-a6ff66199255" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersApiIntegrationTests" name="VolunteerShiftLifecycle_OverHttp" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersApiIntegrationTests.RegisterAndLogin_Coordinator_ReturnsToken" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="c40acdb8-e199-cef2-1513-7b8c8fc58fa8">
+      <Execution id="17359dfc-9893-4e64-ac2e-c7c55449a7f8" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersApiIntegrationTests" name="RegisterAndLogin_Coordinator_ReturnsToken" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_UnknownVolunteer_ReturnsNotFound" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="9cc471d6-aa9e-bc16-3ae6-bce9f2fb553b">
+      <Execution id="e09ace36-1b10-4384-9339-95d808253594" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerShiftTests" name="CreateShift_UnknownVolunteer_ReturnsNotFound" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersApiIntegrationTests.CreateShift_InvalidWindow_OverHttp_Returns400" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="0f881778-f42c-12df-16b2-5f15c933f30e">
+      <Execution id="700014cc-b965-4d81-8a65-5ea2f9ea65b7" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersApiIntegrationTests" name="CreateShift_InvalidWindow_OverHttp_Returns400" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersApiIntegrationTests.GetVolunteers_Anonymous_Returns401" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="1d9678ad-cd14-2188-46d9-0f1120e6134f">
+      <Execution id="0ae0916c-ea20-423d-9b9c-812edd2d871a" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersApiIntegrationTests" name="GetVolunteers_Anonymous_Returns401" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteersApiIntegrationTests.SeededDemoData_Exists" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="2efeba62-dd3e-0b3a-2f50-99fe7f9c42cd">
+      <Execution id="dfaaf8f1-11f0-42aa-82e6-4f1d7f62a5a9" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteersApiIntegrationTests" name="SeededDemoData_Exists" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_ValidWindow_PersistsAndReturnsCreated" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="9d576504-98b4-bea6-d135-f8f561668f61">
+      <Execution id="e4005ca2-18d8-4006-8858-c1d6ece2e1e7" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerShiftTests" name="CreateShift_ValidWindow_PersistsAndReturnsCreated" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.VolunteerShiftTests.CreateShift_EndBeforeStart_ReturnsBadRequest" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="17a269c4-8c20-dfda-0d71-707e0d36e8db">
+      <Execution id="1c3bd9ca-585b-4880-a40d-34e9a37cedc4" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.VolunteerShiftTests" name="CreateShift_EndBeforeStart_ReturnsBadRequest" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="c40acdb8-e199-cef2-1513-7b8c8fc58fa8" executionId="17359dfc-9893-4e64-ac2e-c7c55449a7f8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="79c5f4de-66f3-b076-6241-4a55d5a8b707" executionId="14891e78-8d96-4490-8a07-a6ff66199255" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17a269c4-8c20-dfda-0d71-707e0d36e8db" executionId="1c3bd9ca-585b-4880-a40d-34e9a37cedc4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0f881778-f42c-12df-16b2-5f15c933f30e" executionId="700014cc-b965-4d81-8a65-5ea2f9ea65b7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="952d57dd-5d9d-e739-41e3-73bad8193313" executionId="ff37971f-10da-4a56-ae2d-4927550e11a2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9cc471d6-aa9e-bc16-3ae6-bce9f2fb553b" executionId="e09ace36-1b10-4384-9339-95d808253594" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d9678ad-cd14-2188-46d9-0f1120e6134f" executionId="0ae0916c-ea20-423d-9b9c-812edd2d871a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9d576504-98b4-bea6-d135-f8f561668f61" executionId="e4005ca2-18d8-4006-8858-c1d6ece2e1e7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2efeba62-dd3e-0b3a-2f50-99fe7f9c42cd" executionId="dfaaf8f1-11f0-42aa-82e6-4f1d7f62a5a9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="9" executed="9" passed="9" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.29)&#xD;
+[xUnit.net 00:00:00.12]   Discovering: ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:00.23]   Discovered:  ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:00.24]   Starting:    ERCP.Api.Tests&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 0 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 2 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 4 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 4 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 2 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 5 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 8 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 8 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: ERCP.Api.Services.AuthService[0]&#xD;
+      New user registered: e2e-coord-97be7d3e-dff4-481e-a991-08e75bbe2ce5@test.local with role Citizen&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: ERCP.Api.Services.AuthService[0]&#xD;
+      New user registered: e2e-coord-a62cb7e3-b007-4cea-bb7f-d86457318566@test.local with role Citizen&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: ERCP.Api.Services.AuthService[0]&#xD;
+      New user registered: e2e-coord-b6ec9029-e461-4241-98c0-a9b4829a5728@test.local with role Citizen&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+[xUnit.net 00:00:02.73]   Finished:    ERCP.Api.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

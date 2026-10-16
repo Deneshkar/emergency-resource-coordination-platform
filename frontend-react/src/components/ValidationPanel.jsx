@@ -49,6 +49,12 @@ export default function ValidationPanel({ result, loading, error, history = [], 
         ? "var(--amber)"
         : "var(--red)";
 
+  // Hide the noisy Gemini fallback row ("verdict unavailable - deterministic
+  // rule result kept"). Successful Gemini verdicts (passed) are still shown.
+  const visibleChecks = (result.checks ?? []).filter(
+    (c) => !(c.tool === "gemini_verdict" && !c.passed)
+  );
+
   return (
     <div
       className="card"
@@ -59,8 +65,11 @@ export default function ValidationPanel({ result, loading, error, history = [], 
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <span style={{ fontWeight: 700, fontSize: "13px" }}>🛡️ Safety Gate</span>
           <StatusBadge status={result.recommendation} size="md" />
+          <span className="badge" data-testid="validation-llm-badge" title="AI-hybrid safety gate: Gemini verdict with deterministic rule fallback">
+            🤖 AI Safety Gate
+          </span>
           <span className="text-dim" style={{ fontSize: "12px" }}>
-            {result.isValid ? "Valid" : "Blocked"} · {result.checks?.length ?? 0} checks
+            {result.isValid ? "Valid" : "Blocked"} · {visibleChecks.length} checks
             {typeof result.durationMs === "number" ? ` · ${result.durationMs}ms` : ""}
           </span>
           {(!result.checks || result.checks.length === 0) && (
@@ -75,6 +84,13 @@ export default function ValidationPanel({ result, loading, error, history = [], 
           {result.auditId ? ` · audit #${result.auditId}` : ""}
         </div>
       </div>
+
+      {result.aiInsight && (
+        <div className="glass-card" style={{ marginTop: "10px", padding: "8px 12px", fontSize: "12px", borderLeft: "2px solid var(--blue)" }} data-testid="validation-ai-insight">
+          <span style={{ fontWeight: 700 }}>🤖 AI Insight</span>
+          <div style={{ marginTop: "2px" }}>{result.aiInsight}</div>
+        </div>
+      )}
 
       {result.violations?.length > 0 && (
         <div style={{ marginTop: "10px" }}>
@@ -110,13 +126,13 @@ export default function ValidationPanel({ result, loading, error, history = [], 
         </div>
       )}
 
-      {result.checks?.length > 0 && (
+      {visibleChecks.length > 0 && (
         <div style={{ marginTop: "10px" }}>
           <div className="text-dim" style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: "6px" }}>
-            Tool checks ({result.checks.length})
+            Tool checks ({visibleChecks.length})
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-            {result.checks.map((c, i) => (
+            {visibleChecks.map((c, i) => (
               <div key={i} style={{ display: "flex", gap: "8px", fontSize: "12px", alignItems: "baseline" }}>
                 <span aria-hidden="true">{c.passed ? "✅" : "❌"}</span>
                 <span className="font-mono text-dim" style={{ whiteSpace: "nowrap" }}>{c.tool}</span>

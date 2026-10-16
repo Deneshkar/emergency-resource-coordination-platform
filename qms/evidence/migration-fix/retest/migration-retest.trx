@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="0ab98c27-92db-4523-be8d-7789ae1d8af8" name="USER@DESKTOP-HUE8OII 2026-10-05 14:47:52" runUser="DESKTOP-HUE8OII\USER" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-05T14:47:52.4777207+05:30" queuing="2026-10-05T14:47:52.4777219+05:30" start="2026-10-05T14:47:49.0857618+05:30" finish="2026-10-05T14:47:58.8252338+05:30" />
+  <TestSettings name="default" id="e0a88510-0050-4cf7-b86f-c2870a3c3d45">
+    <Deployment runDeploymentRoot="USER_DESKTOP-HUE8OII_2026-10-05_14_47_52" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="11ba37ab-60a3-4fcf-8850-8e4fce5bbebf" testId="fc31e11d-0aee-d15e-0ed7-e7ccde07f23f" testName="ERCP.Api.Tests.QmsMigrationTests.MIG02_IncidentMigration_RollbackPreservesResourceData" computerName="DESKTOP-HUE8OII" duration="00:00:02.4987198" startTime="2026-10-05T14:47:52.1971904+05:30" endTime="2026-10-05T14:47:52.1972208+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="11ba37ab-60a3-4fcf-8850-8e4fce5bbebf" />
+    <UnitTestResult executionId="16a905a6-c6df-4972-a4ad-8dc90f33449d" testId="081115cd-7550-12a7-ba30-6bb786e5a869" testName="ERCP.Api.Tests.QmsMigrationTests.MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData" computerName="DESKTOP-HUE8OII" duration="00:00:01.5049854" startTime="2026-10-05T14:47:53.7037048+05:30" endTime="2026-10-05T14:47:53.7037055+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="16a905a6-c6df-4972-a4ad-8dc90f33449d" />
+    <UnitTestResult executionId="50d6f886-88dc-4a84-998e-281087cb98d9" testId="d5a5b61b-8a72-a7e0-be8f-d71aacb22fd3" testName="ERCP.Api.Tests.QmsMigrationTests.MIG01_CleanMigration_MatchesCurrentModelSchema" computerName="DESKTOP-HUE8OII" duration="00:00:02.6336984" startTime="2026-10-05T14:47:58.7018812+05:30" endTime="2026-10-05T14:47:58.7018816+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="50d6f886-88dc-4a84-998e-281087cb98d9" />
+    <UnitTestResult executionId="82989c33-d219-46d7-9997-cab73ea73aae" testId="8451d5e2-4ee4-12a3-45e8-6e40028da0e6" testName="ERCP.Api.Tests.QmsMigrationTests.MIG04_ReapplyAndFullRollback_AreConsistent" computerName="DESKTOP-HUE8OII" duration="00:00:02.3639312" startTime="2026-10-05T14:47:56.0679421+05:30" endTime="2026-10-05T14:47:56.0679424+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="82989c33-d219-46d7-9997-cab73ea73aae" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ERCP.Api.Tests.QmsMigrationTests.MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="081115cd-7550-12a7-ba30-6bb786e5a869">
+      <Execution id="16a905a6-c6df-4972-a4ad-8dc90f33449d" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsMigrationTests" name="MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsMigrationTests.MIG04_ReapplyAndFullRollback_AreConsistent" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="8451d5e2-4ee4-12a3-45e8-6e40028da0e6">
+      <Execution id="82989c33-d219-46d7-9997-cab73ea73aae" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsMigrationTests" name="MIG04_ReapplyAndFullRollback_AreConsistent" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsMigrationTests.MIG01_CleanMigration_MatchesCurrentModelSchema" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="d5a5b61b-8a72-a7e0-be8f-d71aacb22fd3">
+      <Execution id="50d6f886-88dc-4a84-998e-281087cb98d9" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsMigrationTests" name="MIG01_CleanMigration_MatchesCurrentModelSchema" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsMigrationTests.MIG02_IncidentMigration_RollbackPreservesResourceData" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="fc31e11d-0aee-d15e-0ed7-e7ccde07f23f">
+      <Execution id="11ba37ab-60a3-4fcf-8850-8e4fce5bbebf" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsMigrationTests" name="MIG02_IncidentMigration_RollbackPreservesResourceData" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="fc31e11d-0aee-d15e-0ed7-e7ccde07f23f" executionId="11ba37ab-60a3-4fcf-8850-8e4fce5bbebf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="081115cd-7550-12a7-ba30-6bb786e5a869" executionId="16a905a6-c6df-4972-a4ad-8dc90f33449d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d5a5b61b-8a72-a7e0-be8f-d71aacb22fd3" executionId="50d6f886-88dc-4a84-998e-281087cb98d9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8451d5e2-4ee4-12a3-45e8-6e40028da0e6" executionId="82989c33-d219-46d7-9997-cab73ea73aae" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="4" executed="4" passed="4" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.29)&#xD;
+[xUnit.net 00:00:00.14]   Discovering: ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:00.19]   Discovered:  ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:00.20]   Starting:    ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:09.25]   Finished:    ERCP.Api.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -148,10 +148,22 @@ namespace ERCP.Api.Migrations
                 name: "IX_IncidentTimelineEvents_IncidentId",
                 table: "IncidentTimelineEvents",
                 column: "IncidentId");
+
+            // Preserve the existing resource tables and align their optional shelter relationships.
+            migrationBuilder.DropForeignKey("FK_InventoryItems_Shelters_ShelterId", "InventoryItems");
+            migrationBuilder.DropForeignKey("FK_Resources_Shelters_ShelterId", "Resources");
+            migrationBuilder.AddForeignKey("FK_InventoryItems_Shelters_ShelterId", "InventoryItems", "ShelterId", "Shelters", principalColumn: "Id");
+            migrationBuilder.AddForeignKey("FK_Resources_Shelters_ShelterId", "Resources", "ShelterId", "Shelters", principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            // Restore the preceding migration's SetNull relationships on rollback.
+            migrationBuilder.DropForeignKey("FK_InventoryItems_Shelters_ShelterId", "InventoryItems");
+            migrationBuilder.DropForeignKey("FK_Resources_Shelters_ShelterId", "Resources");
+            migrationBuilder.AddForeignKey("FK_InventoryItems_Shelters_ShelterId", "InventoryItems", "ShelterId", "Shelters", principalColumn: "Id", onDelete: ReferentialAction.SetNull);
+            migrationBuilder.AddForeignKey("FK_Resources_Shelters_ShelterId", "Resources", "ShelterId", "Shelters", principalColumn: "Id", onDelete: ReferentialAction.SetNull);
+
             // Remove IncidentTimelineEvents
             migrationBuilder.DropTable(
                 name: "IncidentTimelineEvents");

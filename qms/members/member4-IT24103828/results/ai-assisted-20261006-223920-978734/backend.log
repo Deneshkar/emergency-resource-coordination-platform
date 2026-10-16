@@ -1,0 +1,72 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ERCP.Api -> D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend\bin\Debug\net8.0\ERCP.Api.dll
+  ERCP.Api.Tests -> D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll
+Test run for D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll (.NETCoreApp,Version=v8.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.29)
+[xUnit.net 00:00:00.09]   Discovering: ERCP.Api.Tests
+[xUnit.net 00:00:00.14]   Discovered:  ERCP.Api.Tests
+[xUnit.net 00:00:00.15]   Starting:    ERCP.Api.Tests
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 0 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 2 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 4 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 4 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 2 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 5 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 8 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 8 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+  Passed ERCP.Api.Tests.VolunteerShiftTests.CreateShift_EndBeforeStart_ReturnsBadRequest [568 ms]
+  Passed ERCP.Api.Tests.VolunteerShiftTests.CreateShift_InvalidStatus_ReturnsBadRequest [19 ms]
+  Passed ERCP.Api.Tests.VolunteerShiftTests.CreateShift_UnknownVolunteer_ReturnsNotFound [9 ms]
+  Passed ERCP.Api.Tests.VolunteerShiftTests.CreateShift_ValidWindow_PersistsAndReturnsCreated [28 ms]
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: ERCP.Api.Services.AuthService[0]
+      New user registered: e2e-coord-0c772ef2-be6e-41ea-9b26-45cf0c3f8951@test.local with role Citizen
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: ERCP.Api.Services.AuthService[0]
+      New user registered: e2e-coord-3d40b20e-0329-45ee-b35c-6d9f6e0fb2da@test.local with role Citizen
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: ERCP.Api.Services.AuthService[0]
+      New user registered: e2e-coord-13bc72d5-e098-4980-ba4b-712c877e3186@test.local with role Citizen
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+[xUnit.net 00:00:02.24]   Finished:    ERCP.Api.Tests
+  Passed ERCP.Api.Tests.VolunteersApiIntegrationTests.SeededDemoData_Exists [1 s]
+  Passed ERCP.Api.Tests.VolunteersApiIntegrationTests.GetVolunteers_Anonymous_Returns401 [69 ms]
+  Passed ERCP.Api.Tests.VolunteersApiIntegrationTests.RegisterAndLogin_Coordinator_ReturnsToken [267 ms]
+  Passed ERCP.Api.Tests.VolunteersApiIntegrationTests.CreateShift_InvalidWindow_OverHttp_Returns400 [128 ms]
+  Passed ERCP.Api.Tests.VolunteersApiIntegrationTests.VolunteerShiftLifecycle_OverHttp [178 ms]
+Results File: D:\Sliit Subjects\Y3 S1\SEF\Assignment\QMS\members\member4-IT24103828\results\ai-assisted-20261006-223920-978734\backend.trx
+
+Test Run Successful.
+Total tests: 9
+     Passed: 9
+ Total time: 2.7225 Seconds

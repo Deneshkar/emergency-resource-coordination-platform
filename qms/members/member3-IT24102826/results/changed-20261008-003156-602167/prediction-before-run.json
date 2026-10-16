@@ -1,0 +1,9 @@
+{
+  "recorded_before_execution": "2026-10-08T00:31:56.602167+05:30",
+  "operator": "OpenAI Codex",
+  "execution_kind": "ai-assisted",
+  "expected_prediction": "The missing vehicle should produce a resource gap and REVISE; human approval remains required.",
+  "prediction_author": "OpenAI Codex; prepared from existing source and fixtures",
+  "command": "C:\\Users\\USER\\AppData\\Local\\Programs\\Python\\Python313\\python.exe QMS/scripts/run_changed_input.py --member 3 --operator \"OpenAI Codex\" --execution-kind ai-assisted",
+  "input_sha256": "49d2dcfd4b3ca533a8369f58d9ae9dd5cd5f8ccea202f5f9736c488129a17370"
+}

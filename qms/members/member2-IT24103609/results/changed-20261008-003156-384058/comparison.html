@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Member 2 changed-input comparison</title>
+<style>body{font:16px/1.55 system-ui,sans-serif;color:#173247;background:#edf2f5;margin:0}
+main{max-width:1100px;margin:32px auto;padding:32px;background:white;border-radius:12px}
+h1{font-size:30px}h2{margin-top:28px}a{color:#145797}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f4f7;padding:18px;font:13px/1.5 Consolas,monospace}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{border:1px solid #c6d4df;padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#e4edf4}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.note{background:#eaf2f8;padding:16px}.pass{color:#14652e}.fail{color:#a31919}details{margin:12px 0}section{border-top:1px solid #c6d4df;margin-top:28px;padding-top:12px}
+@media(max-width:750px){main{margin:0;padding:18px}.grid{display:block}}
+@media print{body{background:white}main{margin:0;padding:0}pre{font-size:10px}section{break-inside:avoid}}</style>
+<main><h1>Member 2 changed-input comparison</h1><p><b>M.Thanusikan | IT24103609</b> | SituationAnalysisAgent</p><p>Operator: <b>OpenAI Codex</b> | 2026-10-08T00:31:56.384058+05:30<br>Technical execution at the user&#x27;s request; personal execution and understanding are assessed separately.</p><h2>Command actually executed</h2><pre>C:\Users\USER\AppData\Local\Programs\Python\Python313\python.exe QMS/scripts/run_changed_input.py --member 2 --operator &quot;OpenAI Codex&quot; --execution-kind ai-assisted</pre><p><b>Changed:</b> Medical stock: 20 to 50; available vehicles: 1 to 3; shelter 2 occupancy: 30/100 to 100/100. Food stays 100; shelter 1 stays 10/10; incident and High priority unchanged.</p><p><b>Expected before execution:</b> Medical and vehicle deficits should clear; no shelter should be selected because both are full. Urgency remains 85 because the incident is unchanged.</p><table><tr><th>Scenario and input summary</th><th>Expected checks and actual output</th><th>Result</th></tr><tr><td><b>M2-C01 Original input</b><pre>{
+  &quot;incident&quot;: {
+    &quot;id&quot;: 7,
+    &quot;title&quot;: &quot;Flood emergency&quot;,
+    &quot;priority&quot;: &quot;High&quot;
+  },
+  &quot;inventory&quot;: [
+    {
+      &quot;category&quot;: &quot;Medical&quot;,
+      &quot;quantity&quot;: 20
+    },
+    {
+      &quot;category&quot;: &quot;Food&quot;,
+      &quot;quantity&quot;: 100
+    }
+  ],
+  &quot;vehicles&quot;: 1,
+  &quot;shelters&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;occupancy&quot;: &quot;10/10&quot;
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;occupancy&quot;: &quot;30/100&quot;
+    }
+  ]
+}</pre></td><td>urgency_score: expected 85 (equals); actual <b>85</b><br>nearest_shelter.id: expected 2 (equals); actual <b>2</b><br>resource_deficiencies.0.isDeficit: expected true (equals); actual <b>true</b><br>llm_enhanced: expected false (equals); actual <b>false</b></td><td>PASS</td></tr><tr><td><b>M2-C02 Changed input</b><pre>{
+  &quot;incident&quot;: {
+    &quot;id&quot;: 7,
+    &quot;title&quot;: &quot;Flood emergency&quot;,
+    &quot;priority&quot;: &quot;High&quot;
+  },
+  &quot;inventory&quot;: [
+    {
+      &quot;category&quot;: &quot;Medical&quot;,
+      &quot;quantity&quot;: 50
+    },
+    {
+      &quot;category&quot;: &quot;Food&quot;,
+      &quot;quantity&quot;: 100
+    }
+  ],
+  &quot;vehicles&quot;: 3,
+  &quot;shelters&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;occupancy&quot;: &quot;10/10&quot;
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;occupancy&quot;: &quot;100/100&quot;
+    }
+  ]
+}</pre></td><td>urgency_score: expected 85 (equals); actual <b>85</b><br>nearest_shelter: expected null (equals); actual <b>null</b><br>resource_deficiencies.0.isDeficit: expected false (equals); actual <b>false</b><br>resource_deficiencies.1.isDeficit: expected false (equals); actual <b>false</b><br>resource_deficiencies.2.isDeficit: expected false (equals); actual <b>false</b><br>llm_enhanced: expected false (equals); actual <b>false</b></td><td>PASS</td></tr></table><p>Input columns summarize the fields relevant to this comparison. Complete unabridged input/output is saved in the links below. Deterministic mode; no live LLM call. These are separate demonstrations, not additional unique group tests.</p><p><a href="agent-demo.html">Full inputs, outputs and checks</a> | <a href="comparison.json">Comparison JSON</a> | <a href="execution.log">Command and full transcript</a> | <a href="prediction-before-run.json">Saved prediction</a></p></main></html>

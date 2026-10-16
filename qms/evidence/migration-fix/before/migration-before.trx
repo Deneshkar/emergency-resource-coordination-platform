@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c01d5e11-b8de-4d69-9191-272811d417f4" name="USER@DESKTOP-HUE8OII 2026-10-05 14:44:53" runUser="DESKTOP-HUE8OII\USER" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-05T14:44:53.0980819+05:30" queuing="2026-10-05T14:44:53.0980823+05:30" start="2026-10-05T14:44:44.8711486+05:30" finish="2026-10-05T14:44:55.8552706+05:30" />
+  <TestSettings name="default" id="4a939e11-08ec-4e43-a428-057d236c1d31">
+    <Deployment runDeploymentRoot="USER_DESKTOP-HUE8OII_2026-10-05_14_44_53" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="8516977f-860e-4116-8700-4d2750e563ce" testId="d5a5b61b-8a72-a7e0-be8f-d71aacb22fd3" testName="ERCP.Api.Tests.QmsMigrationTests.MIG01_CleanMigration_MatchesCurrentModelSchema" computerName="DESKTOP-HUE8OII" duration="00:00:00.7642088" startTime="2026-10-05T14:44:55.7897352+05:30" endTime="2026-10-05T14:44:55.7897356+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8516977f-860e-4116-8700-4d2750e563ce">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.PostgresException : 42P07: relation "Shelters" already exists</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Migrations.Internal.NpgsqlMigrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+   at ERCP.Api.Tests.QmsMigrationTests.MIG01_CleanMigration_MatchesCurrentModelSchema() in D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs:line 92&#xD;
+   at ERCP.Api.Tests.QmsMigrationTests.MIG01_CleanMigration_MatchesCurrentModelSchema() in D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs:line 97&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="31308146-a406-4b27-be28-234f98f3a597" testId="8451d5e2-4ee4-12a3-45e8-6e40028da0e6" testName="ERCP.Api.Tests.QmsMigrationTests.MIG04_ReapplyAndFullRollback_AreConsistent" computerName="DESKTOP-HUE8OII" duration="00:00:00.8412817" startTime="2026-10-05T14:44:55.0275923+05:30" endTime="2026-10-05T14:44:55.0275925+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="31308146-a406-4b27-be28-234f98f3a597">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.PostgresException : 42P07: relation "Shelters" already exists</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Migrations.Internal.NpgsqlMigrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+   at ERCP.Api.Tests.QmsMigrationTests.MIG04_ReapplyAndFullRollback_AreConsistent() in D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs:line 150&#xD;
+   at ERCP.Api.Tests.QmsMigrationTests.MIG04_ReapplyAndFullRollback_AreConsistent() in D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs:line 162&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f785bc05-f246-4827-99d2-0394de62197e" testId="fc31e11d-0aee-d15e-0ed7-e7ccde07f23f" testName="ERCP.Api.Tests.QmsMigrationTests.MIG02_IncidentMigration_RollbackPreservesResourceData" computerName="DESKTOP-HUE8OII" duration="00:00:04.7757078" startTime="2026-10-05T14:44:53.0628105+05:30" endTime="2026-10-05T14:44:53.0628271+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f785bc05-f246-4827-99d2-0394de62197e">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.PostgresException : 42P07: relation "Shelters" already exists</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Migrations.Internal.NpgsqlMigrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+   at ERCP.Api.Tests.QmsMigrationTests.MIG02_IncidentMigration_RollbackPreservesResourceData() in D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs:line 112&#xD;
+   at ERCP.Api.Tests.QmsMigrationTests.MIG02_IncidentMigration_RollbackPreservesResourceData() in D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs:line 121&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ff2456d3-7275-4370-8980-594e97096afb" testId="081115cd-7550-12a7-ba30-6bb786e5a869" testName="ERCP.Api.Tests.QmsMigrationTests.MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData" computerName="DESKTOP-HUE8OII" duration="00:00:01.1221018" startTime="2026-10-05T14:44:54.1813630+05:30" endTime="2026-10-05T14:44:54.1813634+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff2456d3-7275-4370-8980-594e97096afb">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Collections differ&#xD;
+                                                                                                    ↓ (pos 17)&#xD;
+Expected: [···, "column|Dispatches|Status|text|NO|", "column|Dispatches|UpdatedAt|timestamptz|NO|", "column|IncidentPlans|CreatedAt|timestamptz|NO|", "column|IncidentPlans|Id|int4|NO|", "column|IncidentPlans|IncidentId|int4|NO|", ···]&#xD;
+Actual:   [···, "column|Dispatches|Status|text|NO|", "column|Dispatches|UpdatedAt|timestamptz|NO|", "column|Shifts|CreatedAt|timestamptz|NO|", "column|Shifts|EndTime|timestamptz|NO|", "column|Shifts|Id|uuid|NO|", ···]&#xD;
+                                                                                                    ↑ (pos 17)</Message>
+          <StackTrace>   at ERCP.Api.Tests.QmsMigrationTests.MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData() in D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs:line 139&#xD;
+   at ERCP.Api.Tests.QmsMigrationTests.MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData() in D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs:line 142&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ERCP.Api.Tests.QmsMigrationTests.MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="081115cd-7550-12a7-ba30-6bb786e5a869">
+      <Execution id="ff2456d3-7275-4370-8980-594e97096afb" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsMigrationTests" name="MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsMigrationTests.MIG04_ReapplyAndFullRollback_AreConsistent" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="8451d5e2-4ee4-12a3-45e8-6e40028da0e6">
+      <Execution id="31308146-a406-4b27-be28-234f98f3a597" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsMigrationTests" name="MIG04_ReapplyAndFullRollback_AreConsistent" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsMigrationTests.MIG01_CleanMigration_MatchesCurrentModelSchema" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="d5a5b61b-8a72-a7e0-be8f-d71aacb22fd3">
+      <Execution id="8516977f-860e-4116-8700-4d2750e563ce" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsMigrationTests" name="MIG01_CleanMigration_MatchesCurrentModelSchema" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.QmsMigrationTests.MIG02_IncidentMigration_RollbackPreservesResourceData" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="fc31e11d-0aee-d15e-0ed7-e7ccde07f23f">
+      <Execution id="f785bc05-f246-4827-99d2-0394de62197e" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.QmsMigrationTests" name="MIG02_IncidentMigration_RollbackPreservesResourceData" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="d5a5b61b-8a72-a7e0-be8f-d71aacb22fd3" executionId="8516977f-860e-4116-8700-4d2750e563ce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8451d5e2-4ee4-12a3-45e8-6e40028da0e6" executionId="31308146-a406-4b27-be28-234f98f3a597" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fc31e11d-0aee-d15e-0ed7-e7ccde07f23f" executionId="f785bc05-f246-4827-99d2-0394de62197e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="081115cd-7550-12a7-ba30-6bb786e5a869" executionId="ff2456d3-7275-4370-8980-594e97096afb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="4" executed="4" passed="0" failed="4" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.29)&#xD;
+[xUnit.net 00:00:01.06]   Discovering: ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:01.25]   Discovered:  ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:01.25]   Starting:    ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:06.08]       Npgsql.PostgresException : 42P07: relation "Shelters" already exists&#xD;
+[xUnit.net 00:00:06.09]       Stack Trace:&#xD;
+[xUnit.net 00:00:06.09]            at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+[xUnit.net 00:00:06.09]            at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+[xUnit.net 00:00:06.09]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]            at Npgsql.EntityFrameworkCore.PostgreSQL.Migrations.Internal.NpgsqlMigrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:06.09]         D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs(112,0): at ERCP.Api.Tests.QmsMigrationTests.MIG02_IncidentMigration_RollbackPreservesResourceData()&#xD;
+[xUnit.net 00:00:06.09]         D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs(121,0): at ERCP.Api.Tests.QmsMigrationTests.MIG02_IncidentMigration_RollbackPreservesResourceData()&#xD;
+[xUnit.net 00:00:06.09]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:07.21]       Assert.Equal() Failure: Collections differ&#xD;
+[xUnit.net 00:00:07.21]                                                                                                           ↓ (pos 17)&#xD;
+[xUnit.net 00:00:07.21]       Expected: [···, "column|Dispatches|Status|text|NO|", "column|Dispatches|UpdatedAt|timestamptz|NO|", "column|IncidentPlans|CreatedAt|timestamptz|NO|", "column|IncidentPlans|Id|int4|NO|", "column|IncidentPlans|IncidentId|int4|NO|", ···]&#xD;
+[xUnit.net 00:00:07.21]       Actual:   [···, "column|Dispatches|Status|text|NO|", "column|Dispatches|UpdatedAt|timestamptz|NO|", "column|Shifts|CreatedAt|timestamptz|NO|", "column|Shifts|EndTime|timestamptz|NO|", "column|Shifts|Id|uuid|NO|", ···]&#xD;
+[xUnit.net 00:00:07.21]                                                                                                           ↑ (pos 17)&#xD;
+[xUnit.net 00:00:07.21]       Stack Trace:&#xD;
+[xUnit.net 00:00:07.21]         D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs(139,0): at ERCP.Api.Tests.QmsMigrationTests.MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData()&#xD;
+[xUnit.net 00:00:07.21]         D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs(142,0): at ERCP.Api.Tests.QmsMigrationTests.MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData()&#xD;
+[xUnit.net 00:00:07.21]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:08.05]       Npgsql.PostgresException : 42P07: relation "Shelters" already exists&#xD;
+[xUnit.net 00:00:08.05]       Stack Trace:&#xD;
+[xUnit.net 00:00:08.05]            at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+[xUnit.net 00:00:08.05]            at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+[xUnit.net 00:00:08.05]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]            at Npgsql.EntityFrameworkCore.PostgreSQL.Migrations.Internal.NpgsqlMigrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.05]         D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs(150,0): at ERCP.Api.Tests.QmsMigrationTests.MIG04_ReapplyAndFullRollback_AreConsistent()&#xD;
+[xUnit.net 00:00:08.05]         D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs(162,0): at ERCP.Api.Tests.QmsMigrationTests.MIG04_ReapplyAndFullRollback_AreConsistent()&#xD;
+[xUnit.net 00:00:08.05]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:08.81]       Npgsql.PostgresException : 42P07: relation "Shelters" already exists&#xD;
+[xUnit.net 00:00:08.82]       Stack Trace:&#xD;
+[xUnit.net 00:00:08.82]            at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+[xUnit.net 00:00:08.82]            at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+[xUnit.net 00:00:08.82]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IEnumerable`1 migrationCommands, IRelationalConnection connection, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]            at Npgsql.EntityFrameworkCore.PostgreSQL.Migrations.Internal.NpgsqlMigrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.82]         D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs(92,0): at ERCP.Api.Tests.QmsMigrationTests.MIG01_CleanMigration_MatchesCurrentModelSchema()&#xD;
+[xUnit.net 00:00:08.82]         D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\QmsMigrationTests.cs(97,0): at ERCP.Api.Tests.QmsMigrationTests.MIG01_CleanMigration_MatchesCurrentModelSchema()&#xD;
+[xUnit.net 00:00:08.82]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:08.82]   Finished:    ERCP.Api.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="DESKTOP-HUE8OII" outcome="Error" timestamp="2026-10-05T14:44:53.0584821+05:30">
+        <Text>[xUnit.net 00:00:06.08]     ERCP.Api.Tests.QmsMigrationTests.MIG02_IncidentMigration_RollbackPreservesResourceData [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-HUE8OII" outcome="Error" timestamp="2026-10-05T14:44:54.1810618+05:30">
+        <Text>[xUnit.net 00:00:07.21]     ERCP.Api.Tests.QmsMigrationTests.MIG03_ResourceRollback_PreservesEarlierIncidentTablesAndData [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-HUE8OII" outcome="Error" timestamp="2026-10-05T14:44:55.0237969+05:30">
+        <Text>[xUnit.net 00:00:08.05]     ERCP.Api.Tests.QmsMigrationTests.MIG04_ReapplyAndFullRollback_AreConsistent [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-HUE8OII" outcome="Error" timestamp="2026-10-05T14:44:55.7888348+05:30">
+        <Text>[xUnit.net 00:00:08.81]     ERCP.Api.Tests.QmsMigrationTests.MIG01_CleanMigration_MatchesCurrentModelSchema [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

@@ -1,0 +1,7 @@
+{
+  "member": 1,
+  "change": "resources: 1 to 0; volunteers: 1 to 0. The incident, High priority and affected count stay unchanged.",
+  "expected_prediction": "With resources and volunteers removed, reasoning should report both shortages while requiresHumanApproval remains true.",
+  "prediction_author": "OpenAI Codex; prepared from existing source and fixtures",
+  "personal_execution_status": "Not established by preparation or a technical run"
+}

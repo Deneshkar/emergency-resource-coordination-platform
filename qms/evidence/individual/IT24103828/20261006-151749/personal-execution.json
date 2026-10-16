@@ -1,0 +1,119 @@
+{
+  "member": "Deneshkar. P",
+  "student_id": "IT24103828",
+  "provided_on": "2026-10-06",
+  "provenance": "User personally ran the supplied commands during guided practice and supplied these six screenshots. Original local PNGs were visually matched and copied unchanged; raw TRX/XML reports were independently read. Assistance with commands and interpretation is disclosed.",
+  "screenshots": [
+    {
+      "file": "evidence/individual/IT24103828/20261006-151749/01-volunteer-shifts-results.png",
+      "title": "Controller test results",
+      "source_filename": "Screenshot 2026-10-06 151849.png",
+      "report": "volunteer-shifts.trx",
+      "sha256": "d728a50c5b9cf40fa7187c0151e6446d7507bc4da09b44417a13e6973c43f469",
+      "width": 1131,
+      "height": 877
+    },
+    {
+      "file": "evidence/individual/IT24103828/20261006-151749/02-volunteer-http-command-and-start.png",
+      "title": "HTTP test command and startup",
+      "source_filename": "Screenshot 2026-10-06 152144.png",
+      "report": "volunteer-http.trx",
+      "sha256": "b704fe85b2dae1fea323cd391d984408b477be46cd78ecfc7773286e322c3302",
+      "width": 1072,
+      "height": 850
+    },
+    {
+      "file": "evidence/individual/IT24103828/20261006-151749/03-volunteer-http-database-log.png",
+      "title": "HTTP test in-memory database log",
+      "source_filename": "Screenshot 2026-10-06 152210.png",
+      "report": "volunteer-http.trx",
+      "sha256": "9a8b21fab3b38d6d0a9955dd540b00790baa8fa2eaec9f628d59794cdf98293f",
+      "width": 1063,
+      "height": 857
+    },
+    {
+      "file": "evidence/individual/IT24103828/20261006-151749/04-volunteer-http-authentication-log.png",
+      "title": "HTTP test authentication setup log",
+      "source_filename": "Screenshot 2026-10-06 152225.png",
+      "report": "volunteer-http.trx",
+      "sha256": "a2578b39a8c06b57697b5aeb83cd1c88bfd90c96d9193c13136749bc8659c436",
+      "width": 1062,
+      "height": 856
+    },
+    {
+      "file": "evidence/individual/IT24103828/20261006-151749/05-volunteer-http-results.png",
+      "title": "HTTP test results",
+      "source_filename": "Screenshot 2026-10-06 152236.png",
+      "report": "volunteer-http.trx",
+      "sha256": "890a9c33c17675d06bd39bd61044d555ba8ee7f7a6ee8c5500fd407e41187d9a",
+      "width": 1088,
+      "height": 817
+    },
+    {
+      "file": "evidence/individual/IT24103828/20261006-151749/06-safety-agent-results.png",
+      "title": "Safety-agent test results",
+      "source_filename": "Screenshot 2026-10-06 152355.png",
+      "report": "safety-agent-20261006-152348.xml",
+      "sha256": "570771ee5a766dbf541abd32f196ca7c326bd70484c466ed47a1c83a759d8426",
+      "width": 1053,
+      "height": 452
+    }
+  ],
+  "suites": [
+    {
+      "name": "Volunteer controller tests",
+      "file": "evidence/individual/IT24103828/20261006-151749/volunteer-shifts.trx",
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-10-06T15:18:01.0555416+05:30",
+      "finished_at": "2026-10-06T15:18:06.0461288+05:30",
+      "tests": [
+        "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_UnknownVolunteer_ReturnsNotFound",
+        "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_InvalidStatus_ReturnsBadRequest",
+        "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_ValidWindow_PersistsAndReturnsCreated",
+        "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_EndBeforeStart_ReturnsBadRequest"
+      ],
+      "sha256": "84a33c8c77cec73cf9a19892f314bccee9f5386f9cee72b001772c367dd11036"
+    },
+    {
+      "name": "Volunteer HTTP integration tests",
+      "file": "evidence/individual/IT24103828/20261006-151749/volunteer-http.trx",
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-10-06T15:21:23.3335801+05:30",
+      "finished_at": "2026-10-06T15:21:26.4157339+05:30",
+      "tests": [
+        "ERCP.Api.Tests.VolunteersApiIntegrationTests.VolunteerShiftLifecycle_OverHttp",
+        "ERCP.Api.Tests.VolunteersApiIntegrationTests.CreateShift_InvalidWindow_OverHttp_Returns400",
+        "ERCP.Api.Tests.VolunteersApiIntegrationTests.GetVolunteers_Anonymous_Returns401",
+        "ERCP.Api.Tests.VolunteersApiIntegrationTests.SeededDemoData_Exists",
+        "ERCP.Api.Tests.VolunteersApiIntegrationTests.RegisterAndLogin_Coordinator_ReturnsToken"
+      ],
+      "sha256": "cbbfaf6c8d02ac961b77c5cd9df00b47a1e6a40c36ade20f3085ade8b1aa815e"
+    },
+    {
+      "name": "Deterministic safety-agent tests",
+      "file": "evidence/individual/IT24103828/20261006-151749/safety-agent-20261006-152348.xml",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-10-06T15:23:50.152024+05:30",
+      "deselected": 17,
+      "tests": [
+        "test_AI08_unavailable_volunteer_is_rejected",
+        "test_AI09_malformed_payload_fails_safely",
+        "test_AI10_adjacent_shifts_do_not_overlap"
+      ],
+      "sha256": "2a9ff51a62b0efbe146b818759f937167277f47ad4ee6d1a387913410c2694e1"
+    }
+  ],
+  "total_passed": 12,
+  "group_counts_unchanged": true,
+  "understanding_status": "Own-word explanations and equal-time boundary exercise not yet confirmed.",
+  "http_note": "The HTTP results screenshot reports overwriting volunteer-http.trx. The current report is the retained latest execution; the four HTTP screenshots are supporting views, not four additional test suites."
+}

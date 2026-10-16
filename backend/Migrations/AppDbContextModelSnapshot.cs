@@ -557,6 +557,9 @@ namespace ERCP.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AiInsight")
+                        .HasColumnType("text");
+
                     b.Property<string>("ChecksJson")
                         .IsRequired()
                         .HasColumnType("text");
@@ -571,6 +574,9 @@ namespace ERCP.Api.Migrations
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsValid")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("LlmEnhanced")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Recommendation")

@@ -230,6 +230,27 @@ public class DispatchValidationServiceTests
     }
 
     [Fact]
+    public async Task ValidateDispatch_WithoutGeminiKey_StaysRuleBasedWithFallbackFields()
+    {
+        // No GEMINI_API_KEY in test env: deterministic rules decide, LLM fields stay default.
+        var (ctx, dispatch, _) = await SeedDispatchAsync(volunteerAvailable: true);
+        var service = new DispatchValidationService(ctx);
+
+        var result = await service.ValidateDispatchAsync(dispatch.Id, new ValidateDispatchRequestDto());
+
+        Assert.True(result.IsValid);
+        Assert.Equal("APPROVE", result.Recommendation);
+        Assert.False(result.LlmEnhanced);
+        Assert.Null(result.AiInsight);
+        Assert.DoesNotContain(result.Checks, c => c.Tool == "gemini_verdict" && c.Passed);
+
+        var history = await service.GetHistoryAsync(dispatch.Id);
+        Assert.Single(history);
+        Assert.False(history[0].LlmEnhanced);
+        Assert.Null(history[0].AiInsight);
+    }
+
+    [Fact]
     public async Task ValidateDispatch_EmitsTimelineEvent_WhenIncidentExists()
     {
         var ctx = GetInMemoryContext();

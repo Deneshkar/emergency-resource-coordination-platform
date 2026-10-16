@@ -1,0 +1,4 @@
+# Preserve PDF structure and original evidence bytes across Windows/Linux checkouts.
+*.pdf binary
+qms/evidence/** -text
+qms/members/**/results/** -text

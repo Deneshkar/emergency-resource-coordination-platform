@@ -1,0 +1,35 @@
+9226a56 | Deneshkar Punyamoorthy | 2026-10-06T00:16:30+05:30 | ﻿fix(qms): make migrations and submission tests reproducible
+054fce7 | it24103609 | 2026-10-05T23:11:18+05:30 | Redesign Register page to light theme split layout matching Login page
+f320600 | it24103609 | 2026-10-05T22:26:17+05:30 | Fix lint script and ESLint flat config ignores for CI workflow
+803e2c8 | it24103609 | 2026-10-05T22:23:33+05:30 | Fix ESLint flat config ignores and rules for CI
+258c234 | it24103609 | 2026-10-05T22:20:46+05:30 | Fix ESLint errors in frontend React for CI pipeline
+fe6e0d0 | it24103609 | 2026-10-05T22:19:52+05:30 | Fix unused React import in HomePage.jsx for ESLint CI
+21fc2fd | it24103609 | 2026-10-05T21:59:37+05:30 | Merge pull request #46 from Deneshkar/feature/database_migration
+81f07cf | it24103609 | 2026-10-05T21:54:35+05:30 | Update flutter mobile app logo and remove unused parameters
+9d26149 | it24103609 | 2026-10-05T21:34:52+05:30 | feat: Convert brand logo to transparent PNG matching all background themes
+aec1ef0 | it24103609 | 2026-10-05T21:28:13+05:30 | feat: Update brand logo with high-res ERP logo
+2174918 | it24103609 | 2026-10-05T21:17:33+05:30 | feat: Replace all brand logos with new custom ERP logo
+911b2fa | it24103609 | 2026-10-05T20:59:58+05:30 | feat: Light-theme login with background art, compact demo chips and social sign-in at bottom
+d3a977e | it24103609 | 2026-10-05T20:56:09+05:30 | feat: Light Theme Login Page redesign with compact demo pills and bottom social logins
+3d94586 | it24103609 | 2026-10-05T20:45:05+05:30 | feat: Redesign Login page with split-screen side hero image panel
+1e8905d | it24103609 | 2026-10-05T20:21:07+05:30 | feat: Standalone Light-Theme Home Page and Mobile Responsive Navigation
+24435de | it24103609 | 2026-10-05T19:55:17+05:30 | feat: Add modern Home Page and Flutter Mobile UI with optimized assets
+094b36f | it24103609 | 2026-10-05T19:10:02+05:30 | fix(config): update production Railway backend URL to ercp-backend-production-81a5.up.railway.app
+cd96717 | Denesh005 | 2026-10-05T12:30:00+05:30 | fix: database migrations and prepare backend deployment
+2c3e6a4 | Deneshkar Punyamoorthy | 2026-10-03T13:40:00+05:30 | Merge pull request #45 from Deneshkar/feature/volunteer-react-ui
+fea099a | Deneshkar Punyamoorthy | 2026-10-03T13:25:27+05:30 | Merge remote-tracking branch 'origin/main' into feature/volunteer-react-ui
+ee924e2 | Deneshkar Punyamoorthy | 2026-10-03T13:21:27+05:30 | feat(security): restrict public registration to Citizen/Volunteer, lock dispatch writes to Coordinator/Admin
+1019e7d | it24103609 | 2026-09-30T18:03:36+05:30 | feat: Integrate GitHub OAuth Sign-In across frontend and backend
+d580b48 | it24103609 | 2026-09-30T17:44:14+05:30 | feat: Integrate Google OAuth Sign-In, add Student 2 seed data and configure client credentials
+01f06ea | it24103609 | 2026-09-30T17:16:21+05:30 | fix(lint): extract translations to separate file to resolve react-refresh lint error
+966cdbb | it24103609 | 2026-09-30T17:10:46+05:30 | feat: add multi-language support (English, Tamil, Sinhala) to settings and navigation
+11eb0d2 | it24103609 | 2026-09-30T16:42:06+05:30 | feat(deploy): update backend live URL to Cloudflare tunnel connected to Supabase DB
+5c6f24a | it24103609 | 2026-09-30T16:08:46+05:30 | feat(deploy): add render.yaml blueprint for one-click Render deployment
+1c13194 | it24103609 | 2026-09-30T15:59:00+05:30 | fix(db): use RelationalDatabaseCreator for seamless Supabase initialization
+ece6620 | it24103609 | 2026-09-30T15:19:44+05:30 | feat(deploy): add Dockerfile and dynamic port handling for cloud deployment
+fc73d85 | Deneshkar Punyamoorthy | 2026-09-30T12:17:16+05:30 | Merge pull request #44 from Deneshkar/feature/resource-allocation-agent
+996826d | Denesh005 | 2026-09-29T11:06:30+05:30 | Resource Allocation Agent
+b8e1346 | it24103609 | 2026-09-27T17:26:53+05:30 | fix(frontend): add Category, validation hints, and error messaging to Report Incident modal in IncidentList
+5f6a4b9 | it24103609 | 2026-09-27T17:16:54+05:30 | fix(notifications): make email alert endpoints non-blocking to prevent UI lag
+b65202e | it24103609 | 2026-09-27T17:14:17+05:30 | fix(email): support port 465 SSL and auto fallback for cloud SMTP
+6602c7a | it24103609 | 2026-09-27T17:11:16+05:30 | fix(backend): register SmtpEmailService with MailKit and set 10s timeout

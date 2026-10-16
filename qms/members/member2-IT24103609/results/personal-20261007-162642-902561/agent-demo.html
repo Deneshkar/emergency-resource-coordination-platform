@@ -1,0 +1,149 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Member 2 - Agent demonstration</title>
+<style>body{font:16px/1.55 system-ui,sans-serif;color:#173247;background:#edf2f5;margin:0}
+main{max-width:1100px;margin:32px auto;padding:32px;background:white;border-radius:12px}
+h1{font-size:30px}h2{margin-top:28px}a{color:#145797}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f4f7;padding:18px;font:13px/1.5 Consolas,monospace}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{border:1px solid #c6d4df;padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#e4edf4}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.note{background:#eaf2f8;padding:16px}.pass{color:#14652e}.fail{color:#a31919}details{margin:12px 0}section{border-top:1px solid #c6d4df;margin-top:28px;padding-top:12px}
+@media(max-width:750px){main{margin:0;padding:18px}.grid{display:block}}
+@media print{body{background:white}main{margin:0;padding:0}pre{font-size:10px}section{break-inside:avoid}}</style>
+<main><h1>Member 2 - Agent demonstration</h1><p><b>M.Thanusikan | IT24103609</b><br>Resource and Inventory Management &rarr; SituationAnalysisAgent</p><p class="note">Execution: personal. Operator: M.Thanusikan. Time: 2026-10-07T16:26:46.870659+05:30.<br>Actual Python agent method: run_assessment. Deterministic mode; no live LLM calls. A recommendation does not itself approve or save a dispatch.</p><p>Incident priority, inventory, resources and shelters produce urgency and shortage analysis. The current method named nearest_shelter selects the eligible shelter with most available capacity; it does not calculate geographic distance. Backend tests here use InMemory, not PostgreSQL.</p><p><a href="agent-output.json">Raw output</a> | <a href="agent-inputs.json">Saved input</a></p><section><h2>M2-D01: Flood with inventory shortages <span class="pass">PASS</span></h2><table><tr><th>Expected check</th><th>Observed value</th><th>Result</th></tr><tr><td>{&quot;path&quot;: &quot;urgency_score&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: 85}</td><td>85</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;nearest_shelter.id&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: 2}</td><td>2</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;resource_deficiencies.0.isDeficit&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: true}</td><td>true</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;llm_enhanced&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: false}</td><td>false</td><td>PASS</td></tr></table><div class="grid"><div><h3>Input</h3><pre>{
+  &quot;incident&quot;: {
+    &quot;id&quot;: 7,
+    &quot;title&quot;: &quot;Flood emergency&quot;,
+    &quot;priority&quot;: &quot;High&quot;
+  },
+  &quot;inventory&quot;: [
+    {
+      &quot;category&quot;: &quot;Medical&quot;,
+      &quot;quantity&quot;: 20
+    },
+    {
+      &quot;category&quot;: &quot;Food&quot;,
+      &quot;quantity&quot;: 100
+    }
+  ],
+  &quot;resources&quot;: [
+    {
+      &quot;resourceType&quot;: &quot;Vehicle&quot;,
+      &quot;status&quot;: &quot;Available&quot;
+    }
+  ],
+  &quot;shelters&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;Full shelter&quot;,
+      &quot;status&quot;: &quot;Active&quot;,
+      &quot;totalCapacity&quot;: 10,
+      &quot;currentOccupancy&quot;: 10
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;name&quot;: &quot;Available shelter&quot;,
+      &quot;status&quot;: &quot;Active&quot;,
+      &quot;totalCapacity&quot;: 100,
+      &quot;currentOccupancy&quot;: 30
+    }
+  ]
+}</pre></div><div><h3>Actual output</h3><pre>{
+  &quot;agent_id&quot;: &quot;agent-situation-analysis-02&quot;,
+  &quot;incident_id&quot;: 7,
+  &quot;urgency_score&quot;: 85,
+  &quot;urgency_level&quot;: &quot;Critical&quot;,
+  &quot;analysis_summary&quot;: &quot;[Situation Analysis Agent] Objective #7: Assessed urgency as Critical (85/100). Resource deficit in: Medical Supplies, Transport Vehicles. Nearest available shelter: Available shelter (Cap: 70)&quot;,
+  &quot;nearest_shelter&quot;: {
+    &quot;id&quot;: 2,
+    &quot;name&quot;: &quot;Available shelter&quot;,
+    &quot;availableCapacity&quot;: 70
+  },
+  &quot;resource_deficiencies&quot;: [
+    {
+      &quot;category&quot;: &quot;Medical Supplies&quot;,
+      &quot;available&quot;: 20,
+      &quot;recommended&quot;: 50,
+      &quot;isDeficit&quot;: true
+    },
+    {
+      &quot;category&quot;: &quot;Food &amp; Water Rations&quot;,
+      &quot;available&quot;: 100,
+      &quot;recommended&quot;: 100,
+      &quot;isDeficit&quot;: false
+    },
+    {
+      &quot;category&quot;: &quot;Transport Vehicles&quot;,
+      &quot;available&quot;: 1,
+      &quot;recommended&quot;: 3,
+      &quot;isDeficit&quot;: true
+    }
+  ],
+  &quot;llm_enhanced&quot;: false,
+  &quot;status&quot;: &quot;COMPLETED&quot;
+}</pre></div></div></section><section><h2>M2-D02: Adequate stock but no shelter capacity <span class="pass">PASS</span></h2><table><tr><th>Expected check</th><th>Observed value</th><th>Result</th></tr><tr><td>{&quot;path&quot;: &quot;urgency_score&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: 25}</td><td>25</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;nearest_shelter&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: null}</td><td>null</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;resource_deficiencies.0.isDeficit&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: false}</td><td>false</td><td>PASS</td></tr><tr><td>{&quot;path&quot;: &quot;resource_deficiencies.2.isDeficit&quot;, &quot;op&quot;: &quot;equals&quot;, &quot;value&quot;: false}</td><td>false</td><td>PASS</td></tr></table><div class="grid"><div><h3>Input</h3><pre>{
+  &quot;incident&quot;: {
+    &quot;id&quot;: 8,
+    &quot;title&quot;: &quot;Routine assistance&quot;,
+    &quot;priority&quot;: &quot;Low&quot;
+  },
+  &quot;inventory&quot;: [
+    {
+      &quot;category&quot;: &quot;Medical&quot;,
+      &quot;quantity&quot;: 50
+    },
+    {
+      &quot;category&quot;: &quot;Food&quot;,
+      &quot;quantity&quot;: 100
+    }
+  ],
+  &quot;resources&quot;: [
+    {
+      &quot;resourceType&quot;: &quot;Vehicle&quot;,
+      &quot;status&quot;: &quot;Available&quot;
+    },
+    {
+      &quot;resourceType&quot;: &quot;Vehicle&quot;,
+      &quot;status&quot;: &quot;Available&quot;
+    },
+    {
+      &quot;resourceType&quot;: &quot;Vehicle&quot;,
+      &quot;status&quot;: &quot;Available&quot;
+    }
+  ],
+  &quot;shelters&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;Full shelter&quot;,
+      &quot;status&quot;: &quot;Active&quot;,
+      &quot;totalCapacity&quot;: 10,
+      &quot;currentOccupancy&quot;: 10
+    }
+  ]
+}</pre></div><div><h3>Actual output</h3><pre>{
+  &quot;agent_id&quot;: &quot;agent-situation-analysis-02&quot;,
+  &quot;incident_id&quot;: 8,
+  &quot;urgency_score&quot;: 25,
+  &quot;urgency_level&quot;: &quot;Low&quot;,
+  &quot;analysis_summary&quot;: &quot;[Situation Analysis Agent] Objective #8: Assessed urgency as Low (25/100). Inventory meets baseline requirements. No shelter capacity available.&quot;,
+  &quot;nearest_shelter&quot;: null,
+  &quot;resource_deficiencies&quot;: [
+    {
+      &quot;category&quot;: &quot;Medical Supplies&quot;,
+      &quot;available&quot;: 50,
+      &quot;recommended&quot;: 50,
+      &quot;isDeficit&quot;: false
+    },
+    {
+      &quot;category&quot;: &quot;Food &amp; Water Rations&quot;,
+      &quot;available&quot;: 100,
+      &quot;recommended&quot;: 100,
+      &quot;isDeficit&quot;: false
+    },
+    {
+      &quot;category&quot;: &quot;Transport Vehicles&quot;,
+      &quot;available&quot;: 3,
+      &quot;recommended&quot;: 3,
+      &quot;isDeficit&quot;: false
+    }
+  ],
+  &quot;llm_enhanced&quot;: false,
+  &quot;status&quot;: &quot;COMPLETED&quot;
+}</pre></div></div></section></main></html>

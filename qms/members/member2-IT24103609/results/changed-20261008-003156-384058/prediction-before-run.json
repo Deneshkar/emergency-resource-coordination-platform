@@ -1,0 +1,9 @@
+{
+  "recorded_before_execution": "2026-10-08T00:31:56.384058+05:30",
+  "operator": "OpenAI Codex",
+  "execution_kind": "ai-assisted",
+  "expected_prediction": "Medical and vehicle deficits should clear; no shelter should be selected because both are full. Urgency remains 85 because the incident is unchanged.",
+  "prediction_author": "OpenAI Codex; prepared from existing source and fixtures",
+  "command": "C:\\Users\\USER\\AppData\\Local\\Programs\\Python\\Python313\\python.exe QMS/scripts/run_changed_input.py --member 2 --operator \"OpenAI Codex\" --execution-kind ai-assisted",
+  "input_sha256": "c398a526a6237b941740d44e00d49d4e2620a99ed5f00b6941381a37e19db451"
+}

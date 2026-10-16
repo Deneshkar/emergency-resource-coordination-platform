@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Member 4 changed-input comparison</title>
+<style>body{font:16px/1.55 system-ui,sans-serif;color:#173247;background:#edf2f5;margin:0}
+main{max-width:1100px;margin:32px auto;padding:32px;background:white;border-radius:12px}
+h1{font-size:30px}h2{margin-top:28px}a{color:#145797}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f4f7;padding:18px;font:13px/1.5 Consolas,monospace}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{border:1px solid #c6d4df;padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#e4edf4}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.note{background:#eaf2f8;padding:16px}.pass{color:#14652e}.fail{color:#a31919}details{margin:12px 0}section{border-top:1px solid #c6d4df;margin-top:28px;padding-top:12px}
+@media(max-width:750px){main{margin:0;padding:18px}.grid{display:block}}
+@media print{body{background:white}main{margin:0;padding:0}pre{font-size:10px}section{break-inside:avoid}}</style>
+<main><h1>Member 4 changed-input comparison</h1><p><b>Deneshkar. P | IT24103828</b> | ValidationSafetyAgent</p><p>Operator: <b>Deneshkar. P</b> | 2026-10-08T10:51:28.171178+05:30<br>Operator is self-declared. Complete Understanding.md separately in your own words.</p><h2>Command actually executed</h2><pre>C:\Users\USER\AppData\Local\Programs\Python\Python313\python.exe &quot;D:\Sliit Subjects\Y3 S1\SEF\Assignment\QMS\scripts\run_changed_input.py&quot; --member 4 --operator &quot;Deneshkar. P&quot; --execution-kind personal</pre><p><b>Changed:</b> Only proposed_shift.start changes: 10:00 to 09:30 UTC. Existing shift remains 09:00-10:00, end remains 11:00, volunteer remains available.</p><p><b>Expected before execution:</b> The original adjacent 10:00-11:00 shift should be valid and APPROVE. Changing only its start to 09:30 should produce is_valid=false, REVISE and V2_DOUBLE_BOOKING.</p><table><tr><th>Scenario and input summary</th><th>Expected checks and actual output</th><th>Result</th></tr><tr><td><b>M4-C01 Original input</b><pre>{
+  &quot;is_available&quot;: true,
+  &quot;existing_shift&quot;: &quot;09:00-10:00 UTC&quot;,
+  &quot;proposed_shift&quot;: &quot;10:00-11:00 UTC&quot;
+}</pre></td><td>is_valid: expected true (equals); actual <b>true</b><br>recommendation: expected &quot;APPROVE&quot; (equals); actual <b>&quot;APPROVE&quot;</b><br>checks.1.passed: expected true (equals); actual <b>true</b></td><td>PASS</td></tr><tr><td><b>M4-C02 Changed input</b><pre>{
+  &quot;is_available&quot;: true,
+  &quot;existing_shift&quot;: &quot;09:00-10:00 UTC&quot;,
+  &quot;proposed_shift&quot;: &quot;09:30-11:00 UTC&quot;
+}</pre></td><td>is_valid: expected false (equals); actual <b>false</b><br>recommendation: expected &quot;REVISE&quot; (equals); actual <b>&quot;REVISE&quot;</b><br>violations.0.code: expected &quot;V2_DOUBLE_BOOKING&quot; (equals); actual <b>&quot;V2_DOUBLE_BOOKING&quot;</b></td><td>PASS</td></tr></table><p>Input columns summarize the fields relevant to this comparison. Complete unabridged input/output is saved in the links below. Deterministic mode; no live LLM call. These are separate demonstrations, not additional unique group tests.</p><p><a href="agent-demo.html">Full inputs, outputs and checks</a> | <a href="comparison.json">Comparison JSON</a> | <a href="execution.log">Command and full transcript</a> | <a href="prediction-before-run.json">Saved prediction</a></p></main></html>

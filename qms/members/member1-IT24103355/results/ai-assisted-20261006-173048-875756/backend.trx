@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="8f43d630-0586-4cea-9b83-be2913c282ca" name="USER@DESKTOP-HUE8OII 2026-10-06 17:30:55" runUser="DESKTOP-HUE8OII\USER" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-06T17:30:55.6061580+05:30" queuing="2026-10-06T17:30:55.6061584+05:30" start="2026-10-06T17:30:53.4805198+05:30" finish="2026-10-06T17:30:55.6215940+05:30" />
+  <TestSettings name="default" id="2849bd18-74f0-4236-ae3b-28a605cc0ba7">
+    <Deployment runDeploymentRoot="USER_DESKTOP-HUE8OII_2026-10-06_17_30_55" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="d098c108-31f4-4d14-8946-48f44a7b35c6" testId="fa285b5c-8791-3552-a9ee-9008014cf5af" testName="ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest" computerName="DESKTOP-HUE8OII" duration="00:00:00.0026143" startTime="2026-10-06T17:30:55.3922926+05:30" endTime="2026-10-06T17:30:55.3922930+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d098c108-31f4-4d14-8946-48f44a7b35c6" />
+    <UnitTestResult executionId="a018ff0f-9ea2-4611-b87d-ff78a7d5846e" testId="0e26a2ab-e0cc-6818-a2ee-ae4f6ca9e243" testName="ERCP.Api.Tests.IncidentControllerTests.UpdatePriority_CreatesPriorityChangedTimelineEvent" computerName="DESKTOP-HUE8OII" duration="00:00:00.0113507" startTime="2026-10-06T17:30:55.3734158+05:30" endTime="2026-10-06T17:30:55.3734162+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a018ff0f-9ea2-4611-b87d-ff78a7d5846e" />
+    <UnitTestResult executionId="8bfa61ab-c3ad-42fc-982f-e6dcb1fbf4a1" testId="03ab2743-90f6-ffd2-8994-86bb9e8367ae" testName="ERCP.Api.Tests.IncidentControllerTests.GetIncident_NonExistingId_ReturnsNotFound" computerName="DESKTOP-HUE8OII" duration="00:00:00.0160063" startTime="2026-10-06T17:30:55.3895280+05:30" endTime="2026-10-06T17:30:55.3895284+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8bfa61ab-c3ad-42fc-982f-e6dcb1fbf4a1" />
+    <UnitTestResult executionId="e70295fb-0ed1-4f28-b62a-f89891f5e58d" testId="023e8717-19a8-8f1c-d92f-68317f1e4035" testName="ERCP.Api.Tests.IncidentControllerTests.GetTimeline_ReturnsEventsInChronologicalOrder" computerName="DESKTOP-HUE8OII" duration="00:00:00.0320364" startTime="2026-10-06T17:30:55.3619597+05:30" endTime="2026-10-06T17:30:55.3619601+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e70295fb-0ed1-4f28-b62a-f89891f5e58d" />
+    <UnitTestResult executionId="31cad830-fab6-41aa-82ca-b719e6ef353c" testId="db9f3360-c716-5785-eec9-a070814b5a18" testName="ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable" computerName="DESKTOP-HUE8OII" duration="00:00:00.1444008" startTime="2026-10-06T17:30:55.4396473+05:30" endTime="2026-10-06T17:30:55.4396476+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="31cad830-fab6-41aa-82ca-b719e6ef353c" />
+    <UnitTestResult executionId="4939b86c-f58a-4fa7-9655-adf7392cbefc" testId="2b6d3646-1a04-d86b-73a5-6b27f2754258" testName="ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData" computerName="DESKTOP-HUE8OII" duration="00:00:00.9599036" startTime="2026-10-06T17:30:55.2951949+05:30" endTime="2026-10-06T17:30:55.2951953+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4939b86c-f58a-4fa7-9655-adf7392cbefc" />
+    <UnitTestResult executionId="c151daf7-c68a-4b25-8832-c033a073f80e" testId="0d1cbe0a-3acf-a46c-683a-a01be8d0380e" testName="ERCP.Api.Tests.IncidentControllerTests.GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent" computerName="DESKTOP-HUE8OII" duration="00:00:00.2340832" startTime="2026-10-06T17:30:55.3297337+05:30" endTime="2026-10-06T17:30:55.3297344+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c151daf7-c68a-4b25-8832-c033a073f80e" />
+    <UnitTestResult executionId="a88ed71d-863a-4009-a482-21a610c473d9" testId="6fb227d2-3cbb-6710-2185-858959c8826d" testName="ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_ValidTransition_ReportedToVerified_Succeeds" computerName="DESKTOP-HUE8OII" duration="00:00:00.0106772" startTime="2026-10-06T17:30:55.4030547+05:30" endTime="2026-10-06T17:30:55.4030551+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a88ed71d-863a-4009-a482-21a610c473d9" />
+    <UnitTestResult executionId="007534cd-7a0a-40c4-be94-d5d286e7cc7b" testId="12199f45-9216-f8f8-bbe3-b8b42642f883" testName="ERCP.Api.Tests.IncidentControllerTests.CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent" computerName="DESKTOP-HUE8OII" duration="00:00:00.7564309" startTime="2026-10-06T17:30:55.0975423+05:30" endTime="2026-10-06T17:30:55.0976142+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="007534cd-7a0a-40c4-be94-d5d286e7cc7b" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="2b6d3646-1a04-d86b-73a5-6b27f2754258">
+      <Execution id="4939b86c-f58a-4fa7-9655-adf7392cbefc" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentPlannerServiceTests" name="GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="fa285b5c-8791-3552-a9ee-9008014cf5af">
+      <Execution id="d098c108-31f4-4d14-8946-48f44a7b35c6" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="0d1cbe0a-3acf-a46c-683a-a01be8d0380e">
+      <Execution id="c151daf7-c68a-4b25-8832-c033a073f80e" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="db9f3360-c716-5785-eec9-a070814b5a18">
+      <Execution id="31cad830-fab6-41aa-82ca-b719e6ef353c" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentPlannerServiceTests" name="GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.GetIncident_NonExistingId_ReturnsNotFound" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="03ab2743-90f6-ffd2-8994-86bb9e8367ae">
+      <Execution id="8bfa61ab-c3ad-42fc-982f-e6dcb1fbf4a1" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="GetIncident_NonExistingId_ReturnsNotFound" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_ValidTransition_ReportedToVerified_Succeeds" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="6fb227d2-3cbb-6710-2185-858959c8826d">
+      <Execution id="a88ed71d-863a-4009-a482-21a610c473d9" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="UpdateStatus_ValidTransition_ReportedToVerified_Succeeds" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="12199f45-9216-f8f8-bbe3-b8b42642f883">
+      <Execution id="007534cd-7a0a-40c4-be94-d5d286e7cc7b" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.UpdatePriority_CreatesPriorityChangedTimelineEvent" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="0e26a2ab-e0cc-6818-a2ee-ae4f6ca9e243">
+      <Execution id="a018ff0f-9ea2-4611-b87d-ff78a7d5846e" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="UpdatePriority_CreatesPriorityChangedTimelineEvent" />
+    </UnitTest>
+    <UnitTest name="ERCP.Api.Tests.IncidentControllerTests.GetTimeline_ReturnsEventsInChronologicalOrder" storage="d:\sliit subjects\y3 s1\sef\assignment\sef\emergency-resource-coordination-platform\backend-tests\bin\debug\net8.0\ercp.api.tests.dll" id="023e8717-19a8-8f1c-d92f-68317f1e4035">
+      <Execution id="e70295fb-0ed1-4f28-b62a-f89891f5e58d" />
+      <TestMethod codeBase="D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend-tests\bin\Debug\net8.0\ERCP.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ERCP.Api.Tests.IncidentControllerTests" name="GetTimeline_ReturnsEventsInChronologicalOrder" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="fa285b5c-8791-3552-a9ee-9008014cf5af" executionId="d098c108-31f4-4d14-8946-48f44a7b35c6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0e26a2ab-e0cc-6818-a2ee-ae4f6ca9e243" executionId="a018ff0f-9ea2-4611-b87d-ff78a7d5846e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="03ab2743-90f6-ffd2-8994-86bb9e8367ae" executionId="8bfa61ab-c3ad-42fc-982f-e6dcb1fbf4a1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="023e8717-19a8-8f1c-d92f-68317f1e4035" executionId="e70295fb-0ed1-4f28-b62a-f89891f5e58d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="db9f3360-c716-5785-eec9-a070814b5a18" executionId="31cad830-fab6-41aa-82ca-b719e6ef353c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2b6d3646-1a04-d86b-73a5-6b27f2754258" executionId="4939b86c-f58a-4fa7-9655-adf7392cbefc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0d1cbe0a-3acf-a46c-683a-a01be8d0380e" executionId="c151daf7-c68a-4b25-8832-c033a073f80e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6fb227d2-3cbb-6710-2185-858959c8826d" executionId="a88ed71d-863a-4009-a482-21a610c473d9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="12199f45-9216-f8f8-bbe3-b8b42642f883" executionId="007534cd-7a0a-40c4-be94-d5d286e7cc7b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="9" executed="9" passed="9" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.29)&#xD;
+[xUnit.net 00:00:00.09]   Discovering: ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:00.16]   Discovered:  ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:00.16]   Starting:    ERCP.Api.Tests&#xD;
+[xUnit.net 00:00:01.33]   Finished:    ERCP.Api.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

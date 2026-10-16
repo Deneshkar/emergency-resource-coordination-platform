@@ -1,0 +1,7 @@
+QMS startup failed. Read the preceding database/build error.
+At D:\Sliit Subjects\Y3 S1\SEF\Assignment\QMS\scripts\start-qms.ps1:46 char:24
++ ... EXITCODE) { throw 'QMS startup failed. Read the preceding database/bu ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (QMS startup fai...se/build error.:String) [], RuntimeException
+    + FullyQualifiedErrorId : QMS startup failed. Read the preceding database/build error.
+ 

@@ -1,0 +1,200 @@
+[
+  {
+    "id": "BE-036",
+    "feature": "ERCP.Api.Tests.IncidentControllerTests.CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/IncidentControllerTests.cs",
+    "responsible_reviewer": "Jathurshy.S",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);\nvar incidentDetail = Assert.IsType<IncidentDetailDto>(createdResult.Value);\nAssert.True(incidentDetail.Id > 0);\nAssert.Equal(\"Industrial Chemical Spill\", incidentDetail.Title);\nAssert.Equal(\"Reported\", incidentDetail.Status);\nAssert.NotEmpty(timelineEvents);\nAssert.Contains(timelineEvents, e => e.EventType == \"Created\");",
+    "source_excerpt": "public async Task CreateIncident_Successfully_ReturnsCreatedAndLogsTimelineEvent()\n    {\n        // Arrange\n        var context = GetInMemoryContext();\n        var controller = CreateController(context);\n\n        var dto = new CreateIncidentDto\n        {\n            Title = \"Industrial Chemical Spill\",\n            Description = \"Tanker leak near riverbank\",\n            Location = \"Sector 4 Industrial Zone\",\n            Category = \"Chemical\",\n            Priority = \"High\",\n            AffectedCount = 25,\n            ReporterContact = \"Plant Supervisor\",\n            AutoGeneratePlan = false\n        };\n\n        // Act\n        var result = await controller.CreateIncident(dto);\n\n        // Assert\n        var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);\n        var incidentDetail = Assert.IsType<IncidentDetailDto>(createdResult.Value);\n\n        Assert.True(incidentDetail.Id > 0);\n        Assert.Equal(\"Industrial Chemical Spill\", incidentDetail.Title);\n        Assert.Equal(\"Reported\", incidentDetail.Status);\n\n        // Verify timeline event created\n        var timelineEvents = await context.IncidentTimelineEvents\n            .Where(e => e.IncidentId == incidentDetail.Id)\n            .ToListAsync();\n\n        Assert.NotEmpty(timelineEvents);\n        Assert.Contains(timelineEvents, e => e.EventType == \"Created\");\n    }",
+    "package_member": "Jathurshy.S",
+    "package_student_id": "IT24103355",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.8258533; recorded 2026-10-06T00:15:35.2301651+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-037",
+    "feature": "ERCP.Api.Tests.IncidentControllerTests.GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/IncidentControllerTests.cs",
+    "responsible_reviewer": "Jathurshy.S",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "var okResult = Assert.IsType<OkObjectResult>(result.Result);\nvar planDto = Assert.IsType<IncidentPlanDto>(okResult.Value);\nAssert.NotNull(planDto);\nAssert.Equal(incident.Id, planDto.IncidentId);\nAssert.NotEmpty(planDto.ActionSteps);\nAssert.NotNull(savedPlan);\nAssert.NotNull(timelineEvent);",
+    "source_excerpt": "public async Task GeneratePlan_CreatesAndReturnsIncidentPlan_AndLogsTimelineEvent()\n    {\n        // Arrange\n        var context = GetInMemoryContext();\n        var incident = new Incident\n        {\n            Title = \"Wildfire Threat\",\n            Category = \"Fire\",\n            Priority = \"Critical\",\n            Location = \"Pine Ridge Hill\",\n            AffectedCount = 50,\n            Status = \"Reported\"\n        };\n        context.Incidents.Add(incident);\n        await context.SaveChangesAsync();\n\n        var controller = CreateController(context);\n        var requestDto = new GeneratePlanRequestDto\n        {\n            CustomDirectives = \"Focus on residential evacuation\",\n            FocusPhase = \"Mass Evacuation\"\n        };\n\n        // Act\n        var result = await controller.GeneratePlan(incident.Id, requestDto);\n\n        // Assert\n        var okResult = Assert.IsType<OkObjectResult>(result.Result);\n        var planDto = Assert.IsType<IncidentPlanDto>(okResult.Value);\n\n        Assert.NotNull(planDto);\n        Assert.Equal(incident.Id, planDto.IncidentId);\n        Assert.NotEmpty(planDto.ActionSteps);\n\n        // Verify plan saved in DB\n        var savedPlan = await context.IncidentPlans.FirstOrDefaultAsync(p => p.IncidentId == incident.Id);\n        Assert.NotNull(savedPlan);\n\n        // Verify PlanGenerated timeline event\n        var timelineEvent = await context.IncidentTimelineEvents\n            .FirstOrDefaultAsync(e => e.IncidentId == incident.Id && e.EventType == \"PlanGenerated\");\n        Assert.NotNull(timelineEvent);\n    }",
+    "package_member": "Jathurshy.S",
+    "package_student_id": "IT24103355",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.2051225; recorded 2026-10-06T00:15:35.4354733+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-038",
+    "feature": "ERCP.Api.Tests.IncidentControllerTests.GetIncident_NonExistingId_ReturnsNotFound",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/IncidentControllerTests.cs",
+    "responsible_reviewer": "Jathurshy.S",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.GetIncident_NonExistingId_ReturnsNotFound\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.IsType<NotFoundResult>(result.Result);",
+    "source_excerpt": "public async Task GetIncident_NonExistingId_ReturnsNotFound()\n    {\n        // Arrange\n        var context = GetInMemoryContext();\n        var controller = CreateController(context);\n\n        // Act\n        var result = await controller.GetIncident(99999);\n\n        // Assert\n        Assert.IsType<NotFoundResult>(result.Result);\n    }",
+    "package_member": "Jathurshy.S",
+    "package_student_id": "IT24103355",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0368072; recorded 2026-10-06T00:15:35.5010647+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-039",
+    "feature": "ERCP.Api.Tests.IncidentControllerTests.GetTimeline_ReturnsEventsInChronologicalOrder",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/IncidentControllerTests.cs",
+    "responsible_reviewer": "Jathurshy.S",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.GetTimeline_ReturnsEventsInChronologicalOrder\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "var okResult = Assert.IsType<OkObjectResult>(result.Result);\nvar events = Assert.IsAssignableFrom<IEnumerable<IncidentTimelineEventDto>>(okResult.Value).ToList();\nAssert.Equal(2, events.Count);\nAssert.True(events[0].Timestamp <= events[1].Timestamp);\nAssert.Equal(\"Incident Reported\", events[0].Title);\nAssert.Equal(\"Incident Verified\", events[1].Title);",
+    "source_excerpt": "public async Task GetTimeline_ReturnsEventsInChronologicalOrder()\n    {\n        // Arrange\n        var context = GetInMemoryContext();\n        var incident = new Incident { Title = \"Building Collapse\", Status = \"Reported\" };\n        context.Incidents.Add(incident);\n        await context.SaveChangesAsync();\n\n        var time1 = DateTime.UtcNow.AddMinutes(-30);\n        var time2 = DateTime.UtcNow.AddMinutes(-10);\n\n        context.IncidentTimelineEvents.Add(new IncidentTimelineEvent\n        {\n            IncidentId = incident.Id,\n            EventType = \"Created\",\n            Title = \"Incident Reported\",\n            Timestamp = time1\n        });\n\n        context.IncidentTimelineEvents.Add(new IncidentTimelineEvent\n        {\n            IncidentId = incident.Id,\n            EventType = \"StatusUpdate\",\n            Title = \"Incident Verified\",\n            Timestamp = time2\n        });\n\n        await context.SaveChangesAsync();\n\n        var controller = CreateController(context);\n\n        // Act\n        var result = await controller.GetTimeline(incident.Id);\n\n        // Assert\n        var okResult = Assert.IsType<OkObjectResult>(result.Result);\n        var events = Assert.IsAssignableFrom<IEnumerable<IncidentTimelineEventDto>>(okResult.Value).ToList();\n\n        Assert.Equal(2, events.Count);\n        Assert.True(events[0].Timestamp <= events[1].Timestamp);\n        Assert.Equal(\"Incident Reported\", events[0].Title);\n        Assert.Equal(\"Incident Verified\", events[1].Title);\n    }",
+    "package_member": "Jathurshy.S",
+    "package_student_id": "IT24103355",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0159325; recorded 2026-10-06T00:15:35.4515397+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-040",
+    "feature": "ERCP.Api.Tests.IncidentControllerTests.UpdatePriority_CreatesPriorityChangedTimelineEvent",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/IncidentControllerTests.cs",
+    "responsible_reviewer": "Jathurshy.S",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.UpdatePriority_CreatesPriorityChangedTimelineEvent\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.IsType<NoContentResult>(result);\nAssert.Single(timelineEvents);\nAssert.Contains(\"Critical\", timelineEvents[0].Title);",
+    "source_excerpt": "public async Task UpdatePriority_CreatesPriorityChangedTimelineEvent()\n    {\n        // Arrange\n        var context = GetInMemoryContext();\n        var incident = new Incident\n        {\n            Title = \"Substation Overload\",\n            Status = \"Reported\",\n            Priority = \"Medium\",\n            Location = \"Grid Station 4\"\n        };\n        context.Incidents.Add(incident);\n        await context.SaveChangesAsync();\n\n        var controller = CreateController(context);\n        var updateDto = new UpdateIncidentDto { Priority = \"Critical\" };\n\n        // Act\n        var result = await controller.UpdateIncident(incident.Id, updateDto);\n\n        // Assert\n        Assert.IsType<NoContentResult>(result);\n\n        var timelineEvents = await context.IncidentTimelineEvents\n            .Where(e => e.IncidentId == incident.Id && e.EventType == \"PriorityChanged\")\n            .ToListAsync();\n\n        Assert.Single(timelineEvents);\n        Assert.Contains(\"Critical\", timelineEvents[0].Title);\n    }\n}",
+    "package_member": "Jathurshy.S",
+    "package_student_id": "IT24103355",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0124201; recorded 2026-10-06T00:15:35.4641122+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-041",
+    "feature": "ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/IncidentControllerTests.cs",
+    "responsible_reviewer": "Jathurshy.S",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);\nAssert.NotNull(badRequestResult.Value);\nAssert.NotNull(unchangedIncident);\nAssert.Equal(\"Reported\", unchangedIncident.Status);",
+    "source_excerpt": "public async Task UpdateStatus_InvalidTransition_ReportedToResolved_ReturnsBadRequest()\n    {\n        // Arrange\n        var context = GetInMemoryContext();\n        var incident = new Incident\n        {\n            Title = \"Power Substation Failure\",\n            Status = \"Reported\",\n            Priority = \"High\",\n            Location = \"Substation 9\"\n        };\n        context.Incidents.Add(incident);\n        await context.SaveChangesAsync();\n\n        var controller = CreateController(context);\n        var updateDto = new UpdateIncidentDto\n        {\n            Status = \"Resolved\" // Illegal jump: Reported -> Resolved\n        };\n\n        // Act\n        var result = await controller.UpdateIncident(incident.Id, updateDto);\n\n        // Assert\n        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);\n        Assert.NotNull(badRequestResult.Value);\n\n        // Ensure status in database was NOT changed\n        var unchangedIncident = await context.Incidents.FindAsync(incident.Id);\n        Assert.NotNull(unchangedIncident);\n        Assert.Equal(\"Reported\", unchangedIncident.Status);\n    }",
+    "package_member": "Jathurshy.S",
+    "package_student_id": "IT24103355",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0031554; recorded 2026-10-06T00:15:35.5046888+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-042",
+    "feature": "ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_ValidTransition_ReportedToVerified_Succeeds",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/IncidentControllerTests.cs",
+    "responsible_reviewer": "Jathurshy.S",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.IncidentControllerTests.UpdateStatus_ValidTransition_ReportedToVerified_Succeeds\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.IsType<NoContentResult>(result);\nAssert.NotNull(updatedIncident);\nAssert.Equal(\"Verified\", updatedIncident.Status);\nAssert.NotNull(statusEvent);\nAssert.Equal(\"StatusUpdate\", statusEvent.EventType);",
+    "source_excerpt": "public async Task UpdateStatus_ValidTransition_ReportedToVerified_Succeeds()\n    {\n        // Arrange\n        var context = GetInMemoryContext();\n        var incident = new Incident\n        {\n            Title = \"Pipeline Leak\",\n            Status = \"Reported\",\n            Priority = \"Medium\",\n            Location = \"North Station\"\n        };\n        context.Incidents.Add(incident);\n        await context.SaveChangesAsync();\n\n        var controller = CreateController(context);\n        var updateDto = new UpdateIncidentDto\n        {\n            Status = \"Verified\",\n            Note = \"Verified on site by field officer\"\n        };\n\n        // Act\n        var result = await controller.UpdateIncident(incident.Id, updateDto);\n\n        // Assert\n        Assert.IsType<NoContentResult>(result);\n\n        var updatedIncident = await context.Incidents.FindAsync(incident.Id);\n        Assert.NotNull(updatedIncident);\n        Assert.Equal(\"Verified\", updatedIncident.Status);\n\n        // Verify timeline logging\n        var timeline = await context.IncidentTimelineEvents\n            .Where(e => e.IncidentId == incident.Id)\n            .ToListAsync();\n\n        var statusEvent = timeline.FirstOrDefault(e => e.Title == \"Incident Verified\");\n        Assert.NotNull(statusEvent);\n        Assert.Equal(\"StatusUpdate\", statusEvent.EventType);\n    }",
+    "package_member": "Jathurshy.S",
+    "package_student_id": "IT24103355",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.0084748; recorded 2026-10-06T00:15:35.5129221+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-043",
+    "feature": "ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/IncidentPlannerServiceTests.cs",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.NotNull(plan);\nAssert.Contains(\"1 resources available\", plan.Reasoning); // Ambulance ignored\nAssert.Contains(\"1 volunteers available\", plan.Reasoning);",
+    "source_excerpt": "public void GeneratePlan_WithAvailableResourcesAndVolunteers_AgentReceivesData()\n    {\n        var (service, context) = CreateService(Guid.NewGuid().ToString());\n\n        context.Resources.Add(new Resource { Id = 101, Name = \"Fire Engine 1\", ResourceType = \"Vehicle\", Status = \"Available\" });\n        context.Resources.Add(new Resource { Id = 102, Name = \"Ambulance 1\", ResourceType = \"Vehicle\", Status = \"InUse\" }); // Should be ignored\n        context.Volunteers.Add(new Volunteer { Id = Guid.NewGuid(), Name = \"John Doe\", IsAvailable = true });\n        context.SaveChanges();\n\n        var incident = new Incident\n        {\n            Id = 2,\n            Title = \"Major Fire\",\n            Location = \"Uptown\",\n            Category = \"Fire\",\n            Priority = \"Critical\",\n            AffectedCount = 15\n        };\n\n        var plan = service.GeneratePlan(incident);\n\n        Assert.NotNull(plan);\n        Assert.Contains(\"1 resources available\", plan.Reasoning); // Ambulance ignored\n        Assert.Contains(\"1 volunteers available\", plan.Reasoning);\n    }\n}",
+    "package_member": "Jathurshy.S",
+    "package_student_id": "IT24103355",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:01.0317692; recorded 2026-10-06T00:15:35.4361220+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "BE-044",
+    "feature": "ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable",
+    "source": "SEF/emergency-resource-coordination-platform/backend-tests/IncidentPlannerServiceTests.cs",
+    "responsible_reviewer": "Deneshkar. P",
+    "preconditions": "Restored .NET 8 test project; fixtures created by the named test. Existing controller tests mostly use EF InMemory.",
+    "steps": "From the repository run dotnet test backend-tests/ERCP.Api.Tests.csproj --filter \"FullyQualifiedName~ERCP.Api.Tests.IncidentPlannerServiceTests.GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable\". Use the inline parameter shown in the case name when applicable.",
+    "expected": "Assert.NotNull(plan);\nAssert.Contains(\"No available resources found\", plan.Reasoning);\nAssert.Contains(\"No available volunteers found\", plan.Reasoning);",
+    "source_excerpt": "public void GeneratePlan_WithNoResources_AndNoVolunteers_ReportsNoAvailable()\n    {\n        var (service, context) = CreateService(Guid.NewGuid().ToString());\n\n        var incident = new Incident\n        {\n            Id = 1,\n            Title = \"Test Incident\",\n            Location = \"Downtown\",\n            Category = \"Fire\",\n            Priority = \"High\",\n            AffectedCount = 5\n        };\n\n        var plan = service.GeneratePlan(incident);\n\n        Assert.NotNull(plan);\n        Assert.Contains(\"No available resources found\", plan.Reasoning);\n        Assert.Contains(\"No available volunteers found\", plan.Reasoning);\n    }",
+    "package_member": "Jathurshy.S",
+    "package_student_id": "IT24103355",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "Passed; duration 00:00:00.1535154; recorded 2026-10-06T00:15:35.5896971+05:30",
+      "evidence": "evidence/final/backend/backend.trx"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-001",
+    "feature": "test_AI01_unapproved_tool_is_rejected[CoordinatorPlannerAgent]",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "Jathurshy.S",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI01_unapproved_tool_is_rejected\" -v. Parameter values are included in the case name.",
+    "expected": "All assertions in the named test must pass for its configured fixture.",
+    "source_excerpt": "def test_AI01_unapproved_tool_is_rejected(agent):\n    with pytest.raises(ValueError):\n        agent().execute_tool('delete_database', {})",
+    "package_member": "Jathurshy.S",
+    "package_student_id": "IT24103355",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.001 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  },
+  {
+    "id": "AI-004",
+    "feature": "test_AI02_coordinator_output_requires_human_approval",
+    "source": "QMS/scripts/test_agents.py",
+    "responsible_reviewer": "Jathurshy.S",
+    "preconditions": "Actual SEF Python agents imported; GEMINI_API_KEY blank; no live LLM calls.",
+    "steps": "From assignment root run python -m pytest QMS/scripts/test_agents.py -k \"test_AI02_coordinator_output_requires_human_approval\" -v. Parameter values are included in the case name.",
+    "expected": "assert result['incidentId'] == 42\nassert result['requiresHumanApproval'] is True\nassert result['actions'] and result['requiredResources']",
+    "source_excerpt": "def test_AI02_coordinator_output_requires_human_approval():\n    result = CoordinatorPlannerAgent().analyze_and_plan({'incident_id': 42, 'title': 'Building fire', 'category': 'Fire', 'priority': 'High', 'affected_count': 10})\n    assert result['incidentId'] == 42\n    assert result['requiresHumanApproval'] is True\n    assert result['actions'] and result['requiredResources']",
+    "package_member": "Jathurshy.S",
+    "package_student_id": "IT24103355",
+    "historical_group_result": {
+      "status": "Passed",
+      "actual": "JUnit records pass; 0.001 seconds.",
+      "evidence": "evidence/final/agents.xml"
+    },
+    "personal_result": "See dated personal results; historical group success is not a personal execution claim."
+  }
+]

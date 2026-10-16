@@ -1,6 +1,8 @@
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ERCP.Api.Data;
 using ERCP.Api.DTOs;
 using ERCP.Api.Models;
@@ -18,6 +20,8 @@ namespace ERCP.Api.Services;
 public class DispatchValidationService
 {
     private readonly AppDbContext _context;
+    private readonly HttpClient _httpClient;
+    private readonly IConfiguration? _configuration;
 
     public static readonly IReadOnlyList<string> AllowedTools =
     [
@@ -27,9 +31,185 @@ public class DispatchValidationService
         "check_resource_stock",
     ];
 
-    public DispatchValidationService(AppDbContext context)
+    // Codes the Gemini verdict may return. Unknown codes are rejected and the
+    // deterministic rule result is kept (safety fallback).
+    private static readonly HashSet<string> GeminiAllowedCodes = new(StringComparer.Ordinal)
+    {
+        "V1_VOLUNTEER_UNAVAILABLE", "V2_DOUBLE_BOOKING", "V3_INVALID_SHIFT_WINDOW",
+        "V0_VOLUNTEER_NOT_FOUND",
+        "S0_SHELTER_NOT_FOUND", "S1_SHELTER_NOT_ACTIVE", "S2_SHELTER_OVER_ALLOCATION",
+        "R0_RESOURCE_NOT_FOUND", "R1_RESOURCE_UNAVAILABLE", "R2_RESOURCE_INSUFFICIENT",
+        "I0_ITEM_NOT_FOUND", "I1_INVENTORY_INSUFFICIENT",
+        "E0_INVALID_PAYLOAD",
+    };
+
+    private static readonly HashSet<string> GeminiAllowedRecommendations = new(StringComparer.Ordinal)
+        { "APPROVE", "REVISE", "REJECT" };
+
+    private const string GeminiModel = "gemini-3.6-flash";
+
+    // Optional params keep existing callers/tests (new DispatchValidationService(ctx)) working.
+    public DispatchValidationService(AppDbContext context, HttpClient? httpClient = null, IConfiguration? configuration = null)
     {
         _context = context;
+        _httpClient = httpClient ?? new HttpClient { Timeout = TimeSpan.FromSeconds(12) };
+        _configuration = configuration;
+    }
+
+    private string GetGeminiKey()
+    {
+        // QMS/test runs never call the live LLM (mirrors IncidentPlannerService).
+        var env = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
+            ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        if (string.Equals(env, "Qms", StringComparison.OrdinalIgnoreCase))
+            return string.Empty;
+        return (_configuration?["GEMINI_API_KEY"]
+            ?? Environment.GetEnvironmentVariable("GEMINI_API_KEY")
+            ?? string.Empty).Trim();
+    }
+
+    /// <summary>
+    /// Ask Gemini for the FINAL dispatch verdict. Returns null when the key is
+    /// missing, the call fails, or the response is not valid strict JSON, in
+    /// which case the deterministic rule result is kept.
+    /// </summary>
+    private async Task<(bool IsValid, string Recommendation, List<ValidationViolationDto> Violations, string? AiInsight)?> TryGetGeminiVerdictAsync(
+        int dispatchId, bool ruleIsValid, string ruleRecommendation,
+        IReadOnlyList<string> ruleViolationCodes, IReadOnlyList<string> ruleWarningCodes, int checkCount,
+        CancellationToken cancellationToken = default)
+    {
+        var apiKey = GetGeminiKey();
+        if (string.IsNullOrWhiteSpace(apiKey))
+            return null;
+
+        try
+        {
+            var prompt = "You are the ERCP Validation/Safety Agent deciding a dispatch safety gate. "
+                + "Given this deterministic rule summary, return the FINAL safety verdict. "
+                + "Return ONLY a valid JSON object with exactly these keys: "
+                + "'is_valid' (boolean), 'recommendation' (one of APPROVE, REVISE, REJECT), "
+                + "'violations' (array of {code, message} using only known rule codes), "
+                + "'ai_insight' (1-2 sentence plain-English explanation for a coordinator). "
+                + "Rules: APPROVE only when no blockers. REVISE only for fixable capacity/double-booking "
+                + "(S2, R2, I1, V2). Otherwise REJECT. "
+                + $"Rule summary: {JsonSerializer.Serialize(new { dispatch_id = dispatchId, rule_is_valid = ruleIsValid, rule_recommendation = ruleRecommendation, rule_violations = ruleViolationCodes, rule_warnings = ruleWarningCodes, check_count = checkCount })}";
+
+            using var request = new HttpRequestMessage(HttpMethod.Post,
+                $"https://generativelanguage.googleapis.com/v1beta/models/{GeminiModel}:generateContent?key={apiKey}");
+            request.Content = new StringContent(JsonSerializer.Serialize(new
+            {
+                contents = new[] { new { parts = new[] { new { text = prompt } } } },
+                generationConfig = new { temperature = 0.0, maxOutputTokens = 512, responseMimeType = "application/json" },
+            }), Encoding.UTF8, "application/json");
+
+            using var response = await _httpClient.SendAsync(request, cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"[ValidationSafetyAgent] Gemini verdict skipped: HTTP {(int)response.StatusCode}. Rule result kept.");
+                return null;
+            }
+
+            using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync(cancellationToken));
+            if (!doc.RootElement.TryGetProperty("candidates", out var candidates) || candidates.GetArrayLength() == 0)
+            {
+                Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: empty candidates. Rule result kept.");
+                return null;
+            }
+            var text = candidates[0].GetProperty("content").GetProperty("parts")[0].GetProperty("text").GetString() ?? string.Empty;
+            text = text.Trim();
+            if (text.StartsWith("```json", StringComparison.Ordinal)) text = text["```json".Length..];
+            if (text.StartsWith("```", StringComparison.Ordinal)) text = text["```".Length..];
+            if (text.EndsWith("```", StringComparison.Ordinal)) text = text[..^"```".Length];
+            text = text.Trim();
+
+            JsonDocument? parsed = null;
+            try { parsed = JsonDocument.Parse(text); }
+            catch (JsonException)
+            {
+                // Model sometimes wraps JSON with prose: extract first {...} block.
+                var start = text.IndexOf('{');
+                var end = text.LastIndexOf('}');
+                if (start < 0 || end <= start)
+                {
+                    Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: no JSON object in response. Rule result kept.");
+                    return null;
+                }
+                try { parsed = JsonDocument.Parse(text[start..(end + 1)]); }
+                catch (JsonException)
+                {
+                    Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: unparseable JSON. Rule result kept.");
+                    return null;
+                }
+            }
+            using (parsed)
+            {
+                var root = parsed.RootElement;
+                if (!root.TryGetProperty("is_valid", out var isValidEl)
+                    || (isValidEl.ValueKind != JsonValueKind.True && isValidEl.ValueKind != JsonValueKind.False))
+                {
+                    Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: missing/invalid is_valid. Rule result kept.");
+                    return null;
+                }
+                if (!root.TryGetProperty("recommendation", out var recEl)
+                    || !GeminiAllowedRecommendations.Contains(recEl.GetString() ?? string.Empty))
+                {
+                    Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: invalid recommendation. Rule result kept.");
+                    return null;
+                }
+                if (!root.TryGetProperty("violations", out var violsEl) || violsEl.ValueKind != JsonValueKind.Array)
+                {
+                    Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: violations not an array. Rule result kept.");
+                    return null;
+                }
+
+                var llmViolations = new List<ValidationViolationDto>();
+                foreach (var v in violsEl.EnumerateArray())
+                {
+                    if (v.ValueKind != JsonValueKind.Object
+                        || !v.TryGetProperty("code", out var codeEl))
+                    {
+                        Console.WriteLine("[ValidationSafetyAgent] Gemini verdict skipped: malformed violation entry. Rule result kept.");
+                        return null;
+                    }
+                    var code = codeEl.GetString() ?? string.Empty;
+                    if (!GeminiAllowedCodes.Contains(code))
+                    {
+                        Console.WriteLine($"[ValidationSafetyAgent] Gemini verdict skipped: unknown code '{code}'. Rule result kept.");
+                        return null;
+                    }
+                    var message = v.TryGetProperty("message", out var msgEl) ? msgEl.GetString() ?? code : code;
+                    llmViolations.Add(new ValidationViolationDto(code, message, "BLOCKER"));
+                }
+
+                var recommendation = recEl.GetString()!;
+                var isValid = isValidEl.GetBoolean() && llmViolations.Count == 0;
+                if (!isValid && llmViolations.Count == 0)
+                    return null; // claimed invalid with no blockers: keep rules
+                if (llmViolations.Count > 0 && recommendation == "APPROVE")
+                    recommendation = "REJECT"; // coherence guard
+                if (llmViolations.Count == 0)
+                {
+                    isValid = true;
+                    if (recommendation is not ("APPROVE" or "REVISE"))
+                        recommendation = "APPROVE";
+                }
+
+                string? insight = null;
+                if (root.TryGetProperty("ai_insight", out var insightEl) && insightEl.ValueKind == JsonValueKind.String)
+                {
+                    var raw = insightEl.GetString() ?? string.Empty;
+                    if (!string.IsNullOrWhiteSpace(raw))
+                        insight = raw.Length > 500 ? raw[..500] : raw;
+                }
+                return (isValid, recommendation, llmViolations, insight);
+            }
+        }
+        catch (Exception ex) when (cancellationToken.IsCancellationRequested == false)
+        {
+            // Any LLM failure (network, timeout, parse) falls back to rules.
+            Console.WriteLine($"[ValidationSafetyAgent] Gemini verdict skipped: {ex.GetType().Name}. Rule result kept.");
+            return null;
+        }
     }
 
     public async Task<ValidationResultDto> ValidateDispatchAsync(int dispatchId, ValidateDispatchRequestDto? request = null, string validatedBy = "System")
@@ -251,6 +431,35 @@ public class DispatchValidationService
             recommendation = codes.IsSubsetOf(revisable) ? "REVISE" : "REJECT";
         }
 
+        // ---- Gemini full verdict (hybrid: rules always run first) ----
+        // Rules above are the safety ground truth. When GEMINI_API_KEY is set,
+        // Gemini may supply the FINAL verdict; missing/invalid/failed responses
+        // fall back to the deterministic result so the gate never blanks.
+        var llmEnhanced = false;
+        string? aiInsight = null;
+        var geminiVerdict = await TryGetGeminiVerdictAsync(
+            dispatch.Id, isValid, recommendation,
+            violations.Select(v => v.Code).ToList(),
+            warnings.Select(w => w.Code).ToList(),
+            checks.Count);
+        if (geminiVerdict is { } llm)
+        {
+            violations = llm.Violations;
+            isValid = llm.IsValid;
+            recommendation = llm.Recommendation;
+            aiInsight = llm.AiInsight;
+            llmEnhanced = true;
+            checks.Add(new ValidationCheckDto(
+                "gemini_verdict", true,
+                $"Gemini {GeminiModel} final verdict: {recommendation}."));
+        }
+        else if (!string.IsNullOrWhiteSpace(GetGeminiKey()))
+        {
+            checks.Add(new ValidationCheckDto(
+                "gemini_verdict", false,
+                "Gemini verdict unavailable - deterministic rule result kept."));
+        }
+
         stopwatch.Stop();
         var validatedAt = DateTime.UtcNow;
 
@@ -267,6 +476,8 @@ public class DispatchValidationService
             ValidatedBy = string.IsNullOrWhiteSpace(validatedBy) ? "System" : validatedBy,
             DurationMs = stopwatch.ElapsedMilliseconds,
             ValidatedAt = validatedAt,
+            LlmEnhanced = llmEnhanced,
+            AiInsight = aiInsight,
         };
         _context.ValidationAudits.Add(audit);
 
@@ -280,6 +491,8 @@ public class DispatchValidationService
                     ? "All safety checks passed."
                     : $"{warnings.Count} warning(s): {string.Join(", ", warnings.Select(w => w.Code).Take(3))}."
                 : $"{violations.Count} blocker(s): {string.Join(", ", topCodes)}.";
+            if (llmEnhanced)
+                summary = "[LLM ENHANCED] " + summary;
             _context.IncidentTimelineEvents.Add(new IncidentTimelineEvent
             {
                 IncidentId = dispatch.IncidentId,
@@ -304,7 +517,9 @@ public class DispatchValidationService
             validatedAt,
             audit.Id,
             audit.DurationMs,
-            audit.ValidatedBy
+            audit.ValidatedBy,
+            llmEnhanced,
+            aiInsight
         );
     }
 
@@ -336,7 +551,9 @@ public class DispatchValidationService
             CountJsonArray(a.ChecksJson),
             a.ValidatedBy,
             a.DurationMs,
-            a.ValidatedAt
+            a.ValidatedAt,
+            a.LlmEnhanced,
+            a.AiInsight
         )).ToList();
     }
 }

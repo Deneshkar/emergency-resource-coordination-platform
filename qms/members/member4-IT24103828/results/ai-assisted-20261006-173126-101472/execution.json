@@ -1,0 +1,139 @@
+{
+  "member": "Deneshkar. P",
+  "student_id": "IT24103828",
+  "execution_kind": "ai-assisted",
+  "operator": "OpenAI Codex",
+  "started_at": "2026-10-06T17:31:26.102026+05:30",
+  "note": "Runs existing selected tests. Personal label is the operator declaration, not proof of independent understanding.",
+  "commands": [
+    {
+      "name": "backend",
+      "args": [
+        "dotnet",
+        "test",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\SEF\\emergency-resource-coordination-platform\\backend-tests\\ERCP.Api.Tests.csproj",
+        "--filter",
+        "FullyQualifiedName~ERCP.Api.Tests.VolunteerShiftTests.|FullyQualifiedName~ERCP.Api.Tests.VolunteersApiIntegrationTests.",
+        "--logger",
+        "trx;LogFileName=backend.trx",
+        "--logger",
+        "console;verbosity=normal",
+        "--results-directory",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\members\\member4-IT24103828\\results\\ai-assisted-20261006-173126-101472"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "agents",
+      "args": [
+        "C:\\Users\\USER\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI01_unapproved_tool_is_rejected[ValidationSafetyAgent]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI06_shelter_capacity_boundary[0-True]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI06_shelter_capacity_boundary[5-True]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI06_shelter_capacity_boundary[6-False]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI07_stock_boundary[1-True]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI07_stock_boundary[5-True]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI07_stock_boundary[6-False]",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI08_unavailable_volunteer_is_rejected",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI09_malformed_payload_fails_safely",
+        "D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\scripts\\test_agents.py::test_AI10_adjacent_shifts_do_not_overlap",
+        "-v",
+        "--junitxml=D:\\Sliit Subjects\\Y3 S1\\SEF\\Assignment\\QMS\\members\\member4-IT24103828\\results\\ai-assisted-20261006-173126-101472\\agents.xml"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "suites": {
+    "backend": [
+      {
+        "name": "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_ValidWindow_PersistsAndReturnsCreated",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.VolunteersApiIntegrationTests.VolunteerShiftLifecycle_OverHttp",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_InvalidStatus_ReturnsBadRequest",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_EndBeforeStart_ReturnsBadRequest",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.VolunteersApiIntegrationTests.RegisterAndLogin_Coordinator_ReturnsToken",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.VolunteersApiIntegrationTests.GetVolunteers_Anonymous_Returns401",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.VolunteersApiIntegrationTests.CreateShift_InvalidWindow_OverHttp_Returns400",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.VolunteersApiIntegrationTests.SeededDemoData_Exists",
+        "status": "Passed"
+      },
+      {
+        "name": "ERCP.Api.Tests.VolunteerShiftTests.CreateShift_UnknownVolunteer_ReturnsNotFound",
+        "status": "Passed"
+      }
+    ],
+    "agents": [
+      {
+        "name": "test_AI01_unapproved_tool_is_rejected[ValidationSafetyAgent]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI06_shelter_capacity_boundary[0-True]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI06_shelter_capacity_boundary[5-True]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI06_shelter_capacity_boundary[6-False]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI07_stock_boundary[1-True]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI07_stock_boundary[5-True]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI07_stock_boundary[6-False]",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI08_unavailable_volunteer_is_rejected",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI09_malformed_payload_fails_safely",
+        "status": "Passed"
+      },
+      {
+        "name": "test_AI10_adjacent_shifts_do_not_overlap",
+        "status": "Passed"
+      }
+    ]
+  },
+  "passed": true,
+  "demo_scenarios": 4,
+  "finished_at": "2026-10-06T17:31:32.461851+05:30",
+  "source_hashes": {
+    "backend-tests/VolunteerShiftTests.cs": "f0d58744ad2f7c67f19263e0ad94d48fae34732032d834cb235f1fdc70851d33",
+    "backend-tests/VolunteersApiIntegrationTests.cs": "a763d75bf2421c4580ef45b659a7b0c7b74945c51ebf78b84b32258fc4fecf47",
+    "ai-agents/validation_safety_agent.py": "8cbe95a440e3fd688fbe58a97f49742f8603889a410d7997c07c00b2b2c6ee1f"
+  },
+  "test_script_sha256": "e37929c0f1f72ea19c4320825d6c3e1e47aed79cad7a55986ff80c7ae4158dba"
+}

@@ -1,0 +1,329 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 2f3fd6a..f6fa051 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -10,6 +10,25 @@ jobs:
+   backend-build-and-test:
+     name: Backend (.NET) build + test
+     runs-on: ubuntu-latest
++    services:
++      postgres:
++        image: postgres:17
++        env:
++          POSTGRES_USER: qms
++          POSTGRES_PASSWORD: qms_ci_only
++          POSTGRES_DB: ercp_qms_ci
++        ports:
++          - 55432:5432
++        options: >-
++          --health-cmd "pg_isready -U qms -d ercp_qms_ci"
++          --health-interval 5s --health-timeout 5s --health-retries 12
++    env:
++      QMS_POSTGRES: Host=127.0.0.1;Port=55432;Database=ercp_qms_ci;Username=qms;Password=qms_ci_only
++      QMS_MIGRATION_ADMIN: Host=127.0.0.1;Port=55432;Database=postgres;Username=qms;Password=qms_ci_only
++      ConnectionStrings__DefaultConnection: Host=127.0.0.1;Port=55432;Database=ercp_qms_ci;Username=qms;Password=qms_ci_only
++      DATABASE_URL: ' '
++      SMTP_USER: ' '
++      SMTP_PASS: ' '
+ 
+     steps:
+       - name: Checkout code
+@@ -26,11 +45,55 @@ jobs:
+       - name: Build
+         run: dotnet build ./backend-tests/ERCP.Api.Tests.csproj --no-restore
+ 
+-      - name: Run tests
+-        run: dotnet test ./backend-tests/ERCP.Api.Tests.csproj --no-build --verbosity normal
++      - name: Setup Python
++        uses: actions/setup-python@v5
++        with:
++          python-version: '3.13'
++
++      - name: Install QMS test dependencies
++        run: python -m pip install -r qms/scripts/requirements.txt
++
++      - name: Start migrated QMS API
++        working-directory: backend
++        env:
++          DOTNET_ENVIRONMENT: Qms
++          ASPNETCORE_ENVIRONMENT: Qms
++          ASPNETCORE_URLS: http://127.0.0.1:5009
++          ConnectionStrings__DefaultConnection: ${{ env.QMS_POSTGRES }}
++          DATABASE_URL: ' '
++        run: |
++          mkdir -p ../qms/evidence/ci/backend
++          dotnet run --no-build --no-launch-profile > ../qms/evidence/ci/api.log 2>&1 &
++          for attempt in $(seq 1 30); do
++            if curl --fail --silent http://127.0.0.1:5009/api/health > ../qms/evidence/ci/health.json; then
++              python -c "import json; h=json.load(open('../qms/evidence/ci/health.json')); assert h['environment']=='Qms' and h['database']=='PostgreSQL' and h['appliedMigrations']==8 and h['pendingMigrations']==0"
++              exit 0
++            fi
++            sleep 2
++          done
++          cat ../qms/evidence/ci/api.log
++          exit 1
+ 
+-      - name: Validate Python agents compile
+-        run: python3 -m py_compile ai-agents/validation_safety_agent.py ai-agents/coordinator_planner_agent.py ai-agents/situation_analysis_agent.py
++      - name: Run tests
++        run: dotnet test ./backend-tests/ERCP.Api.Tests.csproj --no-build --logger "trx;LogFileName=backend.trx" --results-directory qms/evidence/ci/backend
++
++      - name: Require every database regression to pass
++        run: python qms/scripts/summarize_results.py qms/evidence/ci --backend-only
++
++      - name: Run real agent and HTTP suites
++        env:
++          QMS_API: http://127.0.0.1:5009
++          QMS_WORKFLOW_OUTPUT: qms/evidence/ci/workflow.json
++        run: |
++          python -m pytest qms/scripts/test_agents.py -q --junitxml=qms/evidence/ci/agents.xml
++          python -m pytest qms/scripts/test_live_api.py -q --junitxml=qms/evidence/ci/live-api.xml
++
++      - name: Upload QMS backend evidence
++        if: always()
++        uses: actions/upload-artifact@v4
++        with:
++          name: qms-backend-agent-http-evidence
++          path: qms/evidence/ci
+ 
+   frontend-build-and-test:
+     name: Frontend (React) lint + test + build
+@@ -73,6 +136,7 @@ jobs:
+       - name: Setup Flutter
+         uses: subosito/flutter-action@v2
+         with:
++          flutter-version: '3.44.9'
+           channel: stable
+ 
+       - name: Install dependencies
+diff --git a/.gitignore b/.gitignore
+index 7e998ea..1efec27 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -37,4 +37,15 @@ frontend-react/.vercel/
+ frontend-react/dist/
+ 
+ # Office Temp Files
+-~$*
+\ No newline at end of file
++~$*
++
++# QMS source, documentation and curated evidence belong in the repository.
++qms/.postgres/
++qms/.tools/
++qms/qa/
++qms/archive/
++qms/evidence/rerun-*/
++qms/evidence/ci/
++qms/*.zip
++**/.pytest_cache/
++!qms/evidence/**/*.log
+diff --git a/backend/Program.cs b/backend/Program.cs
+index 3837697..372b79a 100644
+--- a/backend/Program.cs
++++ b/backend/Program.cs
+@@ -46,12 +46,21 @@ static void LoadDotEnv()
+     }
+ }
+ 
+-LoadDotEnv();
++// QMS runs use explicit test configuration; never import local service credentials.
++var requestedEnvironment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
++    ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
++if (!string.Equals(requestedEnvironment, "Qms", StringComparison.OrdinalIgnoreCase)) LoadDotEnv();
+ 
+ var builder = WebApplication.CreateBuilder(args);
++var qmsMode = builder.Environment.IsEnvironment("Qms");
++if (qmsMode)
++{
++    builder.Configuration["SMTP_USER"] = "";
++    builder.Configuration["SMTP_PASS"] = "";
++}
+ 
+ var portEnv = Environment.GetEnvironmentVariable("PORT");
+-if (!string.IsNullOrEmpty(portEnv))
++if (!qmsMode && !string.IsNullOrEmpty(portEnv))
+ {
+     builder.WebHost.UseUrls($"http://0.0.0.0:{portEnv}");
+ }
+@@ -160,6 +169,13 @@ static string? ConvertDatabaseUrl(string? databaseUrl)
+ var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+ var connString = ConvertDatabaseUrl(databaseUrl)
+     ?? builder.Configuration.GetConnectionString("DefaultConnection");
++if (qmsMode)
++{
++    var testConfig = new NpgsqlConnectionStringBuilder(connString);
++    if (testConfig.Host is not ("127.0.0.1" or "localhost") ||
++        testConfig.Database?.StartsWith("ercp_qms", StringComparison.Ordinal) != true)
++        throw new InvalidOperationException("QMS requires a localhost database named ercp_qms or ercp_qms_*.");
++}
+ if (!string.IsNullOrEmpty(connString))
+ {
+     try
+@@ -168,12 +184,15 @@ if (!string.IsNullOrEmpty(connString))
+         testConn.Open();
+         usePostgres = true;
+     }
+-    catch
++    catch when (!qmsMode)
+     {
+         usePostgres = false;
+     }
+ }
+ 
++if (qmsMode && !usePostgres)
++    throw new InvalidOperationException("QMS requires a reachable PostgreSQL database. Run qms/scripts/start-qms.ps1; in-memory fallback is disabled.");
++
+ builder.Services.AddDbContext<AppDbContext>(options =>
+ {
+     if (usePostgres)
+@@ -206,7 +225,26 @@ using (var scope = app.Services.CreateScope())
+     var planner = scope.ServiceProvider.GetRequiredService<IncidentPlannerService>();
+     try
+     {
+-        if (context.Database.IsRelational())
++        if (qmsMode)
++        {
++            // A database created by the legacy startup path must not be adopted implicitly.
++            await using var connection = new NpgsqlConnection(connString);
++            await connection.OpenAsync();
++            await using var check = new NpgsqlCommand("""
++                SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='public'
++                    AND table_type='BASE TABLE' AND table_name <> '__EFMigrationsHistory');
++                """, connection);
++            var hasTables = (bool)(await check.ExecuteScalarAsync())!;
++            var applied = await context.Database.GetAppliedMigrationsAsync();
++            if (hasTables && !applied.Any())
++                throw new InvalidOperationException("QMS found tables without EF migration history. Choose a fresh ercp_qms_* database; existing databases require an adoption review.");
++            await context.Database.MigrateAsync();
++            if (context.Database.HasPendingModelChanges())
++                throw new InvalidOperationException("QMS model differs from its migration snapshot.");
++            app.Logger.LogInformation("QMS PostgreSQL ready: {MigrationCount} migrations applied.",
++                (await context.Database.GetAppliedMigrationsAsync()).Count());
++        }
++        else if (context.Database.IsRelational())
+         {
+             var creator = context.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
+             if (creator != null)
+@@ -219,7 +257,7 @@ using (var scope = app.Services.CreateScope())
+             context.Database.EnsureCreated();
+         }
+ 
+-        if (context.Database.IsRelational())
++        if (!qmsMode && context.Database.IsRelational())
+         {
+             context.Database.ExecuteSqlRaw(@"
+                 CREATE TABLE IF NOT EXISTS ""Users"" (
+@@ -817,6 +855,7 @@ using (var scope = app.Services.CreateScope())
+     }
+     catch (Exception ex)
+     {
++        if (qmsMode) throw;
+         app.Logger.LogWarning(ex, "Database auto-migration/seeding skipped.");
+     }
+ }
+@@ -832,7 +871,19 @@ app.UseSwaggerUI(c =>
+ 
+ // Health check endpoint for cloud platforms
+ app.MapGet("/", () => Results.Ok(new { status = "healthy", service = "ERCP.Api", timestamp = DateTime.UtcNow }));
+-app.MapGet("/api/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
++app.MapGet("/api/health", async (AppDbContext db) =>
++{
++    if (!qmsMode) return Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow });
++    try
++    {
++        if (!await db.Database.CanConnectAsync()) return Results.StatusCode(503);
++        var pending = (await db.Database.GetPendingMigrationsAsync()).Count();
++        if (pending != 0) return Results.StatusCode(503);
++        return Results.Ok(new { status = "healthy", environment = "Qms", database = "PostgreSQL",
++            appliedMigrations = (await db.Database.GetAppliedMigrationsAsync()).Count(), pendingMigrations = pending });
++    }
++    catch { return Results.StatusCode(503); }
++});
+ 
+ // Railway handles SSL at the edge — no HTTPS redirect needed
+ app.UseCors("AllowAll");
+@@ -844,4 +895,4 @@ app.Run();
+ 
+ // Exposes the top-level entry point to the test project for
+ // WebApplicationFactory-based HTTP integration tests (Student 4).
+-public partial class Program { }
+\ No newline at end of file
++public partial class Program { }
+diff --git a/backend/Services/IncidentPlannerService.cs b/backend/Services/IncidentPlannerService.cs
+index 0197846..c2a46aa 100644
+--- a/backend/Services/IncidentPlannerService.cs
++++ b/backend/Services/IncidentPlannerService.cs
+@@ -66,6 +66,9 @@ public class IncidentPlannerService
+             var geminiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+             if (!string.IsNullOrWhiteSpace(geminiKey) && !psi.Environment.ContainsKey("GEMINI_API_KEY"))
+                 psi.Environment["GEMINI_API_KEY"] = geminiKey;
++            if (string.Equals(Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
++                ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Qms", StringComparison.OrdinalIgnoreCase))
++                psi.Environment["GEMINI_API_KEY"] = "";
+ 
+             using var process = Process.Start(psi);
+             if (process == null) return null;
+@@ -572,4 +575,4 @@ public class IncidentPlannerService
+ 
+         return risk;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/mobile-flutter/pubspec.lock b/mobile-flutter/pubspec.lock
+index 69f8e81..de091e8 100644
+--- a/mobile-flutter/pubspec.lock
++++ b/mobile-flutter/pubspec.lock
+@@ -284,10 +284,10 @@ packages:
+     dependency: transitive
+     description:
+       name: matcher
+-      sha256: "31bd099b47c10cd1aeb55146a2d46ce0277630ecef3f7dae54ad7873f36696cd"
++      sha256: dc0b7dc7651697ea4ff3e69ef44b0407ea32c487a39fff6a4004fa585e901861
+       url: "https://pub.dev"
+     source: hosted
+-    version: "0.12.20"
++    version: "0.12.19"
+   material_color_utilities:
+     dependency: transitive
+     description:
+@@ -300,10 +300,10 @@ packages:
+     dependency: transitive
+     description:
+       name: meta
+-      sha256: "307249ce4ff29d58a18e97f6345f539382eb9c9c29ecda628900f31de0443dd9"
++      sha256: "1741988757a65eb6b36abe716829688cf01910bbf91c34354ff7ec1c3de2b349"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "1.19.0"
++    version: "1.18.0"
+   nested:
+     dependency: transitive
+     description:
+@@ -529,10 +529,10 @@ packages:
+     dependency: transitive
+     description:
+       name: test_api
+-      sha256: "2a122cbe059f8b610d3a5415f42e255b6c17b1f21eee1d960f31080237fb4f11"
++      sha256: "949a932224383300f01be9221c39180316445ecb8e7547f70a41a35bf421fb9e"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "0.7.12"
++    version: "0.7.11"
+   timezone:
+     dependency: transitive
+     description:
+@@ -617,10 +617,10 @@ packages:
+     dependency: transitive
+     description:
+       name: vector_math
+-      sha256: "92b9910f66ed1057fd4da7b040ae7c74cafacf885bdc81be496928d5049b032d"
++      sha256: d530bd74fea330e6e364cda7a85019c434070188383e1cd8d9777ee586914c5b
+       url: "https://pub.dev"
+     source: hosted
+-    version: "2.4.3"
++    version: "2.2.0"
+   vm_service:
+     dependency: transitive
+     description:

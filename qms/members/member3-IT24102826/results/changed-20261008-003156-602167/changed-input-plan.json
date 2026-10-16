@@ -1,0 +1,7 @@
+{
+  "member": 3,
+  "change": "Priority: Medium to High; resources: 1 to 0; volunteers: 1 to 0. The explicit one-vehicle requirement and incident ID stay unchanged.",
+  "expected_prediction": "The missing vehicle should produce a resource gap and REVISE; human approval remains required.",
+  "prediction_author": "OpenAI Codex; prepared from existing source and fixtures",
+  "personal_execution_status": "Not established by preparation or a technical run"
+}

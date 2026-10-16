@@ -1,0 +1,5 @@
+Unhandled exception. System.InvalidOperationException: QMS found tables without EF migration history. Choose a fresh ercp_qms_* database; existing databases require an adoption review.
+   at Program.<Main>$(String[] args) in D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend\Program.cs:line 240
+   at Program.<Main>$(String[] args) in D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend\Program.cs:line 244
+   at Program.<Main>$(String[] args) in D:\Sliit Subjects\Y3 S1\SEF\Assignment\SEF\emergency-resource-coordination-platform\backend\Program.cs:line 244
+   at Program.<Main>(String[] args)

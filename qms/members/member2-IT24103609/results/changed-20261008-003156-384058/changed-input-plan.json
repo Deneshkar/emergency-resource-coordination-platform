@@ -1,0 +1,7 @@
+{
+  "member": 2,
+  "change": "Medical stock: 20 to 50; available vehicles: 1 to 3; shelter 2 occupancy: 30/100 to 100/100. Food stays 100; shelter 1 stays 10/10; incident and High priority unchanged.",
+  "expected_prediction": "Medical and vehicle deficits should clear; no shelter should be selected because both are full. Urgency remains 85 because the incident is unchanged.",
+  "prediction_author": "OpenAI Codex; prepared from existing source and fixtures",
+  "personal_execution_status": "Not established by preparation or a technical run"
+}
