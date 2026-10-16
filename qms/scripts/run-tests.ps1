@@ -12,7 +12,7 @@ $repoRoot = if (Test-Path (Join-Path $parent 'backend')) { $parent } else { Join
 $results = Join-Path $qmsRoot ('evidence/rerun-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
 foreach ($command in @('dotnet','python','npm.cmd','flutter',$K6)) { Get-Command $command -ErrorAction Stop | Out-Null }
 $health = Invoke-RestMethod "$($ApiUrl.TrimEnd('/'))/api/health"
-if ($health.environment -ne 'Qms' -or $health.database -ne 'PostgreSQL' -or $health.appliedMigrations -ne 8 -or $health.pendingMigrations -ne 0) {
+if ($health.environment -ne 'Qms' -or $health.database -ne 'PostgreSQL' -or $health.appliedMigrations -ne 9 -or $health.pendingMigrations -ne 0) {
   throw 'Start the migrated PostgreSQL QMS API with start-qms.ps1. A normal or in-memory API cannot supply QMS database evidence.'
 }
 New-Item -ItemType Directory -Force $results | Out-Null
