@@ -27,9 +27,16 @@ function VolunteerList() {
       const isAvailable =
         availabilityFilter === "available" ? true :
         availabilityFilter === "unavailable" ? false : null;
-      const data = await getVolunteers(search, isAvailable, page, pageSize + 1);
-      setHasNextPage(data.length > pageSize);
-      const sliced = data.slice(0, pageSize);
+      // Fetch exactly one page plus a 1-record probe of the next page.
+      // (Requesting pageSize + 1 as the page size breaks page math on the
+      // backend, which paginates by Skip((page - 1) * pageSize): page 2
+      // would skip over the peeked record and render an empty page.)
+      const [data, probe] = await Promise.all([
+        getVolunteers(search, isAvailable, page, pageSize),
+        getVolunteers(search, isAvailable, page + 1, 1),
+      ]);
+      setHasNextPage(probe.length > 0);
+      const sliced = [...data];
       if (sort === "name") sliced.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
       else if (sort === "available")
         sliced.sort((a, b) => Number(b.isAvailable || false) - Number(a.isAvailable || false));
