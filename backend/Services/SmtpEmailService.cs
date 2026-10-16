@@ -25,8 +25,8 @@ public class SmtpEmailService : IEmailService
 
         if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(pass))
         {
-            _logger.LogWarning("[EmailService] SMTP credentials not configured — skipping email.");
-            return;
+            throw new InvalidOperationException(
+                "SMTP credentials are not configured. Set SMTP_HOST, SMTP_PORT, SMTP_USER, and SMTP_PASS.");
         }
 
         // Parse "Display Name <email>" format

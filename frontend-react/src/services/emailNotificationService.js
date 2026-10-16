@@ -83,3 +83,21 @@ export async function sendResourceAddedEmail(resourceName, resourceType, locatio
     priority: "Info",
   });
 }
+
+// ── WhatsApp Alert Senders ──────────────────────────────────────────
+
+export async function sendWhatsAppTest(recipient = null, message = null) {
+  return postAlert("/whatsapp/test", { recipient, message });
+}
+
+export async function sendWhatsAppCustomAlert(title, message, priority = "High", recipient = null, alertType = "Alert") {
+  return postAlert("/whatsapp", { title, message, priority, recipient, alertType });
+}
+
+export async function sendEmergencyAlert(title, category, priority, location, description, reporterContact = null, recipient = null) {
+  return postAlert("/emergency", { title, category, priority, location, description, reporterContact, recipient });
+}
+
+export async function sendDisasterWarning(title, area, severity = "Critical", advisory = null, recipient = null) {
+  return postAlert("/disaster-warning", { title, area, severity, advisory, recipient });
+}

@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { incidentService } from "../services/incidentService";
 import { useAuth } from "../context/AuthContext";
+import LocationPicker from "../components/LocationPicker";
 
 const CATEGORIES = [
   { value: "Fire", label: "Fire / Explosion", icon: "🔥" },
@@ -31,6 +32,8 @@ function ReportIncident() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
   const [category, setCategory] = useState("Fire");
   const [priority, setPriority] = useState("High");
   const [affectedCount, setAffectedCount] = useState(5);
@@ -141,6 +144,8 @@ function ReportIncident() {
         affectedCount: parseInt(affectedCount) || 0,
         reporterContact: reporterContact.trim(),
         autoGeneratePlan,
+        latitude,
+        longitude,
       });
 
       const notify = localStorage.getItem("ercp_notifications") === "true";
@@ -287,22 +292,20 @@ function ReportIncident() {
               </div>
             </div>
 
-            <div className="form-grid-2">
-              <div className="form-group">
-                <label className="form-label" htmlFor="ri-location">
-                  Specific Location / Address <span className="req">*</span>
-                </label>
-                <input
-                  id="ri-location"
-                  type="text"
-                  placeholder="e.g. 742 Evergreen Terrace, Sector 4"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  className={`form-control ${touched && errors.location ? "input-error" : ""}`}
-                />
-                {touched && errors.location && <span className="field-error">{errors.location}</span>}
-              </div>
+            <LocationPicker
+              location={location}
+              latitude={latitude}
+              longitude={longitude}
+              onChangeLocation={setLocation}
+              onChangeCoordinates={({ lat, lng }) => {
+                setLatitude(lat);
+                setLongitude(lng);
+              }}
+              touched={touched}
+              error={errors.location}
+            />
 
+            <div className="form-grid-2" style={{ marginTop: "18px" }}>
               <div className="form-group">
                 <label className="form-label" htmlFor="ri-affected">People Affected (est.)</label>
                 <div className={`stepper ${touched && errors.affectedCount ? "input-error" : ""}`}>
@@ -319,19 +322,19 @@ function ReportIncident() {
                 </div>
                 {touched && errors.affectedCount && <span className="field-error">{errors.affectedCount}</span>}
               </div>
-            </div>
 
-            <div className="form-group">
-              <label className="form-label" htmlFor="ri-reporter">Reporter Contact / Agency</label>
-              <input
-                id="ri-reporter"
-                type="text"
-                placeholder="e.g. Dispatch Officer Jane Doe · +1 555-0199"
-                value={reporterContact}
-                onChange={(e) => setReporterContact(e.target.value)}
-                className={`form-control ${touched && errors.reporterContact ? "input-error" : ""}`}
-              />
-              {touched && errors.reporterContact && <span className="field-error">{errors.reporterContact}</span>}
+              <div className="form-group">
+                <label className="form-label" htmlFor="ri-reporter">Reporter Contact / Agency</label>
+                <input
+                  id="ri-reporter"
+                  type="text"
+                  placeholder="e.g. Dispatch Officer Jane Doe · +1 555-0199"
+                  value={reporterContact}
+                  onChange={(e) => setReporterContact(e.target.value)}
+                  className={`form-control ${touched && errors.reporterContact ? "input-error" : ""}`}
+                />
+                {touched && errors.reporterContact && <span className="field-error">{errors.reporterContact}</span>}
+              </div>
             </div>
           </section>
 
@@ -419,7 +422,20 @@ function ReportIncident() {
             </div>
             <div className="summary-row">
               <span>Location</span>
-              <strong>{location.trim() || "—"}</strong>
+              <strong>
+                {location.trim() ? (
+                  <>
+                    <span>{location.trim()}</span>
+                    {latitude !== null && longitude !== null && (
+                      <span style={{ display: "block", color: "var(--accent-primary)", fontSize: "0.72rem", fontWeight: "normal", marginTop: "2px" }}>
+                        📍 {latitude}, {longitude}
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  "—"
+                )}
+              </strong>
             </div>
             <div className="summary-row">
               <span>Affected</span>

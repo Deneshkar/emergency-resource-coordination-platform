@@ -23,7 +23,6 @@ export default function Settings() {
   const [notifications, setNotifications] = useState(
     localStorage.getItem("ercp_notifications") === "true"
   );
-
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", currentTheme);
     localStorage.setItem("ercp_theme", currentTheme);
@@ -158,6 +157,9 @@ export default function Settings() {
             </div>
           </div>
         </div>
+
+        {/* WhatsApp Emergency Alerts Card */}
+       
       </div>
     </div>
   );

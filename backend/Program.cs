@@ -20,9 +20,11 @@ static void LoadDotEnv()
 {
     var candidates = new[]
     {
+        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "backend", ".env"),
+        Path.Combine(Directory.GetCurrentDirectory(), ".env"),
+        Path.Combine(Directory.GetCurrentDirectory(), "backend", ".env"),
         Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".env"),
         Path.Combine(Directory.GetCurrentDirectory(), "..", ".env"),
-        Path.Combine(Directory.GetCurrentDirectory(), ".env"),
     };
     foreach (var path in candidates)
     {
@@ -78,6 +80,7 @@ builder.Services.AddScoped<SituationAnalysisService>();
 builder.Services.AddScoped<DispatchValidationService>();
 builder.Services.AddScoped<GeolocationService>();
 builder.Services.AddScoped<IEmailService, SmtpEmailService>();
+builder.Services.AddScoped<IWhatsAppService, WhatsAppService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

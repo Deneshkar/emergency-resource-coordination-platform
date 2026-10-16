@@ -18,18 +18,21 @@ public class IncidentController : ControllerBase
     private readonly AppDbContext _context;
     private readonly IncidentPlannerService _plannerService;
     private readonly IEmailService _emailService;
+    private readonly IWhatsAppService? _whatsAppService;
     private readonly ILogger<IncidentController> _logger;
 
     public IncidentController(
         AppDbContext context,
         IncidentPlannerService plannerService,
         IEmailService emailService,
-        ILogger<IncidentController> logger)
+        ILogger<IncidentController> logger,
+        IWhatsAppService? whatsAppService = null)
     {
         _context = context;
         _plannerService = plannerService;
         _emailService = emailService;
         _logger = logger;
+        _whatsAppService = whatsAppService;
     }
 
     // GET: api/incident
@@ -289,6 +292,29 @@ public class IncidentController : ControllerBase
                 _logger.LogError(ex, "Background email sending failed in CreateIncident.");
             }
         });
+
+        // Send WhatsApp Alert for Emergency Incident (Fire and Forget)
+        if (_whatsAppService != null)
+        {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _whatsAppService.SendCriticalEmergencyAlertAsync(
+                        incident.Title,
+                        incident.Category,
+                        incident.Priority,
+                        incident.Location,
+                        incident.Description,
+                        incident.ReporterContact
+                    );
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Background WhatsApp alert failed in CreateIncident.");
+                }
+            });
+        }
 
         return CreatedAtAction(nameof(GetIncident), new { id = incident.Id }, await GetIncidentDetailObj(incident.Id));
     }
