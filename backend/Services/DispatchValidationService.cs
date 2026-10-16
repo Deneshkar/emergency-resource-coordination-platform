@@ -94,20 +94,45 @@ public class DispatchValidationService
                 + "(S2, R2, I1, V2). Otherwise REJECT. "
                 + $"Rule summary: {JsonSerializer.Serialize(new { dispatch_id = dispatchId, rule_is_valid = ruleIsValid, rule_recommendation = ruleRecommendation, rule_violations = ruleViolationCodes, rule_warnings = ruleWarningCodes, check_count = checkCount })}";
 
-            using var request = new HttpRequestMessage(HttpMethod.Post,
-                $"https://generativelanguage.googleapis.com/v1beta/models/{GeminiModel}:generateContent?key={apiKey}");
-            request.Content = new StringContent(JsonSerializer.Serialize(new
+            var requestBody = JsonSerializer.Serialize(new
             {
                 contents = new[] { new { parts = new[] { new { text = prompt } } } },
                 generationConfig = new { temperature = 0.0, maxOutputTokens = 512, responseMimeType = "application/json" },
-            }), Encoding.UTF8, "application/json");
+            });
+            var requestUri = $"https://generativelanguage.googleapis.com/v1beta/models/{GeminiModel}:generateContent?key={apiKey}";
 
-            using var response = await _httpClient.SendAsync(request, cancellationToken);
-            if (!response.IsSuccessStatusCode)
+            // One polite retry on transient overload/rate-limit (429/503): Google
+            // free-tier blips like the observed HTTP 503 heal on a second attempt.
+            HttpResponseMessage? response = null;
+            for (var attempt = 0; attempt < 2; attempt++)
             {
-                Console.WriteLine($"[ValidationSafetyAgent] Gemini verdict skipped: HTTP {(int)response.StatusCode}. Rule result kept.");
+                using var attemptRequest = new HttpRequestMessage(HttpMethod.Post, requestUri);
+                attemptRequest.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+                response?.Dispose();
+                response = await _httpClient.SendAsync(attemptRequest, cancellationToken);
+                if (response.IsSuccessStatusCode)
+                    break;
+                var status = (int)response.StatusCode;
+                if ((status == 429 || status == 503) && attempt == 0)
+                {
+                    var delaySeconds = 5;
+                    if (response.Headers.TryGetValues("Retry-After", out var values)
+                        && int.TryParse(values.FirstOrDefault(), out var asked))
+                        delaySeconds = Math.Clamp(asked, 2, 10);
+                    Console.WriteLine($"[ValidationSafetyAgent] Gemini HTTP {status}, retrying once in {delaySeconds}s.");
+                    response.Dispose();
+                    response = null;
+                    await Task.Delay(TimeSpan.FromSeconds(delaySeconds), cancellationToken);
+                    continue;
+                }
+                Console.WriteLine($"[ValidationSafetyAgent] Gemini verdict skipped: HTTP {status}. Rule result kept.");
+                response.Dispose();
                 return null;
             }
+            if (response is null)
+                return null;
+            // Owned here: disposed when the enclosing try scope exits, after parsing below.
+            using var ownedResponse = response;
 
             using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync(cancellationToken));
             if (!doc.RootElement.TryGetProperty("candidates", out var candidates) || candidates.GetArrayLength() == 0)

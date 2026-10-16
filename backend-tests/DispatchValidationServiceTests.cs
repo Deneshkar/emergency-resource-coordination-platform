@@ -1,4 +1,8 @@
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ERCP.Api.Data;
 using ERCP.Api.Models;
 using ERCP.Api.DTOs;
@@ -248,6 +252,48 @@ public class DispatchValidationServiceTests
         Assert.Single(history);
         Assert.False(history[0].LlmEnhanced);
         Assert.Null(history[0].AiInsight);
+    }
+
+    private sealed class QueuedHandler : HttpMessageHandler
+    {
+        private readonly Queue<HttpResponseMessage> _responses;
+        public QueuedHandler(IEnumerable<HttpResponseMessage> responses)
+            => _responses = new Queue<HttpResponseMessage>(responses);
+        protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request, CancellationToken cancellationToken)
+            => Task.FromResult(_responses.Dequeue());
+    }
+
+    [Fact]
+    public async Task ValidateDispatch_Gemini503ThenSuccess_RetriesAndUsesLlmVerdict()
+    {
+        // No network: first attempt 503 (with Retry-After: 2), second returns a
+        // strict-JSON Gemini verdict. Proves the polite retry heals transient blips.
+        var (ctx, dispatch, _) = await SeedDispatchAsync(volunteerAvailable: true);
+        var throttled = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable);
+        throttled.Headers.TryAddWithoutValidation("Retry-After", "2");
+        var verdictJson = "{\"candidates\":[{\"content\":{\"parts\":[{\"text\":"
+            + "\"{\\\"is_valid\\\":true,\\\"recommendation\\\":\\\"APPROVE\\\","
+            + "\\\"violations\\\":[],\\\"ai_insight\\\":\\\"All clear.\\\"}\"}]}}]}";
+        var service = new DispatchValidationService(
+            ctx,
+            new HttpClient(new QueuedHandler(new[]
+            {
+                throttled,
+                new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(verdictJson, Encoding.UTF8, "application/json"),
+                },
+            })),
+            new ConfigurationBuilder().AddInMemoryCollection(
+                new Dictionary<string, string?> { ["GEMINI_API_KEY"] = "test-key" }).Build());
+
+        var result = await service.ValidateDispatchAsync(dispatch.Id, new ValidateDispatchRequestDto());
+
+        Assert.True(result.LlmEnhanced);
+        Assert.Equal("APPROVE", result.Recommendation);
+        Assert.Equal("All clear.", result.AiInsight);
+        Assert.Contains(result.Checks, c => c.Tool == "gemini_verdict" && c.Passed);
     }
 
     [Fact]
