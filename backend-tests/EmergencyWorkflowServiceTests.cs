@@ -99,7 +99,7 @@ public class EmergencyWorkflowServiceTests
 
         // The React approval screen requests a fresh safety check first. That
         // recheck must retain the workflow's proposed shelter allocation.
-        var recheck = await new ValidationsController(new DispatchValidationService(db), db)
+        var recheck = await new ValidationsController(new DispatchValidationService(db))
             .ValidateDispatch(dispatch.Id);
         var result = Assert.IsType<OkObjectResult>(recheck.Result);
         var safety = Assert.IsType<ValidationResultDto>(result.Value);
@@ -143,7 +143,7 @@ public class EmergencyWorkflowServiceTests
         Assert.True(run.Status == "NeedsRevision",
             $"Workflow status={run.Status}; errors={run.ErrorsJson}; tools={run.ToolResultsJson}");
         Assert.NotNull(run.DispatchId);
-        var recheck = await new ValidationsController(gate, db)
+        var recheck = await new ValidationsController(gate)
             .ValidateDispatch(run.DispatchId.Value);
         Assert.IsType<OkObjectResult>(recheck.Result);
         Assert.Equal("NeedsRevision", run.Status);

@@ -25,6 +25,7 @@ public class AppDbContext : DbContext
     public DbSet<IncidentPlan> IncidentPlans => Set<IncidentPlan>();
     public DbSet<IncidentTimelineEvent> IncidentTimelineEvents => Set<IncidentTimelineEvent>();
     public DbSet<SituationAssessment> SituationAssessments => Set<SituationAssessment>();
+    public DbSet<WorkflowExecution> WorkflowExecutions => Set<WorkflowExecution>();
 
     // Component - Resource, Shelter & Inventory Management
     public DbSet<Resource> Resources => Set<Resource>();
@@ -36,6 +37,9 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<WorkflowExecution>().HasIndex(w => w.IncidentId);
+        modelBuilder.Entity<WorkflowExecution>().HasIndex(w => w.DispatchId);
 
         // User email uniqueness constraint
         modelBuilder.Entity<User>()

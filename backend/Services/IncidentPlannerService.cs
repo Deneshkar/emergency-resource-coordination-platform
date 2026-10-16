@@ -11,21 +11,31 @@ public class IncidentPlannerService
 {
     private readonly ILogger<IncidentPlannerService> _logger;
     private readonly AppDbContext _context;
+    private readonly IConfiguration? _configuration;
+    public IReadOnlyList<string> LastAgentTools { get; private set; } = Array.Empty<string>();
 
-    public IncidentPlannerService(ILogger<IncidentPlannerService> logger, AppDbContext context)
+    public IncidentPlannerService(ILogger<IncidentPlannerService> logger, AppDbContext context,
+        IConfiguration? configuration = null)
     {
         _logger = logger;
         _context = context;
+        _configuration = configuration;
     }
 
-    public IncidentPlan GeneratePlan(Incident incident, string? customDirectives = null, string? focusPhase = null)
+    public IncidentPlan GeneratePlan(Incident incident, string? customDirectives = null,
+        string? focusPhase = null, SituationAssessmentResponseDto? assessment = null,
+        bool requirePython = false)
     {
+        LastAgentTools = Array.Empty<string>();
         // Try Python AI Agent integration first if available
-        var pyPlan = TryGeneratePythonAgentPlan(incident, customDirectives, focusPhase);
+        var pyPlan = TryGeneratePythonAgentPlan(incident, customDirectives, focusPhase, assessment);
         if (pyPlan != null)
         {
             return pyPlan;
         }
+
+        if (requirePython)
+            throw new InvalidOperationException("Coordinator planning agent did not return a valid plan.");
 
         // Fall back to robust built-in emergency planning engine
         return GenerateRuleBasedPlan(incident, customDirectives, focusPhase);
@@ -35,7 +45,9 @@ public class IncidentPlannerService
     {
         try
         {
-            var agentPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "ai-agents", "coordinator_planner_agent.py");
+            var agentPath = Path.Combine(_configuration?["Agents:Directory"] ??
+                Path.Combine(Directory.GetCurrentDirectory(), "..", "ai-agents"),
+                "coordinator_planner_agent.py");
             if (!File.Exists(agentPath))
             {
                 agentPath = Path.Combine(Directory.GetCurrentDirectory(), "ai-agents", "coordinator_planner_agent.py");
@@ -54,13 +66,18 @@ public class IncidentPlannerService
 
             var psi = new ProcessStartInfo
             {
-                FileName = "python",
-                Arguments = $"\"{agentPath}\" --task \"{task}\" --json \"{inputPayload.Replace("\"", "\\\"")}\"",
+                FileName = _configuration?["Agents:PythonExecutable"] ??
+                    (OperatingSystem.IsWindows() ? "py" : "python3"),
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
+            psi.ArgumentList.Add(agentPath);
+            psi.ArgumentList.Add("--task");
+            psi.ArgumentList.Add(task);
+            psi.ArgumentList.Add("--json");
+            psi.ArgumentList.Add(inputPayload);
 
             // Forward Gemini key loaded from .env so the Python agent can call the LLM.
             var geminiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
@@ -73,8 +90,16 @@ public class IncidentPlannerService
             using var process = Process.Start(psi);
             if (process == null) return null;
 
-            var output = process.StandardOutput.ReadToEnd();
-            process.WaitForExit(3000);
+            var outputTask = process.StandardOutput.ReadToEndAsync();
+            var errorTask = process.StandardError.ReadToEndAsync();
+            if (!process.WaitForExit(15000))
+            {
+                process.Kill(entireProcessTree: true);
+                _logger.LogWarning("Python planning agent timed out.");
+                return null;
+            }
+            var output = outputTask.GetAwaiter().GetResult();
+            _ = errorTask.GetAwaiter().GetResult();
 
             if (process.ExitCode == 0 && !string.IsNullOrWhiteSpace(output))
             {
@@ -88,7 +113,8 @@ public class IncidentPlannerService
         return null;
     }
 
-    private IncidentPlan? TryGeneratePythonAgentPlan(Incident incident, string? customDirectives, string? focusPhase)
+    private IncidentPlan? TryGeneratePythonAgentPlan(Incident incident, string? customDirectives,
+        string? focusPhase, SituationAssessmentResponseDto? assessment = null)
     {
         var availableResources = _context.Resources.Where(r => r.Status == "Available").ToList();
         var availableVolunteers = _context.Volunteers.Where(v => v.IsAvailable).ToList();
@@ -102,6 +128,8 @@ public class IncidentPlannerService
             category = incident.Category,
             priority = incident.Priority,
             affected_count = incident.AffectedCount,
+            situation_assessment_id = assessment?.Id,
+            urgency_level = assessment?.UrgencyLevel,
             custom_directives = customDirectives ?? "",
             focus_phase = focusPhase ?? "",
             resources = availableResources.Select(r => new { r.Id, name = r.Name, resourceType = r.ResourceType, r.Status }),
@@ -121,6 +149,21 @@ public class IncidentPlannerService
                 {
                     _logger.LogWarning("Python AI agent output failed schema validation. Falling back to internal engine.");
                     return null;
+                }
+
+                var allowedTools = new HashSet<string>(StringComparer.Ordinal)
+                {
+                    "get_incident", "get_available_resources", "get_available_volunteers",
+                    "get_nearby_shelters", "create_response_plan"
+                };
+                if (root.TryGetProperty("allowed_tools", out var tools) &&
+                    tools.ValueKind == JsonValueKind.Array)
+                {
+                    var reportedTools = tools.EnumerateArray()
+                        .Select(tool => tool.GetString() ?? string.Empty).ToArray();
+                    if (reportedTools.Any(tool => !allowedTools.Contains(tool)))
+                        return null;
+                    LastAgentTools = reportedTools;
                 }
 
                 var planTitle = root.TryGetProperty("objective", out var objProp) && !string.IsNullOrWhiteSpace(objProp.GetString())
