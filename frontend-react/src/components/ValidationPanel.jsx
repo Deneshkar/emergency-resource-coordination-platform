@@ -49,6 +49,12 @@ export default function ValidationPanel({ result, loading, error, history = [], 
         ? "var(--amber)"
         : "var(--red)";
 
+  // Hide the noisy Gemini fallback row ("verdict unavailable - deterministic
+  // rule result kept"). Successful Gemini verdicts (passed) are still shown.
+  const visibleChecks = (result.checks ?? []).filter(
+    (c) => !(c.tool === "gemini_verdict" && !c.passed)
+  );
+
   return (
     <div
       className="card"
@@ -63,7 +69,7 @@ export default function ValidationPanel({ result, loading, error, history = [], 
             🤖 AI Safety Gate
           </span>
           <span className="text-dim" style={{ fontSize: "12px" }}>
-            {result.isValid ? "Valid" : "Blocked"} · {result.checks?.length ?? 0} checks
+            {result.isValid ? "Valid" : "Blocked"} · {visibleChecks.length} checks
             {typeof result.durationMs === "number" ? ` · ${result.durationMs}ms` : ""}
           </span>
           {(!result.checks || result.checks.length === 0) && (
@@ -120,13 +126,13 @@ export default function ValidationPanel({ result, loading, error, history = [], 
         </div>
       )}
 
-      {result.checks?.length > 0 && (
+      {visibleChecks.length > 0 && (
         <div style={{ marginTop: "10px" }}>
           <div className="text-dim" style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: "6px" }}>
-            Tool checks ({result.checks.length})
+            Tool checks ({visibleChecks.length})
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-            {result.checks.map((c, i) => (
+            {visibleChecks.map((c, i) => (
               <div key={i} style={{ display: "flex", gap: "8px", fontSize: "12px", alignItems: "baseline" }}>
                 <span aria-hidden="true">{c.passed ? "✅" : "❌"}</span>
                 <span className="font-mono text-dim" style={{ whiteSpace: "nowrap" }}>{c.tool}</span>
